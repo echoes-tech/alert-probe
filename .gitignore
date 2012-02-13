@@ -9,3 +9,5 @@
 # Exclusion des dossiers de compilation
 /obj/
 /bin/
+/build/Debug/
+/dist/Debug/
