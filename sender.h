@@ -36,24 +36,33 @@ typedef struct in_addr IN_ADDR;
 
 #endif
 
-// L'adresse IP ou idéalement le FQDN du moteur
-#define SRV_FQDN "127.0.0.1"
-//#define SRV_FQDN "alert.echoes-tech.com"
-// Le port d'écoute du moteur
-#define PORT 8888
-// Le protocole d'emisssion
-#define PROTO "TCP"
-//#define PROTO "UDP"
-
 typedef struct hostent Hostent;
 
-int sender();
+/**
+ * Main function of Sender Module
+ * @param *address Engines FQDN
+ * @param port     Emission port
+ * @param protocol Emission protocol (O: TCP, 1: UDP)
+ * @return Exit status
+ */
+int sender(const char *address, int port, int protocol);
 static void init(void);
 static void end(void);
-static int init_connection(const char *address, SOCKADDR_IN *sin);
-static void end_connection(int sock);
-static void send_server_tcp(SOCKET sock, const char *buffer);
-static void send_server_udp(SOCKET sock, SOCKADDR_IN *sin, const char *buffer);
+/**
+ * Open the socket
+ * @param *address  Engines FQDN
+ * @param *port     Pointer of Emission port
+ * @param *protocol Pointer of Emission protocol (O: TCP, 1: UDP)
+ * @param *sin      Pointer of Connection params
+ * @param *sock     Pointer of Socket
+ * @return Exit status
+ */
+static int init_connection(const char *address, int *port, int *protocol, SOCKADDR_IN *sin, SOCKET *sock);
+/**
+ * Close the socket
+ * @param *sock Pointer of Socket
+ */
+static int end_connection(SOCKET *sock);
 
 #endif	/* SENDER_H */
 

@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
+#include <CUnit/Basic.h>
 
 #include "sender.h"
 
@@ -20,7 +21,7 @@ static void init(void)
    if(err < 0)
    {
       puts("WSAStartup failed !");
-      exit(EXIT_FAILURE);
+      return(EXIT_FAILURE);
    }
 #endif
 }
@@ -32,28 +33,24 @@ static void end(void)
 #endif
 }
 
-/**
- * Open the socket
- * @param *address Engines FQDN 
- * @param *sin      Pointer of Connection params
- * @return Socket
- */
-static int init_connection(const char *address, SOCKADDR_IN *sin)
+static int init_connection(const char *address, int *port, int *protocol, SOCKADDR_IN *sin, SOCKET *sock)
 {
-    SOCKET sock;
     Hostent *hostinfo; // Engines FQDN info
 
-    if (PROTO == "UDP") {
+    if (*protocol == 1)
+    {
         /* UDP so SOCK_DGRAM */
-        sock = socket(AF_INET, SOCK_DGRAM, 0);
-    } else {
-        sock = socket(AF_INET, SOCK_STREAM, 0);
+        *sock = socket(AF_INET, SOCK_DGRAM, 0);
+    }
+    else
+    {
+        *sock = socket(AF_INET, SOCK_STREAM, 0);
     }
 
-   if(sock == INVALID_SOCKET)
+   if(*sock == INVALID_SOCKET)
    {
       perror("socket()");
-      exit(errno);
+      return(errno);
    }
 
    // Get info of Engines FQDN
@@ -62,92 +59,77 @@ static int init_connection(const char *address, SOCKADDR_IN *sin)
    if (hostinfo == NULL)
    {
       fprintf (stderr, "Unknown host %s.\n", address);
-      exit(EXIT_FAILURE);
+      return(EXIT_FAILURE);
    }
 
-    // Emission info
+   // Emission info
    sin->sin_addr = *(IN_ADDR *) hostinfo->h_addr;
-   sin->sin_port = htons(PORT);
+   sin->sin_port = htons(*port);
    sin->sin_family = AF_INET;
    
-    if (PROTO != "UDP")
+    if (*protocol != 1)
     {
         // Open a connection
-        if(connect(sock,(SOCKADDR *) sin, sizeof(SOCKADDR)) == SOCKET_ERROR)
+        if(connect(*sock,(SOCKADDR *) sin, sizeof(SOCKADDR)) == SOCKET_ERROR)
         {
             perror("connect()");
-            exit(errno);
+            return(errno);
         }
     }
 
-   return sock;
+   return (EXIT_SUCCESS);
 }
 
-/**
- * Close the socket
- * @param sock Socket
- */
-static void end_connection(int sock)
-{
-   closesocket(sock);
+static int end_connection(SOCKET *sock) {
+    if (closesocket(*sock))
+    {
+        perror("closesocket()");
+        return (errno);
+    }
+   return (EXIT_SUCCESS);
 }
 
-/**
- * Send the message in UDP to ECHOES Alert Engine
- * @param sock    Socket
- * @param *sin    Pointer of Connection params
- * @param *buffer Message
- */
-static void send_server_udp(SOCKET sock, SOCKADDR_IN *sin, const char *buffer)
-{
-   if(sendto(sock, buffer, strlen(buffer), 0, (SOCKADDR *) sin, sizeof *sin) < 0)
-   {
-      perror("sendto()");
-      exit(errno);
-   }
-}
-
-/**
- * Send the message in TCP to ECHOES Alert Engine
- * @param sock    Socket
- * @param *buffer Message
- */
-static void send_server_tcp(SOCKET sock, const char *buffer)
-{
-   if(send(sock, buffer, strlen(buffer), 0) < 0)
-   {
-      perror("send()");
-      exit(errno);
-   }
-}
-
-/**
- * Main function of Sender Module
- * @return Exit status
- */
-int sender() {
+int sender(const char *address, int port, int protocol) {
     SOCKADDR_IN sin = {0}; // Emission info
-    int sock; // Socket
+    SOCKET sock; // Socket
     char message[] = "Hello World !"; // Message to send
  
+    // Init just for Win32
     init();
 
     // Creating the Socket
-    sock = init_connection(SRV_FQDN, &sin);
+    if(init_connection(address, &port, &protocol, &sin, &sock))
+    {
+        perror("init_connection()");
+        return (errno);
+    }
 
     // Sending data
-    if (PROTO == "UDP")
+    if (protocol == 1)
     {
-        send_server_udp(sock, &sin, message);
+        if(sendto(sock, message, strlen(message), 0, (SOCKADDR *) &sin, sizeof sin) < 0)            
+        {
+            perror("sendto()");
+            return (errno);
+        }
     }
     else
     {
-         send_server_tcp(sock, message);
+        if (send(sock, message, strlen(message), 0) < 0)
+        {
+            perror("send()");
+            return (errno);
+        }
     }
     
     // Closing the socket
-    end_connection(sock);
+    if (end_connection(&sock))
+    {
+        perror("send()");
+        return (errno);
+    }
 
+    // End just for Win32
     end();
     
     return (EXIT_SUCCESS);

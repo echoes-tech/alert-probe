@@ -8,10 +8,18 @@
 #ifndef MAIN_H
 #define	MAIN_H
 
-// Le nom de la sonde
+// Probe Name
 #define NAME "ECHOES Alert - Sonde"
-// La version de la sonde
+// Probe Version
 #define VERSION "0.1.0"
+
+// L'adresse IP ou idéalement le FQDN du moteur
+#define SRV_FQDN "192.168.1.48"
+//#define SRV_FQDN "alert.echoes-tech.com"
+// Le port d'écoute du moteur
+#define PORT 7171
+// Le protocole d'emisssion (O : TCP, 1 : UDP)
+#define PROTO 0
 
 #endif	/* MAIN_H */
 

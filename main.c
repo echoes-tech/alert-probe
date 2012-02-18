@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <CUnit/Basic.h>
 
 #include "main.h"
 
@@ -22,9 +23,9 @@ int main(int argc, char** argv) {
     printf("---------- %s %s ----------\n", NAME, VERSION);
 
     printf("Début de l'envoi du message\n");
-    if (sender()) {
+    if (sender(SRV_FQDN, PORT, PROTO)) {
         perror("sender()");
-        exit(errno);
+        return(errno);
     }
     printf("Fin de l'envoi du message\n");
 
