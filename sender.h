@@ -41,15 +41,19 @@ typedef struct in_addr IN_ADDR;
 //#define SRV_FQDN "alert.echoes-tech.com"
 // Le port d'écoute du moteur
 #define PORT 8888
+// Le protocole d'emisssion
+#define PROTO "TCP"
+//#define PROTO "UDP"
 
 typedef struct hostent Hostent;
 
 int sender();
 static void init(void);
 static void end(void);
-static int init_connection(const char *address, SOCKADDR_IN *to);
+static int init_connection(const char *address, SOCKADDR_IN *sin);
 static void end_connection(int sock);
-static void send_server(SOCKET sock, SOCKADDR_IN *to, const char *buffer);
+static void send_server_tcp(SOCKET sock, const char *buffer);
+static void send_server_udp(SOCKET sock, SOCKADDR_IN *sin, const char *buffer);
 
 #endif	/* SENDER_H */
 

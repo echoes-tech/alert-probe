@@ -35,14 +35,20 @@ static void end(void)
 /**
  * Open the socket
  * @param *address Engines FQDN 
- * @param *to      Pointer of Connection params
+ * @param *sin      Pointer of Connection params
  * @return Socket
  */
-static int init_connection(const char *address, SOCKADDR_IN *to)
+static int init_connection(const char *address, SOCKADDR_IN *sin)
 {
-   /* UDP so SOCK_DGRAM */
-   SOCKET sock = socket(AF_INET, SOCK_DGRAM, 0);
-   Hostent *hostinfo; // Engines FQDN info
+    SOCKET sock;
+    Hostent *hostinfo; // Engines FQDN info
+
+    if (PROTO == "UDP") {
+        /* UDP so SOCK_DGRAM */
+        sock = socket(AF_INET, SOCK_DGRAM, 0);
+    } else {
+        sock = socket(AF_INET, SOCK_STREAM, 0);
+    }
 
    if(sock == INVALID_SOCKET)
    {
@@ -60,9 +66,19 @@ static int init_connection(const char *address, SOCKADDR_IN *to)
    }
 
     // Emission info
-   to->sin_addr = *(IN_ADDR *) hostinfo->h_addr;
-   to->sin_port = htons(PORT);
-   to->sin_family = AF_INET;
+   sin->sin_addr = *(IN_ADDR *) hostinfo->h_addr;
+   sin->sin_port = htons(PORT);
+   sin->sin_family = AF_INET;
+   
+    if (PROTO != "UDP")
+    {
+        // Open a connection
+        if(connect(sock,(SOCKADDR *) sin, sizeof(SOCKADDR)) == SOCKET_ERROR)
+        {
+            perror("connect()");
+            exit(errno);
+        }
+    }
 
    return sock;
 }
@@ -77,16 +93,30 @@ static void end_connection(int sock)
 }
 
 /**
- * Send the message to ECHOES Alert Engine
+ * Send the message in UDP to ECHOES Alert Engine
  * @param sock    Socket
- * @param *to     Pointer of Connection params
+ * @param *sin    Pointer of Connection params
  * @param *buffer Message
  */
-static void send_server(SOCKET sock, SOCKADDR_IN *to, const char *buffer)
+static void send_server_udp(SOCKET sock, SOCKADDR_IN *sin, const char *buffer)
 {
-   if(sendto(sock, buffer, strlen(buffer), 0, (SOCKADDR *) to, sizeof *to) < 0)
+   if(sendto(sock, buffer, strlen(buffer), 0, (SOCKADDR *) sin, sizeof *sin) < 0)
    {
       perror("sendto()");
+      exit(errno);
+   }
+}
+
+/**
+ * Send the message in TCP to ECHOES Alert Engine
+ * @param sock    Socket
+ * @param *buffer Message
+ */
+static void send_server_tcp(SOCKET sock, const char *buffer)
+{
+   if(send(sock, buffer, strlen(buffer), 0) < 0)
+   {
+      perror("send()");
       exit(errno);
    }
 }
@@ -96,17 +126,24 @@ static void send_server(SOCKET sock, SOCKADDR_IN *to, const char *buffer)
  * @return Exit status
  */
 int sender() {
-    SOCKADDR_IN to = {0}; // Emission info
+    SOCKADDR_IN sin = {0}; // Emission info
     int sock; // Socket
     char message[] = "Hello World !"; // Message to send
  
     init();
 
     // Creating the Socket
-    sock = init_connection(SRV_FQDN, &to);
+    sock = init_connection(SRV_FQDN, &sin);
 
     // Sending data
-    send_server(sock, &to, message);
+    if (PROTO == "UDP")
+    {
+        send_server_udp(sock, &sin, message);
+    }
+    else
+    {
+         send_server_tcp(sock, message);
+    }
     
     // Closing the socket
     end_connection(sock);
