@@ -1,38 +1,47 @@
 /*
- * Sender Module CUnit Test
+ * Configuration Loader CUnit Test
  * @author ECHOES Technologies (FPO)
- * @date 18/02/2012
+ * @date 19/02/2012
  */
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <CUnit/Basic.h>
+#include "CUnit/Basic.h"
 
-#include "sender.h"
+#include "conf.h"
 
 /*
  * CUnit Test Suite
  */
 
-int initSuite(void)
+int init_suite(void)
 {
     return 0;
 }
 
-int cleanSuite(void)
+int clean_suite(void)
 {
     return 0;
 }
 
-void testSenderUDP()
+void testParseConf()
 {
-    int res = sender("127.0.0.1", 7171, 1);
-    CU_ASSERT_EQUAL(res, EXIT_SUCCESS);
+    
 }
 
-void testSenderTCP()
+void testLoadConf()
 {
-    //TODO
+    char confDir[] = "conf/echoes-alert.conf";
+    Conf conf;
+    int result = loadConf(confDir, &conf);
+    if(result == 0 && conf.engineFQDN == "192.168.1.48" && conf.enginePort == 7171 && conf.pluginDir == "plugins/" && conf.probeProto == 0)
+    {
+        CU_PASS("loadConf() succeeded.");
+    }
+    else
+    {
+        CU_FAIL("loadConf() failed.");
+    }
 }
 
 int main()
@@ -44,7 +53,7 @@ int main()
         return CU_get_error();
 
     /* Add a suite to the registry */
-    pSuite = CU_add_suite("sendercunittest", initSuite, cleanSuite);
+    pSuite = CU_add_suite("confcunittest", init_suite, clean_suite);
     if (NULL == pSuite)
     {
         CU_cleanup_registry();
@@ -52,8 +61,7 @@ int main()
     }
 
     /* Add the tests to the suite */
-    if ((NULL == CU_add_test(pSuite, "testSenderUDP", testSenderUDP)) /*||
-            (NULL == CU_add_test(pSuite, "testSenderTCP", testSenderTCP))*/)
+    if ((NULL == CU_add_test(pSuite, "testLoadConf", testLoadConf)))
     {
         CU_cleanup_registry();
         return CU_get_error();

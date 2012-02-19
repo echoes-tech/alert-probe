@@ -1,8 +1,7 @@
 /* 
- * File:   sender.h
- * Author: Florent Poinsaut <florent.poinsaut@echoes-tech.com>
- *
- * Created on 14 février 2012, 09:43
+ * Header of Sender Module
+ * @author ECHOES Technologies (FPO)
+ * @date 14/02/2012
  */
 
 #ifndef SENDER_H
@@ -57,12 +56,12 @@ static void end(void);
  * @param *sock     Pointer of Socket
  * @return Exit status
  */
-static int init_connection(const char *address, int *port, int *protocol, SOCKADDR_IN *sin, SOCKET *sock);
+static int initConnection(const char *address, int *port, int *protocol, SOCKADDR_IN *sin, SOCKET *sock);
 /**
  * Close the socket
  * @param *sock Pointer of Socket
  */
-static int end_connection(SOCKET *sock);
+static int endConnection(SOCKET *sock);
 
 #endif	/* SENDER_H */
 

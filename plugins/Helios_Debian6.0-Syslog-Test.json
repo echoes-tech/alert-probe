@@ -1,0 +1,25 @@
+/* 
+ * Debian 6.0 - Syslog - Test
+ */
+
+{
+    "id": 1,
+    "id_addon": 1, // File
+    "id_asset": 1, // Helios
+    "source": {
+        "id": 1,
+        "path": "file:///var/log/syslog",
+        "tail": 1,
+        "search": [
+            {
+                "id": 1,
+                "type": 0, // Regex
+                "params": {
+                    "regex": "(.*)test"
+                    }
+            }
+            
+        ]
+    }
+    
+}
