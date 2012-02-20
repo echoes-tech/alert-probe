@@ -34,6 +34,7 @@ void testLoadConf()
     char confDir[] = "conf/echoes-alert.conf";
     Conf conf;
     int result = loadConf(confDir, &conf);
+    //if(result == 0 && conf.engineFQDN == "192.168.1.48" && conf.enginePort == 7171 && conf.pluginDir == "plugins/" && conf.probeProto == 0)
     if(result == 0 && conf.engineFQDN == "192.168.1.48" && conf.enginePort == 7171 && conf.pluginDir == "plugins/" && conf.probeProto == 0)
     {
         CU_PASS("loadConf() succeeded.");

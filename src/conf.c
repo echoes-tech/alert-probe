@@ -7,13 +7,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
-#include "CUnit/Basic.h"
 
 #include "conf.h"
 
 int parseLineConf(const char* line, Conf *conf)
 {
-    char *equal, *key, *value;
+    char *equal, *value;
 
     /* Search = character */
     equal = strstr(line, "=");
@@ -24,27 +23,26 @@ int parseLineConf(const char* line, Conf *conf)
         /* Replace = character by a end of String */
         *equal = '\0';
         /* Key is begin of line */
-        line;
 
-        if (strcmp(line, "engine_fqdn"))
+        if (!strcmp(line, "engine_fqdn"))
         {
             //TODO: test format
-            conf->engineFQDN = *line;
+            conf->engineFQDN = value;
         }
-        else if (strcmp(line, "engine_port")) 
+        else if (!strcmp(line, "engine_port")) 
         {
             //TODO: test format
-            conf->enginePort = *line;
+            conf->enginePort = atoi(value);
         }
-        else if (strcmp(line, "probe_proto"))
+        else if (!strcmp(line, "probe_proto"))
         {
             //TODO: test format
-            conf->probeProto = *line;
+            conf->probeProto = atoi(value);
         }
-        else if (strcmp(line, "plugin_dir"))
+        else if (!strcmp(line, "plugin_dir"))
         {
             //TODO: test format
-            conf->pluginDir = *line;
+            conf->pluginDir = value;
         }
         else
         {
@@ -84,3 +82,4 @@ int loadConf(const char *confLocation, Conf *conf)
     
     return (EXIT_SUCCESS);
 }
+

@@ -10,10 +10,8 @@
 typedef struct Conf Conf;
 struct Conf
 {
-    const char* engineFQDN;
-    int enginePort;
-    int probeProto;
-    const char* pluginDir;
+    int enginePort, probeProto;
+    char* engineFQDN, pluginDir;
 };
 
 /*Max size of file conf lines in caracters */

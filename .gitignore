@@ -11,3 +11,5 @@
 /bin/
 /build/Debug/
 /dist/Debug/
+/build/Release/
+/dist/Release/
