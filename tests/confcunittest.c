@@ -26,7 +26,10 @@ int clean_suite(void)
 
 void testParseConf()
 {
-    
+    char line[] = "engine_fqdn=localhost";
+    Conf *conf;
+    int result = parseLineConf(line, conf);
+    CU_ASSERT_EQUAL(result,EXIT_SUCCESS);
 }
 
 void testLoadConf()
@@ -34,15 +37,11 @@ void testLoadConf()
     char confDir[] = "conf/echoes-alert.conf";
     Conf conf;
     int result = loadConf(confDir, &conf);
-    //if(result == 0 && conf.engineFQDN == "192.168.1.48" && conf.enginePort == 7171 && conf.pluginDir == "plugins/" && conf.probeProto == 0)
-    if(result == 0 && conf.engineFQDN == "192.168.1.48" && conf.enginePort == 7171 && conf.pluginDir == "plugins/" && conf.probeProto == 0)
-    {
-        CU_PASS("loadConf() succeeded.");
-    }
-    else
-    {
-        CU_FAIL("loadConf() failed.");
-    }
+    CU_ASSERT_STRING_EQUAL(conf.engineFQDN,"localhost");
+    CU_ASSERT_EQUAL(conf.enginePort,7171);
+    CU_ASSERT_STRING_EQUAL(conf.pluginDir,"plugins/");
+    CU_ASSERT_EQUAL(conf.probeProto,0);
+    CU_ASSERT_EQUAL(result,EXIT_SUCCESS);
 }
 
 int main()
@@ -62,7 +61,8 @@ int main()
     }
 
     /* Add the tests to the suite */
-    if ((NULL == CU_add_test(pSuite, "testLoadConf", testLoadConf)))
+    if ((NULL == CU_add_test(pSuite, "testParseConf", testParseConf)) ||
+        (NULL == CU_add_test(pSuite, "testLoadConf", testLoadConf)))
     {
         CU_cleanup_registry();
         return CU_get_error();

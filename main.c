@@ -21,7 +21,8 @@
  */
 int main(int argc, char** argv)
 {
-    Conf conf;
+    // Initialization
+    Conf conf = {0, 0, "", ""};
 
     if (argc > 1)
     {

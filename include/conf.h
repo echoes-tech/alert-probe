@@ -10,12 +10,12 @@
 typedef struct Conf Conf;
 struct Conf
 {
-    int enginePort, probeProto;
-    char* engineFQDN, pluginDir;
+    unsigned int enginePort, probeProto;
+    char engineFQDN[255], pluginDir[255];
 };
 
-/*Max size of file conf lines in caracters */
-#define MAX_SIZE 100
+// Max size of file conf lines in caracters
+#define MAX_SIZE 300
 
 /**
  * Parse line from Configuration file

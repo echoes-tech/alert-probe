@@ -37,12 +37,12 @@ static int initConnection(const char *address, int *port, int *protocol, SOCKADD
 
     if (*protocol == 1)
     {
-        /* UDP so SOCK_DGRAM */
+        // UDP so SOCK_DGRAM
         *sock = socket(AF_INET, SOCK_DGRAM, 0);
     }
     else
     {
-        /* UDP so SOCK_STREAM */
+        // UDP so SOCK_STREAM
         *sock = socket(AF_INET, SOCK_STREAM, 0);
     }
 
@@ -52,9 +52,9 @@ static int initConnection(const char *address, int *port, int *protocol, SOCKADD
         return (errno);
     }
 
-    /* Get info of Engines FQDN */
+    // Get info of Engines FQDN
     hostinfo = gethostbyname(address);
-    /* Whether no info, return an error by stopping probe */
+    // Whether no info, return an error by stopping probe
     if (hostinfo == NULL)
     {
         fprintf(stderr, "Unknown host %s.\n", address);
