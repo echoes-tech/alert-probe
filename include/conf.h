@@ -7,6 +7,7 @@
 #ifndef CONF_H
 #define	CONF_H
 
+// Probe Configurations
 typedef struct Conf Conf;
 struct Conf
 {

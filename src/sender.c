@@ -89,7 +89,7 @@ static int endConnection(SOCKET *sock)
     return (EXIT_SUCCESS);
 }
 
-int sender(const char *address, int port, int protocol)
+int sender(const char *address, int *port, int *protocol)
 {
     SOCKADDR_IN sin = {0}; // Emission info
     SOCKET sock; // Socket
@@ -99,14 +99,14 @@ int sender(const char *address, int port, int protocol)
     init();
 
     // Creating the Socket
-    if (initConnection(address, &port, &protocol, &sin, &sock))
+    if (initConnection(address, port, protocol, &sin, &sock))
     {
         perror("initConnection()");
         return (errno);
     }
 
     // Sending data
-    if (protocol == 1)
+    if (*protocol == 1)
     {
         if (sendto(sock, message, strlen(message), 0, (SOCKADDR *) & sin, sizeof sin) < 0)
         {

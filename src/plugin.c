@@ -9,7 +9,7 @@
 
 #include "plugin.h"
 
-int plugin()
+int plugin(const char *confDir, AddonParam *addonParam)
 {
     return (EXIT_SUCCESS);
 }

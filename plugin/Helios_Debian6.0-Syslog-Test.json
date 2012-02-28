@@ -4,21 +4,29 @@
 
 {
     "id": 1,
-    "id_addon": 1, // File
-    "id_asset": 1, // Helios
+    "idAddon": 1, // File
+    "idAsset": 1, // Helios
     "source": {
         "id": 1,
         "path": "file:///var/log/syslog",
         "tail": 1,
         "search": [
-            {
-                "id": 1,
-                "type": 0, // Regex
-                "params": {
-                    "regex": "(.*)test"
-                    }
+        {
+            "id": 1,
+            "idType": 0, // Regex
+            "params": {
+                "regex": "(.*) (.*)test"
             }
-            
+        },
+        {
+            "id": 2,
+            "idType": 1, // Localisation
+            "params": {
+                "line": 253,
+                "firstChar": 25,
+                "length": 10
+            }
+        }
         ]
     }
     

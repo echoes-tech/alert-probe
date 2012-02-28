@@ -40,7 +40,15 @@ void testLoadConf()
     CU_ASSERT_STRING_EQUAL(conf.engineFQDN,"localhost");
     CU_ASSERT_EQUAL(conf.enginePort,7171);
     CU_ASSERT_STRING_EQUAL(conf.pluginDir,"plugins/");
-    CU_ASSERT_EQUAL(conf.probeProto,0);
+    if (conf.probeProto == 0 || conf.probeProto == 1)
+    {
+        CU_PASS(conf.probeProto);
+    }
+    else
+    {
+        CU_FAIL(conf.probeProto);
+    }
+        
     CU_ASSERT_EQUAL(result,EXIT_SUCCESS);
 }
 

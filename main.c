@@ -26,7 +26,7 @@ int main(int argc, char** argv)
 
     if (argc > 1)
     {
-        if (argv[1] == "-v" || argv[1] == "--version")
+        if (!strcmp(argv[1],"-v") || !strcmp(argv[1],"--version"))
         {
             printf("%s %s\n", NAME, VERSION);
         }
@@ -36,8 +36,8 @@ int main(int argc, char** argv)
                     "Usage:\n"
                     "\techoes-alert [OPTION...]\n\n"
                     "%s options\n"
-                    "\t-h or -help\tPrint this message.\n"
-                    "\t-v or -version\tPrint %s version.\n",
+                    "\t-h or --help\tPrint this message.\n"
+                    "\t-v or --version\tPrint %s version.\n",
                    NAME,
                    NAME
                     );
@@ -46,7 +46,7 @@ int main(int argc, char** argv)
     }
 
     // Affichage à l'écran le démarrage de la sonde
-    //TODO : ne l'afficher qu'en mode verbose
+    //TODO: ne l'afficher qu'en mode verbose
     printf("---------- %s %s ----------\n", NAME, VERSION);
 
     printf("Début du chargement des conf\n");
@@ -58,7 +58,7 @@ int main(int argc, char** argv)
     printf("Fin du chargement des conf\n");
 
     printf("Début du chargement des plug-in\n");
-    if (plugin())
+    if (plugin(conf.pluginDir))
     {
         perror("plugin()");
         return (errno);
@@ -66,7 +66,7 @@ int main(int argc, char** argv)
     printf("Fin du chargement des plug-in\n");
 
     printf("Début de l'envoi du message\n");
-    if (sender(conf.engineFQDN, conf.enginePort, conf.probeProto))
+    if (sender(conf.engineFQDN, &conf.enginePort, &conf.probeProto))
     {
         perror("sender()");
         return (errno);

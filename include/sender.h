@@ -40,11 +40,11 @@ typedef struct hostent Hostent;
 /**
  * Main function of Sender Module
  * @param *address Engines FQDN
- * @param port     Emission port
- * @param protocol Emission protocol (O: TCP, 1: UDP)
+ * @param *port     Pointer of Emission port
+ * @param *protocol Pointer of Emission protocol (O: TCP, 1: UDP)
  * @return Exit status
  */
-int sender(const char *address, int port, int protocol);
+int sender(const char *address, int *port, int *protocol);
 static void init(void);
 static void end(void);
 /**
