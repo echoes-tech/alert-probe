@@ -1,0 +1,47 @@
+ECHOES Alert - Probe
+===============================================================================
+
+ECHOES Alert desc.
+
+For more information, see:
+  • ECHOES Technologies: http://www.echoes-tech.com
+
+REQUIREMENTS
+------------
+In order to build ECHOES Alert - Probe you will need:
+
+  • CUnit = 2.1 (http://cunit.sourceforge.net/)
+
+INSTALLATION
+-------------------------------------------------------------------------------
+To build ECHOES Alert - Probe just run:
+
+  $ ./configure
+  $ make all
+  # make install
+
+BUGS
+-------------------------------------------------------------------------------
+If you find a bug in ECHOES Alert - Probe, please create a Redmine entry here:
+
+  https://redmine.gayuxweb.fr/projects/echoes-alert-sonde/issues/new
+
+Attaching:
+
+  • the version of ECHOES Alert - Probe
+    ◦ if it is a development version, the branch of the git repository
+  • a small test case, if none of the test units exhibit the behaviour
+  • in case of a segmentation fault, a full stack trace with debugging
+    symbols obtained through gdb is greatly appreaciated
+
+RELEASE NOTES
+-------------------------------------------------------------------------------
+• 
+
+AUTHOR, COPYRIGHT AND LICENSING
+-------------------------------------------------------------------------------
+ECHOES Alert - Probe has been written by ECHOES Technologies
+
+See the file COPYING for details.
+
+Copyright (C) 2012 ECHOES Technologies
