@@ -4,11 +4,6 @@
  * @date 14/02/2012
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <errno.h>
-#include <string.h>
-
 #include "sender.h"
 
 static void init(void)

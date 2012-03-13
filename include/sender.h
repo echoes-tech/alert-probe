@@ -1,11 +1,16 @@
 /* 
  * Header of Sender Module
  * @author ECHOES Technologies (FPO)
- * @date 14/02/2012
+ * @date 28/02/2012
  */
 
 #ifndef SENDER_H
 #define	SENDER_H
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <string.h>
 
 // Source : http://broux.developpez.com/articles/c/sockets/
 

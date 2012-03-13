@@ -7,6 +7,11 @@
 #ifndef CONF_H
 #define	CONF_H
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <string.h>
+
 // Probe Configurations
 typedef struct Conf Conf;
 struct Conf
@@ -21,17 +26,17 @@ struct Conf
 /**
  * Parse line from Configuration file
  * @param *line Line of configuration file
- * @param conf  Pointer of Configurations
+ * @param *conf  Pointer of Configurations
  * @return Exit status
  */
 int parseLineConf(const char *line, Conf *conf);
 /**
  * Load probe configuration file
- * @param *confDir Configuration file directory
- * @param conf     Pointer of Configurations
+ * @param *confPath Configuration file path
+ * @param *conf     Pointer of Configurations
  * @return Exit status
  */
-int loadConf(const char *confLocation, Conf *conf);
+int loadConf(const char *confPath, Conf *conf);
 
 #endif	/* CONF_H */
 

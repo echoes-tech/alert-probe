@@ -7,8 +7,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <libjson/libjson.h>
 
 #include "conf.h"
+#include "plugin.h"
 
 // Probe Name
 #define NAME "ECHOES Alert - Probe"
@@ -23,6 +25,7 @@ int main(int argc, char** argv)
 {
     // Initialization
     Conf conf = {0, 0, "", ""};
+    PlgList plgList = NULL;
 
     if (argc > 1)
     {
@@ -58,7 +61,7 @@ int main(int argc, char** argv)
     printf("Fin du chargement des conf\n");
 
     printf("Début du chargement des plug-in\n");
-    if (plugin(conf.pluginDir))
+    if (plugin(conf.pluginDir, plgList))
     {
         perror("plugin()");
         return (errno);

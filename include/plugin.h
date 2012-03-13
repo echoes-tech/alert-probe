@@ -7,52 +7,65 @@
 #ifndef PLUGIN_H
 #define	PLUGIN_H
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <string.h>
+
+#include <dirent.h>
+#ifndef WIN32
+    #include <sys/types.h>
+#endif
+
+#include <libjson/libjson.h>
+
 // Plug-in Informations
-typedef struct PluginInfo PluginInfo;
-struct PluginInfo
+typedef struct PlgInfo PlgInfo;
+struct PlgInfo
 {
-    unsigned int id, idAsset;
-    int sourceId[50];
+    char plgPath[255];
+    JSONNODE * n;
+    PlgInfo *nxt;
 };
 
-// Plug-in File - Source Informations
-typedef struct PlgFileSrcInfo PlgFileSrcInfo;
-struct PlgFileSrcInfo
-{
-    unsigned int id, tail;
-    char path[255];
-    unsigned int searchId[100], searchIdType[100];
-};
+typedef PlgInfo* PlgList;
 
-// Plug-in File - Regex - Parameters
-typedef struct PlgFileRegParam PlgFileRegParam;
-struct PlgFileRexParam
-{
-    unsigned int id;
-    char regex[1000];
-};
-// Plug-in File - Localisation - Parameters
-typedef struct PlgFileLocParam PlgFileLocParam;
-struct PlgFileLocParam
-{
-    unsigned int id, line, firstChar, length;
-};
-
-// Add-on Parameters
-typedef struct AddonParam AddonParam;
-struct AddonParams
-{
-    unsigned int id;
-    PluginInfo PluginInfo[100];
-};
+// Max size of file conf lines in caracters
+#define MAX_SIZE 300
 
 /**
- * Main function of Plug-in Manager
- * @param *confDir     Configuration file directory
- * @param *addonParams Pointer of Table of params to Add-ons
+ * Check if the filename ends with .json
+ * @param s[] Filename
  * @return Exit status
  */
-int plugin(const char *confDir, AddonParam *addonParam);
+int verifExt(char s[]);
+
+/**
+ * Load probe plugin file
+ * @param plgInfo Plugin informations
+ * @return Exit status
+ */
+int loadPlugin(PlgInfo* plgInfo);
+/**
+ * List probe plugin
+ * @param *plgDir Plugins files directory
+ * @param *nbPlg  Pointer of Number of plugins
+ * @param plgList List of plugins with informations
+ * @return Exit status
+ */
+int listPlugins(const char *plgDir, int *nbPlg, PlgList plgList);
+/**
+ * Parse JSON
+ * @param *n json
+ */
+void ParseJSON(JSONNODE *n);
+/**
+ * Main function of Plug-in Manager
+ * @param *plgDir Plugins files directory
+ * @param plgList List of plugins with informations
+ * @return Exit status
+ */
+int plugin(const char *plgDir, PlgList plgList);
 
 #endif	/* PLUGIN_H */
 

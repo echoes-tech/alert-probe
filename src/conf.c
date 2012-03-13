@@ -4,11 +4,6 @@
  * @date 19/02/2012
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <errno.h>
-#include <string.h>
-
 #include "conf.h"
 
 int parseLineConf(const char* line, Conf *conf)
@@ -54,13 +49,13 @@ int parseLineConf(const char* line, Conf *conf)
     return (EXIT_SUCCESS);
 }
 
-int loadConf(const char *confLocation, Conf *conf)
+int loadConf(const char *confPath, Conf *conf)
 {
     FILE* confFile = NULL;
     char line[MAX_SIZE] = "";
 
     // Opening file
-    confFile = fopen(confLocation, "r");
+    confFile = fopen(confPath, "r");
 
     if (confFile != NULL)
     {
