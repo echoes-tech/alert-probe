@@ -45,7 +45,7 @@ int main(int argc, char** argv)
                    NAME
                     );
         }
-        exit(EXIT_SUCCESS);
+        return (EXIT_SUCCESS);
     }
 
     // Affichage à l'écran le démarrage de la sonde
@@ -60,13 +60,29 @@ int main(int argc, char** argv)
     }
     printf("Fin du chargement des conf\n");
 
-    printf("Début du chargement des plug-in\n");
+    printf("Début du chargement des plugins\n");
     if (plugin(conf.pluginDir, plgList))
     {
         perror("plugin()");
         return (errno);
     }
-    printf("Fin du chargement des plug-in\n");
+    printf("Fin du chargement des plugins\n");
+
+    printf("Début du chargement des addons\n");
+    if (addon(plgList))
+    {
+        perror("addon()");
+        return (errno);
+    }
+    printf("Fin du chargement des addons\n");
+    
+    // Delete all json node
+    PlgInfo *tmp=plgList;
+    while(tmp != NULL)
+    {
+        json_delete(tmp->n);
+        tmp = tmp->nxt;
+    }
 
     printf("Début de l'envoi du message\n");
     if (sender(conf.engineFQDN, &conf.enginePort, &conf.probeProto))

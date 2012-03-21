@@ -23,7 +23,6 @@
 typedef struct PlgInfo PlgInfo;
 struct PlgInfo
 {
-    char plgPath[255];
     JSONNODE * n;
     PlgInfo *nxt;
 };
@@ -42,10 +41,11 @@ int verifExt(char s[]);
 
 /**
  * Load probe plugin file
+ * @param *plgPath Plugins file path
  * @param plgInfo Plugin informations
  * @return Exit status
  */
-int loadPlugin(PlgInfo* plgInfo);
+int loadPlugin(const char *plgPath, PlgInfo* plgInfo);
 /**
  * List probe plugin
  * @param *plgDir Plugins files directory

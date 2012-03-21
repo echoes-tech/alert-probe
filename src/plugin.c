@@ -33,18 +33,20 @@ int listPlugins(const char *plgDir, int *nbPlg, PlgList plgList)
         {
             // Count number of plugin
             (*nbPlg)++;
+
+            char plgPath[255] = "";
+
+            // Put repository for plugin path
+            strcpy(plgPath, plgDir);
+            // Add filename for plugin path
+            strcat(plgPath, read->d_name);
             
+            printf("Loading plugin %s\n", plgPath);
+
             // New element of linked list
             PlgInfo* plgInfo = calloc(1, sizeof(PlgInfo));
-            
-            // Put repository for plugin path
-            strcpy(plgInfo->plgPath, plgDir);
-            // Add filename for plugin path
-            strcat(plgInfo->plgPath, read->d_name);
-            
-            printf("FICHIER: %s\n", plgInfo->plgPath);
-            
-            loadPlugin(plgInfo);
+
+            loadPlugin(plgPath, plgInfo);
 
             // Assign the address of the next element in the new element
             plgInfo->nxt = plgList;
@@ -62,7 +64,7 @@ int listPlugins(const char *plgDir, int *nbPlg, PlgList plgList)
     return EXIT_SUCCESS;
 }
 
-int loadPlugin(PlgInfo* plgInfo)
+int loadPlugin(const char *plgPath, PlgInfo* plgInfo)
 {
     FILE* plgFile = NULL;
     char line[MAX_SIZE] = "";
@@ -70,7 +72,7 @@ int loadPlugin(PlgInfo* plgInfo)
     char json[MAX_SIZE * 1000] = "";
 
     // Opening file
-    plgFile = fopen(plgInfo->plgPath, "r");
+    plgFile = fopen(plgPath, "r");
 
     if (plgFile != NULL)
     {
@@ -95,6 +97,7 @@ int loadPlugin(PlgInfo* plgInfo)
 
 int plugin(const char *plgDir, PlgList plgList)
 {
+    // Plugins counter initialisation
     int nbPlg = 0;
 
     if (listPlugins(plgDir, &nbPlg, plgList))
@@ -102,7 +105,7 @@ int plugin(const char *plgDir, PlgList plgList)
         perror("listPlugins()");
         return (errno);
     }
-    printf("Nombre de plugins : %d\n", nbPlg);
+    printf("%d plugin load.\n", nbPlg);
     
     return (EXIT_SUCCESS);
 }
