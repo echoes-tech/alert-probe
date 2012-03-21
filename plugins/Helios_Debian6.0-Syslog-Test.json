@@ -3,11 +3,12 @@
  */
 
 {
-    "id": 1,
-    "idAddon": 1, // File
+    "id": 2,
     "idAsset": 1, // Helios
-    "source": {
+    "source": [
+    {
         "id": 1,
+        "idAddon": 2, // File
         "path": "file:///var/log/syslog",
         "tail": 1,
         "search": [
@@ -16,7 +17,8 @@
             "idType": 0, // Regex
             "params": {
                 "regex": "(.*) (.*)test"
-            }
+            },
+            "period": "default" // default or [1-60]s or [1-60]m or [1-24]h or [1-365]d
         },
         {
             "id": 2,
@@ -25,9 +27,10 @@
                 "line": 253,
                 "firstChar": 25,
                 "length": 10
-            }
+            },
+            "period": "default" // default or [1-60]s or [1-60]m or [1-24]h or [1-365]d
         }
         ]
     }
-    
+    ]
 }

@@ -1,0 +1,34 @@
+/* 
+ * Debian 6.0 - System - Test
+ */
+
+{
+    "id": 1,
+    "idAsset": 1, // Helios
+    "source": [
+    {
+        "id": 1,
+        "idAddon": 2, // File
+        "path": "file:///proc/meminfo",
+        "tail": 0,
+        "search": [
+        {
+            "id": 1,
+            "idType": 0, // Regex
+            "params": {
+                "regex": "MemTotal: *(\d+) kB"
+            },
+            "staticValuesPeriod": "default" // default or [1-60]s or [1-60]m or [1-24]h or [1-365]d
+        },
+        {
+            "id": 2,
+            "idType": 0, // Regex
+            "params": {
+                "regex": "MemFree: *(\d+) kB"
+            },
+            "staticValuesPeriod": "default" // default or [1-60]s or [1-60]m or [1-24]h or [1-365]d
+        }
+        ]
+    }
+    ]
+}
