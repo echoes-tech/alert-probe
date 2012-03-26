@@ -25,7 +25,7 @@ int main(int argc, char** argv)
 {
     // Initialization
     Conf conf = {0, 0, "", ""};
-    PlgList plgList = NULL;
+    PlgList plgList = {NULL};
 
     if (argc > 1)
     {
@@ -61,7 +61,7 @@ int main(int argc, char** argv)
     printf("Fin du chargement des conf\n");
 
     printf("Début du chargement des plugins\n");
-    if (plugin(conf.pluginDir, plgList))
+    if (plugin(conf.pluginDir, &plgList))
     {
         perror("plugin()");
         return (errno);
@@ -76,6 +76,7 @@ int main(int argc, char** argv)
     }
     printf("Fin du chargement des addons\n");
     
+/*
     // Delete all json node
     PlgInfo *tmp=plgList;
     while(tmp != NULL)
@@ -83,6 +84,7 @@ int main(int argc, char** argv)
         json_delete(tmp->n);
         tmp = tmp->nxt;
     }
+*/
 
     printf("Début de l'envoi du message\n");
     if (sender(conf.engineFQDN, &conf.enginePort, &conf.probeProto))
