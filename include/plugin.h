@@ -19,15 +19,42 @@
 
 #include <libjson/libjson.h>
 
-// Plug-in Informations
+// Plugin Informations
 typedef struct PlgInfo PlgInfo;
 struct PlgInfo
 {
-    JSONNODE * n;
-    PlgInfo *nxt;
+    unsigned int idPlg, idAsset;
 };
 
-typedef PlgInfo* PlgList;
+// Source Informations
+typedef struct SrcInfo SrcInfo;
+struct SrcInfo
+{
+    PlgInfo *plgInfo;
+    unsigned int idSrc, idAddon;
+    JSONNODE *params;
+};
+
+// File Search Informations
+typedef struct FileSearchInfo FileSearchInfo;
+struct FileSearchInfo
+{
+    SrcInfo *srcInfo;
+    unsigned int idSearch, idType, staticValues;
+    char *period;
+    JSONNODE *params;
+    FileSearchInfo *nxt;
+};
+
+typedef FileSearchInfo* FileSearchList;
+
+// Plugin List
+typedef struct PlgList PlgList;
+struct PlgList
+{
+    FileSearchList fileSearchList;
+    //SysList sysList;
+};
 
 // Max size of file conf lines in caracters
 #define MAX_SIZE 300
@@ -40,32 +67,34 @@ typedef PlgInfo* PlgList;
 int verifExt(char s[]);
 
 /**
- * Load probe plugin file
+ * Load probe plugin file to a jsonnode
  * @param *plgPath Plugins file path
- * @param plgInfo Plugin informations
+ * @param *json    Json string
  * @return Exit status
  */
-int loadPlugin(const char *plgPath, PlgInfo* plgInfo);
+int file2json(const char *plgPath, json_char *json);
+/**
+ * Load jsonnode to a linkedlist
+ * @param *n       Json node
+ * @param *plgList Pointer of Plugins list with informations
+ * @return Exit status
+ */
+int json2llist(JSONNODE *n, PlgList *plgList);
 /**
  * List probe plugin
  * @param *plgDir Plugins files directory
  * @param *nbPlg  Pointer of Number of plugins
- * @param plgList List of plugins with informations
+ * @param *plgList Pointer of Plugins list with informations
  * @return Exit status
  */
-int listPlugins(const char *plgDir, int *nbPlg, PlgList plgList);
-/**
- * Parse JSON
- * @param *n json
- */
-void ParseJSON(JSONNODE *n);
+int listPlugins(const char *plgDir, int *nbPlg, PlgList *plgList);
 /**
  * Main function of Plug-in Manager
- * @param *plgDir Plugins files directory
- * @param plgList List of plugins with informations
+ * @param *plgDir  Plugins files directory
+ * @param *plgList Pointer of Plugins list with informations
  * @return Exit status
  */
-int plugin(const char *plgDir, PlgList plgList);
+int plugin(const char *plgDir, PlgList *plgList);
 
 #endif	/* PLUGIN_H */
 
