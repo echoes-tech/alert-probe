@@ -23,14 +23,17 @@ int clean_suite(void)
     return 0;
 }
 
-void test1()
+void testVerifExt()
 {
-    CU_ASSERT(2 * 2 == 4);
+    CU_ASSERT_EQUAL(verifExt("file.json"),EXIT_SUCCESS);
+    CU_ASSERT_EQUAL(verifExt("file.yaml"),EXIT_FAILURE);
 }
 
-void test2()
+void testAddBackslash()
 {
-    CU_ASSERT(2 * 2 == 5);
+    char string[255] = "test\\*123321$!!\\";
+    addBackslash(string);
+    CU_ASSERT_STRING_EQUAL(string, "test\\\\*123321$!!\\\\")
 }
 
 int main()
@@ -50,8 +53,8 @@ int main()
     }
 
     /* Add the tests to the suite */
-    if ((NULL == CU_add_test(pSuite, "test1", test1)) ||
-            (NULL == CU_add_test(pSuite, "test2", test2)))
+    if ((NULL == CU_add_test(pSuite, "testVerifExt", testVerifExt)) ||
+            (NULL == CU_add_test(pSuite, "testAddBackslash", testAddBackslash)))
     {
         CU_cleanup_registry();
         return CU_get_error();
