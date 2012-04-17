@@ -28,7 +28,14 @@ static void end(void)
 
 static int initConnection(const char *address, int *port, int *protocol, SOCKADDR_IN *sin, SOCKET *sock)
 {
-    Hostent *hostinfo; // Engines FQDN info
+    // Get info of Engines FQDN
+    Hostent *hostinfo = gethostbyname(address);
+    // Whether no info, return an error by stopping probe
+    if (hostinfo == NULL)
+    {
+        fprintf(stderr, "Unknown host %s.\n", address);
+        return (EXIT_FAILURE);
+    }
 
     if (*protocol == 1)
     {
@@ -45,15 +52,6 @@ static int initConnection(const char *address, int *port, int *protocol, SOCKADD
     {
         perror("socket()");
         return (errno);
-    }
-
-    // Get info of Engines FQDN
-    hostinfo = gethostbyname(address);
-    // Whether no info, return an error by stopping probe
-    if (hostinfo == NULL)
-    {
-        fprintf(stderr, "Unknown host %s.\n", address);
-        return (EXIT_FAILURE);
     }
 
     // Emission info
