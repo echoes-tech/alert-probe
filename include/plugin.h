@@ -14,47 +14,45 @@
 
 #include <dirent.h>
 #ifndef WIN32
-    #include <sys/types.h>
+#include <sys/types.h>
 #endif
 
 #include <libjson/libjson.h>
+
+// Search Informations
+typedef struct SearchInfo SearchInfo;
+struct SearchInfo
+{
+    unsigned int idSearch, idType, staticValues;
+    char period[255];
+    JSONNODE *params;
+    SearchInfo *nxt;
+};
+// Search List
+typedef SearchInfo* SearchList;
+
+// Source Informations
+typedef struct SrcInfo SrcInfo;
+struct SrcInfo
+{
+    unsigned int idSrc, idAddon;
+    JSONNODE *params;
+    SearchList searchList;
+    SrcInfo *nxt;
+};
+// Sources List
+typedef SrcInfo* SrcList;
 
 // Plugin Informations
 typedef struct PlgInfo PlgInfo;
 struct PlgInfo
 {
     unsigned int idPlg, idAsset;
+    SrcList srcList;
+    PlgInfo *nxt;
 };
-
-// Source Informations
-typedef struct SrcInfo SrcInfo;
-struct SrcInfo
-{
-    PlgInfo *plgInfo;
-    unsigned int idSrc, idAddon;
-    JSONNODE *params;
-};
-
-// File Search Informations
-typedef struct FileSearchInfo FileSearchInfo;
-struct FileSearchInfo
-{
-    SrcInfo *srcInfo;
-    unsigned int idSearch, idType, staticValues;
-    char *period;
-    JSONNODE *params;
-    FileSearchInfo *nxt;
-};
-
-typedef FileSearchInfo* FileSearchList;
-
-// Plugin List
-typedef struct PlgList PlgList;
-struct PlgList
-{
-    FileSearchList fileSearchList;
-    //SysList sysList;
-};
+// Plugins List
+typedef PlgInfo* PlgList;
 
 // Max size of file conf lines in caracters
 #define MAX_SIZE 300

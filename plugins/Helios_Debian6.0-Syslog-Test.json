@@ -5,16 +5,17 @@
 {
     "id": 2,
     "idAsset": 1, // Helios
-    "source": [
+    "sources": [
     {
         "id": 1,
-        "idAddon": 2, // File
-        "path": "file:///var/log/syslog",
-        "tail": 1,
-        "search": [
+        "idAddon": 3, // Log
+        "params": {
+            "path": "file:///var/log/syslog"
+        },
+        "searches": [
         {
             "id": 1,
-            "idType": 0, // Regex
+            "idType": 1, // Regex
             "params": {
                 "regex": "(.*) (.*)test"
             },
@@ -23,9 +24,28 @@
         },
         {
             "id": 2,
-            "idType": 1, // Localisation
+            "idType": 2, // Localisation
             "params": {
-                "line": 253,
+                "firstChar": 1,
+                "length": 10
+            },
+            "period": "default", // default or [1-60]s or [1-60]m or [1-24]h or [1-365]d
+            "staticValues": 0
+        }
+        ]
+    },
+    {
+        "id": 2,
+        "idAddon": 2, // File
+        "params": {
+            "path": "/var/log/syslog"
+        },
+        "searches": [
+        {
+            "id": 2,
+            "idType": 2, // Localisation
+            "params": {
+                "line": 23,
                 "firstChar": 25,
                 "length": 10
             },

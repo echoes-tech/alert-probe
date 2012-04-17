@@ -10,13 +10,12 @@
         "id": 1,
         "idAddon": 2, // File
         "params": {
-            "path": "file:///proc/meminfo",
-            "tail": 0
+            "path": "/proc/meminfo"
         },
         "searches": [
         {
             "id": 1,
-            "idType": 0, // Regex
+            "idType": 1, // Regex
             "params": {
                 "regex": "MemTotal: *(\d+) kB"
             },
@@ -25,7 +24,7 @@
         },
         {
             "id": 2,
-            "idType": 0, // Regex
+            "idType": 1, // Regex
             "params": {
                 "regex": "MemFree: *(\d+) kB"
             },

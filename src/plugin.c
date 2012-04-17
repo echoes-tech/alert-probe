@@ -8,34 +8,35 @@
 
 int verifExt(char s[])
 {
-   int i = strlen(s);
- 
-   if ((s[i - 5] == '.') && (s[i - 4] == 'j') && (s[i - 3] == 's') && (s[i - 2] == 'o') && (s[i - 1] == 'n'))
-   {
-      return EXIT_SUCCESS;
-   }
-   return EXIT_FAILURE;
+    int i = strlen(s);
+
+    if ((s[i - 5] == '.') && (s[i - 4] == 'j') && (s[i - 3] == 's') && (s[i - 2] == 'o') && (s[i - 1] == 'n'))
+    {
+        return EXIT_SUCCESS;
+    }
+    return EXIT_FAILURE;
 }
-int addBackslash (char *string)
+
+int addBackslash(char *string)
 {
     char *backslash = NULL, *rest = NULL, tmp[25500] = "";
-    
+
     // Search \ character
     backslash = strchr(string, '\\');
-    
+
     if (backslash != NULL)
     {
         // Value is String after equal, end of line
         rest = backslash + 1;
-         
+
         // Replace = character by a end of String
         *backslash = '\0';
-        
-        strcpy(tmp,string);
+
+        strcpy(tmp, string);
         strcat(tmp, "\\\\");
-        
+
         addBackslash(rest);
-        
+
         strcat(tmp, rest);
         strcpy(string, tmp);
     }
@@ -44,22 +45,19 @@ int addBackslash (char *string)
 }
 
 int listPlugins(const char *plgDir, int *nbPlg, PlgList *plgList)
-{  
+{
     DIR* dir = NULL;
     struct dirent* read = NULL;
 
     dir = opendir(plgDir);
     if (dir == NULL)
-        return(EXIT_FAILURE);
+        return (EXIT_FAILURE);
 
     // Reading filename file by file
     while ((read = readdir(dir)))
     {
         if (!verifExt(read->d_name))
         {
-            // Count number of plugin
-            (*nbPlg)++;
-
             char plgPath[255] = "";
             //TODO: define max line by plugin
             json_char json[MAX_SIZE * 1000] = "";
@@ -69,17 +67,17 @@ int listPlugins(const char *plgDir, int *nbPlg, PlgList *plgList)
             strcpy(plgPath, plgDir);
             // Add filename for plugin path
             strcat(plgPath, read->d_name);
-            
-            printf("Loading plugin %s\n", plgPath);
 
-            // New element of linked list
-            //PlgInfo* plgInfo = calloc(1, sizeof(PlgInfo));
+            printf("Loading plugin %s\n", plgPath);
 
             if (file2json(plgPath, json))
             {
                 perror("file2json()");
                 return (errno);
             }
+
+            // Remove spaces and comments
+            strcpy(json, json_strip_white_space(json));
 
             n = json_parse(json);
 
@@ -88,12 +86,11 @@ int listPlugins(const char *plgDir, int *nbPlg, PlgList *plgList)
                 perror("json2llist()");
                 return (errno);
             }
- 
-            // Assign the address of the next element in the new element
-            //plgInfo->nxt = plgList;
+            
+            json_delete(n);
 
-            // Update the pointer of linked list
-            //plgList = plgInfo;
+            // Count number of plugin
+            (*nbPlg)++;
         }
     }
 
@@ -122,12 +119,11 @@ int file2json(const char *plgPath, json_char* json)
             addBackslash(line);
             strcat(json, line);
         }
+
         // Closing plugin file
         fclose(plgFile);
 
-        printf("%s",json);
-        
-        if(!json_is_valid(json))
+        if (!json_is_valid(json))
         {
             printf("Invalid JSON Node : %s\n", plgPath);
             return (EXIT_FAILURE);
@@ -144,123 +140,214 @@ int file2json(const char *plgPath, json_char* json)
 
 int json2llist(JSONNODE *n, PlgList *plgList)
 {
-    if (n == NULL){
+    if (n == NULL)
+    {
         printf("Invalid JSON Node\n");
         return (EXIT_FAILURE);
     }
 
     JSONNODE_ITERATOR i = json_begin(n);
 
-    while (i != json_end(n)){
-        if (*i == NULL){
+    // Get the node name and value as a string
+    json_char *node_name = json_name(*i);
+
+    PlgInfo* plgInfo = calloc(1, sizeof (plgInfo));
+    JSONNODE *sources, *searches;;
+
+    while (i != json_end(n))
+    {
+        if (*i == NULL)
+        {
             printf("Invalid JSON Node\n");
             return (EXIT_FAILURE);
         }
- 
-        // get the node name and value as a string
-        json_char *node_name = json_name(*i);
 
-        // find out where to store the values
-        PlgInfo plgInfo = {0};
+        // Get the node name and value as a string
+        node_name = json_name(*i);
+
+        // Find out where to store the values
         if (!strcmp(node_name, "id"))
         {
-            plgInfo.idPlg = json_as_int(*i);
+            plgInfo->idPlg = json_as_int(*i);
         }
         else if (!strcmp(node_name, "idAsset"))
         {
-            plgInfo.idAsset = json_as_int(*i);
+            plgInfo->idAsset = json_as_int(*i);
         }
         else if (!strcmp(node_name, "sources"))
         {
-            SrcInfo srcInfo = {&plgInfo, 0, 0, NULL};
-            JSONNODE_ITERATOR j = json_begin(*i);
+            sources = *i;
+        }
+        // Increment the iterator
+        ++i;
+    }
 
-            while (j != json_end(*i))
+    if (sources == NULL)
+    {
+        printf("Invalid Plugin: no source\n");
+        return (EXIT_FAILURE);
+    }
+    
+    SrcList srcList = NULL;
+    i = json_begin(sources);
+
+    while (i != json_end(sources))
+    {
+        if (*i == NULL)
+        {
+            printf("Invalid JSON Node\n");
+            return (EXIT_FAILURE);
+        }
+
+        SrcInfo* srcInfo = calloc(1, sizeof (SrcInfo));
+        JSONNODE_ITERATOR j = json_begin(*i);
+
+        while (j != json_end(*i))
+        {
+            if (*j == NULL)
             {
-                // get the node name and value as a string
-                json_char *node_name = json_name(*j);
+                printf("Invalid JSON Node\n");
+                return (EXIT_FAILURE);
+            }
 
+            // Get the node name and value as a string
+            node_name = json_name(*j);
+
+            if (*j == NULL)
+            {
+                printf("Invalid JSON Node\n");
+                return (EXIT_FAILURE);
+            }
+            if (!strcmp(node_name, "id"))
+            {
+                srcInfo->idSrc = json_as_int(*j);
+            }
+            else if (!strcmp(node_name, "idAddon"))
+            {
+                srcInfo->idAddon = json_as_int(*j);
+            }
+            else if (!strcmp(node_name, "params"))
+            {
+                srcInfo->params = *j;
+            }
+            else if (!strcmp(node_name, "searches"))
+            {
+                searches = *j;
+            }
+            // Increment the iterator
+            ++j;
+        }
+
+        if (searches == NULL)
+        {
+            printf("Invalid Plugin: no searches\n");
+            return (EXIT_FAILURE);
+        }
+/*
+
+            SrcParams *fileSrcParams = calloc(1, sizeof (FileSrcParams));
+            j = json_begin(params);
+            while (j != json_end(params))
+            {
                 if (*j == NULL)
                 {
                     printf("Invalid JSON Node\n");
                     return (EXIT_FAILURE);
                 }
+                // Get the node name and value as a string
+                node_name = json_name(*j);
+                if (!strcmp(node_name, "path"))
+                {
+                    json_char *node_value = json_as_string(*j);
+                    strcpy(fileSrcParams->path, node_value);
+                    json_free(node_value);
+                }
+                ++j;
+            }
+            srcInfo->params = fileSrcParams;
+*/
+
+        SearchList searchList = NULL;
+
+        j = json_begin(searches);
+        while (j != json_end(searches))
+        {
+            if (*j == NULL)
+            {
+                printf("Invalid JSON Node\n");
+                return (EXIT_FAILURE);
+            }
+            // New element of linjed list
+            SearchInfo* searchInfo = calloc(1, sizeof (SearchInfo));
+            searchInfo->nxt = NULL;
+            JSONNODE_ITERATOR k = json_begin(*j);
+
+            while (k != json_end(*j))
+            {
+                if (*k == NULL)
+                {
+                    printf("Invalid JSON Node\n");
+                    return (EXIT_FAILURE);
+                }
+                // Get the node name and value as a string
+                node_name = json_name(*k);
                 if (!strcmp(node_name, "id"))
                 {
-                    srcInfo.idSrc = json_as_int(*j);
+                    searchInfo->idSearch = json_as_int(*k);
                 }
-                else if (!strcmp(node_name, "idAddon"))
+                else if (!strcmp(node_name, "idType"))
                 {
-                    srcInfo.idAddon = json_as_int(*j);
+                    searchInfo->idType = json_as_int(*k);
                 }
                 else if (!strcmp(node_name, "params"))
                 {
-                    srcInfo.params = *j;
+                    searchInfo->params = *k;
                 }
-                else if (!strcmp(node_name, "searches"))
+                else if (!strcmp(node_name, "period"))
                 {
-                    JSONNODE_ITERATOR k = json_begin(*j);
-                    // New element of linked list
-                    FileSearchInfo* fileSearchInfo = calloc(1, sizeof(fileSearchInfo));
-                    while (k != json_end(*j))
-                    {
-                        // get the node name and value as a string
-                        json_char *node_name = json_name(*j);
-                        switch (srcInfo.idAddon)
-                        {
-                        case 1:
-                            if (!strcmp(node_name, "id"))
-                            {
-                                fileSearchInfo->idSearch = json_as_int(*i);
-                            }
-                            else if (!strcmp(node_name, "idType"))
-                            {
-                                fileSearchInfo->idType = json_as_int(*i);
-                            }
-                            else if (!strcmp(node_name, "params"))
-                            {
-                                fileSearchInfo->params = *i;
-                            }
-                            else if (!strcmp(node_name, "period"))
-                            {
-                                json_char *node_value = json_as_string(*i);
-                                strcpy(fileSearchInfo->period, node_value);
-                                json_free(node_value);
-                            }
-                            else if (!strcmp(node_name, "staticValues"))
-                            {
-                                fileSearchInfo->staticValues = json_as_int(*i);
-                            }
-                            break;
-                        default:
-                            break;
-                        }
-                    // cleanup and increment the iterator
-                    json_free(node_name);
-                    ++k;
-                    }
-                    switch (srcInfo.idAddon)
-                    {
-                    case 1:
-                        // Assign the address of the next element in the new element
-                        fileSearchInfo->nxt = plgList->fileSearchList;
-
-                        // Update the pointer of linked list
-                        plgList->fileSearchList = fileSearchInfo;
-                        break;
-                    default:
-                        break;
-                    }
+                    json_char *node_value = json_as_string(*k);
+                    strcpy(searchInfo->period, node_value);
+                    json_free(node_value);
                 }
-                // cleanup and increment the iterator
-                json_free(node_name);
-                ++j;
+                else if (!strcmp(node_name, "staticValues"))
+                {
+                    searchInfo->staticValues = json_as_int(*k);
+                }
+                // Increment the iterator
+                ++k;
             }
+            // Assign the address of the next element in the new element
+            searchInfo->nxt = searchList;
+
+            // Update the pointer of linked list
+            searchList = searchInfo;
+            // Increment the iterator
+            ++j;
         }
-        // cleanup and increment the iterator
-        json_free(node_name);
+
+        srcInfo->searchList = searchList;
+ 
+
+        // Assign the address of the next element in the new element
+        srcInfo->nxt = srcList;
+
+        // Update the pointer of linked list
+        srcList = srcInfo;
+
         ++i;
     }
+
+    plgInfo->srcList = srcList;
+    
+    // Assign the address of the next element in the new element
+    plgInfo->nxt = *plgList;
+
+    // Update the pointer of linked list
+    *plgList = plgInfo;
+
+    // Cleanup and increment the iterator
+    json_free(node_name);
+
     return (EXIT_SUCCESS);
 }
 
@@ -275,7 +362,7 @@ int plugin(const char *plgDir, PlgList *plgList)
         return (errno);
     }
     printf("%d plugins load.\n", nbPlg);
-    
+
     return (EXIT_SUCCESS);
 }
 
