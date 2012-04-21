@@ -30,10 +30,10 @@
 
 /**
  * Main function of Addons Manager
- * @param plgList List of plugins with informations
+ * @param *plgList Pointer of Plugins list with informations
  * @return Exit status
  */
-int addon(PlgList plgList);
+int addon(PlgList *plgList);
 
 #endif	/* ADDON_H */
 

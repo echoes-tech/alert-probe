@@ -7,9 +7,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
-#include <libjson/libjson.h>
 
+// To init struct Conf
 #include "conf.h"
+// To init struct PlgList
 #include "plugin.h"
 
 // Probe Name
@@ -25,25 +26,26 @@ int main(int argc, char** argv)
 {
     // Initialization
     Conf conf = {0, 0, "", ""};
-    PlgList plgList = {NULL};
+    PlgList plgList = NULL;
 
+    // Help message and version
     if (argc > 1)
     {
-        if (!strcmp(argv[1],"-v") || !strcmp(argv[1],"--version"))
+        if (!strcmp(argv[1], "-v") || !strcmp(argv[1], "--version"))
         {
             printf("%s %s\n", NAME, VERSION);
         }
         else
         {
             printf(
-                    "Usage:\n"
-                    "\techoes-alert [OPTION...]\n\n"
-                    "%s options\n"
-                    "\t-h or --help\tPrint this message.\n"
-                    "\t-v or --version\tPrint %s version.\n",
+                   "Usage:\n"
+                   "\techoes-alert [OPTION...]\n\n"
+                   "%s options\n"
+                   "\t-h or --help\tPrint this message.\n"
+                   "\t-v or --version\tPrint %s version.\n",
                    NAME,
                    NAME
-                    );
+                   );
         }
         return (EXIT_SUCCESS);
     }
@@ -69,22 +71,12 @@ int main(int argc, char** argv)
     printf("Fin du chargement des plugins\n");
 
     printf("Début du chargement des addons\n");
-    if (addon(plgList))
+    if (addon(&plgList))
     {
         perror("addon()");
         return (errno);
     }
     printf("Fin du chargement des addons\n");
-    
-/*
-    // Delete all json node
-    PlgInfo *tmp=plgList;
-    while(tmp != NULL)
-    {
-        json_delete(tmp->n);
-        tmp = tmp->nxt;
-    }
-*/
 
     printf("Début de l'envoi du message\n");
     if (sender(conf.engineFQDN, &conf.enginePort, &conf.probeProto))
