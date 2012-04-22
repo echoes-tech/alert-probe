@@ -87,7 +87,8 @@ int listPlugins(const char *plgDir, int *nbPlg, PlgList *plgList)
                 return (errno);
             }
             
-            json_delete(n);
+            //TODO: llist to delete all n after addons
+            //json_delete(n);
 
             // Count number of plugin
             (*nbPlg)++;
@@ -151,7 +152,7 @@ int json2llist(JSONNODE *n, PlgList *plgList)
     // Get the node name and value as a string
     json_char *node_name = json_name(*i);
 
-    PlgInfo* plgInfo = calloc(1, sizeof (plgInfo));
+    PlgInfo* plgInfo = calloc(1, sizeof (PlgInfo));
     JSONNODE *sources, *searches;;
 
     while (i != json_end(n))
@@ -237,35 +238,35 @@ int json2llist(JSONNODE *n, PlgList *plgList)
             // Increment the iterator
             ++j;
         }
-
+/*
+                char path[255];
+                 j = json_begin(srcInfo->params);
+                while (j != json_end(srcInfo->params))
+                {
+                    if (*j == NULL)
+                    {
+                        printf("Invalid JSON Node\n");
+                        return (EXIT_FAILURE);
+                    }
+                    // Get the node name and value as a string
+                    node_name = json_name(*j);
+                    if (!strcmp(node_name, "path"))
+                    {
+                        json_char *node_value = json_as_string(*j);
+                        strcpy(path, node_value);
+                        json_free(node_value);
+                    }
+                    // Cleanup and increment the iterator
+                    ++j;
+                }
+                printf("path: %s\n", path);
+*/
+        
         if (searches == NULL)
         {
             printf("Invalid Plugin: no searches\n");
             return (EXIT_FAILURE);
         }
-/*
-
-            SrcParams *fileSrcParams = calloc(1, sizeof (FileSrcParams));
-            j = json_begin(params);
-            while (j != json_end(params))
-            {
-                if (*j == NULL)
-                {
-                    printf("Invalid JSON Node\n");
-                    return (EXIT_FAILURE);
-                }
-                // Get the node name and value as a string
-                node_name = json_name(*j);
-                if (!strcmp(node_name, "path"))
-                {
-                    json_char *node_value = json_as_string(*j);
-                    strcpy(fileSrcParams->path, node_value);
-                    json_free(node_value);
-                }
-                ++j;
-            }
-            srcInfo->params = fileSrcParams;
-*/
 
         SearchList searchList = NULL;
 
@@ -307,6 +308,7 @@ int json2llist(JSONNODE *n, PlgList *plgList)
                 {
                     json_char *node_value = json_as_string(*k);
                     strcpy(searchInfo->period, node_value);
+                    //TODO: transform period to int (second)
                     json_free(node_value);
                 }
                 else if (!strcmp(node_name, "staticValues"))
@@ -321,6 +323,7 @@ int json2llist(JSONNODE *n, PlgList *plgList)
 
             // Update the pointer of linked list
             searchList = searchInfo;
+
             // Increment the iterator
             ++j;
         }
@@ -334,6 +337,7 @@ int json2llist(JSONNODE *n, PlgList *plgList)
         // Update the pointer of linked list
         srcList = srcInfo;
 
+        // Increment the iterator
         ++i;
     }
 
@@ -345,7 +349,7 @@ int json2llist(JSONNODE *n, PlgList *plgList)
     // Update the pointer of linked list
     *plgList = plgInfo;
 
-    // Cleanup and increment the iterator
+    // Cleanup
     json_free(node_name);
 
     return (EXIT_SUCCESS);
