@@ -64,7 +64,6 @@
   <sourceRootList>
     <Elem>plugins</Elem>
     <Elem>conf</Elem>
-    <Elem>plugin</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>

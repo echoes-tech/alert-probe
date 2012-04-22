@@ -12,7 +12,6 @@
             <sourceRootList>
                 <sourceRootElem>plugins</sourceRootElem>
                 <sourceRootElem>conf</sourceRootElem>
-                <sourceRootElem>plugin</sourceRootElem>
             </sourceRootList>
             <confList>
                 <confElem>
