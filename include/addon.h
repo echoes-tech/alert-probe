@@ -27,6 +27,14 @@
 
 #endif
 
+#define DEFAULT "10s"
+
+typedef struct AddonLocationFileParams AddonLocationFileParams;
+struct AddonLocationFileParams
+{
+    unsigned int idPlg, idAsset, idSrc, idSearch, staticValues, line, firstChar, length;
+    char path[255], period[255];
+};
 
 /**
  * Main function of Addons Manager

@@ -6,29 +6,32 @@
 
 #include "addon.h"
 
-void *addonLocationFileLoop(void *arg)
+void *addonLocationFileLoop(AddonLocationFileParams *arg)
 {
-    unsigned int period = 5;
+/*
     time_t now;
 
     // What time is it ?
     time(&now);
 
     // Method to know when start the loop
-    time_t temp =  ((int)(now / period) * period) + period;
+    time_t temp =  ((int)(now / arg->period) * arg->period) + arg->period;
 
     // Diff between now and the start of the loop
     SLEEP(difftime(temp, now));
 
     while(1)
     {
-        addonLocationFile("/var/log/syslog", 10, 25, 2);
-        SLEEP(period);
+        addonLocationFile(arg->path, arg->line, arg->firstChar, arg->length);
+        SLEEP(arg->period);
     }
     
+/*
     // Pour enlever le warning
     (void) arg;
+
     pthread_exit(NULL);
+*/
 }
 
 int addonLocationFile(const char* filePath, unsigned int nLine, unsigned int firstChar, unsigned int length)
@@ -86,61 +89,183 @@ void *addonLoop(void *arg)
 
 int addon(PlgList *plgList)
 {
-    PlgInfo *tmp = *plgList;
+    char path[255], regex[255] = "";
+    
+    PlgInfo *plgInfo = *plgList;
     // Tant que l'on n'est pas au bout de la liste
-    while (tmp != NULL)
+    while (plgInfo != NULL)
     {
         // On affiche
-        printf("idPlg: %d\n", tmp->idPlg);
-        printf("idAsset: %d\n", tmp->idAsset);
+        printf("idPlg: %d\n", plgInfo->idPlg);
+        printf("idAsset: %d\n", plgInfo->idAsset);
         
-        SrcInfo *tmp2 = tmp->srcList;
-        while (tmp2 != NULL)
+        SrcInfo *srcInfo = plgInfo->srcList;
+        while (srcInfo != NULL)
         {
             
-            printf("idSrc: %d\n", tmp2->idSrc);
-            printf("idAddon: %d\n", tmp2->idAddon);
-            SearchInfo *tmp3 = tmp2->searchList;
-            while (tmp3 != NULL)
-            {
-                printf("idSearch: %d\n", tmp3->idSearch);
-                printf("idType: %d\n", tmp3->idType);
-                printf("period: %s\n", tmp3->period);
-                printf("staticValues: %d\n", tmp3->staticValues);
-                tmp3 = tmp3->nxt;
-            }
-            if (tmp2->params == NULL)
+            printf("idSrc: %d\n", srcInfo->idSrc);
+            printf("idAddon: %d\n", srcInfo->idAddon);
+
+            if (srcInfo->params == NULL)
             {
                 printf("Invalid JSON Node\n");
                 return (EXIT_FAILURE);
-            }   
-            tmp2 = tmp2->nxt;
-        }
-
-/*
-        JSONNODE_ITERATOR i = json_begin(tmp->params);
-       // Get the node name and value as a string
-        json_char *node_name = json_name(*i);
-        switch (tmp->idType)
-        {
-        case 1:
-            if (strcmp(node_name, "regex") == 0){
-                json_char *node_value = json_as_string(*i);
-                strcpy(regex, node_value);
-                json_free(node_value);
             }
-            break;
-        case 2:
-            break;
-        default:
-            break;
+
+            switch(srcInfo->idAddon)
+            {
+            case 2:
+            case 3:
+            {
+                JSONNODE_ITERATOR i = json_begin(srcInfo->params);
+                while (i != json_end(srcInfo->params))
+                {
+                    if (*i == NULL)
+                    {
+                        printf("Invalid JSON Node\n");
+                        return (EXIT_FAILURE);
+                    }
+                    // Get the node name and value as a string
+                    json_char *node_name = json_name(*i);
+                    if (!strcmp(node_name, "path"))
+                    {
+                        json_char *node_value = json_as_string(*i);
+                        strcpy(path, node_value);
+                        json_free(node_value);
+                    }
+                    // Cleanup and increment the iterator
+                    json_free(node_name);
+                    ++i;
+                }
+                printf("path: %s\n", path);
+                break;
+            }
+            default:
+                break;
+            }
+
+            SearchInfo *searchInfo = srcInfo->searchList;
+            while (searchInfo != NULL)
+            {
+                printf("idSearch: %d\n", searchInfo->idSearch);
+                printf("idType: %d\n", searchInfo->idType);
+                printf("period: %s\n", searchInfo->period);
+                printf("staticValues: %d\n", searchInfo->staticValues);
+                switch (srcInfo->idAddon)
+                {
+                case 2:
+                case 3:
+                    switch (searchInfo->idType)
+                    {
+                    case 1:
+                    {
+                        JSONNODE_ITERATOR i = json_begin(searchInfo->params);
+                        while (i != json_end(searchInfo->params))
+                        {
+                            if (*i == NULL)
+                            {
+                                printf("Invalid JSON Node\n");
+                                return (EXIT_FAILURE);
+                            }
+                            // Get the node name and value as a string
+                            json_char *node_name = json_name(*i);
+                            if (!strcmp(node_name, "regex"))
+                            {
+                                json_char *node_value = json_as_string(*i);
+                                strcpy(regex, node_value);
+                                json_free(node_value);
+                            }
+                            // Cleanup and increment the iterator
+                            json_free(node_name);
+                            ++i;
+                        }
+                        printf("regex: %s\n", regex);
+                        break;
+                    }
+                    case 2:
+                    {
+                        AddonLocationFileParams addonLocationFileParams =
+                        {
+                            plgInfo->idPlg,
+                            plgInfo->idAsset,
+                            srcInfo->idSrc,
+                            searchInfo->idSearch,
+                            searchInfo->staticValues,
+                            0, // line
+                            0, // firstChar
+                            0, //length
+                            "",
+                            ""
+                        };
+                        strcpy(addonLocationFileParams.path, path);
+                        strcpy(addonLocationFileParams.period, searchInfo->period);
+                        JSONNODE_ITERATOR i = json_begin(searchInfo->params);
+                        while (i != json_end(searchInfo->params))
+                        {
+                            if (*i == NULL)
+                            {
+                                printf("Invalid JSON Node\n");
+                                return (EXIT_FAILURE);
+                            }
+                            // Get the node name and value as a string
+                            json_char *node_name = json_name(*i);
+                            if (!strcmp(node_name, "line"))
+                            {
+                                addonLocationFileParams.line = json_as_int(*i);
+                            }
+                            else if (!strcmp(node_name, "firstChar"))
+                            {
+                                addonLocationFileParams.firstChar = json_as_int(*i);
+                            }
+                            else if (!strcmp(node_name, "length"))
+                            {
+                                addonLocationFileParams.length = json_as_int(*i);
+                            }
+                            // Cleanup and increment the iterator
+                            json_free(node_name);
+                            ++i;
+                        }
+                        printf("line: %i\n",addonLocationFileParams.line);
+                        printf("firstChar: %i\n", addonLocationFileParams.firstChar);
+                        printf("length: %i\n", addonLocationFileParams.length);
+
+                        pthread_t addonLocationFileThread;
+
+                        printf("Avant la création du thread.\n");
+
+                        if (pthread_create(&addonLocationFileThread, NULL, addonLocationFileLoop, &addonLocationFileParams))
+                        {
+                            perror("pthread_create");
+                            return EXIT_FAILURE;
+                        }
+
+                        if (pthread_join(addonLocationFileThread, NULL))
+                        {
+                            perror("pthread_join");
+                            return EXIT_FAILURE;
+                        }
+
+                        printf("Après la création du thread.\n"); 
+
+                        break;
+                    }
+                    default:
+                        break;
+                    }
+                    break;
+                default:
+                    break;
+                }
+                            
+                searchInfo = searchInfo->nxt;
+            }
+
+            srcInfo = srcInfo->nxt;
         }
-*/
         
         // On avance d'une case
-        tmp = tmp->nxt;
+        plgInfo = plgInfo->nxt;
     }
-
 
 /*
     pthread_t thread1;
