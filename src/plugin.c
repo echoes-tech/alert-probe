@@ -44,6 +44,40 @@ int addBackslash(char *string)
     return (EXIT_SUCCESS);
 }
 
+int periodString2Int(unsigned int *periodSec, const char *periodString)
+{
+     // default or [1-60]s or [1-60]m or [1-24]h or [1-365]d
+    
+    int i = strlen(periodString);
+    
+    if(periodString[i - 1] == 's')
+    {
+       //periodString[i - 1] = '\0';
+       *periodSec = atoi(periodString);
+    }
+    else if(periodString[i - 1] == 'm')
+    {
+       //periodString[i - 1] = '\0';
+       *periodSec = 60 * atoi(periodString);
+    }
+    else if(periodString[i - 1] == 'h')
+    {
+       //periodString[i - 1] = '\0';
+       *periodSec = 60 * 60 * atoi(periodString);
+    }
+    else if(periodString[i - 1] == 'd')
+    {
+       //periodString[i - 1] = '\0';
+       *periodSec = 24 * 60 * 60 * atoi(periodString);
+    }
+    
+    if (*periodSec == 0)
+    {
+        *periodSec = DEFAULT;
+    }
+    
+}
+
 int listPlugins(const char *plgDir, int *nbPlg, PlgList *plgList)
 {
     DIR* dir = NULL;
@@ -238,29 +272,6 @@ int json2llist(JSONNODE *n, PlgList *plgList)
             // Increment the iterator
             ++j;
         }
-/*
-                char path[255];
-                 j = json_begin(srcInfo->params);
-                while (j != json_end(srcInfo->params))
-                {
-                    if (*j == NULL)
-                    {
-                        printf("Invalid JSON Node\n");
-                        return (EXIT_FAILURE);
-                    }
-                    // Get the node name and value as a string
-                    node_name = json_name(*j);
-                    if (!strcmp(node_name, "path"))
-                    {
-                        json_char *node_value = json_as_string(*j);
-                        strcpy(path, node_value);
-                        json_free(node_value);
-                    }
-                    // Cleanup and increment the iterator
-                    ++j;
-                }
-                printf("path: %s\n", path);
-*/
         
         if (searches == NULL)
         {
@@ -280,7 +291,6 @@ int json2llist(JSONNODE *n, PlgList *plgList)
             }
             // New element of linjed list
             SearchInfo* searchInfo = calloc(1, sizeof (SearchInfo));
-            searchInfo->nxt = NULL;
             JSONNODE_ITERATOR k = json_begin(*j);
 
             while (k != json_end(*j))
@@ -307,8 +317,7 @@ int json2llist(JSONNODE *n, PlgList *plgList)
                 else if (!strcmp(node_name, "period"))
                 {
                     json_char *node_value = json_as_string(*k);
-                    strcpy(searchInfo->period, node_value);
-                    //TODO: transform period to int (second)
+                    periodString2Int(&searchInfo->period, node_value);
                     json_free(node_value);
                 }
                 else if (!strcmp(node_name, "staticValues"))

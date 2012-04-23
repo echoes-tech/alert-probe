@@ -23,8 +23,7 @@
 typedef struct SearchInfo SearchInfo;
 struct SearchInfo
 {
-    unsigned int idSearch, idType, staticValues;
-    char period[255];
+    unsigned int idSearch, idType, period, staticValues;
     JSONNODE *params;
     SearchInfo *nxt;
 };
@@ -57,12 +56,30 @@ typedef PlgInfo* PlgList;
 // Max size of file conf lines in caracters
 #define MAX_SIZE 300
 
+// Default period (second)
+#define DEFAULT 10
+
 /**
  * Check if the filename ends with .json
  * @param s[] Filename
  * @return Exit status
  */
 int verifExt(char s[]);
+
+/**
+ * Replace \ to \\
+ * @param string String
+ * @return Exit status
+ */
+int addBackslash(char *string);
+
+/**
+ * Convert the string period from plugin to a number of seconds
+ * @param *periodSec Pointer of period (second)
+ * @param periodString Period (string)
+ * @return 
+ */
+int periodString2Int(unsigned int *periodSec, const char *periodString);
 
 /**
  * Load probe plugin file to a jsonnode

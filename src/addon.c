@@ -6,32 +6,57 @@
 
 #include "addon.h"
 
-void *addonLocationFileLoop(AddonLocationFileParams *arg)
+void *addonLoop(void *arg)
 {
-/*
+    LoopParams *loopParams = (LoopParams*) arg;
+
     time_t now;
 
     // What time is it ?
     time(&now);
 
-    // Method to know when start the loop
-    time_t temp =  ((int)(now / arg->period) * arg->period) + arg->period;
-
-    // Diff between now and the start of the loop
-    SLEEP(difftime(temp, now));
-
-    while(1)
+    switch(loopParams->idAddon)
     {
-        addonLocationFile(arg->path, arg->line, arg->firstChar, arg->length);
-        SLEEP(arg->period);
+    case 1:
+        switch(loopParams->idType)
+        {
+        case 1:
+            break;
+        default:
+            break;        
+        }
+        break;
+    case 2:
+        switch(loopParams->idType)
+        {
+        case 1:
+            break;
+        case 2:
+        {
+            AddonLocationFileParams *params = (AddonLocationFileParams*) loopParams->params;
+
+            // Method to know when start the loop
+            time_t temp =  ((int)(now / params->period) * params->period) + params->period;
+
+            // Diff between now and the start of the loop
+            SLEEP(difftime(temp, now));
+
+            while(1)
+            {
+                addonLocationFile(params->path, params->line, params->firstChar, params->length);
+                SLEEP(params->period);
+            }
+            break;
+        }
+        default:
+            break;        
+        }
+        break;        
+    default:
+        break;
     }
     
-/*
-    // Pour enlever le warning
-    (void) arg;
-
     pthread_exit(NULL);
-*/
 }
 
 int addonLocationFile(const char* filePath, unsigned int nLine, unsigned int firstChar, unsigned int length)
@@ -58,7 +83,7 @@ int addonLocationFile(const char* filePath, unsigned int nLine, unsigned int fir
         
         for(i=0; i < length; ++i)
         {
-            res[i] = line[firstChar + i - 1];   
+            res[i] = line[firstChar + i - 1];
         }
 
         //TODO: envoyer le résultat
@@ -73,24 +98,10 @@ int addonLocationFile(const char* filePath, unsigned int nLine, unsigned int fir
     return (EXIT_SUCCESS);
 }
 
-void *addonLoop(void *arg)
-{
-    printf("On lance l'addon.\n");
-    time_t temps;
-    struct tm *tm;
-    
-    time(&temps);
-    tm = gmtime(&temps);
-    
-    // Pour enlever le warning
-    (void) arg;
-    pthread_exit(NULL);
-}
-
 int addon(PlgList *plgList)
 {
     char path[255], regex[255] = "";
-    
+
     PlgInfo *plgInfo = *plgList;
     // Tant que l'on n'est pas au bout de la liste
     while (plgInfo != NULL)
@@ -149,7 +160,7 @@ int addon(PlgList *plgList)
             {
                 printf("idSearch: %d\n", searchInfo->idSearch);
                 printf("idType: %d\n", searchInfo->idType);
-                printf("period: %s\n", searchInfo->period);
+                printf("period: %d\n", searchInfo->period);
                 printf("staticValues: %d\n", searchInfo->staticValues);
                 switch (srcInfo->idAddon)
                 {
@@ -184,21 +195,20 @@ int addon(PlgList *plgList)
                     }
                     case 2:
                     {
-                        AddonLocationFileParams addonLocationFileParams =
+                        AddonLocationFileParams alfp =
                         {
                             plgInfo->idPlg,
                             plgInfo->idAsset,
                             srcInfo->idSrc,
                             searchInfo->idSearch,
+                            searchInfo->period,
                             searchInfo->staticValues,
                             0, // line
                             0, // firstChar
                             0, //length
-                            "",
-                            ""
+                            "" // path
                         };
-                        strcpy(addonLocationFileParams.path, path);
-                        strcpy(addonLocationFileParams.period, searchInfo->period);
+                        strcpy(alfp.path, path);
                         JSONNODE_ITERATOR i = json_begin(searchInfo->params);
                         while (i != json_end(searchInfo->params))
                         {
@@ -211,35 +221,37 @@ int addon(PlgList *plgList)
                             json_char *node_name = json_name(*i);
                             if (!strcmp(node_name, "line"))
                             {
-                                addonLocationFileParams.line = json_as_int(*i);
+                                alfp.line = json_as_int(*i);
                             }
                             else if (!strcmp(node_name, "firstChar"))
                             {
-                                addonLocationFileParams.firstChar = json_as_int(*i);
+                                alfp.firstChar = json_as_int(*i);
                             }
                             else if (!strcmp(node_name, "length"))
                             {
-                                addonLocationFileParams.length = json_as_int(*i);
+                                alfp.length = json_as_int(*i);
                             }
                             // Cleanup and increment the iterator
                             json_free(node_name);
                             ++i;
                         }
-                        printf("line: %i\n",addonLocationFileParams.line);
-                        printf("firstChar: %i\n", addonLocationFileParams.firstChar);
-                        printf("length: %i\n", addonLocationFileParams.length);
+                        printf("line: %i\n",alfp.line);
+                        printf("firstChar: %i\n", alfp.firstChar);
+                        printf("length: %i\n", alfp.length);
 
-                        pthread_t addonLocationFileThread;
+                        LoopParams loopParams = {srcInfo->idAddon, searchInfo->idType, (void*)&alfp};
+                        
+                        pthread_t alft;
 
                         printf("Avant la création du thread.\n");
 
-                        if (pthread_create(&addonLocationFileThread, NULL, addonLocationFileLoop, &addonLocationFileParams))
+                        if (pthread_create(&alft, NULL, addonLoop, (void*)&loopParams))
                         {
                             perror("pthread_create");
                             return EXIT_FAILURE;
                         }
 
-                        if (pthread_join(addonLocationFileThread, NULL))
+                        if (pthread_join(alft, NULL))
                         {
                             perror("pthread_join");
                             return EXIT_FAILURE;
@@ -266,26 +278,6 @@ int addon(PlgList *plgList)
         // On avance d'une case
         plgInfo = plgInfo->nxt;
     }
-
-/*
-    pthread_t thread1;
-
-    printf("Avant la création du thread.\n");
-
-    if (pthread_create(&thread1, NULL, addonLocationFileLoop, NULL))
-    {
-        perror("pthread_create");
-        return EXIT_FAILURE;
-    }
-
-    if (pthread_join(thread1, NULL))
-    {
-        perror("pthread_join");
-        return EXIT_FAILURE;
-    }
-
-    printf("Après la création du thread.\n"); 
-*/
 
     return (EXIT_SUCCESS);
 }

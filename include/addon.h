@@ -27,14 +27,35 @@
 
 #endif
 
-#define DEFAULT "10s"
+typedef struct LoopParams LoopParams;
+struct LoopParams
+{
+    unsigned int idAddon, idType;
+    void *params;
+};
 
 typedef struct AddonLocationFileParams AddonLocationFileParams;
 struct AddonLocationFileParams
 {
-    unsigned int idPlg, idAsset, idSrc, idSearch, staticValues, line, firstChar, length;
-    char path[255], period[255];
+    unsigned int idPlg, idAsset, idSrc, idSearch, period, staticValues, line, firstChar, length;
+    char path[255];
 };
+
+/**
+ * Thread - Loop for addon
+ * @param arg Pointer of Loop Parameters 
+ */
+void *addonLoop(void *arg);
+
+/**
+ * Addon Location File
+ * @param filePath  Path of file
+ * @param nLine     Number of line
+ * @param firstChar First character
+ * @param length    Lenngth
+ * @return Exit status
+ */
+int addonLocationFile(const char* filePath, unsigned int nLine, unsigned int firstChar, unsigned int length);
 
 /**
  * Main function of Addons Manager
