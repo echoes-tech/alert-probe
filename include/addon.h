@@ -42,27 +42,25 @@ struct AddonLocationFileParams
 };
 
 /**
- * Thread - Loop for addon
+ * Thread - Loop for addon.
  * @param arg Pointer of Loop Parameters 
  */
 void *addonLoop(void *arg);
 
 /**
- * Addon Location File
- * @param filePath  Path of file
- * @param nLine     Number of line
- * @param firstChar First character
- * @param length    Lenngth
- * @return Exit status
+ * Addon Location File.
+ * @param *alfp Pointer of addon location file parameters
  */
-int addonLocationFile(const char* filePath, unsigned int nLine, unsigned int firstChar, unsigned int length);
+void *addonLocationFile(void *arg);
 
 /**
- * Main function of Addons Manager
- * @param *plgList Pointer of Plugins list with informations
+ * Main function of Addons Manager.
+ * @param *nbThreads      Pointer of Number of threads
+ * @param *plgList        Pointer of Plugins list with informations
+ * @param *addonThreads[] Table of addons threads
  * @return Exit status
  */
-int addon(PlgList *plgList);
+int addon(unsigned int *nbThreads, PlgList *plgList, pthread_t addonsThreads[]);
 
 #endif	/* ADDON_H */
 

@@ -12,6 +12,9 @@
 #include <errno.h>
 #include <string.h>
 
+// Max size of file conf lines in caracters
+#define MAX_SIZE 300
+
 // Probe Configurations
 typedef struct Conf Conf;
 struct Conf
@@ -19,9 +22,6 @@ struct Conf
     unsigned int enginePort, probeProto;
     char engineFQDN[255], pluginDir[255];
 };
-
-// Max size of file conf lines in caracters
-#define MAX_SIZE 300
 
 /**
  * Parse line from Configuration file

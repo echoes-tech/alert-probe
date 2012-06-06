@@ -9,6 +9,7 @@
                    projectFiles="true">
       <itemPath>include/addon.h</itemPath>
       <itemPath>include/conf.h</itemPath>
+      <itemPath>include/format.h</itemPath>
       <itemPath>include/plugin.h</itemPath>
       <itemPath>include/sender.h</itemPath>
     </logicalFolder>
@@ -23,11 +24,14 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>src/addon.c</itemPath>
-      <itemPath>src/conf.c</itemPath>
+      <logicalFolder name="f1" displayName="src" projectFiles="true">
+        <itemPath>src/addon.c</itemPath>
+        <itemPath>src/conf.c</itemPath>
+        <itemPath>src/format.c</itemPath>
+        <itemPath>src/plugin.c</itemPath>
+        <itemPath>src/sender.c</itemPath>
+      </logicalFolder>
       <itemPath>main.c</itemPath>
-      <itemPath>src/plugin.c</itemPath>
-      <itemPath>src/sender.c</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -56,14 +60,14 @@
                    displayName="Important Files"
                    projectFiles="false"
                    kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>.gitignore</itemPath>
       <itemPath>AUTHORS</itemPath>
       <itemPath>Makefile</itemPath>
       <itemPath>README</itemPath>
     </logicalFolder>
   </logicalFolder>
   <sourceRootList>
-    <Elem>plugins</Elem>
-    <Elem>conf</Elem>
+    <Elem>.</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
