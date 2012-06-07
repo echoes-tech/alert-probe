@@ -78,7 +78,7 @@ int main(int argc, char** argv)
     printf("Fin du chargement des conf\n");
 
     printf("Début du chargement des plugins\n");
-    if (plugin(conf.pluginDir, &plgList, &nbThreads))
+    if (plugin(conf.probePluginDir, &plgList, &nbThreads))
     {
         perror("plugin()");
         return (errno);
@@ -113,7 +113,7 @@ int main(int argc, char** argv)
     printf("Fin du chargement des addons\n");
 
     printf("Début de l'envoi du message\n");
-    if (sender(conf.engineFQDN, &conf.enginePort, &conf.probeProto))
+    if (sender(conf.engineFQDN, &conf.enginePort, &conf.transportProto))
     {
         perror("sender()");
         return (errno);
