@@ -20,10 +20,10 @@ int parseLineConf(const char* line, Conf *conf)
         *equal = '\0';
         // Key is begin of line
 
-         if (!strcmp(line, "engine_fqdn"))
+        if (!strcmp(line, "engine_fqdn"))
         {
             //TODO: test format
-            strncpy(conf->engineFQDN, value, (sizeof(value) + 1));
+            strncpy(conf->engineFQDN, value, (strlen(value) - 1));
         }
         else if (!strcmp(line, "engine_port"))
         {
@@ -38,7 +38,7 @@ int parseLineConf(const char* line, Conf *conf)
         else if (!strcmp(line, "probe_plugin_dir"))
         {
             //TODO: test format
-            strncpy(conf->probePluginDir, value, (sizeof(value) + 1));
+            strncpy(conf->probePluginDir, value, (strlen(value) - 1));
         }
         else if (!strcmp(line, "transport_proto"))
         {
