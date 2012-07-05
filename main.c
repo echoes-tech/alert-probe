@@ -12,7 +12,7 @@
 #include "conf.h"
 // To init struct PlgList
 #include "plugin.h"
-// To init struct AddonLoop and Params
+// To init struct AddonParams
 #include "addon.h"
 
 // Probe Name
@@ -20,7 +20,7 @@
 // Probe Version
 #define VERSION "0.1.0"
 // Conf Repository
-#define CONF_DIR "conf/echoes-alert.conf"
+#define CONF_DIR "./conf/echoes-alert.conf"
 
 /**
  * Main function
@@ -29,19 +29,14 @@
 int main(int argc, char** argv)
 {
     // Initialization
-    Conf conf = {0, 0, "", ""};
+    Conf conf = {0, 0, 0, 0, "", ""};
     
     // Plugins counter initialisation
     unsigned int nbThreads = 0;
-    PlgList plgList = NULL;
     
     // Addons threads initialisation
-    pthread_t *addonsThreads = NULL;
-/*
-    LoopParams *loopParams = {NULL};
-    AddonLocationFileParams *alfp = {NULL};
-*/
-    
+    pthread_t addonThread = 0;
+    AddonParams addonParams = {NULL, NULL, NULL};
 
     // Help message and version
     if (argc > 1)
@@ -78,39 +73,32 @@ int main(int argc, char** argv)
     printf("Fin du chargement des conf\n");
 
     printf("Début du chargement des plugins\n");
-    if (plugin(conf.probePluginDir, &plgList, &nbThreads))
+    if (plugin(conf.probePluginDir, &addonParams.plgList, &nbThreads))
     {
         perror("plugin()");
         return (errno);
     }
     printf("Fin du chargement des plugins\n");
 
-    addonsThreads = calloc(nbThreads, sizeof (pthread_t));
-    if (addonsThreads == NULL)
+    // Table addonsThreads creation
+    addonParams.addonsThreads = calloc(nbThreads, sizeof (pthread_t));
+    if (addonParams.addonsThreads == NULL)
     {
         return (EXIT_FAILURE);
     }
-/*
-    loopParams = calloc(nbThreads, sizeof (pthread_t));
-    if (loopParams == NULL)
+    // Table loopsParams creation
+    addonParams.loopsParams = calloc(nbThreads, sizeof (LoopParams));
+    if (addonParams.loopsParams == NULL)
     {
         return (EXIT_FAILURE);
     }
-    alfp = calloc(nbThreads, sizeof (pthread_t));
-    if (alfp == NULL)
-    {
-        return (EXIT_FAILURE);
-    }
-*/
 
     printf("Début du chargement des addons\n");
-    if (addon(&nbThreads, &plgList, addonsThreads))
-    //if (addon(&nbThreads, &plgList, addonsThreads, loopParams, alfp))
+    if (pthread_create(&addonThread, NULL, addon, (void*) &addonParams))
     {
-        perror("addon()");
-        return (errno);
+        perror("pthread_create");
+        return EXIT_FAILURE;
     }
-    printf("Fin du chargement des addons\n");
 
     printf("Début de l'envoi du message\n");
     if (sender(conf.engineFQDN, &conf.enginePort, &conf.transportProto))
@@ -120,18 +108,15 @@ int main(int argc, char** argv)
     }
     printf("Fin de l'envoi du message\n");
 
-    unsigned int i;
-    for (i = 0; i < nbThreads; i++)
+    if (pthread_join(addonThread, NULL))
     {
-        if (pthread_join(addonsThreads[i], NULL))
-        {
-/*
-            perror("pthread_join");
-            return EXIT_FAILURE;
-*/
-        }        
-    }
 
+        perror("pthread_join");
+        return EXIT_FAILURE;
+
+    }
+    
+    
     //TODO: free calloc!
     
     return (EXIT_SUCCESS);

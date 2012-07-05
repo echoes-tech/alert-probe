@@ -451,6 +451,7 @@ int json2llist(JSONNODE *n, PlgList *plgList, unsigned int *nbThreads)
                 default:
                     break;
                 }
+                break;
             }
             case 3:
             {
@@ -511,6 +512,7 @@ int json2llist(JSONNODE *n, PlgList *plgList, unsigned int *nbThreads)
                 default:
                     break;
                 }
+                break;
             }
             default:
                 break;

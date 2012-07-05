@@ -34,11 +34,26 @@ struct LoopParams
     void *params;
 };
 
+typedef struct AddonLocationLogParams AddonLocationLogParams;
+struct AddonLocationLogParams
+{
+    unsigned int idPlg, idAsset, idSrc, idSearch, period, staticValues, nbLine, firstChar, length;
+    char path[255];
+};
+
 typedef struct AddonLocationFileParams AddonLocationFileParams;
 struct AddonLocationFileParams
 {
     unsigned int idPlg, idAsset, idSrc, idSearch, period, staticValues, line, firstChar, length;
     char path[255];
+};
+
+typedef struct AddonParams AddonParams;
+struct AddonParams
+{
+    PlgList plgList;
+    pthread_t* addonsThreads;
+    LoopParams* loopsParams;
 };
 
 /**
@@ -54,13 +69,20 @@ void *addonLoop(void *arg);
 void *addonLocationFile(void *arg);
 
 /**
+ * Addon Location Log.
+ * @param *allp Pointer of addon location log parameters
+ */
+void *addonLocationLog(void *arg);
+
+/**
  * Main function of Addons Manager.
  * @param *nbThreads      Pointer of Number of threads
  * @param *plgList        Pointer of Plugins list with informations
  * @param *addonThreads[] Table of addons threads
  * @return Exit status
  */
-int addon(unsigned int *nbThreads, PlgList *plgList, pthread_t addonsThreads[]);
+//int addon(unsigned int *nbThreads, PlgList *plgList, pthread_t addonsThreads[]);
+void *addon(void *arg);
 
 #endif	/* ADDON_H */
 
