@@ -6,8 +6,39 @@
 
 #include "addon.h"
 
-pthread_cond_t condition = PTHREAD_COND_INITIALIZER; /* Création de la condition */
-pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER; /* Création du mutex */
+int pushCollectQueue(CollectQueue *collectQueue, unsigned int idPlg, unsigned int idAsset, unsigned int idSrc, unsigned int idSearch, unsigned int numSubSearch, const char *value, time_t time)
+{
+    CollectQueueElement *new = calloc(1, sizeof(CollectQueueElement));
+    if (collectQueue == NULL || new == NULL)
+    {
+        exit(EXIT_FAILURE);
+    }
+
+    sprintf(new->identifier, "%d-%d-%d-%d-%d", idPlg, idAsset, idSrc, idSearch, numSubSearch);
+    strcpy(new->value, value);
+    new->time = time;
+
+    /* Debut de la zone protegee. */
+    pthread_mutex_lock (& collectQueue->mutex);
+    
+    if (collectQueue->first != NULL) /* La file n'est pas vide */
+    {
+        /* On se positionne à la fin de la file */
+        CollectQueueElement *lastElement = collectQueue->first;
+        while (lastElement->next != NULL)
+        {
+            lastElement = lastElement->next;
+        }
+        lastElement->next = new;
+    }
+    else /* La file est vide, notre élément est le premier */
+    {
+        collectQueue->first = new;
+    }
+    
+    /* Fin de la zone protegee. */
+    pthread_mutex_unlock (& collectQueue->mutex);
+}
 
 void *addonLoop(void *arg)
 {
@@ -50,14 +81,15 @@ void *addonLoop(void *arg)
                 paramsTmp->line,
                 paramsTmp->firstChar,
                 paramsTmp->length,
-                "" // path
+                "", // path
+                paramsTmp->collectQueue
             };
             
             strcpy(alfp.path, paramsTmp->path);
             
-            pthread_mutex_lock (&mutex); /* On verrouille le mutex */
-			pthread_cond_signal (&condition); /* On délivre le signal : condition remplie */
-			pthread_mutex_unlock (&mutex); /* On déverrouille le mutex */
+            pthread_mutex_lock (&loopParams->mutex); /* On verrouille le mutex */
+			pthread_cond_signal (&loopParams->condition); /* On délivre le signal : condition remplie */
+			pthread_mutex_unlock (&loopParams->mutex); /* On déverrouille le mutex */
 
             // Method to know when start the loop
             time_t temp =  ((int)(now / alfp.period) * alfp.period) + alfp.period;
@@ -102,14 +134,15 @@ void *addonLoop(void *arg)
                 0, // nbLine
                 paramsTmp->firstChar,
                 paramsTmp->length,
-                "" // path
+                "", // path
+                paramsTmp->collectQueue
             };
 
             strcpy(allp.path, paramsTmp->path);
             
-            pthread_mutex_lock (&mutex); /* On verrouille le mutex */
-			pthread_cond_signal (&condition); /* On délivre le signal : condition remplie */
-			pthread_mutex_unlock (&mutex); /* On déverrouille le mutex */
+            pthread_mutex_lock (&loopParams->mutex); /* On verrouille le mutex */
+			pthread_cond_signal (&loopParams->condition); /* On délivre le signal : condition remplie */
+			pthread_mutex_unlock (&loopParams->mutex); /* On déverrouille le mutex */
 
             // Method to know when start the loop
             time_t temp =  ((int)(now / allp.period) * allp.period) + allp.period;
@@ -178,9 +211,12 @@ void *addonLocationFile(void *arg)
         {
             res[i] = line[params->firstChar + i - 1];
         }
-
-        //TODO: envoyer le résultat
-        printf("time: %f, res: %s, ids: %d-%d-%d-%d.\n", (double) now, res, params->idPlg, params->idAsset, params->idSrc, params->idSearch);
+        
+        if (pushCollectQueue(params->collectQueue, params->idPlg, params->idAsset, params->idSrc, params->idSearch, 0, res, now))
+        {
+            perror("pushCollectQueue()");
+            return (errno);
+        }
     }
     else
     {
@@ -226,8 +262,11 @@ void *addonLocationLog(void *arg)
                 {
                     res[i] = line[params->firstChar + i - 1];
                 }
-                //TODO: envoyer le résultat
-                printf("time: %f, res: %s, ids: %d-%d-%d-%d.\n", (double) now, res, params->idPlg, params->idAsset, params->idSrc, params->idSearch);
+                if (pushCollectQueue(params->collectQueue, params->idPlg, params->idAsset, params->idSrc, params->idSearch, 0, res, now))
+                {
+                    perror("pushCollectQueue()");
+                    return (errno);
+                }
                 n++;
             }
         }
@@ -254,8 +293,11 @@ void *addonLocationLog(void *arg)
                 {
                     res[i] = line[params->firstChar + i - 1];
                 }
-                //TODO: envoyer le résultat
-                printf("time: %f, res: %s, ids: %d-%d-%d-%d.\n", (double) now, res, params->idPlg, params->idAsset, params->idSrc, params->idSearch);
+                if (pushCollectQueue(params->collectQueue, params->idPlg, params->idAsset, params->idSrc, params->idSearch, 0, res, now))
+                {
+                    perror("pushCollectQueue()");
+                    return (errno);
+                }
             }
         }
         else if (n < params->nbLine)
@@ -339,7 +381,8 @@ void *addon(void *arg)
                             searchInfoParams2_2->line,
                             searchInfoParams2_2->firstChar,
                             searchInfoParams2_2->length,
-                            "" // path
+                            "", // path
+                            &addonParams->collectQueue
                         };
                         strcpy(alfp.path, srcInfoParams2->path);
 
@@ -347,25 +390,17 @@ void *addon(void *arg)
                         addonParams->loopsParams[numThread].idType = searchInfo->idType;
                         addonParams->loopsParams[numThread].params = (void*)&alfp;
 
-
                         if (pthread_create(&addonParams->addonsThreads[numThread], NULL, addonLoop, (void*)&addonParams->loopsParams[numThread]))
                         {
                             perror("pthread_create");
                             pthread_exit(NULL);
                         }
-/*
-                        if (pthread_join(addonParams->addonsThreads[numThread], NULL))
-                        {
- 
-                            perror("pthread_join");
-                            pthread_exit(NULL);
-
-                        } 
-*/
                         
-                        pthread_mutex_lock(&mutex); /* On verrouille le mutex */
-                        pthread_cond_wait (&condition, &mutex); /* On attend que la condition soit remplie */
-                        pthread_mutex_unlock(&mutex); /* On déverrouille le mutex */
+                        pthread_mutex_lock(&addonParams->loopsParams[numThread].mutex); /* On verrouille le mutex */
+                        pthread_cond_wait (&addonParams->loopsParams[numThread].condition, &addonParams->loopsParams[numThread].mutex); /* On attend que la condition soit remplie */
+                        pthread_mutex_unlock(&addonParams->loopsParams[numThread].mutex); /* On déverrouille le mutex */
+                        
+                        pthread_mutex_destroy(&addonParams->loopsParams[numThread].mutex);
                         break;
                     }
                     default:
@@ -400,7 +435,8 @@ void *addon(void *arg)
                             0, // nbLine
                             searchInfoParams3_2->firstChar,
                             searchInfoParams3_2->length,
-                            "" // path
+                            "", // path
+                            &addonParams->collectQueue
                         };
                         strcpy(allp.path, srcInfoParams3->path);
 
@@ -415,18 +451,12 @@ void *addon(void *arg)
                             perror("pthread_create");
                             pthread_exit(NULL);
                         }
-/*
-                        if (pthread_join(addonParams->addonsThreads[numThread], NULL))
-                        {
- 
-                            perror("pthread_join");
-                            pthread_exit(NULL);
 
-                        } 
-*/
-                        pthread_mutex_lock(&mutex); /* On verrouille le mutex */
-                        pthread_cond_wait (&condition, &mutex); /* On attend que la condition soit remplie */
-                        pthread_mutex_unlock(&mutex); /* On déverrouille le mutex */
+                        pthread_mutex_lock(&addonParams->loopsParams[numThread].mutex); /* On verrouille le mutex */
+                        pthread_cond_wait (&addonParams->loopsParams[numThread].condition, &addonParams->loopsParams[numThread].mutex); /* On attend que la condition soit remplie */
+                        pthread_mutex_unlock(&addonParams->loopsParams[numThread].mutex); /* On déverrouille le mutex */
+                        
+                        pthread_mutex_destroy(&addonParams->loopsParams[numThread].mutex);
                         break;
                     }
                     default:
@@ -450,21 +480,15 @@ void *addon(void *arg)
         // On avance d'une case
         plgInfo = plgInfo->nxt;
     }
+
+    printf("Fin du chargement des addons\n");
     
+    /* Attente de la fin des threads */
     unsigned int i;
     for (i = 0; i < numThread; i++)
     {
         pthread_join(addonParams->addonsThreads[i], NULL);
-/*
-        if (pthread_join(addonParams->addonsThreads[i], NULL))
-        {
-            perror("pthread_join");
-            return EXIT_FAILURE;
-        }        
-*/
     }
-
-    printf("Fin du chargement des addons\n");
     
     pthread_exit(NULL);
 }

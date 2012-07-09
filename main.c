@@ -14,6 +14,8 @@
 #include "plugin.h"
 // To init struct AddonParams
 #include "addon.h"
+// To init struct FormatParams
+#include "format.h"
 
 // Probe Name
 #define NAME "ECHOES Alert - Probe"
@@ -37,6 +39,10 @@ int main(int argc, char** argv)
     // Addons threads initialisation
     pthread_t addonThread = 0;
     AddonParams addonParams = {NULL, NULL, NULL};
+    
+    // Queues initialisation
+    //CollectQueue collectQueue = {PTHREAD_MUTEX_INITIALIZER, NULL};
+    SDElementQueue sdElementQueue = {PTHREAD_MUTEX_INITIALIZER, NULL};
 
     // Help message and version
     if (argc > 1)
@@ -100,6 +106,17 @@ int main(int argc, char** argv)
         return EXIT_FAILURE;
     }
 
+    // Format thread initilisation
+    pthread_t formatThread = 0;
+    FormatParams formatParams = {&conf.probeID, &conf.transportMsgVersion, &addonParams.collectQueue};
+
+    printf("Début du chargement du module Format\n");
+    if (pthread_create(&formatThread, NULL, format, (void*) &formatParams))
+    {
+        perror("pthread_create");
+        return EXIT_FAILURE;
+    }
+    
     printf("Début de l'envoi du message\n");
     if (sender(conf.engineFQDN, &conf.enginePort, &conf.transportProto))
     {

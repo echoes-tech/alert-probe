@@ -12,5 +12,54 @@
 #include <stdlib.h>
 #include <errno.h>
 
+#include "addon.h"
+
+typedef struct FormatParams FormatParams;
+struct FormatParams
+{
+    unsigned int *probeID, *transportMsgVersion;
+    CollectQueue *collectQueue;
+};
+
+// Element of SD-Element queue
+typedef struct SDElementQueueElement SDElementQueueElement;
+struct SDElementQueueElement
+{
+    char sdElement[10000];
+    SDElementQueueElement *next;
+};
+// SD-Element queue
+typedef struct SDElementQueue SDElementQueue;
+struct SDElementQueue
+{
+    pthread_mutex_t mutex;
+    SDElementQueueElement *first;
+};
+
+/**
+ * Group collected data by time in Structured-Element.
+ * @param collectQueue   Data collected Queue
+ * @param sdElementQueue SD-Element Queue
+ * @return Exit status
+ */
+ int collectedData2sdElement(CollectQueue collectQueue, SDElementQueue sdElementQueue);
+ 
+/**
+ * Create the message to send
+ * @param sdElementQueue   SD-Element Queue
+ * @param probeID             Probe Identifier
+ * @param transportMsgVersion Message Version
+ * @return Exit status
+ */
+ int msgCreator(SDElementQueue sdElementQueue, unsigned int probeID, unsigned int transportMsgVersion);
+
+/**
+ * Main function of Format Module.
+ * @param *probeID            Pointer of Probe Identifier
+ * @param transportMsgVersion Pointer of Message Version
+ * @param collectQueue        Pointer of Data collected Queue
+ */
+void *format(void *arg);
+
 #endif	/* FORMAT_H */
 
