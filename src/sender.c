@@ -82,11 +82,11 @@ static int endConnection(SOCKET *sock)
     return (EXIT_SUCCESS);
 }
 
-int sender(const char *address, int *port, int *protocol)
+int sendMessage(const char *address, int *port, int *protocol, const char *message)
 {
+    
     SOCKADDR_IN sin = {0}; // Emission info
     SOCKET sock; // Socket
-    char message[] = "Hello World !"; // Message to send
 
     // Init just for Win32
     init();
@@ -125,7 +125,59 @@ int sender(const char *address, int *port, int *protocol)
 
     // End just for Win32
     end();
+}
+
+int popSDElementQueue(const char *address, int *port, int *protocol, SDElementQueue *sdElementQueue)
+{
+    if (sdElementQueue == NULL)
+    {
+        exit(EXIT_FAILURE);
+    }
+
+    /* Debut de la zone protegee. */
+    pthread_mutex_lock (& sdElementQueue->mutex);
+    
+    /* On vérifie s'il y a quelque chose à défiler */
+    if (sdElementQueue->first != NULL)
+    {
+        SDElementQueueElement *popedElement = sdElementQueue->first;
+
+        sendMessage(
+                    address,
+                    port,
+                    protocol,
+                    popedElement->sdElement
+                    );
+        sdElementQueue->first = popedElement->next;
+        free(popedElement);
+    }
+
+    /* Fin de la zone protegee. */
+    pthread_mutex_unlock (& sdElementQueue->mutex);
 
     return (EXIT_SUCCESS);
+}
+
+void *sender(void *arg)
+{
+    SenderParams *senderParams = (SenderParams*) arg;
+
+    while (1)
+    {
+        while (senderParams->sdElementQueue->first != NULL)
+        {
+            popSDElementQueue(
+                              senderParams->address,
+                              senderParams->port,
+                              senderParams->protocol,
+                              senderParams->sdElementQueue
+                );
+        }
+        SLEEP(1);
+    }
+
+    printf("Fin de l'envoi des messages\n");
+    
+    pthread_exit(NULL);
 }
 

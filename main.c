@@ -16,6 +16,8 @@
 #include "addon.h"
 // To init struct FormatParams
 #include "format.h"
+// To init struct SenderParams
+#include "sender.h"
 
 // Probe Name
 #define NAME "ECHOES Alert - Probe"
@@ -41,7 +43,6 @@ int main(int argc, char** argv)
     AddonParams addonParams = {NULL, NULL, NULL};
     
     // Queues initialisation
-    //CollectQueue collectQueue = {PTHREAD_MUTEX_INITIALIZER, NULL};
     SDElementQueue sdElementQueue = {PTHREAD_MUTEX_INITIALIZER, NULL};
 
     // Help message and version
@@ -108,7 +109,7 @@ int main(int argc, char** argv)
 
     // Format thread initilisation
     pthread_t formatThread = 0;
-    FormatParams formatParams = {&conf.probeID, &conf.transportMsgVersion, &addonParams.collectQueue};
+    FormatParams formatParams = {&conf.probeID, &conf.transportMsgVersion, &addonParams.collectQueue, &sdElementQueue};
 
     printf("Début du chargement du module Format\n");
     if (pthread_create(&formatThread, NULL, format, (void*) &formatParams))
@@ -117,13 +118,16 @@ int main(int argc, char** argv)
         return EXIT_FAILURE;
     }
     
+    // Sender thread initilisation
+    pthread_t senderThread = 0;
+    SenderParams senderParams = {&sdElementQueue, conf.engineFQDN, &conf.enginePort, &conf.transportProto};
+
     printf("Début de l'envoi du message\n");
-    if (sender(conf.engineFQDN, &conf.enginePort, &conf.transportProto))
+    if (pthread_create(&senderThread, NULL, sender, (void*) &senderParams))
     {
-        perror("sender()");
-        return (errno);
+        perror("pthread_create");
+        return EXIT_FAILURE;
     }
-    printf("Fin de l'envoi du message\n");
 
     if (pthread_join(addonThread, NULL))
     {

@@ -12,6 +12,8 @@
 #include <errno.h>
 #include <string.h>
 
+#include "format.h"
+
 // Source : http://broux.developpez.com/articles/c/sockets/
 
 #ifdef WIN32
@@ -42,16 +44,17 @@ typedef struct in_addr IN_ADDR;
 
 typedef struct hostent Hostent;
 
-/**
- * Main function of Sender Module
- * @param *address Engines FQDN
- * @param *port     Pointer of Emission port
- * @param *protocol Pointer of Emission protocol (O: TCP, 1: UDP)
- * @return Exit status
- */
-int sender(const char *address, int *port, int *protocol);
+typedef struct SenderParams SenderParams;
+struct SenderParams
+{
+    SDElementQueue *sdElementQueue;
+    const char *address;
+    int *port, *protocol;
+};
+
 static void init(void);
 static void end(void);
+
 /**
  * Open the socket
  * @param *address  Engines FQDN
@@ -62,11 +65,41 @@ static void end(void);
  * @return Exit status
  */
 static int initConnection(const char *address, int *port, int *protocol, SOCKADDR_IN *sin, SOCKET *sock);
+
 /**
  * Close the socket
  * @param *sock Pointer of Socket
  */
 static int endConnection(SOCKET *sock);
+
+/**
+ * Send Message
+ * @param *address  Engines FQDN
+ * @param *port     Pointer of Emission port
+ * @param *protocol Pointer of Emission protocol (O: TCP, 1: UDP)
+ * @param *message  Message
+ * @return Exit status
+ */
+int sendMessage(const char *address, int *port, int *protocol, const char *message);
+
+/**
+ * Extract a message from SD-Element Queue
+ * @param *address        Engines FQDN
+ * @param *port           Pointer of Emission port
+ * @param *protocol       Pointer of Emission protocol (O: TCP, 1: UDP)
+ * @param *sdElementQueue Pointer of SD-Element Queue
+ * @return Exit status
+ */
+int popSDElementQueue(const char *address, int *port, int *protocol, SDElementQueue *sdElementQueue);
+
+/**
+ * Thread - Main function of Sender Module
+ * @param *sdElementQueue Pointer of SD-Element Queue
+ * @param *address        Engines FQDN
+ * @param *port           Pointer of Emission port
+ * @param *protocol       Pointer of Emission protocol (O: TCP, 1: UDP)
+ */
+void *sender(void *arg);
 
 #endif	/* SENDER_H */
 

@@ -14,7 +14,11 @@ int pushCollectQueue(CollectQueue *collectQueue, unsigned int idPlg, unsigned in
         exit(EXIT_FAILURE);
     }
 
-    sprintf(new->identifier, "%d-%d-%d-%d-%d", idPlg, idAsset, idSrc, idSearch, numSubSearch);
+    new->idPlg = idPlg;
+    new->idAsset = idAsset;
+    new->idSrc = idSrc;
+    new->idSearch = idSearch;
+    new->numSubSearch = numSubSearch;
     strcpy(new->value, value);
     new->time = time;
 
@@ -44,9 +48,6 @@ void *addonLoop(void *arg)
 {
     LoopParams *loopParams = (LoopParams*) arg;
 
-    printf("addonLoop idAddon: %d\n", loopParams->idAddon);
-    printf("addonLoop idType: %d\n", loopParams->idType);
-    
     time_t now;
 
     // What time is it ?

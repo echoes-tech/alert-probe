@@ -31,7 +31,7 @@
 typedef struct CollectQueueElement CollectQueueElement;
 struct CollectQueueElement
 {
-    char identifier[250];
+    unsigned int idPlg, idAsset, idSrc, idSearch, numSubSearch;
     char value[1000];
     time_t time;
     CollectQueueElement *next;

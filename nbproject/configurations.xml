@@ -97,6 +97,8 @@
           <linkerLibItems>
             <linkerLibStdlibItem>CUnit</linkerLibStdlibItem>
             <linkerLibLibItem>json</linkerLibLibItem>
+            <linkerLibLibItem>ssl</linkerLibLibItem>
+            <linkerLibLibItem>crypto</linkerLibLibItem>
           </linkerLibItems>
           <commandLine>-pthread</commandLine>
         </linkerTool>

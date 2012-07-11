@@ -5,8 +5,77 @@
  */
 
 #include "format.h"
+#include <openssl/sha.h>
+#include <openssl/hmac.h>
+#include <openssl/evp.h>
+#include <openssl/bio.h>
+#include <openssl/buffer.h>
 
-int popCollectQueue(CollectQueue *collectQueue)
+// Source : http://www.ioncannon.net/programming/34/howto-base64-encode-with-cc-and-openssl/
+
+char *base64(const unsigned char *input, int length)
+{
+    BIO *bmem, *b64;
+    BUF_MEM *bptr;
+
+    b64 = BIO_new(BIO_f_base64());
+    bmem = BIO_new(BIO_s_mem());
+    b64 = BIO_push(b64, bmem);
+    BIO_write(b64, input, length);
+    BIO_flush(b64);
+    BIO_get_mem_ptr(b64, &bptr);
+
+    char *buff = (char *) malloc(bptr->length);
+    memcpy(buff, bptr->data, bptr->length - 1);
+    buff[bptr->length - 1] = 0;
+
+    BIO_free_all(b64);
+
+    return buff;
+}
+
+int pushSDElementQueue(SDElementQueue *sdElementQueue, unsigned int idPlg, unsigned int idAsset, unsigned int idSrc, unsigned int idSearch, unsigned int numSubSearch, const char *b64Value, time_t time)
+{
+    SDElementQueueElement *new = calloc(1, sizeof(SDElementQueueElement));
+    if (sdElementQueue == NULL || new == NULL)
+    {
+        exit(EXIT_FAILURE);
+    }
+
+    sprintf(
+            new->sdElement,
+            "<165>1 2003-10-11T22:14:15Z mymachine.example.com echoes-alert-probe 3216 ID47 [prop@5875 ver=1 probe=12][res1@5875 offset= %d-%d-%d-%d-%d=\"%s\"]",
+            idPlg,
+            idAsset,
+            idSrc,
+            idSearch,
+            numSubSearch,
+            b64Value
+        );
+
+    /* Debut de la zone protegee. */
+    pthread_mutex_lock (& sdElementQueue->mutex);
+    
+    if (sdElementQueue->first != NULL) /* La file n'est pas vide */
+    {
+        /* On se positionne à la fin de la file */
+        SDElementQueueElement *lastElement = sdElementQueue->first;
+        while (lastElement->next != NULL)
+        {
+            lastElement = lastElement->next;
+        }
+        lastElement->next = new;
+    }
+    else /* La file est vide, notre élément est le premier */
+    {
+        sdElementQueue->first = new;
+    }
+    
+    /* Fin de la zone protegee. */
+    pthread_mutex_unlock (& sdElementQueue->mutex);
+}
+
+int popCollectQueue(CollectQueue *collectQueue, SDElementQueue *sdElementQueue)
 {
     if (collectQueue == NULL)
     {
@@ -21,7 +90,16 @@ int popCollectQueue(CollectQueue *collectQueue)
     {
         CollectQueueElement *popedElement = collectQueue->first;
 
-        printf("time: %f, value: %s, ids: %s.\n", (double) popedElement->time, popedElement->value, popedElement->identifier);
+        pushSDElementQueue(
+                           sdElementQueue,
+                           popedElement->idPlg,
+                           popedElement->idAsset,
+                           popedElement->idSrc,
+                           popedElement->idSearch,
+                           popedElement->numSubSearch,
+                           base64(popedElement->value, strlen(popedElement->value)),
+                           popedElement->time
+                           );
         collectQueue->first = popedElement->next;
         free(popedElement);
     }
@@ -40,7 +118,7 @@ void *format(void *arg)
     {
         while (formatParams->collectQueue->first != NULL)
         {
-            popCollectQueue(formatParams->collectQueue);
+            popCollectQueue(formatParams->collectQueue, formatParams->sdElementQueue);
         }
         SLEEP(1);
     }

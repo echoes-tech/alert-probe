@@ -14,13 +14,6 @@
 
 #include "addon.h"
 
-typedef struct FormatParams FormatParams;
-struct FormatParams
-{
-    unsigned int *probeID, *transportMsgVersion;
-    CollectQueue *collectQueue;
-};
-
 // Element of SD-Element queue
 typedef struct SDElementQueueElement SDElementQueueElement;
 struct SDElementQueueElement
@@ -35,6 +28,16 @@ struct SDElementQueue
     pthread_mutex_t mutex;
     SDElementQueueElement *first;
 };
+
+typedef struct FormatParams FormatParams;
+struct FormatParams
+{
+    unsigned int *probeID, *transportMsgVersion;
+    CollectQueue *collectQueue;
+    SDElementQueue *sdElementQueue;
+};
+
+char *base64(const unsigned char *input, int length);
 
 /**
  * Group collected data by time in Structured-Element.
