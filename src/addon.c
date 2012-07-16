@@ -333,7 +333,7 @@ void *addonLocationLog(void *arg)
 //int addon(unsigned int *nbThreads, PlgList *plgList, pthread_t addonsThreads[])
 void *addon(void *arg)
 {
-    AddonParams *addonParams = (AddonParams*) arg;
+    AddonsMgrParams *addonParams = (AddonsMgrParams*) arg;
     
     // The position on the threads table
     unsigned int numThread = 0;
@@ -444,8 +444,6 @@ void *addon(void *arg)
                         addonParams->loopsParams[numThread].idAddon = srcInfo->idAddon;
                         addonParams->loopsParams[numThread].idType = searchInfo->idType;
                         addonParams->loopsParams[numThread].params = (void*)&allp;
-
-
 
                         if (pthread_create(&addonParams->addonsThreads[numThread], NULL, addonLoop, (void*) &addonParams->loopsParams[numThread]))
                         {

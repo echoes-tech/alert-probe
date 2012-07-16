@@ -98,10 +98,22 @@ int sendMessage(const char *address, int *port, int *protocol, const char *messa
         return (errno);
     }
 
+    // Adding PRI, VERSION and TIMESTAMP
+    time_t now;
+    struct tm instant;
+    char timestamp[480], completMsg[480];
+
+    time(&now);
+    instant=*localtime(&now);
+
+    strftime(timestamp, 480, "%Y-%m-%dT%XZ", &instant);
+    
+    snprintf(completMsg, 480, "<118>1 %s %s", timestamp, message);
+
     // Sending data
     if (*protocol == 1)
     {
-        if (sendto(sock, message, strlen(message), 0, (SOCKADDR *) & sin, sizeof sin) < 0)
+        if (sendto(sock, completMsg, strlen(completMsg), 0, (SOCKADDR *) & sin, sizeof sin) < 0)
         {
             perror("sendto()");
             return (errno);
@@ -109,7 +121,7 @@ int sendMessage(const char *address, int *port, int *protocol, const char *messa
     }
     else
     {
-        if (send(sock, message, strlen(message), 0) < 0)
+        if (send(sock, completMsg, strlen(completMsg), 0) < 0)
         {
             perror("send()");
             return (errno);
@@ -171,7 +183,7 @@ void *sender(void *arg)
                               senderParams->port,
                               senderParams->protocol,
                               senderParams->sdElementQueue
-                );
+                              );
         }
         SLEEP(1);
     }

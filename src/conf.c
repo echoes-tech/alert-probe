@@ -20,17 +20,7 @@ int parseLineConf(const char* line, Conf *conf)
         *equal = '\0';
         // Key is begin of line
 
-        if (!strcmp(line, "engine_fqdn"))
-        {
-            //TODO: test format
-            strncpy(conf->engineFQDN, value, (strlen(value) - 1));
-        }
-        else if (!strcmp(line, "engine_port"))
-        {
-            //TODO: test format
-            conf->enginePort = atoi(value);
-        }
-        else if (!strcmp(line, "probe_id"))
+        if (!strcmp(line, "probe_id"))
         {
             //TODO: test format
             conf->probeID = atoi(value);
@@ -49,6 +39,16 @@ int parseLineConf(const char* line, Conf *conf)
         {
             //TODO: test format
             conf->transportMsgVersion = atoi(value);
+        }
+        else if (!strcmp(line, "engine_fqdn"))
+        {
+            //TODO: test format
+            strncpy(conf->engineFQDN, value, (strlen(value) - 1));
+        }
+        else if (!strcmp(line, "engine_port"))
+        {
+            //TODO: test format
+            conf->enginePort = atoi(value);
         }
         else
         {

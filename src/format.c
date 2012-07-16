@@ -44,7 +44,12 @@ int pushSDElementQueue(SDElementQueue *sdElementQueue, unsigned int idPlg, unsig
 
     sprintf(
             new->sdElement,
-            "<165>1 2003-10-11T22:14:15Z mymachine.example.com echoes-alert-probe 3216 ID47 [prop@5875 ver=1 probe=12][res1@5875 offset= %d-%d-%d-%d-%d=\"%s\"]",
+            "%s %s %d ID47 [prop@5875 ver=%d probe=%d][res1@5875 offset= %d-%d-%d-%d-%d=\"%s\"]",
+            sdElementQueue->hostname,
+            sdElementQueue->appName,
+            sdElementQueue->pID,
+            *sdElementQueue->transportMsgVersion,
+            *sdElementQueue->probeID,
             idPlg,
             idAsset,
             idSrc,

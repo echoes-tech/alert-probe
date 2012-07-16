@@ -26,13 +26,15 @@ typedef struct SDElementQueue SDElementQueue;
 struct SDElementQueue
 {
     pthread_mutex_t mutex;
+    char hostname[255], appName[255];
+    unsigned int *probeID, *transportMsgVersion;
+    pid_t pID;
     SDElementQueueElement *first;
 };
 
 typedef struct FormatParams FormatParams;
 struct FormatParams
 {
-    unsigned int *probeID, *transportMsgVersion;
     CollectQueue *collectQueue;
     SDElementQueue *sdElementQueue;
 };

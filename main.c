@@ -12,15 +12,16 @@
 #include "conf.h"
 // To init struct PlgList
 #include "plugin.h"
-// To init struct AddonParams
+// To init struct AddonsMgrParams
 #include "addon.h"
 // To init struct FormatParams
 #include "format.h"
 // To init struct SenderParams
 #include "sender.h"
 
-// Probe Name
-#define NAME "ECHOES Alert - Probe"
+// Probe Names
+#define PRODUCT_NAME "ECHOES Alert - Probe"
+#define APP_NAME "echoes-alert-probe"
 // Probe Version
 #define VERSION "0.1.0"
 // Conf Repository
@@ -32,36 +33,67 @@
  */
 int main(int argc, char** argv)
 {
+    //
     // Initialization
-    Conf conf = {0, 0, 0, 0, "", ""};
+    // 
+    
+    // Probe Configuration initialisation
+    Conf conf = CONF_INITIALIZER;
     
     // Plugins counter initialisation
     unsigned int nbThreads = 0;
     
-    // Addons threads initialisation
-    pthread_t addonThread = 0;
-    AddonParams addonParams = {NULL, NULL, NULL};
-    
+    // Addons Manager, Format Module and Sender Module threads initialisations
+    pthread_t addonsMgrThread = 0, formatThread = 0, senderThread = 0;
+
+    // Addons Manager thread params initialisation
+    AddonsMgrParams addonsMgrParams = ADDON_PARAMS_INITIALIZER;
+
     // Queues initialisation
-    SDElementQueue sdElementQueue = {PTHREAD_MUTEX_INITIALIZER, NULL};
+    SDElementQueue sdElementQueue = {
+        PTHREAD_MUTEX_INITIALIZER,
+        "",
+        APP_NAME,
+        &conf.probeID,
+        &conf.transportMsgVersion,
+        getpid(),
+        NULL
+    };
+    
+    gethostname(sdElementQueue.hostname, 255);
+
+    // Format thread initilisation
+    FormatParams formatParams = {
+        &addonsMgrParams.collectQueue,
+        &sdElementQueue
+    };
+
+    // Sender thread initilisation
+    SenderParams senderParams = {
+        &sdElementQueue,
+        conf.engineFQDN,
+        &conf.enginePort,
+        &conf.transportProto
+    };
 
     // Help message and version
     if (argc > 1)
     {
         if (!strcmp(argv[1], "-v") || !strcmp(argv[1], "--version"))
         {
-            printf("%s %s\n", NAME, VERSION);
+            printf("%s %s\n", PRODUCT_NAME, VERSION);
         }
         else
         {
             printf(
                    "Usage:\n"
-                   "\techoes-alert [OPTION...]\n\n"
+                   "\t%s [OPTION...]\n\n"
                    "%s options\n"
                    "\t-h or --help\tPrint this message.\n"
                    "\t-v or --version\tPrint %s version.\n",
-                   NAME,
-                   NAME
+                   APP_NAME,
+                   PRODUCT_NAME,
+                   PRODUCT_NAME
                    );
         }
         return (EXIT_SUCCESS);
@@ -69,7 +101,7 @@ int main(int argc, char** argv)
 
     // Affichage à l'écran le démarrage de la sonde
     //TODO: ne l'afficher qu'en mode verbose
-    printf("---------- %s %s ----------\n", NAME, VERSION);
+    printf("---------- %s %s ----------\n", PRODUCT_NAME, VERSION);
 
     printf("Début du chargement des conf\n");
     if (loadConf(CONF_DIR, &conf))
@@ -80,7 +112,7 @@ int main(int argc, char** argv)
     printf("Fin du chargement des conf\n");
 
     printf("Début du chargement des plugins\n");
-    if (plugin(conf.probePluginDir, &addonParams.plgList, &nbThreads))
+    if (plugin(conf.probePluginDir, &addonsMgrParams.plgList, &nbThreads))
     {
         perror("plugin()");
         return (errno);
@@ -88,28 +120,24 @@ int main(int argc, char** argv)
     printf("Fin du chargement des plugins\n");
 
     // Table addonsThreads creation
-    addonParams.addonsThreads = calloc(nbThreads, sizeof (pthread_t));
-    if (addonParams.addonsThreads == NULL)
+    addonsMgrParams.addonsThreads = calloc(nbThreads, sizeof (pthread_t));
+    if (addonsMgrParams.addonsThreads == NULL)
     {
         return (EXIT_FAILURE);
     }
     // Table loopsParams creation
-    addonParams.loopsParams = calloc(nbThreads, sizeof (LoopParams));
-    if (addonParams.loopsParams == NULL)
+    addonsMgrParams.loopsParams = calloc(nbThreads, sizeof (LoopParams));
+    if (addonsMgrParams.loopsParams == NULL)
     {
         return (EXIT_FAILURE);
     }
 
     printf("Début du chargement des addons\n");
-    if (pthread_create(&addonThread, NULL, addon, (void*) &addonParams))
+    if (pthread_create(&addonsMgrThread, NULL, addon, (void*) &addonsMgrParams))
     {
         perror("pthread_create");
         return EXIT_FAILURE;
     }
-
-    // Format thread initilisation
-    pthread_t formatThread = 0;
-    FormatParams formatParams = {&conf.probeID, &conf.transportMsgVersion, &addonParams.collectQueue, &sdElementQueue};
 
     printf("Début du chargement du module Format\n");
     if (pthread_create(&formatThread, NULL, format, (void*) &formatParams))
@@ -117,29 +145,22 @@ int main(int argc, char** argv)
         perror("pthread_create");
         return EXIT_FAILURE;
     }
-    
-    // Sender thread initilisation
-    pthread_t senderThread = 0;
-    SenderParams senderParams = {&sdElementQueue, conf.engineFQDN, &conf.enginePort, &conf.transportProto};
 
-    printf("Début de l'envoi du message\n");
+    printf("Début de l'envoi des messages\n");
     if (pthread_create(&senderThread, NULL, sender, (void*) &senderParams))
     {
         perror("pthread_create");
         return EXIT_FAILURE;
     }
 
-    if (pthread_join(addonThread, NULL))
-    {
+    pthread_join(addonsMgrThread, NULL);
+    pthread_join(formatThread, NULL);
+    pthread_join(senderThread, NULL);/* Attente de la fin des threads */
 
-        perror("pthread_join");
-        return EXIT_FAILURE;
+    // Cleanup
+    free(addonsMgrParams.addonsThreads);
+    free(addonsMgrParams.loopsParams);
 
-    }
-    
-    
-    //TODO: free calloc!
-    
     return (EXIT_SUCCESS);
 }
 

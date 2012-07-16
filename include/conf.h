@@ -20,16 +20,20 @@ typedef struct Conf Conf;
 struct Conf
 {
     unsigned int enginePort, probeID, transportProto, transportMsgVersion;
-    char engineFQDN[255], probePluginDir[255];
+    char probePluginDir[255], engineFQDN[255];
 };
+
+// Probe Configuration Initializer
+#define CONF_INITIALIZER {0, 0, 0, 0, "", ""}
 
 /**
  * Parse line from Configuration file
  * @param *line Line of configuration file
- * @param *conf  Pointer of Configurations
+ * @param *conf Pointer of Configurations
  * @return Exit status
  */
 int parseLineConf(const char *line, Conf *conf);
+
 /**
  * Load probe configuration file
  * @param *confPath Configuration file path

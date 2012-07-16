@@ -69,14 +69,16 @@ struct AddonLocationFileParams
     CollectQueue *collectQueue;
 };
 
-typedef struct AddonParams AddonParams;
-struct AddonParams
+typedef struct AddonsMgrParams AddonsMgrParams;
+struct AddonsMgrParams
 {
     PlgList plgList;
     pthread_t* addonsThreads;
     LoopParams* loopsParams;
     CollectQueue collectQueue;
 };
+
+#define ADDON_PARAMS_INITIALIZER {NULL, NULL, NULL, NULL}
 
 /**
  * Push a new Element to CollectQueue
