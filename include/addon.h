@@ -78,7 +78,7 @@ struct AddonsMgrParams
     CollectQueue collectQueue;
 };
 
-#define ADDON_PARAMS_INITIALIZER {NULL, NULL, NULL, NULL}
+#define ADDON_PARAMS_INITIALIZER {NULL, NULL, NULL, {PTHREAD_MUTEX_INITIALIZER, NULL}}
 
 /**
  * Push a new Element to CollectQueue

@@ -216,7 +216,7 @@ void *addonLocationFile(void *arg)
         if (pushCollectQueue(params->collectQueue, params->idPlg, params->idAsset, params->idSrc, params->idSearch, 0, res, now))
         {
             perror("pushCollectQueue()");
-            return (errno);
+            pthread_exit(NULL);
         }
     }
     else
@@ -266,7 +266,7 @@ void *addonLocationLog(void *arg)
                 if (pushCollectQueue(params->collectQueue, params->idPlg, params->idAsset, params->idSrc, params->idSearch, 0, res, now))
                 {
                     perror("pushCollectQueue()");
-                    return (errno);
+                    pthread_exit(NULL);
                 }
                 n++;
             }
@@ -297,7 +297,7 @@ void *addonLocationLog(void *arg)
                 if (pushCollectQueue(params->collectQueue, params->idPlg, params->idAsset, params->idSrc, params->idSearch, 0, res, now))
                 {
                     perror("pushCollectQueue()");
-                    return (errno);
+                    pthread_exit(NULL);
                 }
             }
         }

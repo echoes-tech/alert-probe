@@ -10,7 +10,7 @@ REQUIREMENTS
 ------------
 In order to build ECHOES Alert - Probe you will need:
 
-  • lijson >= 7.5.0 (http://sourceforge.net/projects/libjson/)
+  • libjson >= 7.5.0 (http://sourceforge.net/projects/libjson/)
 Build it with following options: JSON_LIBRARY (run "make SHARED=1; sudo make SHARED=1 install").
   • libssl-dev
 Debian/Ubuntu : apt-get intall libssl-dev
