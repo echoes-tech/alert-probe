@@ -44,6 +44,8 @@ struct CollectQueue
     CollectQueueElement *first;
 };
 
+#define COLLECT_QUEUE_INITIALIZER {PTHREAD_MUTEX_INITIALIZER, NULL}
+
 typedef struct LoopParams LoopParams;
 struct LoopParams
 {
@@ -78,17 +80,21 @@ struct AddonsMgrParams
     CollectQueue collectQueue;
 };
 
-#define ADDON_PARAMS_INITIALIZER {NULL, NULL, NULL, {PTHREAD_MUTEX_INITIALIZER, NULL}}
+#define ADDON_PARAMS_INITIALIZER {NULL, NULL, NULL, COLLECT_QUEUE_INITIALIZER}
 
 /**
  * Push a new Element to CollectQueue
  * @param *collectQueue Pointer of Collected Data Queue
- * @param identifier    Message Identifier
+ * @param idPlg         Plugin Identifier
+ * @param idAsset       Asset Identifier
+ * @param idSrc         Source Identifier
+ * @param idSearch      Search Identifier
+ * @param numSubSearch  Sub-Search Number
  * @param value         Message Value
  * @param time          Time of collect
  * @return Exit status
  */
-//int pushCollectQueue(CollectQueue *collectQueue, const char *identifier, const char *value, time_t time);
+int pushCollectQueue(CollectQueue *collectQueue, unsigned int idPlg, unsigned int idAsset, unsigned int idSrc, unsigned int idSearch, unsigned int numSubSearch, const char *value, time_t time);
 
 /**
  * Thread - Loop for addon.

@@ -108,8 +108,11 @@ int sendMessage(const char *address, int *port, int *protocol, const char *messa
 
     strftime(timestamp, 480, "%Y-%m-%dT%XZ", &instant);
     
-    snprintf(completMsg, 480, "<118>1 %s %s", timestamp, message);
+    // Caution: keep the Line Feed to work with TCP
+    snprintf(completMsg, 480, "<118>1 %s %s\n", timestamp, message);
 
+    printf("%s", completMsg);
+    
     // Sending data
     if (*protocol == 1)
     {
