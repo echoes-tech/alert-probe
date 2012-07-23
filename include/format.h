@@ -18,7 +18,8 @@
 typedef struct SDElementQueueElement SDElementQueueElement;
 struct SDElementQueueElement
 {
-    char sdElement[10000];
+    char beforeMsgID[10000], afterMsgID[10000], afterOffset[10000];
+    time_t time;
     SDElementQueueElement *next;
 };
 // SD-Element queue

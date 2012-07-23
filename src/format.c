@@ -42,14 +42,26 @@ int pushSDElementQueue(SDElementQueue *sdElementQueue, unsigned int idPlg, unsig
         exit(EXIT_FAILURE);
     }
 
+    new->time = time;
+
     sprintf(
-            new->sdElement,
-            "%s %s %d ID47 [prop@5875 ver=%d probe=%d][res1@5875 offset= %d-%d-%d-%d-%d=\"%s\"]",
+            new->beforeMsgID,
+            "%s %s %d ID",
             sdElementQueue->hostname,
             sdElementQueue->appName,
-            sdElementQueue->pID,
+            sdElementQueue->pID
+        );
+
+    sprintf(
+            new->afterMsgID,
+            "[prop@5875 ver=%d probe=%d][res1@5875 offset=",
             *sdElementQueue->transportMsgVersion,
-            *sdElementQueue->probeID,
+            *sdElementQueue->probeID
+        );
+
+    sprintf(
+            new->afterOffset,
+            "%d-%d-%d-%d-%d=\"%s\"]",
             idPlg,
             idAsset,
             idSrc,
@@ -57,7 +69,7 @@ int pushSDElementQueue(SDElementQueue *sdElementQueue, unsigned int idPlg, unsig
             numSubSearch,
             b64Value
         );
-
+    
     /* Debut de la zone protegee. */
     pthread_mutex_lock (& sdElementQueue->mutex);
     

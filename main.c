@@ -73,7 +73,8 @@ int main(int argc, char** argv)
         &sdElementQueue,
         conf.engineFQDN,
         &conf.enginePort,
-        &conf.transportProto
+        &conf.transportProto,
+        0
     };
 
     // Help message and version

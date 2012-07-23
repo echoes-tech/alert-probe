@@ -49,7 +49,7 @@ struct SenderParams
 {
     SDElementQueue *sdElementQueue;
     const char *address;
-    int *port, *protocol;
+    unsigned int *port, *protocol, msgID;
 };
 
 static void init(void);
@@ -74,13 +74,17 @@ static int endConnection(SOCKET *sock);
 
 /**
  * Send Message
- * @param *address  Engines FQDN
- * @param *port     Pointer of Emission port
- * @param *protocol Pointer of Emission protocol (O: TCP, 1: UDP)
- * @param *message  Message
+ * @param *address     Engines FQDN
+ * @param *port        Pointer of Emission port
+ * @param *protocol    Pointer of Emission protocol (O: TCP, 1: UDP)
+ * @param *beforeMsgID Message before Message Identifier
+ * @param *msgID       Pointer of Message Identifier
+ * @param *afterMsgID  Message after Message Identier
+ * @patam collectTime         Time of collect
+ * @param *afterOffset Message after Offset
  * @return Exit status
  */
-int sendMessage(const char *address, int *port, int *protocol, const char *message);
+int sendMessage(const char *address, unsigned int *port, unsigned int *protocol, const char *beforeMsgID, unsigned int *msgID, const char *afterMsgID, time_t collectTime, const char *afterOffset);
 
 /**
  * Extract a message from SD-Element Queue
@@ -88,9 +92,10 @@ int sendMessage(const char *address, int *port, int *protocol, const char *messa
  * @param *port           Pointer of Emission port
  * @param *protocol       Pointer of Emission protocol (O: TCP, 1: UDP)
  * @param *sdElementQueue Pointer of SD-Element Queue
+ * @param *msgID    Pointer of Message Identifier
  * @return Exit status
  */
-int popSDElementQueue(const char *address, int *port, int *protocol, SDElementQueue *sdElementQueue);
+int popSDElementQueue(const char *address, unsigned int *port, unsigned int *protocol, SDElementQueue *sdElementQueue, unsigned int *msgID);
 
 /**
  * Thread - Main function of Sender Module

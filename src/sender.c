@@ -82,7 +82,7 @@ static int endConnection(SOCKET *sock)
     return (EXIT_SUCCESS);
 }
 
-int sendMessage(const char *address, int *port, int *protocol, const char *message)
+int sendMessage(const char *address, unsigned int *port, unsigned int *protocol, const char *beforeMsgID, unsigned int *msgID, const char *afterMsgID, time_t collectTime, const char *afterOffset)
 {
     
     SOCKADDR_IN sin = {0}; // Emission info
@@ -97,7 +97,7 @@ int sendMessage(const char *address, int *port, int *protocol, const char *messa
         perror("initConnection()");
         return (errno);
     }
-
+    
     // Adding PRI, VERSION and TIMESTAMP
     time_t now;
     struct tm instant;
@@ -109,7 +109,16 @@ int sendMessage(const char *address, int *port, int *protocol, const char *messa
     strftime(timestamp, 480, "%Y-%m-%dT%XZ", &instant);
     
     // Caution: keep the Line Feed to work with TCP
-    snprintf(completMsg, 480, "<118>1 %s %s\n", timestamp, message);
+    snprintf(
+        completMsg,
+             480,
+             "<118>1 %s %s%d %s%d %s\n",
+             timestamp,
+             beforeMsgID,
+             *msgID,
+             afterMsgID,
+             (int)difftime (now, collectTime),
+             afterOffset);
 
     printf("%s", completMsg);
     
@@ -142,7 +151,7 @@ int sendMessage(const char *address, int *port, int *protocol, const char *messa
     end();
 }
 
-int popSDElementQueue(const char *address, int *port, int *protocol, SDElementQueue *sdElementQueue)
+int popSDElementQueue(const char *address, unsigned int *port, unsigned int *protocol, SDElementQueue *sdElementQueue, unsigned int *msgID)
 {
     if (sdElementQueue == NULL)
     {
@@ -161,7 +170,11 @@ int popSDElementQueue(const char *address, int *port, int *protocol, SDElementQu
                     address,
                     port,
                     protocol,
-                    popedElement->sdElement
+                    popedElement->beforeMsgID,
+                    msgID,
+                    popedElement->afterMsgID,
+                    popedElement->time,
+                    popedElement->afterOffset
                     );
         sdElementQueue->first = popedElement->next;
         free(popedElement);
@@ -181,12 +194,18 @@ void *sender(void *arg)
     {
         while (senderParams->sdElementQueue->first != NULL)
         {
+            senderParams->msgID++;
             popSDElementQueue(
                               senderParams->address,
                               senderParams->port,
                               senderParams->protocol,
-                              senderParams->sdElementQueue
+                              senderParams->sdElementQueue,
+                              &senderParams->msgID
                               );
+            if (senderParams->msgID == 99999)
+            {
+                senderParams->msgID = 0;
+            }
         }
         SLEEP(1);
     }
