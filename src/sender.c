@@ -26,11 +26,11 @@ static void end(void)
 #endif
 }
 
-static int initConnection(const char *address, int *port, int *protocol, SOCKADDR_IN *sin, SOCKET *sock)
+static int initConnection(const char *address, unsigned int *port, unsigned int *protocol, SOCKADDR_IN *sin, SOCKET *sock)
 {
-    // Get info of Engines FQDN
+    /* Get info of Engines FQDN */
     Hostent *hostinfo = gethostbyname(address);
-    // Whether no info, return an error by stopping probe
+    /* Whether no info, return an error by stopping probe */
     if (hostinfo == NULL)
     {
         fprintf(stderr, "Unknown host %s.\n", address);
@@ -39,12 +39,12 @@ static int initConnection(const char *address, int *port, int *protocol, SOCKADD
 
     if (*protocol == 1)
     {
-        // UDP so SOCK_DGRAM
+        /* UDP so SOCK_DGRAM */
         *sock = socket(AF_INET, SOCK_DGRAM, 0);
     }
     else
     {
-        // UDP so SOCK_STREAM
+        /* UDP so SOCK_STREAM */
         *sock = socket(AF_INET, SOCK_STREAM, 0);
     }
 
@@ -54,14 +54,14 @@ static int initConnection(const char *address, int *port, int *protocol, SOCKADD
         return (errno);
     }
 
-    // Emission info
+    /* Emission info */
     sin->sin_addr = *(IN_ADDR *) hostinfo->h_addr;
     sin->sin_port = htons(*port);
     sin->sin_family = AF_INET;
 
     if (*protocol != 1)
     {
-        // Open a connection
+        /* Open a connection */
         if (connect(*sock, (SOCKADDR *) sin, sizeof (SOCKADDR)) == SOCKET_ERROR)
         {
             perror("connect()");
@@ -85,30 +85,30 @@ static int endConnection(SOCKET *sock)
 int sendMessage(const char *address, unsigned int *port, unsigned int *protocol, const char *beforeMsgID, unsigned int *msgID, const char *afterMsgID, time_t collectTime, const char *afterOffset)
 {
     
-    SOCKADDR_IN sin = {0}; // Emission info
-    SOCKET sock; // Socket
+    SOCKADDR_IN sin = {0}; /* Emission info */
+    SOCKET sock; /* Socket */
 
-    // Init just for Win32
+    time_t now;
+    struct tm instant;
+    char timestamp[480], completMsg[480];
+
+    /* Init just for Win32 */
     init();
 
-    // Creating the Socket
+    /* Creating the Socket */
     if (initConnection(address, port, protocol, &sin, &sock))
     {
         perror("initConnection()");
         return (errno);
     }
     
-    // Adding PRI, VERSION and TIMESTAMP
-    time_t now;
-    struct tm instant;
-    char timestamp[480], completMsg[480];
-
+    /* Adding PRI, VERSION and TIMESTAMP */
     time(&now);
     instant=*localtime(&now);
 
     strftime(timestamp, 480, "%Y-%m-%dT%XZ", &instant);
     
-    // Caution: keep the Line Feed to work with TCP
+    /* Caution: keep the Line Feed to work with TCP */
     snprintf(
         completMsg,
              480,
@@ -122,7 +122,7 @@ int sendMessage(const char *address, unsigned int *port, unsigned int *protocol,
 
     printf("%s", completMsg);
     
-    // Sending data
+    /* Sending data */
     if (*protocol == 1)
     {
         if (sendto(sock, completMsg, strlen(completMsg), 0, (SOCKADDR *) & sin, sizeof sin) < 0)
@@ -140,15 +140,17 @@ int sendMessage(const char *address, unsigned int *port, unsigned int *protocol,
         }
     }
 
-    // Closing the socket
+    /* Closing the socket */
     if (endConnection(&sock))
     {
         perror("send()");
         return (errno);
     }
 
-    // End just for Win32
+    /* End just for Win32 */
     end();
+
+    return (EXIT_SUCCESS);
 }
 
 int popSDElementQueue(const char *address, unsigned int *port, unsigned int *protocol, SDElementQueue *sdElementQueue, unsigned int *msgID)

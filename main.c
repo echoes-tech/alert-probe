@@ -8,23 +8,23 @@
 #include <stdlib.h>
 #include <errno.h>
 
-// To init struct Conf
+/* To init struct Conf */
 #include "conf.h"
-// To init struct PlgList
+/* To init struct PlgList */
 #include "plugin.h"
-// To init struct AddonsMgrParams
+/* To init struct AddonsMgrParams */
 #include "addon.h"
-// To init struct FormatParams
+/* To init struct FormatParams */
 #include "format.h"
-// To init struct SenderParams
+/* To init struct SenderParams */
 #include "sender.h"
 
-// Probe Names
+/* Probe Names */
 #define PRODUCT_NAME "ECHOES Alert - Probe"
 #define APP_NAME "echoes-alert-probe"
-// Probe Version
+/* Probe Version */
 #define VERSION "0.1.0"
-// Conf Repository
+/* Conf Repository */
 #define CONF_DIR "./conf/echoes-alert.conf"
 
 /**
@@ -33,42 +33,40 @@
  */
 int main(int argc, char** argv)
 {
-    //
-    // Initialization
-    // 
+    /*
+     *Initialization
+     */ 
     
-    // Probe Configuration initialisation
+    /* Probe Configuration initialisation */
     Conf conf = CONF_INITIALIZER;
     
-    // Plugins counter initialisation
+    /* Plugins counter initialisation */
     unsigned int nbThreads = 0;
     
-    // Addons Manager, Format Module and Sender Module threads initialisations
+    /* Addons Manager, Format Module and Sender Module threads initialisations */
     pthread_t addonsMgrThread = 0, formatThread = 0, senderThread = 0;
 
-    // Addons Manager thread params initialisation
+    /* Addons Manager thread params initialisation */
     AddonsMgrParams addonsMgrParams = ADDON_PARAMS_INITIALIZER;
 
-    // Queues initialisation
+    /* Queues initialisation */
     SDElementQueue sdElementQueue = {
         PTHREAD_MUTEX_INITIALIZER,
-        "",
+        NULL,
         APP_NAME,
         &conf.probeID,
         &conf.transportMsgVersion,
         getpid(),
         NULL
     };
-    
-    gethostname(sdElementQueue.hostname, 255);
 
-    // Format thread initilisation
+    /* Format thread initilisation */
     FormatParams formatParams = {
         &addonsMgrParams.collectQueue,
         &sdElementQueue
     };
 
-    // Sender thread initilisation
+    /* Sender thread initilisation */
     SenderParams senderParams = {
         &sdElementQueue,
         conf.engineFQDN,
@@ -77,7 +75,21 @@ int main(int argc, char** argv)
         0
     };
 
-    // Help message and version
+
+    /* Retrieve the Hostname */
+    size_t taille = 10;
+    sdElementQueue.hostname = calloc(1, taille);
+
+    while(gethostname(sdElementQueue.hostname, taille) != 0 && taille < 255) {
+        if (errno != ENAMETOOLONG) {
+            perror("gethostname");
+            exit(EXIT_FAILURE);
+        }
+        taille += 10;
+        sdElementQueue.hostname = realloc(sdElementQueue.hostname, taille);        
+    }
+
+    /* Help message and version */
     if (argc > 1)
     {
         if (!strcmp(argv[1], "-v") || !strcmp(argv[1], "--version"))
@@ -100,8 +112,8 @@ int main(int argc, char** argv)
         return (EXIT_SUCCESS);
     }
 
-    // Affichage à l'écran le démarrage de la sonde
-    //TODO: ne l'afficher qu'en mode verbose
+    /* Affichage à l'écran le démarrage de la sonde */
+    /*TODO: ne l'afficher qu'en mode verbose */
     printf("---------- %s %s ----------\n", PRODUCT_NAME, VERSION);
 
     printf("Début du chargement des conf\n");
@@ -120,13 +132,13 @@ int main(int argc, char** argv)
     }
     printf("Fin du chargement des plugins\n");
 
-    // Table addonsThreads creation
+    /* Table addonsThreads creation */
     addonsMgrParams.addonsThreads = calloc(nbThreads, sizeof (pthread_t));
     if (addonsMgrParams.addonsThreads == NULL)
     {
         return (EXIT_FAILURE);
     }
-    // Table loopsParams creation
+    /* Table loopsParams creation */
     addonsMgrParams.loopsParams = calloc(nbThreads, sizeof (LoopParams));
     if (addonsMgrParams.loopsParams == NULL)
     {
@@ -158,10 +170,12 @@ int main(int argc, char** argv)
     pthread_join(formatThread, NULL);
     pthread_join(senderThread, NULL);/* Attente de la fin des threads */
 
-    // Cleanup
+    /* Cleanup */
     free(addonsMgrParams.addonsThreads);
     free(addonsMgrParams.loopsParams);
 
+    free(sdElementQueue.hostname);
+    
     return (EXIT_SUCCESS);
 }
 

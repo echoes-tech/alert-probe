@@ -12,10 +12,10 @@
 #include <errno.h>
 #include <string.h>
 
-// Max size of file conf lines in caracters
+/* Max size of file conf lines in caracters */
 #define MAX_SIZE 300
 
-// Probe Configurations
+/* Probe Configurations */
 typedef struct Conf Conf;
 struct Conf
 {
@@ -23,7 +23,7 @@ struct Conf
     char probePluginDir[255], engineFQDN[255];
 };
 
-// Probe Configuration Initializer
+/* Probe Configuration Initializer */
 #define CONF_INITIALIZER {0, 0, 0, 0, "", ""}
 
 /**

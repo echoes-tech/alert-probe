@@ -14,7 +14,7 @@
 
 #include "addon.h"
 
-// Element of SD-Element queue
+/* Element of SD-Element queue */
 typedef struct SDElementQueueElement SDElementQueueElement;
 struct SDElementQueueElement
 {
@@ -22,12 +22,12 @@ struct SDElementQueueElement
     time_t time;
     SDElementQueueElement *next;
 };
-// SD-Element queue
+/* SD-Element queue */
 typedef struct SDElementQueue SDElementQueue;
 struct SDElementQueue
 {
     pthread_mutex_t mutex;
-    char hostname[255], appName[255];
+    char *hostname, appName[255];
     unsigned int *probeID, *transportMsgVersion;
     pid_t pID;
     SDElementQueueElement *first;
@@ -40,7 +40,13 @@ struct FormatParams
     SDElementQueue *sdElementQueue;
 };
 
-char *base64(const unsigned char *input, int length);
+/**
+ * Encode input in Base64
+ * @param input  String
+ * @param length Length of String
+ * @return String encoded
+ */
+char *base64(const char *input, int length);
 
 /**
  * Group collected data by time in Structured-Element.

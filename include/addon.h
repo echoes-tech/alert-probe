@@ -14,7 +14,7 @@
 
 #include "plugin.h"
 
-// Portable sleep
+/* Portable sleep */
 #if defined (WIN32) || defined (WIN64)
 
 #include <windows.h>
@@ -27,7 +27,7 @@
 
 #endif
 
-// Element of collected data queue
+/* Element of collected data queue */
 typedef struct CollectQueueElement CollectQueueElement;
 struct CollectQueueElement
 {
@@ -36,7 +36,7 @@ struct CollectQueueElement
     time_t time;
     CollectQueueElement *next;
 };
-// Collected data queue
+/* Collected data queue */
 typedef struct CollectQueue CollectQueue;
 struct CollectQueue
 {
@@ -120,7 +120,6 @@ void *addonLocationLog(void *arg);
  * @param *plgList        Pointer of Plugins list with informations
  * @param *addonThreads[] Table of addons threads
  */
-//int addon(unsigned int *nbThreads, PlgList *plgList, pthread_t addonsThreads[]);
 void *addon(void *arg);
 
 #endif	/* ADDON_H */

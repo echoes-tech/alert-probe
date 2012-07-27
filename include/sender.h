@@ -14,7 +14,7 @@
 
 #include "format.h"
 
-// Source : http://broux.developpez.com/articles/c/sockets/
+/* Source : http://broux.developpez.com/articles/c/sockets/ */
 
 #ifdef WIN32
 
@@ -26,8 +26,8 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <unistd.h> // close
-#include <netdb.h> // gethostbyname
+#include <unistd.h> /* close */
+#include <netdb.h> /* gethostbyname */
 #define INVALID_SOCKET -1
 #define SOCKET_ERROR -1
 #define closesocket(s) close(s)
@@ -64,7 +64,7 @@ static void end(void);
  * @param *sock     Pointer of Socket
  * @return Exit status
  */
-static int initConnection(const char *address, int *port, int *protocol, SOCKADDR_IN *sin, SOCKET *sock);
+static int initConnection(const char *address, unsigned int *port, unsigned int *protocol, SOCKADDR_IN *sin, SOCKET *sock);
 
 /**
  * Close the socket

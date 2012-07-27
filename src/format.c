@@ -11,21 +11,26 @@
 #include <openssl/bio.h>
 #include <openssl/buffer.h>
 
-// Source : http://www.ioncannon.net/programming/34/howto-base64-encode-with-cc-and-openssl/
+/* Source : http://www.ioncannon.net/programming/34/howto-base64-encode-with-cc-and-openssl/ */
 
-char *base64(const unsigned char *input, int length)
+char *base64(const char *input, int length)
 {
     BIO *bmem, *b64;
     BUF_MEM *bptr;
+    char *buff;
 
     b64 = BIO_new(BIO_f_base64());
     bmem = BIO_new(BIO_s_mem());
     b64 = BIO_push(b64, bmem);
     BIO_write(b64, input, length);
-    BIO_flush(b64);
+    if (BIO_flush(b64) != 1)
+    {
+        perror("BIO_flush()");
+        exit (EXIT_FAILURE);
+    }
     BIO_get_mem_ptr(b64, &bptr);
 
-    char *buff = (char *) malloc(bptr->length);
+    buff = (char *) malloc(bptr->length);
     memcpy(buff, bptr->data, bptr->length - 1);
     buff[bptr->length - 1] = 0;
 
@@ -90,6 +95,8 @@ int pushSDElementQueue(SDElementQueue *sdElementQueue, unsigned int idPlg, unsig
     
     /* Fin de la zone protegee. */
     pthread_mutex_unlock (& sdElementQueue->mutex);
+
+    return (EXIT_SUCCESS);
 }
 
 int popCollectQueue(CollectQueue *collectQueue, SDElementQueue *sdElementQueue)
@@ -114,6 +121,7 @@ int popCollectQueue(CollectQueue *collectQueue, SDElementQueue *sdElementQueue)
                            popedElement->idSrc,
                            popedElement->idSearch,
                            popedElement->numSubSearch,
+                           /*TODO: Tester le retour de base64 */
                            base64(popedElement->value, strlen(popedElement->value)),
                            popedElement->time
                            );
