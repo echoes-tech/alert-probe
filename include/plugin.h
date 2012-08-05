@@ -18,6 +18,7 @@
 #endif
 
 #include <libjson/libjson.h>
+#include <regex.h>
 
 /* Max size of file conf lines in caracters */
 #define MAX_SIZE 300
@@ -31,7 +32,9 @@ typedef struct SearchInfoParams2_1 SearchInfoParams3_1;
 typedef struct SearchInfoParams2_1 SearchInfoParams2_1;
 struct SearchInfoParams2_1
 {
-    char regex[MAX_SIZE];
+    int err;
+    regex_t preg;
+    size_t nmatch;
 };
 
 /* Search Informations Parameters for Addon 2 Type 2 */
@@ -93,10 +96,10 @@ typedef PlgInfo* PlgList;
 
 /**
  * Check if the filename ends with .json
- * @param s[] Filename
+ * @param s Filename
  * @return Exit status
  */
-int verifExt(char s[]);
+int verifExt(const char *s);
 
 /**
  * Replace \ to \\

@@ -28,19 +28,19 @@ struct Conf
 
 /**
  * Parse line from Configuration file
- * @param *line Line of configuration file
  * @param *conf Pointer of Configurations
+ * @param *line Line of configuration file
  * @return Exit status
  */
-int parseLineConf(const char *line, Conf *conf);
+int parseLineConf(Conf *conf, const char *line);
 
 /**
  * Load probe configuration file
- * @param *confPath Configuration file path
  * @param *conf     Pointer of Configurations
+ * @param *confPath Configuration file path
  * @return Exit status
  */
-int loadConf(const char *confPath, Conf *conf);
+int loadConf(Conf *conf, const char *confPath);
 
 #endif	/* CONF_H */
 

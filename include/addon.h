@@ -31,7 +31,7 @@
 typedef struct CollectQueueElement CollectQueueElement;
 struct CollectQueueElement
 {
-    unsigned int idPlg, idAsset, idSrc, idSearch, numSubSearch;
+    unsigned int idPlg, idAsset, idSrc, idSearch, subSearchNum;
     char value[1000];
     time_t time;
     CollectQueueElement *next;
@@ -58,16 +58,30 @@ struct LoopParams
 typedef struct AddonLocationLogParams AddonLocationLogParams;
 struct AddonLocationLogParams
 {
-    unsigned int idPlg, idAsset, idSrc, idSearch, period, staticValues, nbLine, firstChar, length;
-    char path[255];
+    const unsigned int idPlg, idAsset, idSrc, idSearch, period, staticValues, firstChar, length;
+    unsigned int nbLine;
+    const char *path;
     CollectQueue *collectQueue;
 };
 
 typedef struct AddonLocationFileParams AddonLocationFileParams;
 struct AddonLocationFileParams
 {
-    unsigned int idPlg, idAsset, idSrc, idSearch, period, staticValues, line, firstChar, length;
-    char path[255];
+    const unsigned int idPlg, idAsset, idSrc, idSearch, period, staticValues, line, firstChar, length;
+    const char *path;
+    CollectQueue *collectQueue;
+};
+
+typedef struct AddonRegexFileParams AddonRegexFileParams;
+struct AddonRegexFileParams
+{
+    const unsigned int idPlg, idAsset, idSrc, idSearch, period, staticValues;
+    unsigned int subSearchNum;
+    const char *path;
+    regex_t preg;
+    int match;
+    size_t nmatch;
+    regmatch_t *pmatch;
     CollectQueue *collectQueue;
 };
 
@@ -94,7 +108,7 @@ struct AddonsMgrParams
  * @param time          Time of collect
  * @return Exit status
  */
-int pushCollectQueue(CollectQueue *collectQueue, unsigned int idPlg, unsigned int idAsset, unsigned int idSrc, unsigned int idSearch, unsigned int numSubSearch, const char *value, time_t time);
+int pushCollectQueue(CollectQueue *collectQueue, const unsigned int idPlg, const unsigned int idAsset, const unsigned int idSrc, const unsigned int idSearch, const unsigned int subSearchNum, const char *value, time_t time);
 
 /**
  * Thread - Loop for addon.
@@ -107,6 +121,12 @@ void *addonLoop(void *arg);
  * @param *alfp Pointer of addon location file parameters
  */
 void *addonLocationFile(void *arg);
+
+/**
+ * Thread - Addon Regex File.
+ * @param *arfp Pointer of addon regex file parameters
+ */
+void *addonRegexFile(void *arg);
 
 /**
  * Thread - Addon Location Log.

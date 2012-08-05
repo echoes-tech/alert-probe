@@ -6,7 +6,7 @@
 
 #include "addon.h"
 
-int pushCollectQueue(CollectQueue *collectQueue, unsigned int idPlg, unsigned int idAsset, unsigned int idSrc, unsigned int idSearch, unsigned int numSubSearch, const char *value, time_t time)
+int pushCollectQueue(CollectQueue *collectQueue, const unsigned int idPlg, const unsigned int idAsset, const unsigned int idSrc, const unsigned int idSearch, const unsigned int subSearchNum, const char *value, time_t time)
 {
     CollectQueueElement *new = calloc(1, sizeof(CollectQueueElement));
     if (collectQueue == NULL || new == NULL)
@@ -18,7 +18,7 @@ int pushCollectQueue(CollectQueue *collectQueue, unsigned int idPlg, unsigned in
     new->idAsset = idAsset;
     new->idSrc = idSrc;
     new->idSearch = idSearch;
-    new->numSubSearch = numSubSearch;
+    new->subSearchNum = subSearchNum;
     strcpy(new->value, value);
     new->time = time;
 
@@ -70,7 +70,51 @@ void *addonLoop(void *arg)
         switch(loopParams->idType)
         {
         case 1:
+        {
+            time_t temp;
+            
+            AddonRegexFileParams *paramsTmp = (AddonRegexFileParams*) loopParams->params;
+            AddonRegexFileParams arfp = {
+                paramsTmp->idPlg,
+                paramsTmp->idAsset,
+                paramsTmp->idSrc,
+                paramsTmp->idSearch,
+                paramsTmp->period,
+                paramsTmp->staticValues,
+                0, /* subSearchNum */
+                paramsTmp->path,
+                paramsTmp->preg,
+                paramsTmp->match,
+                paramsTmp->nmatch,
+                paramsTmp->pmatch,
+                paramsTmp->collectQueue
+            };
+            
+            pthread_mutex_lock (&loopParams->mutex); /* On verrouille le mutex */
+			pthread_cond_signal (&loopParams->condition); /* On délivre le signal : condition remplie */
+			pthread_mutex_unlock (&loopParams->mutex); /* On déverrouille le mutex */
+
+            /* Method to know when start the loop */
+            temp =  ((int)(now / arfp.period) * arfp.period) + arfp.period;
+
+            /* Diff between now and the start of the loop */
+            SLEEP(difftime(temp, now));
+            while(1)
+            {
+                pthread_t arft;
+
+                printf("Création du thread addonRegexFile.\n");
+
+                if (pthread_create(&arft, NULL, addonRegexFile, (void*) &arfp))
+                {
+                    perror("pthread_create");
+                    pthread_exit(NULL);
+                }
+
+                SLEEP(arfp.period);
+            }
             break;
+        }
         case 2:
         {
             time_t temp;
@@ -86,11 +130,9 @@ void *addonLoop(void *arg)
                 paramsTmp->line,
                 paramsTmp->firstChar,
                 paramsTmp->length,
-                "", /* path */
+                paramsTmp->path,
                 paramsTmp->collectQueue
             };
-            
-            strcpy(alfp.path, paramsTmp->path);
             
             pthread_mutex_lock (&loopParams->mutex); /* On verrouille le mutex */
 			pthread_cond_signal (&loopParams->condition); /* On délivre le signal : condition remplie */
@@ -138,14 +180,12 @@ void *addonLoop(void *arg)
                 paramsTmp->idSearch,
                 paramsTmp->period,
                 paramsTmp->staticValues,
-                0, /* nbLine */
                 paramsTmp->firstChar,
                 paramsTmp->length,
-                "", /* path */
+                0, /* nbLine */
+                paramsTmp->path,
                 paramsTmp->collectQueue
             };
-
-            strcpy(allp.path, paramsTmp->path);
             
             pthread_mutex_lock (&loopParams->mutex); /* On verrouille le mutex */
 			pthread_cond_signal (&loopParams->condition); /* On délivre le signal : condition remplie */
@@ -181,6 +221,68 @@ void *addonLoop(void *arg)
     }
 
     pthread_exit(NULL);
+}
+
+void *addonRegexFile(void *arg)
+{
+    AddonRegexFileParams *params = (AddonRegexFileParams*) arg;
+
+    FILE* file = NULL;
+    char line[MAX_SIZE] = "", *res = NULL;
+    
+    time_t now;
+
+    printf("Dans le thread addonRegexFile.\n");
+    
+    /* What time is it ? */
+    time(&now);
+
+    /* Opening file */
+    file = fopen(params->path, "r");
+    
+    if (file != NULL)
+    {
+        /* Reading file line by line */
+        while (fgets(line, MAX_SIZE, file) != NULL)
+        {
+            if (params->pmatch)
+            {
+                params->match = regexec(&params->preg, line, params->nmatch, params->pmatch, 0);
+                if (params->match == 0)
+                {
+                    for (params->subSearchNum = 0; params->subSearchNum < (params->nmatch - 1); ++params->subSearchNum)
+                    {
+                        int start = params->pmatch[params->subSearchNum + 1].rm_so;
+                        int end = params->pmatch[params->subSearchNum + 1].rm_eo;
+                        size_t size = end - start;
+
+                        res = malloc(sizeof (*res) * (size  + 1));
+                        if (res)
+                        {
+                            strncpy(res, &line[start], size);
+                            res[size] = '\0';
+                            if (pushCollectQueue(params->collectQueue, params->idPlg, params->idAsset, params->idSrc, params->idSearch, params->subSearchNum, res, now))
+                            {
+                                perror("pushCollectQueue()");
+                                pthread_exit(NULL);
+                            }
+                            free(res);
+                        }
+                    }
+                }
+            }
+        }
+
+        /* Closing file */
+        fclose(file);
+    }
+    else
+    {
+        perror("fopen()");
+        pthread_exit(NULL);
+    }
+
+    pthread_exit(NULL);    
 }
 
 void *addonLocationFile(void *arg)
@@ -368,13 +470,46 @@ void *addon(void *arg)
                     {
                     case 1:
                     {
+                        
                         SearchInfoParams2_1 *searchInfoParams2_1 = (SearchInfoParams2_1*)searchInfo->params;
+                        
+                        AddonRegexFileParams arfp =
+                        {
+                            plgInfo->idPlg,
+                            plgInfo->idAsset,
+                            srcInfo->idSrc,
+                            searchInfo->idSearch,
+                            searchInfo->period,
+                            searchInfo->staticValues,
+                            0, /* subSearchNum */
+                            srcInfoParams2->path,
+                            searchInfoParams2_1->preg,
+                            0, /* match */
+                            searchInfoParams2_1->nmatch,
+                            malloc (sizeof (*arfp.pmatch) * (searchInfoParams2_1->nmatch)),
+                            &addonParams->collectQueue
+                        };
+
+                        addonParams->loopsParams[numThread].idAddon = srcInfo->idAddon;
+                        addonParams->loopsParams[numThread].idType = searchInfo->idType;
+                        addonParams->loopsParams[numThread].params = (void*)&arfp;
+
+                        if (pthread_create(&addonParams->addonsThreads[numThread], NULL, addonLoop, (void*)&addonParams->loopsParams[numThread]))
+                        {
+                            perror("pthread_create");
+                            pthread_exit(NULL);
+                        }
+                        
+                        pthread_mutex_lock(&addonParams->loopsParams[numThread].mutex); /* On verrouille le mutex */
+                        pthread_cond_wait (&addonParams->loopsParams[numThread].condition, &addonParams->loopsParams[numThread].mutex); /* On attend que la condition soit remplie */
+                        pthread_mutex_unlock(&addonParams->loopsParams[numThread].mutex); /* On déverrouille le mutex */
+                        
+                        pthread_mutex_destroy(&addonParams->loopsParams[numThread].mutex);
 
                         break;
                     }
                     case 2:
                     {
-                        
                         SearchInfoParams2_2 *searchInfoParams2_2 = (SearchInfoParams2_2*)searchInfo->params;
                         
                         AddonLocationFileParams alfp =
@@ -388,10 +523,9 @@ void *addon(void *arg)
                             searchInfoParams2_2->line,
                             searchInfoParams2_2->firstChar,
                             searchInfoParams2_2->length,
-                            "", /* path */
+                            srcInfoParams2->path,
                             &addonParams->collectQueue
                         };
-                        strcpy(alfp.path, srcInfoParams2->path);
 
                         addonParams->loopsParams[numThread].idAddon = srcInfo->idAddon;
                         addonParams->loopsParams[numThread].idType = searchInfo->idType;
@@ -439,14 +573,13 @@ void *addon(void *arg)
                             searchInfo->idSearch,
                             searchInfo->period,
                             searchInfo->staticValues,
-                            0, /* nbLine */
                             searchInfoParams3_2->firstChar,
                             searchInfoParams3_2->length,
-                            "", /* path */
+                            0, /* nbLine */
+                            srcInfoParams3->path,
                             &addonParams->collectQueue
                         };
-                        strcpy(allp.path, srcInfoParams3->path);
-
+                        
                         addonParams->loopsParams[numThread].idAddon = srcInfo->idAddon;
                         addonParams->loopsParams[numThread].idType = searchInfo->idType;
                         addonParams->loopsParams[numThread].params = (void*)&allp;

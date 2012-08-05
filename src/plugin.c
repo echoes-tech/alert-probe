@@ -6,7 +6,7 @@
 
 #include "plugin.h"
 
-int verifExt(char s[])
+int verifExt(const char *s)
 {
     int i = strlen(s);
 
@@ -176,15 +176,14 @@ int file2json(const char *plgPath, json_char* json)
 
 int json2llist(JSONNODE *n, PlgList *plgList, unsigned int *nbThreads)
 {
-    JSONNODE_ITERATOR i;
+    JSONNODE_ITERATOR i, j, k;
     json_char *node_name = NULL;
 
     PlgInfo* plgInfo = calloc(1, sizeof (PlgInfo));
-    JSONNODE *sources, *searches, *params;
-
+    JSONNODE *sources, *searches, *srcParams, *searchParams;
+ 
     SrcList srcList = NULL;
-    SearchList searchList = NULL;
-
+    
     if (n == NULL)
     {
         printf("Invalid JSON Node\n");
@@ -231,9 +230,9 @@ int json2llist(JSONNODE *n, PlgList *plgList, unsigned int *nbThreads)
 
     while (i != json_end(sources))
     {
-        SrcInfo* srcInfo = calloc(1, sizeof (SrcInfo));
+        SearchList searchList = NULL;
 
-        JSONNODE_ITERATOR j;
+        SrcInfo* srcInfo = calloc(1, sizeof (SrcInfo));
 
         if (*i == NULL)
         {
@@ -269,7 +268,7 @@ int json2llist(JSONNODE *n, PlgList *plgList, unsigned int *nbThreads)
             }
             else if (!strcmp(node_name, "params"))
             {
-                params = *j;
+                srcParams = *j;
             }
             else if (!strcmp(node_name, "searches"))
             {
@@ -277,62 +276,6 @@ int json2llist(JSONNODE *n, PlgList *plgList, unsigned int *nbThreads)
             }
             /* Increment the iterator */
             ++j;
-        }
-
-        switch (srcInfo->idAddon)
-        {
-        case 2:
-        {
-            SrcInfoParams2 *srcInfoParams2 = calloc(1, sizeof (SrcInfoParams2));
-            JSONNODE_ITERATOR j = json_begin(params);
-            while (j != json_end(params))
-            {
-                if (*j == NULL)
-                {
-                    printf("Invalid JSON Node\n");
-                    return (EXIT_FAILURE);
-                }
-                /* Get the node name and value as a string */
-                node_name = json_name(*j);
-                if (!strcmp(node_name, "path"))
-                {
-                    json_char *node_value = json_as_string(*j);
-                    strcpy(srcInfoParams2->path, node_value);
-                    json_free(node_value);
-                }
-                /* Increment the iterator */
-                ++j;
-            }
-            srcInfo->params = (void*)srcInfoParams2;
-            break;
-        }
-        case 3:
-        {
-            SrcInfoParams3 *srcInfoParams3 = calloc(1, sizeof (SrcInfoParams3));
-            JSONNODE_ITERATOR j = json_begin(params);
-            while (j != json_end(params))
-            {
-                if (*j == NULL)
-                {
-                    printf("Invalid JSON Node\n");
-                    return (EXIT_FAILURE);
-                }
-                /* Get the node name and value as a string */
-                node_name = json_name(*j);
-                if (!strcmp(node_name, "path"))
-                {
-                    json_char *node_value = json_as_string(*j);
-                    strcpy(srcInfoParams3->path, node_value);
-                    json_free(node_value);
-                }
-                /* Increment the iterator */
-                ++j;
-            }
-            srcInfo->params = (void*)srcInfoParams3;
-            break;
-        }
-        default:
-            break;
         }
 
         if (searches == NULL)
@@ -345,7 +288,6 @@ int json2llist(JSONNODE *n, PlgList *plgList, unsigned int *nbThreads)
         while (j != json_end(searches))
         {
             SearchInfo* searchInfo = calloc(1, sizeof (SearchInfo));
-            JSONNODE_ITERATOR k;
 
             if (*j == NULL)
             {
@@ -376,7 +318,7 @@ int json2llist(JSONNODE *n, PlgList *plgList, unsigned int *nbThreads)
                 }
                 else if (!strcmp(node_name, "params"))
                 {
-                    params = *k;
+                    searchParams = *k;
                 }
                 else if (!strcmp(node_name, "period"))
                 {
@@ -396,13 +338,35 @@ int json2llist(JSONNODE *n, PlgList *plgList, unsigned int *nbThreads)
             {
             case 2:
             {
+                SrcInfoParams2 *srcInfoParams2 = calloc(1, sizeof (SrcInfoParams2));
+                k = json_begin(srcParams);
+                while (k != json_end(srcParams))
+                {
+                    if (*k == NULL)
+                    {
+                        printf("Invalid JSON Node\n");
+                        return (EXIT_FAILURE);
+                    }
+                    /* Get the node name and value as a string */
+                    node_name = json_name(*k);
+                    if (!strcmp(node_name, "path"))
+                    {
+                        json_char *node_value = json_as_string(*k);
+                        strcpy(srcInfoParams2->path, node_value);
+                        json_free(node_value);
+                    }
+                    /* Increment the iterator */
+                    ++k;
+                }
+                srcInfo->params = (void*)srcInfoParams2;
+
                 switch (searchInfo->idType)
                 {
                 case 1:
                 {
                     SearchInfoParams2_1 *searchInfoParams2_1 = calloc(1, sizeof (SearchInfoParams2_1));
-                    JSONNODE_ITERATOR k = json_begin(params);
-                    while (k != json_end(params))
+                    k = json_begin(searchParams);
+                    while (k != json_end(searchParams))
                     {
                         if (*k == NULL)
                         {
@@ -414,8 +378,20 @@ int json2llist(JSONNODE *n, PlgList *plgList, unsigned int *nbThreads)
                         if (!strcmp(node_name, "regex"))
                         {
                             json_char *node_value = json_as_string(*k);
-                            strcpy(searchInfoParams2_1->regex, node_value);
+                            printf("%s\n", node_value);
+                            /* Regex compilation */
+                            searchInfoParams2_1->err = regcomp (&searchInfoParams2_1->preg, node_value, REG_EXTENDED);
                             json_free(node_value);
+                            if (searchInfoParams2_1->err == 0)
+                            {
+                                searchInfoParams2_1->nmatch = (searchInfoParams2_1->preg.re_nsub + 1);
+                            }
+                            else
+                            {
+                                printf("Invalid Regex\n");
+                                exit (EXIT_FAILURE);
+                            }
+
                         }
                         /* Increment the iterator */
                         ++k;
@@ -426,13 +402,13 @@ int json2llist(JSONNODE *n, PlgList *plgList, unsigned int *nbThreads)
                 case 2:
                 {
                     SearchInfoParams2_2 *searchInfoParams2_2 = calloc(1, sizeof (SearchInfoParams2_2));
-                    JSONNODE_ITERATOR k = json_begin(params);
-                    while (k != json_end(params))
+                    k = json_begin(searchParams);
+                    while (k != json_end(searchParams))
                     {
                         if (*k == NULL)
                         {
                             printf("Invalid JSON Node\n");
-                            return (EXIT_FAILURE);
+                            exit (EXIT_FAILURE);
                         }
                         /* Get the node name and value as a string */
                         node_name = json_name(*k);
@@ -461,13 +437,35 @@ int json2llist(JSONNODE *n, PlgList *plgList, unsigned int *nbThreads)
             }
             case 3:
             {
+                SrcInfoParams3 *srcInfoParams3 = calloc(1, sizeof (SrcInfoParams3));
+                k = json_begin(srcParams);
+                while (k != json_end(srcParams))
+                {
+                    if (*k == NULL)
+                    {
+                        printf("Invalid JSON Node\n");
+                        return (EXIT_FAILURE);
+                    }
+                    /* Get the node name and value as a string */
+                    node_name = json_name(*k);
+                    if (!strcmp(node_name, "path"))
+                    {
+                        json_char *node_value = json_as_string(*k);
+                        strcpy(srcInfoParams3->path, node_value);
+                        json_free(node_value);
+                    }
+                    /* Increment the iterator */
+                    ++k;
+                }
+                srcInfo->params = (void*)srcInfoParams3;
+
                 switch (searchInfo->idType)
                 {
                 case 1:
                 {
                     SearchInfoParams3_1 *searchInfoParams3_1 = calloc(1, sizeof (SearchInfoParams3_1));
-                    JSONNODE_ITERATOR k = json_begin(params);
-                    while (k != json_end(params))
+                    k = json_begin(searchParams);
+                    while (k != json_end(searchParams))
                     {
                         if (*k == NULL)
                         {
@@ -479,8 +477,19 @@ int json2llist(JSONNODE *n, PlgList *plgList, unsigned int *nbThreads)
                         if (!strcmp(node_name, "regex"))
                         {
                             json_char *node_value = json_as_string(*k);
-                            strcpy(searchInfoParams3_1->regex, node_value);
+                            /* Regex compilation */
+                            searchInfoParams3_1->err = regcomp (&searchInfoParams3_1->preg, node_value, REG_EXTENDED);
                             json_free(node_value);
+                            if (searchInfoParams3_1->err == 0)
+                            {
+                                searchInfoParams3_1->nmatch = (searchInfoParams3_1->preg.re_nsub + 1);
+                            }
+                            else
+                            {
+                                printf("Invalid Regex\n");
+                                exit (EXIT_FAILURE);
+                            }
+                            
                         }
                         /* Increment the iterator */
                         ++k;
@@ -491,8 +500,8 @@ int json2llist(JSONNODE *n, PlgList *plgList, unsigned int *nbThreads)
                 case 2:
                 {
                     SearchInfoParams3_2 *searchInfoParams3_2 = calloc(1, sizeof (SearchInfoParams3_2));
-                    JSONNODE_ITERATOR k = json_begin(params);
-                    while (k != json_end(params))
+                    k = json_begin(searchParams);
+                    while (k != json_end(searchParams))
                     {
                         if (*k == NULL)
                         {

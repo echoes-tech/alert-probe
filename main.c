@@ -117,7 +117,7 @@ int main(int argc, char** argv)
     printf("---------- %s %s ----------\n", PRODUCT_NAME, VERSION);
 
     printf("Début du chargement des conf\n");
-    if (loadConf(CONF_DIR, &conf))
+    if (loadConf(&conf, CONF_DIR))
     {
         perror("loadConf()");
         return (errno);
@@ -170,6 +170,9 @@ int main(int argc, char** argv)
     pthread_join(formatThread, NULL);
     pthread_join(senderThread, NULL);/* Attente de la fin des threads */
 
+    /* TODO: Vérifier tous les calloc et faire un fonction de cleanup
+       avec entre autres les plgInfo et srcInfo etc. */
+    
     /* Cleanup */
     free(addonsMgrParams.addonsThreads);
     free(addonsMgrParams.loopsParams);

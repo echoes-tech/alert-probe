@@ -27,7 +27,7 @@ typedef struct SDElementQueue SDElementQueue;
 struct SDElementQueue
 {
     pthread_mutex_t mutex;
-    char *hostname, appName[255];
+    char *hostname, appName[19];
     unsigned int *probeID, *transportMsgVersion;
     pid_t pID;
     SDElementQueueElement *first;

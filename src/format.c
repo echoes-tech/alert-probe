@@ -39,7 +39,7 @@ char *base64(const char *input, int length)
     return buff;
 }
 
-int pushSDElementQueue(SDElementQueue *sdElementQueue, unsigned int idPlg, unsigned int idAsset, unsigned int idSrc, unsigned int idSearch, unsigned int numSubSearch, const char *b64Value, time_t time)
+int pushSDElementQueue(SDElementQueue *sdElementQueue, unsigned int idPlg, unsigned int idAsset, unsigned int idSrc, unsigned int idSearch, unsigned int subSearchNum, const char *b64Value, time_t time)
 {
     SDElementQueueElement *new = calloc(1, sizeof(SDElementQueueElement));
     if (sdElementQueue == NULL || new == NULL)
@@ -59,7 +59,7 @@ int pushSDElementQueue(SDElementQueue *sdElementQueue, unsigned int idPlg, unsig
 
     sprintf(
             new->afterMsgID,
-            "[prop@5875 ver=%d probe=%d][res1@5875 offset=",
+            "[prop@40311 ver=%d probe=%d][res1@40311 offset=",
             *sdElementQueue->transportMsgVersion,
             *sdElementQueue->probeID
         );
@@ -71,7 +71,7 @@ int pushSDElementQueue(SDElementQueue *sdElementQueue, unsigned int idPlg, unsig
             idAsset,
             idSrc,
             idSearch,
-            numSubSearch,
+            subSearchNum,
             b64Value
         );
     
@@ -120,7 +120,7 @@ int popCollectQueue(CollectQueue *collectQueue, SDElementQueue *sdElementQueue)
                            popedElement->idAsset,
                            popedElement->idSrc,
                            popedElement->idSearch,
-                           popedElement->numSubSearch,
+                           popedElement->subSearchNum,
                            /*TODO: Tester le retour de base64 */
                            base64(popedElement->value, strlen(popedElement->value)),
                            popedElement->time

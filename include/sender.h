@@ -52,6 +52,7 @@ struct SenderParams
     unsigned int *port, *protocol, msgID;
 };
 
+/* TODO: changer de nom et dégager "static" */
 static void init(void);
 static void end(void);
 

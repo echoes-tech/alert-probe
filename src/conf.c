@@ -6,7 +6,7 @@
 
 #include "conf.h"
 
-int parseLineConf(const char* line, Conf *conf)
+int parseLineConf(Conf *conf, const char* line)
 {
     char *equal = NULL, *value = NULL;
 
@@ -59,7 +59,7 @@ int parseLineConf(const char* line, Conf *conf)
     return (EXIT_SUCCESS);
 }
 
-int loadConf(const char *confPath, Conf *conf)
+int loadConf(Conf *conf,const char *confPath)
 {
     FILE* confFile = NULL;
     char line[MAX_SIZE] = "";
@@ -74,7 +74,7 @@ int loadConf(const char *confPath, Conf *conf)
         {
             /* Ignore commented lines */
             if (line[0] == '#') continue;
-            parseLineConf(line, conf);
+            parseLineConf(conf, line);
         }
 
         /* Closing conf file */

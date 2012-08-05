@@ -17,7 +17,7 @@
             "id": 1,
             "idType": 1, // Regex
             "params": {
-                "regex": "MemTotal: *(\d+) kB"
+                "regex": "MemTotal:\s+([[:digit:]]+) kB"
             },
             "period": "default", // default or [1-60]s or [1-60]m or [1-24]h or [1-365]d
             "staticValues": 1
