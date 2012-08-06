@@ -31,7 +31,7 @@
 typedef struct CollectQueueElement CollectQueueElement;
 struct CollectQueueElement
 {
-    unsigned int idPlg, idAsset, idSrc, idSearch, subSearchNum;
+    unsigned int idPlg, idAsset, idSrc, idSearch, valueNum;
     char value[1000];
     time_t time;
     CollectQueueElement *next;
@@ -76,7 +76,7 @@ typedef struct AddonRegexFileParams AddonRegexFileParams;
 struct AddonRegexFileParams
 {
     const unsigned int idPlg, idAsset, idSrc, idSearch, period, staticValues;
-    unsigned int subSearchNum;
+    unsigned int valueNum;
     const char *path;
     regex_t preg;
     int match;
@@ -103,12 +103,12 @@ struct AddonsMgrParams
  * @param idAsset       Asset Identifier
  * @param idSrc         Source Identifier
  * @param idSearch      Search Identifier
- * @param numSubSearch  Sub-Search Number
+ * @param valueNum      Value Number
  * @param value         Message Value
  * @param time          Time of collect
  * @return Exit status
  */
-int pushCollectQueue(CollectQueue *collectQueue, const unsigned int idPlg, const unsigned int idAsset, const unsigned int idSrc, const unsigned int idSearch, const unsigned int subSearchNum, const char *value, time_t time);
+int pushCollectQueue(CollectQueue *collectQueue, const unsigned int idPlg, const unsigned int idAsset, const unsigned int idSrc, const unsigned int idSearch, const unsigned int valueNum, const char *value, time_t time);
 
 /**
  * Thread - Loop for addon.

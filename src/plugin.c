@@ -378,7 +378,6 @@ int json2llist(JSONNODE *n, PlgList *plgList, unsigned int *nbThreads)
                         if (!strcmp(node_name, "regex"))
                         {
                             json_char *node_value = json_as_string(*k);
-                            printf("%s\n", node_value);
                             /* Regex compilation */
                             searchInfoParams2_1->err = regcomp (&searchInfoParams2_1->preg, node_value, REG_EXTENDED);
                             json_free(node_value);

@@ -6,7 +6,7 @@
 
 #include "addon.h"
 
-int pushCollectQueue(CollectQueue *collectQueue, const unsigned int idPlg, const unsigned int idAsset, const unsigned int idSrc, const unsigned int idSearch, const unsigned int subSearchNum, const char *value, time_t time)
+int pushCollectQueue(CollectQueue *collectQueue, const unsigned int idPlg, const unsigned int idAsset, const unsigned int idSrc, const unsigned int idSearch, const unsigned int valueNum, const char *value, time_t time)
 {
     CollectQueueElement *new = calloc(1, sizeof(CollectQueueElement));
     if (collectQueue == NULL || new == NULL)
@@ -18,7 +18,7 @@ int pushCollectQueue(CollectQueue *collectQueue, const unsigned int idPlg, const
     new->idAsset = idAsset;
     new->idSrc = idSrc;
     new->idSearch = idSearch;
-    new->subSearchNum = subSearchNum;
+    new->valueNum = valueNum;
     strcpy(new->value, value);
     new->time = time;
 
@@ -81,7 +81,7 @@ void *addonLoop(void *arg)
                 paramsTmp->idSearch,
                 paramsTmp->period,
                 paramsTmp->staticValues,
-                0, /* subSearchNum */
+                paramsTmp->valueNum,
                 paramsTmp->path,
                 paramsTmp->preg,
                 paramsTmp->match,
@@ -182,7 +182,7 @@ void *addonLoop(void *arg)
                 paramsTmp->staticValues,
                 paramsTmp->firstChar,
                 paramsTmp->length,
-                0, /* nbLine */
+                paramsTmp->nbLine,
                 paramsTmp->path,
                 paramsTmp->collectQueue
             };
@@ -247,13 +247,14 @@ void *addonRegexFile(void *arg)
         {
             if (params->pmatch)
             {
+                /* TODO: Comprendre le comportement étrange avec \d */
                 params->match = regexec(&params->preg, line, params->nmatch, params->pmatch, 0);
                 if (params->match == 0)
                 {
-                    for (params->subSearchNum = 0; params->subSearchNum < (params->nmatch - 1); ++params->subSearchNum)
+                    for (params->valueNum = 1; params->valueNum < params->nmatch; ++params->valueNum)
                     {
-                        int start = params->pmatch[params->subSearchNum + 1].rm_so;
-                        int end = params->pmatch[params->subSearchNum + 1].rm_eo;
+                        int start = params->pmatch[params->valueNum].rm_so;
+                        int end = params->pmatch[params->valueNum].rm_eo;
                         size_t size = end - start;
 
                         res = malloc(sizeof (*res) * (size  + 1));
@@ -261,7 +262,7 @@ void *addonRegexFile(void *arg)
                         {
                             strncpy(res, &line[start], size);
                             res[size] = '\0';
-                            if (pushCollectQueue(params->collectQueue, params->idPlg, params->idAsset, params->idSrc, params->idSearch, params->subSearchNum, res, now))
+                            if (pushCollectQueue(params->collectQueue, params->idPlg, params->idAsset, params->idSrc, params->idSearch, params->valueNum, res, now))
                             {
                                 perror("pushCollectQueue()");
                                 pthread_exit(NULL);
@@ -321,7 +322,7 @@ void *addonLocationFile(void *arg)
             res[i] = line[params->firstChar + i - 1];
         }
         
-        if (pushCollectQueue(params->collectQueue, params->idPlg, params->idAsset, params->idSrc, params->idSearch, 0, res, now))
+        if (pushCollectQueue(params->collectQueue, params->idPlg, params->idAsset, params->idSrc, params->idSearch, 1, res, now))
         {
             perror("pushCollectQueue()");
             pthread_exit(NULL);
@@ -344,13 +345,13 @@ void *addonLocationLog(void *arg)
     char line[MAX_SIZE] = "", res[MAX_SIZE]= "";
     unsigned int n = 0, i = 0, j = 0;
     
-    /*TODO: faire un check du protocole file://, socket://, etc. */
     char *path;
-    
+
     time_t now;
 
     printf("Dans le thread addonLocationLog.\n");
 
+    /*TODO: faire un check du protocole file://, socket://, etc. */
     path = params->path + 7;
     
     /* What time is it ? */
@@ -360,7 +361,7 @@ void *addonLocationLog(void *arg)
     file = fopen(path, "r");
 
     /*TODO: Gérer la remise à zéro du fichier dans le labs de temps de la période */
-    
+
     if (file != NULL)
     {
         if (params->nbLine == 0)
@@ -372,12 +373,12 @@ void *addonLocationLog(void *arg)
                 {
                     res[i] = line[params->firstChar + i - 1];
                 }
-                if (pushCollectQueue(params->collectQueue, params->idPlg, params->idAsset, params->idSrc, params->idSearch, 0, res, now))
+                if (pushCollectQueue(params->collectQueue, params->idPlg, params->idAsset, params->idSrc, params->idSearch, 1, res, now))
                 {
                     perror("pushCollectQueue()");
                     pthread_exit(NULL);
                 }
-                n++;
+                ++n;
             }
         }
         else
@@ -385,43 +386,60 @@ void *addonLocationLog(void *arg)
             /* Reading file line by line */
             while (fgets(line, MAX_SIZE, file) != NULL)
             {
-                n++;
+                ++n;
             }
-        }
-        
-        if (n > params->nbLine)
-        {
-            /* Reading file line by line */
-            while (j < params->nbLine && fgets(line, MAX_SIZE, file) != NULL)
+
+            /* Closing file */
+            fclose(file);
+
+            /* Opening file */
+            file = fopen(path, "r");
+            
+            if (file != NULL)
             {
-                j++;
+                if (n > params->nbLine)
+                {
+                    /* Reading file line by line */
+                    while (j < params->nbLine && fgets(line, MAX_SIZE, file) != NULL)
+                    {
+                        ++j;
+                    }
+                    /* Reading file line by line */
+                    while (fgets(line, MAX_SIZE, file) != NULL)
+                    {
+                        for (i = 0; i < params->length; ++i)
+                        {
+                            res[i] = line[params->firstChar + i - 1];
+                        }
+                        if (pushCollectQueue(params->collectQueue, params->idPlg, params->idAsset, params->idSrc, params->idSearch, 1, res, now))
+                        {
+                            perror("pushCollectQueue()");
+                            pthread_exit(NULL);
+                        }
+                    }
+                }
+                else if (n < params->nbLine)
+                {
+                    /* Reading file line by line */
+                    while (fgets(line, MAX_SIZE, file) != NULL)
+                    {
+                        for (i = 0; i < params->length; ++i)
+                        {
+                            res[i] = line[params->firstChar + i - 1];
+                        }
+                        if (pushCollectQueue(params->collectQueue, params->idPlg, params->idAsset, params->idSrc, params->idSearch, 1, res, now))
+                        {
+                            perror("pushCollectQueue()");
+                            pthread_exit(NULL);
+                        }
+                        n++;
+                    }
+                }
             }
-            /* Reading file line by line */
-            while (fgets(line, MAX_SIZE, file) != NULL)
+            else
             {
-                for(i=0; i < params->length; ++i)
-                {
-                    res[i] = line[params->firstChar + i - 1];
-                }
-                if (pushCollectQueue(params->collectQueue, params->idPlg, params->idAsset, params->idSrc, params->idSearch, 0, res, now))
-                {
-                    perror("pushCollectQueue()");
-                    pthread_exit(NULL);
-                }
-            }
-        }
-        else if (n < params->nbLine)
-        {
-            /* Reading file line by line */
-            while (fgets(line, MAX_SIZE, file) != NULL)
-            {
-                for(i=0; i < params->length; ++i)
-                {
-                    res[i] = line[params->firstChar + i - 1];
-                }
-                /*TODO: envoyer le résultat */
-                printf("time: %f, res: %s, ids: %d-%d-%d-%d.\n", (double) now, res, params->idPlg, params->idAsset, params->idSrc, params->idSearch);
-                n++;
+                perror("fopen()");
+                pthread_exit(NULL);
             }
         }
 
@@ -481,7 +499,7 @@ void *addon(void *arg)
                             searchInfo->idSearch,
                             searchInfo->period,
                             searchInfo->staticValues,
-                            0, /* subSearchNum */
+                            0, /* valueNum */
                             srcInfoParams2->path,
                             searchInfoParams2_1->preg,
                             0, /* match */

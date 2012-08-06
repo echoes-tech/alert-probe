@@ -21,18 +21,17 @@
             },
             "period": "default", // default or [1-60]s or [1-60]m or [1-24]h or [1-365]d
             "staticValues": 0
+        },
+        {
+            "id": 2,
+            "idType": 2, // Localisation
+            "params": {
+                "firstChar": 1,
+                "length": 10
+            },
+            "period": "default", // default or [1-60]s or [1-60]m or [1-24]h or [1-365]d
+            "staticValues": 0
         }
-//        ,
-//        {
-//            "id": 2,
-//            "idType": 2, // Localisation
-//            "params": {
-//                "firstChar": 1,
-//                "length": 10
-//            },
-//            "period": "default", // default or [1-60]s or [1-60]m or [1-24]h or [1-365]d
-//            "staticValues": 0
-//        }
         ]
     },
     {
