@@ -4,12 +4,16 @@
  * @date 24/04/2012
  */
 
-#include "format.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <errno.h>
 #include <openssl/sha.h>
 #include <openssl/hmac.h>
 #include <openssl/evp.h>
 #include <openssl/bio.h>
 #include <openssl/buffer.h>
+
+#include "format.h"
 
 /* Source : http://www.ioncannon.net/programming/34/howto-base64-encode-with-cc-and-openssl/ */
 
@@ -101,6 +105,8 @@ int pushSDElementQueue(SDElementQueue *sdElementQueue, unsigned int idPlg, unsig
 
 int popCollectQueue(CollectQueue *collectQueue, SDElementQueue *sdElementQueue)
 {
+    const char *base64Value;
+    
     if (collectQueue == NULL)
     {
         exit(EXIT_FAILURE);
@@ -113,7 +119,16 @@ int popCollectQueue(CollectQueue *collectQueue, SDElementQueue *sdElementQueue)
     if (collectQueue->first != NULL)
     {
         CollectQueueElement *popedElement = collectQueue->first;
-
+    
+        if (strcmp(popedElement->value, ""))
+        {
+            base64Value = base64(popedElement->value, strlen(popedElement->value));
+        }
+        else
+        {
+            base64Value = "";
+        }
+        
         pushSDElementQueue(
                            sdElementQueue,
                            popedElement->idPlg,
@@ -122,7 +137,7 @@ int popCollectQueue(CollectQueue *collectQueue, SDElementQueue *sdElementQueue)
                            popedElement->idSearch,
                            popedElement->valueNum,
                            /*TODO: Tester le retour de base64 */
-                           base64(popedElement->value, strlen(popedElement->value)),
+                           base64Value,
                            popedElement->time
                            );
         collectQueue->first = popedElement->next;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurationDescriptor version="80">
+<configurationDescriptor version="84">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <logicalFolder name="conf" displayName="Conf" projectFiles="true">
       <itemPath>conf/echoes-alert.conf</itemPath>
@@ -7,7 +7,12 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>include/addon.h</itemPath>
+      <logicalFolder name="addon" displayName="addon" projectFiles="true">
+        <itemPath>/media/windows/Users/Florent Poinsaut/Documents/Dev/ECHOES Alert/Probe/include/addon/addon.h</itemPath>
+        <itemPath>/media/windows/Users/Florent Poinsaut/Documents/Dev/ECHOES Alert/Probe/include/addon/addonFile.h</itemPath>
+        <itemPath>include/addon/addonList.h</itemPath>
+        <itemPath>/media/windows/Users/Florent Poinsaut/Documents/Dev/ECHOES Alert/Probe/include/addon/addonLog.h</itemPath>
+      </logicalFolder>
       <itemPath>include/conf.h</itemPath>
       <itemPath>include/format.h</itemPath>
       <itemPath>include/plugin.h</itemPath>
@@ -25,7 +30,12 @@
                    displayName="Source Files"
                    projectFiles="true">
       <logicalFolder name="f1" displayName="src" projectFiles="true">
-        <itemPath>src/addon.c</itemPath>
+        <logicalFolder name="addon" displayName="addon" projectFiles="true">
+          <itemPath>/media/windows/Users/Florent Poinsaut/Documents/Dev/ECHOES Alert/Probe/src/addon/addon.c</itemPath>
+          <itemPath>/media/windows/Users/Florent Poinsaut/Documents/Dev/ECHOES Alert/Probe/src/addon/addonFile.c</itemPath>
+          <itemPath>src/addon/addonList.c</itemPath>
+          <itemPath>/media/windows/Users/Florent Poinsaut/Documents/Dev/ECHOES Alert/Probe/src/addon/addonLog.c</itemPath>
+        </logicalFolder>
         <itemPath>src/conf.c</itemPath>
         <itemPath>src/format.c</itemPath>
         <itemPath>src/plugin.c</itemPath>

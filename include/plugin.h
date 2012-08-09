@@ -11,14 +11,15 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
+#include <libjson/libjson.h>
+#include <regex.h>
 
 #include <dirent.h>
 #ifndef WIN32
 #include <sys/types.h>
 #endif
 
-#include <libjson/libjson.h>
-#include <regex.h>
+#include "addon/addonList.h"
 
 /* Max size of file conf lines in caracters */
 #define MAX_SIZE 300
@@ -32,9 +33,11 @@ typedef struct SearchInfoParams2_1 SearchInfoParams3_1;
 typedef struct SearchInfoParams2_1 SearchInfoParams2_1;
 struct SearchInfoParams2_1
 {
-    int err;
+    char regex[MAX_SIZE];
+    int err, match;
     regex_t preg;
     size_t nmatch;
+    regmatch_t *pmatch;
 };
 
 /* Search Informations Parameters for Addon 2 Type 2 */
@@ -63,7 +66,13 @@ struct SearchInfo
 typedef SearchInfo* SearchList;
 
 /* Source Informations Parameters for Addon 3 */
-typedef struct SrcInfoParams2 SrcInfoParams3;
+typedef struct SrcInfoParams3 SrcInfoParams3;
+struct SrcInfoParams3
+{
+    char path[MAX_SIZE];
+    unsigned int nbLine;
+};
+
 /* Source Informations Parameters for Addon 2 */
 typedef struct SrcInfoParams2 SrcInfoParams2;
 struct SrcInfoParams2
@@ -93,6 +102,7 @@ struct PlgInfo
 };
 /* Plugins List */
 typedef PlgInfo* PlgList;
+
 
 /**
  * Check if the filename ends with .json
@@ -130,7 +140,7 @@ int file2json(const char *plgPath, json_char *json);
  * @param *nbThreads Pointer of Number of Searches
  * @return Exit status
  */
-int json2llist(JSONNODE *n, PlgList *plgList, unsigned int *nbThreads);
+int json2llist(JSONNODE *n, PlgList *plgList, AddonList *addonList, unsigned int *nbThreads, CollectQueue *collectQueue);
 /**
  * List probe plugin
  * @param *plgDir    Plugins files directory
@@ -139,15 +149,16 @@ int json2llist(JSONNODE *n, PlgList *plgList, unsigned int *nbThreads);
  * @param *nbThreads Pointer of Number of Searches
  * @return Exit status
  */
-int listPlugins(const char *plgDir, int *nbPlg, PlgList *plgList, unsigned int *nbThreads);
+int listPlugins(const char *plgDir, int *nbPlg, PlgList *plgList, AddonList *addonList, unsigned int *nbThreads, CollectQueue *collectQueue);
 /**
  * Main function of Plug-in Manager
  * @param *plgDir    Plugins files directory
  * @param *plgList   Pointer of Plugins list with informations
+ * @param *addonList Pointer of Addons list with informations
  * @param *nbThreads Pointer of Number of Searches
  * @return Exit status
  */
-int plugin(const char *plgDir, PlgList *plgList, unsigned int *nbThreads);
+int plugin(const char *plgDir, PlgList *plgList, AddonList *addonList, unsigned int *nbThreads, CollectQueue *collectQueue);
 
 #endif	/* PLUGIN_H */
 

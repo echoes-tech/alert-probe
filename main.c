@@ -13,7 +13,7 @@
 /* To init struct PlgList */
 #include "plugin.h"
 /* To init struct AddonsMgrParams */
-#include "addon.h"
+#include "addon/addon.h"
 /* To init struct FormatParams */
 #include "format.h"
 /* To init struct SenderParams */
@@ -40,6 +40,8 @@ int main(int argc, char** argv)
     /* Probe Configuration initialisation */
     Conf conf = CONF_INITIALIZER;
     
+    /* Plugins List initialisation */
+    PlgList plgList = NULL;
     /* Plugins counter initialisation */
     unsigned int nbThreads = 0;
     
@@ -125,7 +127,7 @@ int main(int argc, char** argv)
     printf("Fin du chargement des conf\n");
 
     printf("Début du chargement des plugins\n");
-    if (plugin(conf.probePluginDir, &addonsMgrParams.plgList, &nbThreads))
+    if (plugin(conf.probePluginDir, &plgList, &addonsMgrParams.addonsList, &nbThreads, &addonsMgrParams.collectQueue))
     {
         perror("plugin()");
         return (errno);
@@ -135,12 +137,6 @@ int main(int argc, char** argv)
     /* Table addonsThreads creation */
     addonsMgrParams.addonsThreads = calloc(nbThreads, sizeof (pthread_t));
     if (addonsMgrParams.addonsThreads == NULL)
-    {
-        return (EXIT_FAILURE);
-    }
-    /* Table loopsParams creation */
-    addonsMgrParams.loopsParams = calloc(nbThreads, sizeof (LoopParams));
-    if (addonsMgrParams.loopsParams == NULL)
     {
         return (EXIT_FAILURE);
     }
@@ -175,7 +171,6 @@ int main(int argc, char** argv)
     
     /* Cleanup */
     free(addonsMgrParams.addonsThreads);
-    free(addonsMgrParams.loopsParams);
 
     free(sdElementQueue.hostname);
     

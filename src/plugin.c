@@ -79,7 +79,7 @@ int periodString2Int(unsigned int *periodSec, const char *periodString)
     return (EXIT_SUCCESS);
 }
 
-int listPlugins(const char *plgDir, int *nbPlg, PlgList *plgList, unsigned int *nbThreads)
+int listPlugins(const char *plgDir, int *nbPlg, PlgList *plgList, AddonList *addonList, unsigned int *nbThreads, CollectQueue *collectQueue)
 {
     DIR* dir = NULL;
     struct dirent* read = NULL;
@@ -116,7 +116,7 @@ int listPlugins(const char *plgDir, int *nbPlg, PlgList *plgList, unsigned int *
 
             n = json_parse(json);
 
-            if (json2llist(n, plgList, nbThreads))
+            if (json2llist(n, plgList, addonList, nbThreads, collectQueue))
             {
                 perror("json2llist()");
                 return (errno);
@@ -174,7 +174,7 @@ int file2json(const char *plgPath, json_char* json)
     return (EXIT_SUCCESS);
 }
 
-int json2llist(JSONNODE *n, PlgList *plgList, unsigned int *nbThreads)
+int json2llist(JSONNODE *n, PlgList *plgList, AddonList *addonList, unsigned int *nbThreads, CollectQueue *collectQueue)
 {
     JSONNODE_ITERATOR i, j, k;
     json_char *node_name = NULL;
@@ -378,12 +378,14 @@ int json2llist(JSONNODE *n, PlgList *plgList, unsigned int *nbThreads)
                         if (!strcmp(node_name, "regex"))
                         {
                             json_char *node_value = json_as_string(*k);
-                            /* Regex compilation */
-                            searchInfoParams2_1->err = regcomp (&searchInfoParams2_1->preg, node_value, REG_EXTENDED);
+                            strcpy(searchInfoParams2_1->regex, node_value);
                             json_free(node_value);
+                            /* Regex compilation */
+                            searchInfoParams2_1->err = regcomp (&searchInfoParams2_1->preg, searchInfoParams2_1->regex, REG_EXTENDED);
                             if (searchInfoParams2_1->err == 0)
                             {
                                 searchInfoParams2_1->nmatch = (searchInfoParams2_1->preg.re_nsub + 1);
+                                searchInfoParams2_1->pmatch = malloc (sizeof (*searchInfoParams2_1->pmatch) * (searchInfoParams2_1->nmatch));
                             }
                             else
                             {
@@ -437,6 +439,7 @@ int json2llist(JSONNODE *n, PlgList *plgList, unsigned int *nbThreads)
             case 3:
             {
                 SrcInfoParams3 *srcInfoParams3 = calloc(1, sizeof (SrcInfoParams3));
+                srcInfoParams3->nbLine = 0;
                 k = json_begin(srcParams);
                 while (k != json_end(srcParams))
                 {
@@ -476,12 +479,14 @@ int json2llist(JSONNODE *n, PlgList *plgList, unsigned int *nbThreads)
                         if (!strcmp(node_name, "regex"))
                         {
                             json_char *node_value = json_as_string(*k);
-                            /* Regex compilation */
-                            searchInfoParams3_1->err = regcomp (&searchInfoParams3_1->preg, node_value, REG_EXTENDED);
+                            strcpy(searchInfoParams3_1->regex, node_value);
                             json_free(node_value);
+                            /* Regex compilation */
+                            searchInfoParams3_1->err = regcomp (&searchInfoParams3_1->preg, searchInfoParams3_1->regex, REG_EXTENDED);
                             if (searchInfoParams3_1->err == 0)
                             {
                                 searchInfoParams3_1->nmatch = (searchInfoParams3_1->preg.re_nsub + 1);
+                                searchInfoParams3_1->pmatch = malloc (sizeof (*searchInfoParams3_1->pmatch) * (searchInfoParams3_1->nmatch));
                             }
                             else
                             {
@@ -532,6 +537,21 @@ int json2llist(JSONNODE *n, PlgList *plgList, unsigned int *nbThreads)
                 break;
             }
 
+            pushAddonList(
+                          addonList,
+                          &srcInfo->idAddon,
+                          srcInfo->params,
+                          &searchInfo->period,
+                          &searchInfo->staticValues,
+                          collectQueue,
+                          &searchInfo->idType,
+                          searchInfo->params,
+                          &plgInfo->idPlg,
+                          &plgInfo->idAsset,
+                          &srcInfo->idSrc,
+                          &searchInfo->idSearch
+                          );
+
             /* Assign the address of the next element in the new element */
             searchInfo->nxt = searchList;
 
@@ -569,12 +589,12 @@ int json2llist(JSONNODE *n, PlgList *plgList, unsigned int *nbThreads)
     return (EXIT_SUCCESS);
 }
 
-int plugin(const char *plgDir, PlgList *plgList, unsigned int *nbThreads)
+int plugin(const char *plgDir, PlgList *plgList, AddonList *addonList, unsigned int *nbThreads, CollectQueue *collectQueue)
 {
     /* Plugins counter initialisation */
     int nbPlg = 0;
 
-    if (listPlugins(plgDir, &nbPlg, plgList, nbThreads))
+    if (listPlugins(plgDir, &nbPlg, plgList, addonList, nbThreads, collectQueue))
     {
         perror("listPlugins()");
         return (errno);

@@ -4,15 +4,10 @@
  * @date 24/04/2012
  */
 
-
 #ifndef FORMAT_H
 #define	FORMAT_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <errno.h>
-
-#include "addon.h"
+#include "addon/addon.h"
 
 /* Element of SD-Element queue */
 typedef struct SDElementQueueElement SDElementQueueElement;

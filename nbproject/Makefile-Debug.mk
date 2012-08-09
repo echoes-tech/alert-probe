@@ -22,6 +22,7 @@ AS=as
 
 # Macros
 CND_PLATFORM=GNU-Linux-x86
+CND_DLIB_EXT=so
 CND_CONF=Debug
 CND_DISTDIR=dist
 CND_BUILDDIR=build
@@ -35,10 +36,13 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/src/format.o \
-	${OBJECTDIR}/src/addon.o \
+	${OBJECTDIR}/src/addon/addonList.o \
 	${OBJECTDIR}/src/plugin.o \
+	${OBJECTDIR}/_ext/754107514/addonFile.o \
 	${OBJECTDIR}/main.o \
+	${OBJECTDIR}/_ext/754107514/addonLog.o \
 	${OBJECTDIR}/src/sender.o \
+	${OBJECTDIR}/_ext/754107514/addon.o \
 	${OBJECTDIR}/src/conf.o
 
 # Test Directory
@@ -79,25 +83,40 @@ ${OBJECTDIR}/src/format.o: src/format.c
 	${RM} $@.d
 	$(COMPILE.c) -g -I. -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/format.o src/format.c
 
-${OBJECTDIR}/src/addon.o: src/addon.c 
-	${MKDIR} -p ${OBJECTDIR}/src
+${OBJECTDIR}/src/addon/addonList.o: src/addon/addonList.c 
+	${MKDIR} -p ${OBJECTDIR}/src/addon
 	${RM} $@.d
-	$(COMPILE.c) -g -I. -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon.o src/addon.c
+	$(COMPILE.c) -g -I. -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonList.o src/addon/addonList.c
 
 ${OBJECTDIR}/src/plugin.o: src/plugin.c 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.c) -g -I. -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/plugin.o src/plugin.c
 
+${OBJECTDIR}/_ext/754107514/addonFile.o: /media/windows/Users/Florent\ Poinsaut/Documents/Dev/ECHOES\ Alert/Probe/src/addon/addonFile.c 
+	${MKDIR} -p ${OBJECTDIR}/_ext/754107514
+	${RM} $@.d
+	$(COMPILE.c) -g -I. -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/754107514/addonFile.o /media/windows/Users/Florent\ Poinsaut/Documents/Dev/ECHOES\ Alert/Probe/src/addon/addonFile.c
+
 ${OBJECTDIR}/main.o: main.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.c) -g -I. -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.c
 
+${OBJECTDIR}/_ext/754107514/addonLog.o: /media/windows/Users/Florent\ Poinsaut/Documents/Dev/ECHOES\ Alert/Probe/src/addon/addonLog.c 
+	${MKDIR} -p ${OBJECTDIR}/_ext/754107514
+	${RM} $@.d
+	$(COMPILE.c) -g -I. -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/754107514/addonLog.o /media/windows/Users/Florent\ Poinsaut/Documents/Dev/ECHOES\ Alert/Probe/src/addon/addonLog.c
+
 ${OBJECTDIR}/src/sender.o: src/sender.c 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.c) -g -I. -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/sender.o src/sender.c
+
+${OBJECTDIR}/_ext/754107514/addon.o: /media/windows/Users/Florent\ Poinsaut/Documents/Dev/ECHOES\ Alert/Probe/src/addon/addon.c 
+	${MKDIR} -p ${OBJECTDIR}/_ext/754107514
+	${RM} $@.d
+	$(COMPILE.c) -g -I. -Iinclude -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/754107514/addon.o /media/windows/Users/Florent\ Poinsaut/Documents/Dev/ECHOES\ Alert/Probe/src/addon/addon.c
 
 ${OBJECTDIR}/src/conf.o: src/conf.c 
 	${MKDIR} -p ${OBJECTDIR}/src
@@ -153,17 +172,17 @@ ${OBJECTDIR}/src/format_nomain.o: ${OBJECTDIR}/src/format.o src/format.c
 	    ${CP} ${OBJECTDIR}/src/format.o ${OBJECTDIR}/src/format_nomain.o;\
 	fi
 
-${OBJECTDIR}/src/addon_nomain.o: ${OBJECTDIR}/src/addon.o src/addon.c 
-	${MKDIR} -p ${OBJECTDIR}/src
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/addon.o`; \
+${OBJECTDIR}/src/addon/addonList_nomain.o: ${OBJECTDIR}/src/addon/addonList.o src/addon/addonList.c 
+	${MKDIR} -p ${OBJECTDIR}/src/addon
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/addon/addonList.o`; \
 	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
 	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} $@.d;\
-	    $(COMPILE.c) -g -I. -Iinclude -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon_nomain.o src/addon.c;\
+	    $(COMPILE.c) -g -I. -Iinclude -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonList_nomain.o src/addon/addonList.c;\
 	else  \
-	    ${CP} ${OBJECTDIR}/src/addon.o ${OBJECTDIR}/src/addon_nomain.o;\
+	    ${CP} ${OBJECTDIR}/src/addon/addonList.o ${OBJECTDIR}/src/addon/addonList_nomain.o;\
 	fi
 
 ${OBJECTDIR}/src/plugin_nomain.o: ${OBJECTDIR}/src/plugin.o src/plugin.c 
@@ -179,6 +198,19 @@ ${OBJECTDIR}/src/plugin_nomain.o: ${OBJECTDIR}/src/plugin.o src/plugin.c
 	    ${CP} ${OBJECTDIR}/src/plugin.o ${OBJECTDIR}/src/plugin_nomain.o;\
 	fi
 
+${OBJECTDIR}/_ext/754107514/addonFile_nomain.o: ${OBJECTDIR}/_ext/754107514/addonFile.o /media/windows/Users/Florent\ Poinsaut/Documents/Dev/ECHOES\ Alert/Probe/src/addon/addonFile.c 
+	${MKDIR} -p ${OBJECTDIR}/_ext/754107514
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/_ext/754107514/addonFile.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} $@.d;\
+	    $(COMPILE.c) -g -I. -Iinclude -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/754107514/addonFile_nomain.o /media/windows/Users/Florent\ Poinsaut/Documents/Dev/ECHOES\ Alert/Probe/src/addon/addonFile.c;\
+	else  \
+	    ${CP} ${OBJECTDIR}/_ext/754107514/addonFile.o ${OBJECTDIR}/_ext/754107514/addonFile_nomain.o;\
+	fi
+
 ${OBJECTDIR}/main_nomain.o: ${OBJECTDIR}/main.o main.c 
 	${MKDIR} -p ${OBJECTDIR}
 	@NMOUTPUT=`${NM} ${OBJECTDIR}/main.o`; \
@@ -192,6 +224,19 @@ ${OBJECTDIR}/main_nomain.o: ${OBJECTDIR}/main.o main.c
 	    ${CP} ${OBJECTDIR}/main.o ${OBJECTDIR}/main_nomain.o;\
 	fi
 
+${OBJECTDIR}/_ext/754107514/addonLog_nomain.o: ${OBJECTDIR}/_ext/754107514/addonLog.o /media/windows/Users/Florent\ Poinsaut/Documents/Dev/ECHOES\ Alert/Probe/src/addon/addonLog.c 
+	${MKDIR} -p ${OBJECTDIR}/_ext/754107514
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/_ext/754107514/addonLog.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} $@.d;\
+	    $(COMPILE.c) -g -I. -Iinclude -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/754107514/addonLog_nomain.o /media/windows/Users/Florent\ Poinsaut/Documents/Dev/ECHOES\ Alert/Probe/src/addon/addonLog.c;\
+	else  \
+	    ${CP} ${OBJECTDIR}/_ext/754107514/addonLog.o ${OBJECTDIR}/_ext/754107514/addonLog_nomain.o;\
+	fi
+
 ${OBJECTDIR}/src/sender_nomain.o: ${OBJECTDIR}/src/sender.o src/sender.c 
 	${MKDIR} -p ${OBJECTDIR}/src
 	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/sender.o`; \
@@ -203,6 +248,19 @@ ${OBJECTDIR}/src/sender_nomain.o: ${OBJECTDIR}/src/sender.o src/sender.c
 	    $(COMPILE.c) -g -I. -Iinclude -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/sender_nomain.o src/sender.c;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/sender.o ${OBJECTDIR}/src/sender_nomain.o;\
+	fi
+
+${OBJECTDIR}/_ext/754107514/addon_nomain.o: ${OBJECTDIR}/_ext/754107514/addon.o /media/windows/Users/Florent\ Poinsaut/Documents/Dev/ECHOES\ Alert/Probe/src/addon/addon.c 
+	${MKDIR} -p ${OBJECTDIR}/_ext/754107514
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/_ext/754107514/addon.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} $@.d;\
+	    $(COMPILE.c) -g -I. -Iinclude -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/754107514/addon_nomain.o /media/windows/Users/Florent\ Poinsaut/Documents/Dev/ECHOES\ Alert/Probe/src/addon/addon.c;\
+	else  \
+	    ${CP} ${OBJECTDIR}/_ext/754107514/addon.o ${OBJECTDIR}/_ext/754107514/addon_nomain.o;\
 	fi
 
 ${OBJECTDIR}/src/conf_nomain.o: ${OBJECTDIR}/src/conf.o src/conf.c 
