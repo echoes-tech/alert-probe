@@ -11,7 +11,8 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
-#include <libjson/libjson.h>
+#include <glib-object.h>
+#include <json-glib/json-glib.h>
 #include <regex.h>
 
 #include <dirent.h>
@@ -33,7 +34,7 @@ typedef struct SearchInfoParams2_1 SearchInfoParams3_1;
 typedef struct SearchInfoParams2_1 SearchInfoParams2_1;
 struct SearchInfoParams2_1
 {
-    char regex[MAX_SIZE];
+    gchar *regex;
     int err, match;
     regex_t preg;
     size_t nmatch;
@@ -69,7 +70,7 @@ typedef SearchInfo* SearchList;
 typedef struct SrcInfoParams3 SrcInfoParams3;
 struct SrcInfoParams3
 {
-    char path[MAX_SIZE];
+    gchar *path;
     unsigned int nbLine;
 };
 
@@ -77,7 +78,7 @@ struct SrcInfoParams3
 typedef struct SrcInfoParams2 SrcInfoParams2;
 struct SrcInfoParams2
 {
-    char path[MAX_SIZE];
+    gchar *path;
 };
 
 /* Source Informations */
@@ -127,20 +128,22 @@ int addBackslash(char *string);
 int periodString2Int(unsigned int *periodSec, const char *periodString);
 
 /**
- * Load probe plugin file to a jsonnode
+ * Load probe plugin file to a String
  * @param *plgPath Plugins file path
- * @param *json    Json string
+ * @param data     String
  * @return Exit status
  */
-int file2json(const char *plgPath, json_char *json);
+int file2data(const char *plgPath, gchar *data);
 /**
- * Load jsonnode to a linkedlist
- * @param *n         Json node
+ * Load data to a linkedlist
  * @param *plgList   Pointer of Plugins list with informations
+ * @param *addonList Pointer of Addons list with informations
  * @param *nbThreads Pointer of Number of Searches
+ * @param *plgPath Plugins file path
+ * @param data     String
  * @return Exit status
  */
-int json2llist(JSONNODE *n, PlgList *plgList, AddonList *addonList, unsigned int *nbThreads, CollectQueue *collectQueue);
+int data2llist(PlgList *plgList, AddonList *addonList, unsigned int *nbThreads, CollectQueue *collectQueue, const char *plgPath, const char *data);
 /**
  * List probe plugin
  * @param *plgDir    Plugins files directory

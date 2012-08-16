@@ -17,7 +17,7 @@ int addonLogRegex(
 {
     SearchInfoParams3_1 *searchInfoParams = (SearchInfoParams3_1*)params;
     char *res = NULL;
-    
+
     if (searchInfoParams->pmatch)
     {
         /* TODO: Comprendre le comportement étrange avec \d */

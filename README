@@ -10,8 +10,7 @@ REQUIREMENTS
 ------------
 In order to build ECHOES Alert - Probe you will need:
 
-  • libjson >= 7.5.0 (http://sourceforge.net/projects/libjson/)
-Build it with following options: JSON_LIBRARY (run "make SHARED=1; sudo make SHARED=1 install").
+  • json-glib-dev >= 0.12
   • libssl-dev
 Debian/Ubuntu : apt-get intall libssl-dev
   • CUnit = 2.1 (http://cunit.sourceforge.net/)
@@ -28,7 +27,7 @@ BUGS
 -------------------------------------------------------------------------------
 If you find a bug in ECHOES Alert - Probe, please create a Redmine entry here:
 
-  https://redmine.gayuxweb.fr/projects/probe/issues/new
+  https://forge.echoes-tech.com/projects/probe/issues/new
 
 Attaching:
 

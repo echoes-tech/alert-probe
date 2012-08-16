@@ -47,24 +47,6 @@
                    displayName="Test Files"
                    projectFiles="false"
                    kind="TEST_LOGICAL_FOLDER">
-      <logicalFolder name="f1"
-                     displayName="Conf CUnit Test"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/confcunittest.c</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f2"
-                     displayName="Plugin CUnit Test"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/plugincunittest.c</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f3"
-                     displayName="Sender CUnit Test"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/sendercunittest.c</itemPath>
-      </logicalFolder>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -92,6 +74,7 @@
             <pElem>.</pElem>
             <pElem>include</pElem>
           </incDir>
+          <commandLine>`pkg-config --cflags gobject-2.0 json-glib-1.0` -Wall</commandLine>
         </cTool>
         <ccTool>
           <incDir>
@@ -101,14 +84,18 @@
             <pElem>.</pElem>
             <pElem>.</pElem>
             <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
           </incDir>
         </ccTool>
         <linkerTool>
+          <output>${TESTDIR}/TestFiles/f3</output>
           <linkerLibItems>
             <linkerLibStdlibItem>CUnit</linkerLibStdlibItem>
-            <linkerLibLibItem>json</linkerLibLibItem>
-            <linkerLibLibItem>ssl</linkerLibLibItem>
-            <linkerLibLibItem>crypto</linkerLibLibItem>
+            <linkerOptionItem>`pkg-config --libs libssl gobject-2.0 json-glib-1.0`</linkerOptionItem>
           </linkerLibItems>
           <commandLine>-pthread</commandLine>
         </linkerTool>
@@ -132,35 +119,15 @@
         <cTool>
           <incDir>
             <pElem>.</pElem>
-            <pElem>.</pElem>
           </incDir>
         </cTool>
         <ccTool>
           <incDir>
-            <pElem>.</pElem>
             <pElem>.</pElem>
           </incDir>
         </ccTool>
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f2</output>
-          <linkerLibItems>
-            <linkerLibStdlibItem>CUnit</linkerLibStdlibItem>
-          </linkerLibItems>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f3">
-        <cTool>
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
-        </cTool>
-        <ccTool>
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f3</output>
         </linkerTool>
       </folder>
     </conf>
@@ -175,6 +142,7 @@
           <incDir>
             <pElem>include</pElem>
           </incDir>
+          <commandLine>`pkg-config --cflags gobject-2.0 json-glib-1.0` -Wall</commandLine>
         </cTool>
         <ccTool>
           <developmentMode>5</developmentMode>
@@ -185,6 +153,12 @@
         <asmTool>
           <developmentMode>5</developmentMode>
         </asmTool>
+        <linkerTool>
+          <linkerLibItems>
+            <linkerLibStdlibItem>CUnit</linkerLibStdlibItem>
+            <linkerOptionItem>`pkg-config --libs libssl gobject-2.0 json-glib-1.0`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
       </compileType>
     </conf>
   </confs>
