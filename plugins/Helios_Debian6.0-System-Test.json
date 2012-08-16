@@ -4,31 +4,31 @@
 
 {
     "id": 1,
-    "idAsset": 1, // Helios
+    "idAsset": 1, /* Helios */
     "sources": [
     {
         "id": 1,
-        "idAddon": 2, // File
+        "idAddon": 2, /* File */
         "params": {
             "path": "/proc/meminfo"
         },
         "searches": [
         {
             "id": 1,
-            "idType": 1, // Regex
+            "idType": 1, /* Regex */
             "params": {
                 "regex": "MemTotal:\s+([[:digit:]]+) kB"
             },
-            "period": "default", // default or [1-60]s or [1-60]m or [1-24]h or [1-365]d
+            "period": "default", /* default or [1-60]s or [1-60]m or [1-24]h or [1-365]d */
             "staticValues": 1
         },
         {
             "id": 2,
-            "idType": 1, // Regex
+            "idType": 1, /* Regex */
             "params": {
                 "regex": "MemFree: *(\d+) kB"
             },
-            "period": "default", // default or [1-60]s or [1-60]m or [1-24]h or [1-365]d
+            "period": "default", /* default or [1-60]s or [1-60]m or [1-24]h or [1-365]d */
             "staticValues": 1
         }
         ]
