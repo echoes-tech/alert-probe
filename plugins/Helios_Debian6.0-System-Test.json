@@ -17,21 +17,134 @@
             "id": 1,
             "idType": 1, /* Regex */
             "params": {
-                "regex": "MemTotal:\s+([[:digit:]]+) kB"
+                "regex": "^MemTotal:\s+([0-9]+)\skB"
             },
             "period": "default", /* default or [1-60]s or [1-60]m or [1-24]h or [1-365]d */
-            "staticValues": 1
+            "staticValues": 0
         },
         {
             "id": 2,
             "idType": 1, /* Regex */
             "params": {
-                "regex": "MemFree: *(\d+) kB"
+                "regex": "^MemFree:\s+([0-9]+)\skB"
             },
             "period": "default", /* default or [1-60]s or [1-60]m or [1-24]h or [1-365]d */
-            "staticValues": 1
+            "staticValues": 0
+        },
+        {
+            "id": 3,
+            "idType": 1, /* Regex */
+            "params": {
+                "regex": "^Buffers:\s+([0-9]+)\skB"
+            },
+            "period": "default", /* default or [1-60]s or [1-60]m or [1-24]h or [1-365]d */
+            "staticValues": 0
+        },
+		{
+            "id": 4,
+            "idType": 1, /* Regex */
+            "params": {
+                "regex": "^Cached:\s+([0-9]+)\skB"
+            },
+            "period": "default", /* default or [1-60]s or [1-60]m or [1-24]h or [1-365]d */
+            "staticValues": 0
+        },
+		{
+            "id": 5,
+            "idType": 1, /* Regex */
+            "params": {
+                "regex": "^SwapTotal:\s+([0-9]+)\skB"
+            },
+            "period": "default", /* default or [1-60]s or [1-60]m or [1-24]h or [1-365]d */
+            "staticValues": 0
+        },
+		{
+            "id": 6,
+            "idType": 1, /* Regex */
+            "params": {
+                "regex": "^SwapFree:\s+([0-9]+)\skB"
+            },
+            "period": "default", /* default or [1-60]s or [1-60]m or [1-24]h or [1-365]d */
+            "staticValues": 0
         }
         ]
-    }
+    },
+    {
+        "id": 2,
+        "idAddon": 2, /* File */
+        "params": {
+            "path": "/proc/net/dev"
+        },
+        "searches": [
+        {
+            "id": 1,
+            "idType": 1, /* Regex */
+            "params": {
+                "regex": "^\s*(\w+):\s*([0-9]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+)\s+[0-9]+\s+[0-9]+\s+[0-9]+\s+[0-9]+\s+([0-9]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+)\s+[0-9]+\s+[0-9]+\s+[0-9]+\s+[0-9]+"
+				/* Description des groupes
+                 * groupe 1 : interface reseau
+                 * groupe 2 : Receive bytes
+                 * groupe 3 : Receive packets
+                 * groupe 4 : Receive errs
+                 * groupe 5 : Receive drops
+                 * groupe 6 : Transmit bytes
+                 * groupe 7 : Transmit packets
+                 * groupe 8 : Transmit errs
+                 * groupe 9 : Transmit drop
+                 */
+           },
+            "period": "default", /* default or [1-60]s or [1-60]m or [1-24]h or [1-365]d */
+            "staticValues": 0
+        }
+        ]
+    },
+    {
+		"id": 3,
+        "idAddon": 2, /* File */
+        "params": {
+            "path": "/proc/loadavg"
+        },
+        "searches": [
+		{
+            "id": 1,
+            "idType": 1, /* Regex */
+            "params": {
+                "regex": "^([0-9]+\.[0-9]+)\s([0-9]+\.[0-9]+)\s([0-9]+\.[0-9]+)"
+				/* Description des groupes
+                 * groupe 1 : valeur de charge moyenne sur 1 minute
+                 * groupe 2 : valeur de charge moyenne sur 5 minutes
+                 * groupe 3 : valeur de charge moyenne sur 15 minutes
+                 */
+            },
+            "period": "default", /* default or [1-60]s or [1-60]m or [1-24]h or [1-365]d */
+            "staticValues": 0
+		}
+        ]
+	},
+	{
+		"id": 4,
+        "idAddon": 2, /* File */
+        "params": {
+            "path": "/proc/stat"
+        },
+        "searches": [
+		{
+            "id": 1,
+            "idType": 1, /* Regex */
+            "params": {
+                "regex": "^(cpu[0-9]*)\s+([0-9]+)\s([0-9]+)\s([0-9]+)\s([0-9]+)\s[0-9]+\s[0-9]+\s[0-9]+\s[0-9]+\s[0-9]+"
+				/* Description des groupes
+                 * groupe 1 : Nom du cpu
+                 * groupe 2 : Temps, mesuré en unité de USER_HZ,que le système a passé en mode utilisateur
+                 * groupe 3 : Temps, mesuré en unité de USER_HZ que le système a passé en mode utilisateur avec une basse priorité
+				 * groupe 4 : Temps, mesuré en unité de USER_HZ, que le système a passé en mode système
+                 * groupe 5 : Temps, mesuré en en unité de USER_HZ correspondant au temps d'inactivité du système
+                 */
+            },
+            "period": "default", /* default or [1-60]s or [1-60]m or [1-24]h or [1-365]d */
+            "staticValues": 0
+        }
+		]
+	}
     ]
 }
