@@ -143,7 +143,13 @@ int file2data(const char *plgPath, gchar *data);
  * @param data     String
  * @return Exit status
  */
-int data2llist(PlgList *plgList, AddonList *addonList, unsigned int *nbThreads, CollectQueue *collectQueue, const char *plgPath, const char *data);
+int data2llist(
+               PlgList *plgList,
+               AddonList *addonList,
+               unsigned int *nbThreads,
+               const char *plgPath,
+               const char *data
+               );
 /**
  * List probe plugin
  * @param *plgDir    Plugins files directory
@@ -152,7 +158,13 @@ int data2llist(PlgList *plgList, AddonList *addonList, unsigned int *nbThreads, 
  * @param *nbThreads Pointer of Number of Searches
  * @return Exit status
  */
-int listPlugins(const char *plgDir, int *nbPlg, PlgList *plgList, AddonList *addonList, unsigned int *nbThreads, CollectQueue *collectQueue);
+int listPlugins(
+                const char *plgDir,
+                int *nbPlg,
+                PlgList *plgList,
+                AddonList *addonList,
+                unsigned int *nbThreads
+                );
 /**
  * Main function of Plug-in Manager
  * @param *plgDir    Plugins files directory
@@ -161,7 +173,12 @@ int listPlugins(const char *plgDir, int *nbPlg, PlgList *plgList, AddonList *add
  * @param *nbThreads Pointer of Number of Searches
  * @return Exit status
  */
-int plugin(const char *plgDir, PlgList *plgList, AddonList *addonList, unsigned int *nbThreads, CollectQueue *collectQueue);
+int plugin(
+           const char *plgDir,
+           PlgList *plgList,
+           AddonList *addonList,
+           unsigned int *nbThreads
+           );
 
 #endif	/* PLUGIN_H */
 

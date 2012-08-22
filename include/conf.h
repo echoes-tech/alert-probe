@@ -19,7 +19,9 @@
 typedef struct Conf Conf;
 struct Conf
 {
-    unsigned int enginePort, probeID, transportProto, transportMsgVersion;
+    unsigned int probeID;
+    unsigned short enginePort;
+    unsigned char transportProto, transportMsgVersion;
     char probePluginDir[255], engineFQDN[255];
 };
 

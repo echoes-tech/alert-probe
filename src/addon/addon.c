@@ -13,6 +13,7 @@ int pushCollectQueue(
                      const unsigned int idSrc,
                      const unsigned int idSearch,
                      const unsigned int valueNum,
+                     const unsigned short lotNum,
                      const char *value,
                      time_t time
                      )
@@ -28,6 +29,7 @@ int pushCollectQueue(
     new->idSrc = idSrc;
     new->idSearch = idSearch;
     new->valueNum = valueNum;
+    new->lotNum = lotNum;
     strcpy(new->value, value);
     new->time = time;
 
@@ -67,9 +69,14 @@ void *addon(void *arg)
     while (addonInfo != NULL)
     {
         AddonParamsInfo *addonParamsInfo = addonInfo->addonParamsList;
+
         /* Tant que l'on n'est pas au bout de la liste */
         while (addonParamsInfo != NULL)
         {
+            addonParamsInfo->collectQueue = &addonsMgrParams->collectQueue;
+            addonParamsInfo->lotNumPtr = &addonsMgrParams->lotNum;
+            addonParamsInfo->mutex = &addonsMgrParams->mutex;
+
             switch (*addonInfo->idAddon)
             {
             case 2:
@@ -97,7 +104,7 @@ void *addon(void *arg)
         }
         
         /* On avance d'une case */
-        addonInfo = addonInfo->nxt;   
+        addonInfo = addonInfo->nxt;
     }
 
     printf("Fin du chargement des addons\n");

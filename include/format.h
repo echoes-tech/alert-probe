@@ -23,7 +23,8 @@ struct SDElementQueue
 {
     pthread_mutex_t mutex;
     char *hostname, appName[19];
-    unsigned int *probeID, *transportMsgVersion;
+    unsigned int *probeID;
+    unsigned char *transportMsgVersion;
     pid_t pID;
     SDElementQueueElement *first;
 };
@@ -36,20 +37,26 @@ struct FormatParams
 };
 
 /**
- * Encode input in Base64
- * @param input  String
- * @param length Length of String
- * @return String encoded
  */
-char *base64(const char *input, int length);
+int pushSDElementQueue(
+                       SDElementQueue *sdElementQueue,
+                       unsigned int idPlg,
+                       unsigned int idAsset,
+                       unsigned int idSrc,
+                       unsigned int idSearch,
+                       unsigned int valueNum,
+                       unsigned short lotNum,
+                       const gchar *b64Value,
+                       time_t time
+                       );
 
 /**
  * Group collected data by time in Structured-Element.
- * @param collectQueue   Data collected Queue
- * @param sdElementQueue SD-Element Queue
+ * @param collectQueue   Pointer of Data collected Queue
+ * @param sdElementQueue Pointer of SD-Element Queue
  * @return Exit status
  */
- int collectedData2sdElement(CollectQueue collectQueue, SDElementQueue sdElementQueue);
+ int popCollectQueue(CollectQueue *collectQueue, SDElementQueue *sdElementQueue);
  
 /**
  * Create the message to send

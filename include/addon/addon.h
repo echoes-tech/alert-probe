@@ -35,10 +35,12 @@ struct AddonsMgrParams
 {
     AddonList addonsList;
     pthread_t* addonsThreads;
+    unsigned short lotNum;
+    pthread_mutex_t mutex;
     CollectQueue collectQueue;
 };
 
-#define ADDON_PARAMS_INITIALIZER {NULL, NULL, COLLECT_QUEUE_INITIALIZER}
+#define ADDON_PARAMS_INITIALIZER {NULL, NULL, 0, PTHREAD_MUTEX_INITIALIZER, COLLECT_QUEUE_INITIALIZER}
 
 /**
  * Thread - Main function of Addons Manager.

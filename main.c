@@ -23,7 +23,7 @@
 #define PRODUCT_NAME "ECHOES Alert - Probe"
 #define APP_NAME "echoes-alert-probe"
 /* Probe Version */
-#define VERSION "0.1.0"
+#define VERSION "0.1.0-alpha"
 /* Conf Repository */
 #define CONF_DIR "./conf/echoes-alert.conf"
 
@@ -73,8 +73,8 @@ int main(int argc, char** argv)
         &sdElementQueue,
         conf.engineFQDN,
         &conf.enginePort,
-        &conf.transportProto,
-        0
+        0,
+        &conf.transportProto
     };
 
 
@@ -127,7 +127,7 @@ int main(int argc, char** argv)
     printf("Fin du chargement des conf\n");
 
     printf("Début du chargement des plugins\n");
-    if (plugin(conf.probePluginDir, &plgList, &addonsMgrParams.addonsList, &nbThreads, &addonsMgrParams.collectQueue))
+    if (plugin(conf.probePluginDir, &plgList, &addonsMgrParams.addonsList, &nbThreads))
     {
         perror("plugin()");
         return (errno);

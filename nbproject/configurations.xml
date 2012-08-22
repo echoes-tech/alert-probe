@@ -8,10 +8,10 @@
                    displayName="Header Files"
                    projectFiles="true">
       <logicalFolder name="addon" displayName="addon" projectFiles="true">
-        <itemPath>/media/windows/Users/Florent Poinsaut/Documents/Dev/ECHOES Alert/Probe/include/addon/addon.h</itemPath>
-        <itemPath>/media/windows/Users/Florent Poinsaut/Documents/Dev/ECHOES Alert/Probe/include/addon/addonFile.h</itemPath>
+        <itemPath>include/addon/addon.h</itemPath>
+        <itemPath>include/addon/addonFile.h</itemPath>
         <itemPath>include/addon/addonList.h</itemPath>
-        <itemPath>/media/windows/Users/Florent Poinsaut/Documents/Dev/ECHOES Alert/Probe/include/addon/addonLog.h</itemPath>
+        <itemPath>include/addon/addonLog.h</itemPath>
       </logicalFolder>
       <itemPath>include/conf.h</itemPath>
       <itemPath>include/format.h</itemPath>
@@ -31,10 +31,10 @@
                    projectFiles="true">
       <logicalFolder name="f1" displayName="src" projectFiles="true">
         <logicalFolder name="addon" displayName="addon" projectFiles="true">
-          <itemPath>/media/windows/Users/Florent Poinsaut/Documents/Dev/ECHOES Alert/Probe/src/addon/addon.c</itemPath>
-          <itemPath>/media/windows/Users/Florent Poinsaut/Documents/Dev/ECHOES Alert/Probe/src/addon/addonFile.c</itemPath>
+          <itemPath>src/addon/addon.c</itemPath>
+          <itemPath>src/addon/addonFile.c</itemPath>
           <itemPath>src/addon/addonList.c</itemPath>
-          <itemPath>/media/windows/Users/Florent Poinsaut/Documents/Dev/ECHOES Alert/Probe/src/addon/addonLog.c</itemPath>
+          <itemPath>src/addon/addonLog.c</itemPath>
         </logicalFolder>
         <itemPath>src/conf.c</itemPath>
         <itemPath>src/format.c</itemPath>
@@ -71,65 +71,17 @@
       <compileType>
         <cTool>
           <incDir>
-            <pElem>.</pElem>
             <pElem>include</pElem>
           </incDir>
-          <commandLine>`pkg-config --cflags gobject-2.0 json-glib-1.0` -Wall</commandLine>
+          <commandLine>-Wall -pedantic</commandLine>
         </cTool>
-        <ccTool>
-          <incDir>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-            <pElem>.</pElem>
-          </incDir>
-        </ccTool>
         <linkerTool>
-          <output>${TESTDIR}/TestFiles/f3</output>
           <linkerLibItems>
             <linkerLibStdlibItem>CUnit</linkerLibStdlibItem>
             <linkerOptionItem>`pkg-config --libs libssl gobject-2.0 json-glib-1.0`</linkerOptionItem>
           </linkerLibItems>
-          <commandLine>-pthread</commandLine>
         </linkerTool>
       </compileType>
-      <folder path="TestFiles/f1">
-        <cTool>
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
-        </cTool>
-        <ccTool>
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f1</output>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f2">
-        <cTool>
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
-        </cTool>
-        <ccTool>
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f2</output>
-        </linkerTool>
-      </folder>
     </conf>
     <conf name="Release" type="1">
       <toolsSet>
@@ -142,7 +94,7 @@
           <incDir>
             <pElem>include</pElem>
           </incDir>
-          <commandLine>`pkg-config --cflags gobject-2.0 json-glib-1.0` -Wall</commandLine>
+          <commandLine>-Wall</commandLine>
         </cTool>
         <ccTool>
           <developmentMode>5</developmentMode>

@@ -49,7 +49,8 @@ struct SenderParams
 {
     SDElementQueue *sdElementQueue;
     const char *address;
-    unsigned int *port, *protocol, msgID;
+    unsigned short *port, msgID;
+    unsigned char *protocol;
 };
 
 /* TODO: changer de nom et dégager "static" */
@@ -65,7 +66,13 @@ static void end(void);
  * @param *sock     Pointer of Socket
  * @return Exit status
  */
-static int initConnection(const char *address, unsigned int *port, unsigned int *protocol, SOCKADDR_IN *sin, SOCKET *sock);
+static int initConnection(
+                          const char *address,
+                          unsigned short *port,
+                          unsigned char *protocol,
+                          SOCKADDR_IN *sin,
+                          SOCKET *sock
+                          );
 
 /**
  * Close the socket
@@ -85,7 +92,16 @@ static int endConnection(SOCKET *sock);
  * @param *afterOffset Message after Offset
  * @return Exit status
  */
-int sendMessage(const char *address, unsigned int *port, unsigned int *protocol, const char *beforeMsgID, unsigned int *msgID, const char *afterMsgID, time_t collectTime, const char *afterOffset);
+int sendMessage(
+                const char *address,
+                unsigned short *port,
+                unsigned char *protocol,
+                const char *beforeMsgID,
+                unsigned short *msgID,
+                const char *afterMsgID,
+                time_t collectTime,
+                const char *afterOffset
+                );
 
 /**
  * Extract a message from SD-Element Queue
@@ -96,7 +112,13 @@ int sendMessage(const char *address, unsigned int *port, unsigned int *protocol,
  * @param *msgID    Pointer of Message Identifier
  * @return Exit status
  */
-int popSDElementQueue(const char *address, unsigned int *port, unsigned int *protocol, SDElementQueue *sdElementQueue, unsigned int *msgID);
+int popSDElementQueue(
+                      const char *address,
+                      unsigned short *port,
+                      unsigned char *protocol,
+                      SDElementQueue *sdElementQueue,
+                      unsigned short *msgID
+                      );
 
 /**
  * Thread - Main function of Sender Module

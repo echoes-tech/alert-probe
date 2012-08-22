@@ -79,7 +79,13 @@ int periodString2Int(unsigned int *periodSec, const char *periodString)
     return (EXIT_SUCCESS);
 }
 
-int listPlugins(const char *plgDir, int *nbPlg, PlgList *plgList, AddonList *addonList, unsigned int *nbThreads, CollectQueue *collectQueue)
+int listPlugins(
+                const char *plgDir,
+                int *nbPlg,
+                PlgList *plgList,
+                AddonList *addonList,
+                unsigned int *nbThreads
+                )
 {
     DIR* dir = NULL;
     struct dirent* read = NULL;
@@ -109,8 +115,8 @@ int listPlugins(const char *plgDir, int *nbPlg, PlgList *plgList, AddonList *add
                 perror("file2datat()");
                 return (errno);                
             }
-            
-            if (data2llist(plgList, addonList, nbThreads, collectQueue, plgPath, data))
+
+            if (data2llist(plgList, addonList, nbThreads, plgPath, data))
             /*if (file2llist(plgList, addonList, nbThreads, collectQueue, plgPath))*/
             {
                 perror("data2llist()");
@@ -162,7 +168,13 @@ int file2data(const char *plgPath, gchar* data)
     return (EXIT_SUCCESS);
 }
 
-int data2llist(PlgList *plgList, AddonList *addonList, unsigned int *nbThreads, CollectQueue *collectQueue, const char *plgPath, const char *data)
+int data2llist(
+               PlgList *plgList,
+               AddonList *addonList,
+               unsigned int *nbThreads,
+               const char *plgPath,
+               const char *data
+               )
 /*int file2llist(PlgList *plgList, AddonList *addonList, unsigned int *nbThreads, CollectQueue *collectQueue, const char *plgPath)*/
 {
     JsonParser *parser = NULL;
@@ -309,6 +321,8 @@ int data2llist(PlgList *plgList, AddonList *addonList, unsigned int *nbThreads, 
                                 srcInfo->params = (void*)srcInfoParams;
                                 break;
                             }
+                            default:
+                                break;
                         }
                     }
                     else
@@ -387,6 +401,7 @@ int data2llist(PlgList *plgList, AddonList *addonList, unsigned int *nbThreads, 
                                                 if (json_reader_read_member(reader, "regex"))
                                                 {
                                                     searchInfoParams->regex = g_strdup(json_reader_get_string_value(reader));
+
                                                     /* Regex compilation */
                                                     searchInfoParams->err = regcomp(&searchInfoParams->preg, searchInfoParams->regex, REG_EXTENDED);
                                                     if (searchInfoParams->err == 0)
@@ -396,7 +411,7 @@ int data2llist(PlgList *plgList, AddonList *addonList, unsigned int *nbThreads, 
                                                     }
                                                     else
                                                     {
-                                                        printf("Invalid Plugin '%s': Invalid regex of Search ID '%d' of Source ID '%d'\n", plgPath, searchInfo->idSearch, srcInfo->idSrc);
+                                                        printf("Invalid Plugin '%s': Compilation failed of regex of Search ID '%d' of Source ID '%d'\n", plgPath, searchInfo->idSearch, srcInfo->idSrc);
                                                         exit(EXIT_FAILURE);
                                                     }
                                                 }
@@ -463,6 +478,7 @@ int data2llist(PlgList *plgList, AddonList *addonList, unsigned int *nbThreads, 
                                                 if (json_reader_read_member(reader, "regex"))
                                                 {
                                                     searchInfoParams->regex = g_strdup(json_reader_get_string_value(reader));
+
                                                     /* Regex compilation */
                                                     searchInfoParams->err = regcomp(&searchInfoParams->preg, searchInfoParams->regex, REG_EXTENDED);
                                                     if (searchInfoParams->err == 0)
@@ -472,7 +488,7 @@ int data2llist(PlgList *plgList, AddonList *addonList, unsigned int *nbThreads, 
                                                     }
                                                     else
                                                     {
-                                                        printf("Invalid Plugin '%s': Invalid regex of Search ID '%d' of Source ID '%d'\n", plgPath, searchInfo->idSearch, srcInfo->idSrc);
+                                                        printf("Invalid Plugin '%s': Compilation failed of regex of Search ID '%d' of Source ID '%d'\n", plgPath, searchInfo->idSearch, srcInfo->idSrc);
                                                         exit(EXIT_FAILURE);
                                                     }
                                                 }
@@ -535,7 +551,6 @@ int data2llist(PlgList *plgList, AddonList *addonList, unsigned int *nbThreads, 
                                                   srcInfo->params,
                                                   &searchInfo->period,
                                                   &searchInfo->staticValues,
-                                                  collectQueue,
                                                   &searchInfo->idType,
                                                   searchInfo->params,
                                                   &plgInfo->idPlg,
@@ -614,12 +629,17 @@ int data2llist(PlgList *plgList, AddonList *addonList, unsigned int *nbThreads, 
     return (EXIT_SUCCESS);
 }
 
-int plugin(const char *plgDir, PlgList *plgList, AddonList *addonList, unsigned int *nbThreads, CollectQueue *collectQueue)
+int plugin(
+           const char *plgDir,
+           PlgList *plgList,
+           AddonList *addonList,
+           unsigned int *nbThreads
+           )
 {
     /* Plugins counter initialisation */
     int nbPlg = 0;
 
-    if (listPlugins(plgDir, &nbPlg, plgList, addonList, nbThreads, collectQueue))
+    if (listPlugins(plgDir, &nbPlg, plgList, addonList, nbThreads))
     {
         perror("listPlugins()");
         return (errno);

@@ -21,6 +21,7 @@ typedef struct CollectQueueElement CollectQueueElement;
 struct CollectQueueElement
 {
     unsigned int idPlg, idAsset, idSrc, idSearch, valueNum;
+    unsigned short lotNum;
     char value[1000];
     time_t time;
     CollectQueueElement *next;
@@ -74,6 +75,8 @@ struct AddonParamsInfo
 {
     void *params;
     unsigned int *period, *staticValues;
+    unsigned short *lotNumPtr, lotNum;
+    pthread_mutex_t *mutex;
     CollectQueue *collectQueue;
     AddonTypeList addonTypeList;
     AddonParamsInfo *nxt;
@@ -115,7 +118,6 @@ AddonInfo* isAddonOnList(const AddonList *addonList, const unsigned int *idAddon
  * @param *srcParams Pointer of Source Parameters
  * @param *period    Pointer of Period
  * @param *staticValues
- * @param *collectQueue
  * @param *idType
  * @param *searchParams
  * @param *idPlg
@@ -130,7 +132,6 @@ int pushAddonList(
                   void *srcParams,
                   unsigned int *period,
                   unsigned int *staticValues,
-                  CollectQueue *collectQueue,
                   unsigned int *idType,
                   void *searchParams,
                   unsigned int *idPlg,

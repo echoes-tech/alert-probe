@@ -11,6 +11,7 @@ REQUIREMENTS
 In order to build ECHOES Alert - Probe you will need:
 
   • json-glib-dev >= 0.12
+Debian/Ubuntu : apt-get intall libjson-glib-dev
   • libssl-dev
 Debian/Ubuntu : apt-get intall libssl-dev
   • CUnit = 2.1 (http://cunit.sourceforge.net/)

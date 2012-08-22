@@ -182,7 +182,6 @@ int pushAddonList(
                   void *srcParams,
                   unsigned int *period,
                   unsigned int *staticValues,
-                  CollectQueue *collectQueue,
                   unsigned int *idType,
                   void *searchParams,
                   unsigned int *idPlg,
@@ -225,7 +224,10 @@ int pushAddonList(
         addonParamsInfo->params = srcParams;
         addonParamsInfo->period = period;
         addonParamsInfo->staticValues = staticValues;
-        addonParamsInfo->collectQueue = collectQueue;
+        addonParamsInfo->lotNumPtr = NULL;
+        addonParamsInfo->lotNum = 0;
+        addonParamsInfo->mutex = NULL;
+        addonParamsInfo->collectQueue = NULL;
 
         /* Assign the address of the next element in the new element */
         addonParamsInfo->nxt = addonInfo->addonParamsList;

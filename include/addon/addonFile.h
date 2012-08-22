@@ -23,16 +23,25 @@ int addonFileLocation(
                       const char *line,
                       unsigned int *lineNum,
                       void *params,
+                      unsigned short lotNum,
                       unsigned int *valueNum,
                       IDList *idList,
-                      time_t now
+                      time_t *now
                       );
 
 /**
  * Thread - Addon File Regex.
  * @param *arfp Pointer of addon regex file parameters
  */
-int addonFileRegex(CollectQueue *collectQueue, const char *line, void *params, unsigned int *valueNum, IDList *idList, time_t now);
+int addonFileRegex(
+                   CollectQueue *collectQueue,
+                   const char *line,
+                   void *params,
+                   unsigned short lotNum,
+                   unsigned int *valueNum,
+                   IDList *idList,
+                   time_t *now
+                   );
 
 /**
  * Thread - Addon File.

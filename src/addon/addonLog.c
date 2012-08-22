@@ -7,13 +7,14 @@
 #include "addon/addonLog.h"
 
 int addonLogRegex(
-                      CollectQueue *collectQueue,
-                      const char *line,
-                      void *params,
-                      unsigned int *valueNum,
-                      IDList *idList,
-                      time_t now
-                      )
+                  CollectQueue *collectQueue,
+                  const char *line,
+                  void *params,
+                  unsigned short lotNum,
+                  unsigned int *valueNum,
+                  IDList *idList,
+                  time_t *now
+                  )
 {
     SearchInfoParams3_1 *searchInfoParams = (SearchInfoParams3_1*)params;
     char *res = NULL;
@@ -46,7 +47,7 @@ int addonLogRegex(
                     /* Tant que l'on n'est pas au bout de la liste */
                     while (idInfo != NULL)
                     {
-                        if (pushCollectQueue(collectQueue, *idInfo->idPlg, *idInfo->idAsset, *idInfo->idSrc, *idInfo->idSearch, *valueNum, res, now))
+                        if (pushCollectQueue(collectQueue, *idInfo->idPlg, *idInfo->idAsset, *idInfo->idSrc, *idInfo->idSearch, *valueNum, lotNum, res, *now))
                         {
                             perror("pushCollectQueue()");
                             exit(EXIT_FAILURE);
@@ -64,13 +65,14 @@ int addonLogRegex(
 }
 
 int addonLogLocation(
-                      CollectQueue *collectQueue,
-                      const char *line,
-                      void *params,
-                      unsigned int *valueNum,
-                      IDList *idList,
-                      time_t now
-                      )
+                     CollectQueue *collectQueue,
+                     const char *line,
+                     void *params,
+                     unsigned short lotNum,
+                     unsigned int *valueNum,
+                     IDList *idList,
+                     time_t *now
+                     )
 {
     SearchInfoParams3_2 *searchInfoParams = (SearchInfoParams3_2*)params;
 
@@ -88,7 +90,7 @@ int addonLogLocation(
     /* Tant que l'on n'est pas au bout de la liste */
     while (idInfo != NULL)
     {
-        if (pushCollectQueue(collectQueue, *idInfo->idPlg, *idInfo->idAsset, *idInfo->idSrc, *idInfo->idSearch, *valueNum, res, now))
+        if (pushCollectQueue(collectQueue, *idInfo->idPlg, *idInfo->idAsset, *idInfo->idSrc, *idInfo->idSearch, *valueNum, lotNum, res, *now))
         {
             perror("pushCollectQueue()");
             exit(EXIT_FAILURE);
@@ -98,6 +100,56 @@ int addonLogLocation(
     }
 
     return(EXIT_SUCCESS);
+}
+
+void whileAddonTypeInfo(AddonParamsInfo *addonParamsInfo, const char *line, time_t *now)
+{
+    AddonTypeInfo *addonTypeInfo = addonParamsInfo->addonTypeList;
+
+    /* Tant que l'on n'est pas au bout de la liste */
+    while (addonTypeInfo != NULL)
+    {
+        AddonTypeParamsInfo *addonTypeParamsInfo = addonTypeInfo->addonTypeParamsList;
+
+        /* Tant que l'on n'est pas au bout de la liste */
+        while (addonTypeParamsInfo != NULL)
+        {
+            switch (*addonTypeInfo->idType)
+            {
+            case 1:
+                addonLogRegex(
+                              addonParamsInfo->collectQueue,
+                              line,
+                              addonTypeParamsInfo->params,
+                              addonParamsInfo->lotNum,
+                              &addonTypeParamsInfo->valueNum,
+                              &addonTypeParamsInfo->IDList,
+                              now
+                              );
+                break;
+            case 2:
+                addonLogLocation(
+                                 addonParamsInfo->collectQueue,
+                                 line,
+                                 addonTypeParamsInfo->params,
+                                 addonParamsInfo->lotNum,
+                                 &addonTypeParamsInfo->valueNum,
+                                 &addonTypeParamsInfo->IDList,
+                                 now
+                                 );
+                break;
+            default:
+                break;
+            }
+
+            /* On avance d'une case */
+            addonTypeParamsInfo = addonTypeParamsInfo->nxt;
+        }
+
+        /* On avance d'une case */
+        addonTypeInfo = addonTypeInfo->nxt;
+    }
+    return;
 }
 
 void *addonLog(void *arg)
@@ -126,6 +178,15 @@ void *addonLog(void *arg)
     SLEEP(difftime(temp, now));
     while (1)
     {
+        /* Debut de la zone protegee. */
+        pthread_mutex_lock(addonParamsInfo->mutex);
+
+        ++*addonParamsInfo->lotNumPtr;
+        addonParamsInfo->lotNum = *addonParamsInfo->lotNumPtr;
+
+        /* Fin de la zone protegee. */
+        pthread_mutex_unlock(addonParamsInfo->mutex);
+        
         /* Number of line */
         n = 1;
 
@@ -142,50 +203,7 @@ void *addonLog(void *arg)
                 /* Reading file line by line */
                 while (fgets(line, MAX_SIZE, file) != NULL)
                 {
-                    AddonTypeInfo *addonTypeInfo = addonParamsInfo->addonTypeList;
-
-                    /* Tant que l'on n'est pas au bout de la liste */
-                    while (addonTypeInfo != NULL)
-                    {
-                        AddonTypeParamsInfo *addonTypeParamsInfo = addonTypeInfo->addonTypeParamsList;
-
-                        /* Tant que l'on n'est pas au bout de la liste */
-                        while (addonTypeParamsInfo != NULL)
-                        {
-                            switch (*addonTypeInfo->idType)
-                            {
-                            case 1:
-                                addonLogRegex(
-                                            addonParamsInfo->collectQueue,
-                                            line,
-                                            addonTypeParamsInfo->params,
-                                            &addonTypeParamsInfo->valueNum,
-                                            &addonTypeParamsInfo->IDList,
-                                            now
-                                            );
-                                break;
-                            case 2:
-                                addonLogLocation(
-                                                addonParamsInfo->collectQueue,
-                                                line,
-                                                addonTypeParamsInfo->params,
-                                                &addonTypeParamsInfo->valueNum,
-                                                &addonTypeParamsInfo->IDList,
-                                                now
-                                                );
-                                break;
-                            default:
-                                break;
-                            }
-
-                            /* On avance d'une case */
-                            addonTypeParamsInfo = addonTypeParamsInfo->nxt;
-                        }
-
-                        /* On avance d'une case */
-                        addonTypeInfo = addonTypeInfo->nxt;
-                    }
-
+                    whileAddonTypeInfo(addonParamsInfo, line, &now);
                     ++n;
                 }
             }
@@ -215,49 +233,7 @@ void *addonLog(void *arg)
                         /* Reading file line by line */
                         while (fgets(line, MAX_SIZE, file) != NULL)
                         {
-                            AddonTypeInfo *addonTypeInfo = addonParamsInfo->addonTypeList;
-
-                            /* Tant que l'on n'est pas au bout de la liste */
-                            while (addonTypeInfo != NULL)
-                            {
-                                AddonTypeParamsInfo *addonTypeParamsInfo = addonTypeInfo->addonTypeParamsList;
-
-                                /* Tant que l'on n'est pas au bout de la liste */
-                                while (addonTypeParamsInfo != NULL)
-                                {
-                                    switch (*addonTypeInfo->idType)
-                                    {
-                                    case 1:
-                                        addonLogRegex(
-                                                    addonParamsInfo->collectQueue,
-                                                    line,
-                                                    addonTypeParamsInfo->params,
-                                                    &addonTypeParamsInfo->valueNum,
-                                                    &addonTypeParamsInfo->IDList,
-                                                    now
-                                                    );
-                                        break;
-                                    case 2:
-                                        addonLogLocation(
-                                                        addonParamsInfo->collectQueue,
-                                                        line,
-                                                        addonTypeParamsInfo->params,
-                                                        &addonTypeParamsInfo->valueNum,
-                                                        &addonTypeParamsInfo->IDList,
-                                                        now
-                                                        );
-                                        break;
-                                    default:
-                                        break;
-                                    }
-
-                                    /* On avance d'une case */
-                                    addonTypeParamsInfo = addonTypeParamsInfo->nxt;
-                                }
-                                
-                                /* On avance d'une case */
-                                addonTypeInfo = addonTypeInfo->nxt;
-                            }
+                            whileAddonTypeInfo(addonParamsInfo, line, &now);
                         }
                     }
                     else if (n < srcInfoParams->nbLine)
@@ -265,49 +241,7 @@ void *addonLog(void *arg)
                         /* Reading file line by line */
                         while (fgets(line, MAX_SIZE, file) != NULL)
                         {
-                            AddonTypeInfo *addonTypeInfo = addonParamsInfo->addonTypeList;
-
-                            /* Tant que l'on n'est pas au bout de la liste */
-                            while (addonTypeInfo != NULL)
-                            {
-                                AddonTypeParamsInfo *addonTypeParamsInfo = addonTypeInfo->addonTypeParamsList;
-
-                                /* Tant que l'on n'est pas au bout de la liste */
-                                while (addonTypeParamsInfo != NULL)
-                                {
-                                    switch (*addonTypeInfo->idType)
-                                    {
-                                    case 1:
-                                        addonLogRegex(
-                                                    addonParamsInfo->collectQueue,
-                                                    line,
-                                                    addonTypeParamsInfo->params,
-                                                    &addonTypeParamsInfo->valueNum,
-                                                    &addonTypeParamsInfo->IDList,
-                                                    now
-                                                    );
-                                        break;
-                                    case 2:
-                                        addonLogLocation(
-                                                        addonParamsInfo->collectQueue,
-                                                        line,
-                                                        addonTypeParamsInfo->params,
-                                                        &addonTypeParamsInfo->valueNum,
-                                                        &addonTypeParamsInfo->IDList,
-                                                        now
-                                                        );
-                                        break;
-                                    default:
-                                        break;
-                                    }
-
-                                    /* On avance d'une case */
-                                    addonTypeParamsInfo = addonTypeParamsInfo->nxt;
-                                }
-
-                                /* On avance d'une case */
-                                addonTypeInfo = addonTypeInfo->nxt;
-                            }
+                            whileAddonTypeInfo(addonParamsInfo, line, &now);
                         }
                     }
                 }

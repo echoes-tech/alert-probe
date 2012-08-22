@@ -10,9 +10,10 @@ int addonFileRegex(
                    CollectQueue *collectQueue,
                    const char *line,
                    void *params,
+                   unsigned short lotNum,
                    unsigned int *valueNum,
                    IDList *idList,
-                   time_t now
+                   time_t *now
                    )
 {
     SearchInfoParams2_1 *searchInfoParams = (SearchInfoParams2_1*)params;
@@ -46,7 +47,7 @@ int addonFileRegex(
                     /* Tant que l'on n'est pas au bout de la liste */
                     while (idInfo != NULL)
                     {
-                        if (pushCollectQueue(collectQueue, *idInfo->idPlg, *idInfo->idAsset, *idInfo->idSrc, *idInfo->idSearch, *valueNum, res, now))
+                        if (pushCollectQueue(collectQueue, *idInfo->idPlg, *idInfo->idAsset, *idInfo->idSrc, *idInfo->idSearch, *valueNum, lotNum, res, *now))
                         {
                             perror("pushCollectQueue()");
                             exit(EXIT_FAILURE);
@@ -56,6 +57,29 @@ int addonFileRegex(
                     }
                     free(res);
                 }
+            }
+        }
+        else if (searchInfoParams->match == REG_NOMATCH)
+        {
+            return(EXIT_SUCCESS);
+        }
+        else
+        {
+            char *text;
+            size_t size;
+
+            size = regerror(searchInfoParams->err, &searchInfoParams->preg, NULL, 0);
+            text = malloc(sizeof (*text) * size);
+            if (text)
+            {
+                regerror(searchInfoParams->err, &searchInfoParams->preg, text, size);
+                fprintf(stderr, "%s\n", text);
+                free(text);
+            }
+            else
+            {
+                fprintf(stderr, "Insufficient memory\n");
+                exit(EXIT_FAILURE);
             }
         }
     }
@@ -68,9 +92,10 @@ int addonFileLocation(
                       const char *line,
                       unsigned int *lineNum,
                       void *params,
+                      unsigned short lotNum,
                       unsigned int *valueNum,
                       IDList *idList,
-                      time_t now
+                      time_t *now
                       )
 {
     SearchInfoParams2_2 *searchInfoParams = (SearchInfoParams2_2*)params;
@@ -90,7 +115,7 @@ int addonFileLocation(
         /* Tant que l'on n'est pas au bout de la liste */
         while (idInfo != NULL)
         {
-            if (pushCollectQueue(collectQueue, *idInfo->idPlg, *idInfo->idAsset, *idInfo->idSrc, *idInfo->idSearch, *valueNum, res, now))
+            if (pushCollectQueue(collectQueue, *idInfo->idPlg, *idInfo->idAsset, *idInfo->idSrc, *idInfo->idSearch, *valueNum, lotNum, res, *now))
             {
                 perror("pushCollectQueue()");
                 exit(EXIT_FAILURE);
@@ -125,6 +150,16 @@ void *addonFile(void *arg)
     SLEEP(difftime(temp, now));
     while(1)
     {
+
+        /* Debut de la zone protegee. */
+        pthread_mutex_lock(addonParamsInfo->mutex);
+
+        ++*addonParamsInfo->lotNumPtr;
+        addonParamsInfo->lotNum = *addonParamsInfo->lotNumPtr;
+
+        /* Fin de la zone protegee. */
+        pthread_mutex_unlock(addonParamsInfo->mutex);
+
         /* Number of line */
         n = 1;
         
@@ -153,24 +188,26 @@ void *addonFile(void *arg)
                         {
                         case 1:
                             addonFileRegex(
-                                        addonParamsInfo->collectQueue,
-                                        line,
-                                        addonTypeParamsInfo->params,
-                                        &addonTypeParamsInfo->valueNum,
-                                        &addonTypeParamsInfo->IDList,
-                                        now
-                                        );
+                                           addonParamsInfo->collectQueue,
+                                           line,
+                                           addonTypeParamsInfo->params,
+                                           addonParamsInfo->lotNum,
+                                           &addonTypeParamsInfo->valueNum,
+                                           &addonTypeParamsInfo->IDList,
+                                           &now
+                                           );
                             break;
                         case 2:
                             addonFileLocation(
-                                        addonParamsInfo->collectQueue,
-                                        line,
-                                        &n,
-                                        addonTypeParamsInfo->params,
-                                        &addonTypeParamsInfo->valueNum,
-                                        &addonTypeParamsInfo->IDList,
-                                        now
-                                        );
+                                              addonParamsInfo->collectQueue,
+                                              line,
+                                              &n,
+                                              addonTypeParamsInfo->params,
+                                              addonParamsInfo->lotNum,
+                                              &addonTypeParamsInfo->valueNum,
+                                              &addonTypeParamsInfo->IDList,
+                                              &now
+                                              );
                             break;
                         default:
                             break;
@@ -195,7 +232,7 @@ void *addonFile(void *arg)
         
         /* Closing file */
         fclose(file);
-        
+
         SLEEP(*addonParamsInfo->period);
     }
 

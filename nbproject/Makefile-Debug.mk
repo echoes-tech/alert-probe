@@ -38,16 +38,16 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/format.o \
 	${OBJECTDIR}/src/addon/addonList.o \
 	${OBJECTDIR}/src/plugin.o \
-	${OBJECTDIR}/_ext/754107514/addonFile.o \
+	${OBJECTDIR}/src/addon/addon.o \
+	${OBJECTDIR}/src/addon/addonLog.o \
 	${OBJECTDIR}/main.o \
-	${OBJECTDIR}/_ext/754107514/addonLog.o \
 	${OBJECTDIR}/src/sender.o \
-	${OBJECTDIR}/_ext/754107514/addon.o \
+	${OBJECTDIR}/src/addon/addonFile.o \
 	${OBJECTDIR}/src/conf.o
 
 
 # C Compiler Flags
-CFLAGS=`pkg-config --cflags gobject-2.0 json-glib-1.0` -Wall 
+CFLAGS=-Wall -pedantic
 
 # CC Compiler Flags
 CCFLAGS=
@@ -64,56 +64,56 @@ LDLIBSOPTIONS=-lcunit `pkg-config --libs libssl gobject-2.0 json-glib-1.0`
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${TESTDIR}/TestFiles/f3
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/probe
 
-${TESTDIR}/TestFiles/f3: ${OBJECTFILES}
-	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.c} -pthread -o ${TESTDIR}/TestFiles/f3 ${OBJECTFILES} ${LDLIBSOPTIONS} 
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/probe: ${OBJECTFILES}
+	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
+	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/probe ${OBJECTFILES} ${LDLIBSOPTIONS} 
 
 ${OBJECTDIR}/src/format.o: src/format.c 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.c) -g -I. -Iinclude `pkg-config --cflags libssl gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/format.o src/format.c
+	$(COMPILE.c) -g -Iinclude `pkg-config --cflags libssl gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/format.o src/format.c
 
 ${OBJECTDIR}/src/addon/addonList.o: src/addon/addonList.c 
 	${MKDIR} -p ${OBJECTDIR}/src/addon
 	${RM} $@.d
-	$(COMPILE.c) -g -I. -Iinclude `pkg-config --cflags libssl gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonList.o src/addon/addonList.c
+	$(COMPILE.c) -g -Iinclude `pkg-config --cflags libssl gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonList.o src/addon/addonList.c
 
 ${OBJECTDIR}/src/plugin.o: src/plugin.c 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.c) -g -I. -Iinclude `pkg-config --cflags libssl gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/plugin.o src/plugin.c
+	$(COMPILE.c) -g -Iinclude `pkg-config --cflags libssl gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/plugin.o src/plugin.c
 
-${OBJECTDIR}/_ext/754107514/addonFile.o: /media/windows/Users/Florent\ Poinsaut/Documents/Dev/ECHOES\ Alert/Probe/src/addon/addonFile.c 
-	${MKDIR} -p ${OBJECTDIR}/_ext/754107514
+${OBJECTDIR}/src/addon/addon.o: src/addon/addon.c 
+	${MKDIR} -p ${OBJECTDIR}/src/addon
 	${RM} $@.d
-	$(COMPILE.c) -g -I. -Iinclude `pkg-config --cflags libssl gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/754107514/addonFile.o /media/windows/Users/Florent\ Poinsaut/Documents/Dev/ECHOES\ Alert/Probe/src/addon/addonFile.c
+	$(COMPILE.c) -g -Iinclude `pkg-config --cflags libssl gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addon.o src/addon/addon.c
+
+${OBJECTDIR}/src/addon/addonLog.o: src/addon/addonLog.c 
+	${MKDIR} -p ${OBJECTDIR}/src/addon
+	${RM} $@.d
+	$(COMPILE.c) -g -Iinclude `pkg-config --cflags libssl gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonLog.o src/addon/addonLog.c
 
 ${OBJECTDIR}/main.o: main.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.c) -g -I. -Iinclude `pkg-config --cflags libssl gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.c
-
-${OBJECTDIR}/_ext/754107514/addonLog.o: /media/windows/Users/Florent\ Poinsaut/Documents/Dev/ECHOES\ Alert/Probe/src/addon/addonLog.c 
-	${MKDIR} -p ${OBJECTDIR}/_ext/754107514
-	${RM} $@.d
-	$(COMPILE.c) -g -I. -Iinclude `pkg-config --cflags libssl gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/754107514/addonLog.o /media/windows/Users/Florent\ Poinsaut/Documents/Dev/ECHOES\ Alert/Probe/src/addon/addonLog.c
+	$(COMPILE.c) -g -Iinclude `pkg-config --cflags libssl gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.c
 
 ${OBJECTDIR}/src/sender.o: src/sender.c 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.c) -g -I. -Iinclude `pkg-config --cflags libssl gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/sender.o src/sender.c
+	$(COMPILE.c) -g -Iinclude `pkg-config --cflags libssl gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/sender.o src/sender.c
 
-${OBJECTDIR}/_ext/754107514/addon.o: /media/windows/Users/Florent\ Poinsaut/Documents/Dev/ECHOES\ Alert/Probe/src/addon/addon.c 
-	${MKDIR} -p ${OBJECTDIR}/_ext/754107514
+${OBJECTDIR}/src/addon/addonFile.o: src/addon/addonFile.c 
+	${MKDIR} -p ${OBJECTDIR}/src/addon
 	${RM} $@.d
-	$(COMPILE.c) -g -I. -Iinclude `pkg-config --cflags libssl gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/754107514/addon.o /media/windows/Users/Florent\ Poinsaut/Documents/Dev/ECHOES\ Alert/Probe/src/addon/addon.c
+	$(COMPILE.c) -g -Iinclude `pkg-config --cflags libssl gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonFile.o src/addon/addonFile.c
 
 ${OBJECTDIR}/src/conf.o: src/conf.c 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.c) -g -I. -Iinclude `pkg-config --cflags libssl gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/conf.o src/conf.c
+	$(COMPILE.c) -g -Iinclude `pkg-config --cflags libssl gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/conf.o src/conf.c
 
 # Subprojects
 .build-subprojects:
@@ -121,7 +121,7 @@ ${OBJECTDIR}/src/conf.o: src/conf.c
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ${TESTDIR}/TestFiles/f3
+	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/probe
 
 # Subprojects
 .clean-subprojects:

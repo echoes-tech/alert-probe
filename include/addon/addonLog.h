@@ -14,27 +14,31 @@ extern "C" {
 #include "addon.h"
 
 int addonLogRegex(
-                      CollectQueue *collectQueue,
-                      const char *line,
-                      void *params,
-                      unsigned int *valueNum,
-                      IDList *idList,
-                      time_t now
-                      );
+                  CollectQueue *collectQueue,
+                  const char *line,
+                  void *params,
+                  unsigned short lotNum,
+                  unsigned int *valueNum,
+                  IDList *idList,
+                  time_t *now
+                  );
 
 /**
  * Thread - Addon Location Log.
  * @param *allp Pointer of addon location log parameters
  */
 int addonLogLocation(
-                      CollectQueue *collectQueue,
-                      const char *line,
-                      void *params,
-                      unsigned int *valueNum,
-                      IDList *idList,
-                      time_t now
-                      );
+                     CollectQueue *collectQueue,
+                     const char *line,
+                     void *params,
+                     unsigned short lotNum,
+                     unsigned int *valueNum,
+                     IDList *idList,
+                     time_t *now
+                     );
 
+
+void whileAddonTypeInfo(AddonParamsInfo *addonParamsInfo, const char *line, time_t *now);
 
 /**
  * Thread - Addon Log.

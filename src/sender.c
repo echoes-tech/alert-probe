@@ -26,7 +26,13 @@ static void end(void)
 #endif
 }
 
-static int initConnection(const char *address, unsigned int *port, unsigned int *protocol, SOCKADDR_IN *sin, SOCKET *sock)
+static int initConnection(
+                          const char *address,
+                          unsigned short *port,
+                          unsigned char *protocol,
+                          SOCKADDR_IN *sin,
+                          SOCKET *sock
+                          )
 {
     /* Get info of Engines FQDN */
     Hostent *hostinfo = gethostbyname(address);
@@ -82,7 +88,16 @@ static int endConnection(SOCKET *sock)
     return (EXIT_SUCCESS);
 }
 
-int sendMessage(const char *address, unsigned int *port, unsigned int *protocol, const char *beforeMsgID, unsigned int *msgID, const char *afterMsgID, time_t collectTime, const char *afterOffset)
+int sendMessage(
+                const char *address,
+                unsigned short *port,
+                unsigned char *protocol,
+                const char *beforeMsgID,
+                unsigned short *msgID,
+                const char *afterMsgID,
+                time_t collectTime,
+                const char *afterOffset
+                )
 {
     
     SOCKADDR_IN sin = {0}; /* Emission info */
@@ -153,7 +168,13 @@ int sendMessage(const char *address, unsigned int *port, unsigned int *protocol,
     return (EXIT_SUCCESS);
 }
 
-int popSDElementQueue(const char *address, unsigned int *port, unsigned int *protocol, SDElementQueue *sdElementQueue, unsigned int *msgID)
+int popSDElementQueue(
+                      const char *address,
+                      unsigned short *port,
+                      unsigned char *protocol,
+                      SDElementQueue *sdElementQueue,
+                      unsigned short *msgID
+                      )
 {
     if (sdElementQueue == NULL)
     {
@@ -204,7 +225,7 @@ void *sender(void *arg)
                               senderParams->sdElementQueue,
                               &senderParams->msgID
                               );
-            if (senderParams->msgID == 99999)
+            if (senderParams->msgID == 65535)
             {
                 senderParams->msgID = 0;
             }

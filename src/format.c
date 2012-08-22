@@ -7,43 +7,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
-#include <openssl/sha.h>
-#include <openssl/hmac.h>
-#include <openssl/evp.h>
-#include <openssl/bio.h>
-#include <openssl/buffer.h>
 
 #include "format.h"
 
-/* Source : http://www.ioncannon.net/programming/34/howto-base64-encode-with-cc-and-openssl/ */
-
-char *base64(const char *input, int length)
-{
-    BIO *bmem, *b64;
-    BUF_MEM *bptr;
-    char *buff;
-
-    b64 = BIO_new(BIO_f_base64());
-    bmem = BIO_new(BIO_s_mem());
-    b64 = BIO_push(b64, bmem);
-    BIO_write(b64, input, length);
-    if (BIO_flush(b64) != 1)
-    {
-        perror("BIO_flush()");
-        exit (EXIT_FAILURE);
-    }
-    BIO_get_mem_ptr(b64, &bptr);
-
-    buff = (char *) malloc(bptr->length);
-    memcpy(buff, bptr->data, bptr->length - 1);
-    buff[bptr->length - 1] = 0;
-
-    BIO_free_all(b64);
-
-    return buff;
-}
-
-int pushSDElementQueue(SDElementQueue *sdElementQueue, unsigned int idPlg, unsigned int idAsset, unsigned int idSrc, unsigned int idSearch, unsigned int valueNum, const char *b64Value, time_t time)
+int pushSDElementQueue(
+                       SDElementQueue *sdElementQueue,
+                       unsigned int idPlg,
+                       unsigned int idAsset,
+                       unsigned int idSrc,
+                       unsigned int idSearch,
+                       unsigned int valueNum,
+                       unsigned short lotNum,
+                       const gchar *b64Value,
+                       time_t time
+                       )
 {
     SDElementQueueElement *new = calloc(1, sizeof(SDElementQueueElement));
     if (sdElementQueue == NULL || new == NULL)
@@ -70,12 +47,13 @@ int pushSDElementQueue(SDElementQueue *sdElementQueue, unsigned int idPlg, unsig
 
     sprintf(
             new->afterOffset,
-            "%d-%d-%d-%d-%d=\"%s\"]",
+            "%d-%d-%d-%d-%d-%d=\"%s\"]",
             idPlg,
             idAsset,
             idSrc,
             idSearch,
             valueNum,
+            lotNum,
             b64Value
         );
     
@@ -105,8 +83,6 @@ int pushSDElementQueue(SDElementQueue *sdElementQueue, unsigned int idPlg, unsig
 
 int popCollectQueue(CollectQueue *collectQueue, SDElementQueue *sdElementQueue)
 {
-    const char *base64Value;
-    
     if (collectQueue == NULL)
     {
         exit(EXIT_FAILURE);
@@ -119,15 +95,6 @@ int popCollectQueue(CollectQueue *collectQueue, SDElementQueue *sdElementQueue)
     if (collectQueue->first != NULL)
     {
         CollectQueueElement *popedElement = collectQueue->first;
-    
-        if (strcmp(popedElement->value, ""))
-        {
-            base64Value = base64(popedElement->value, strlen(popedElement->value));
-        }
-        else
-        {
-            base64Value = "";
-        }
         
         pushSDElementQueue(
                            sdElementQueue,
@@ -136,8 +103,9 @@ int popCollectQueue(CollectQueue *collectQueue, SDElementQueue *sdElementQueue)
                            popedElement->idSrc,
                            popedElement->idSearch,
                            popedElement->valueNum,
+                           popedElement->lotNum,
                            /*TODO: Tester le retour de base64 */
-                           base64Value,
+                           g_base64_encode(popedElement->value, strlen(popedElement->value)),
                            popedElement->time
                            );
         collectQueue->first = popedElement->next;
