@@ -47,7 +47,7 @@ OBJECTFILES= \
 
 
 # C Compiler Flags
-CFLAGS=-Wall
+CFLAGS=-Wall -DNDEBUG
 
 # CC Compiler Flags
 CCFLAGS=
@@ -60,7 +60,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-lcunit `pkg-config --libs libssl gobject-2.0 json-glib-1.0`  
+LDLIBSOPTIONS=-Wl,-rpath,/opt/echoes-alert/probe/lib -lcunit `pkg-config --libs libssl gobject-2.0 json-glib-1.0`  
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}

@@ -25,7 +25,11 @@
 /* Probe Version */
 #define VERSION "0.1.0-alpha"
 /* Conf Repository */
-#define CONF_DIR "./conf/echoes-alert.conf"
+#ifdef NDEBUG
+    #define CONF_DIR "/opt/echoes-alert/probe/etc/probe.conf"
+#else
+    #define CONF_DIR "./conf/probe.conf"
+#endif
 
 /**
  * Main function
@@ -116,23 +120,29 @@ int main(int argc, char** argv)
 
     /* Affichage à l'écran le démarrage de la sonde */
     /*TODO: ne l'afficher qu'en mode verbose */
+#ifndef NDEBUG
     printf("---------- %s %s ----------\n", PRODUCT_NAME, VERSION);
 
     printf("Début du chargement des conf\n");
+#endif
     if (loadConf(&conf, CONF_DIR))
     {
         perror("loadConf()");
         return (errno);
     }
+#ifndef NDEBUG
     printf("Fin du chargement des conf\n");
 
     printf("Début du chargement des plugins\n");
+#endif
     if (plugin(conf.probePluginDir, &plgList, &addonsMgrParams.addonsList, &nbThreads))
     {
         perror("plugin()");
         return (errno);
     }
+#ifndef NDEBUG
     printf("Fin du chargement des plugins\n");
+#endif
 
     /* Table addonsThreads creation */
     addonsMgrParams.addonsThreads = calloc(nbThreads, sizeof (pthread_t));
@@ -141,21 +151,27 @@ int main(int argc, char** argv)
         return (EXIT_FAILURE);
     }
 
+#ifndef NDEBUG
     printf("Début du chargement des addons\n");
+#endif
     if (pthread_create(&addonsMgrThread, NULL, addon, (void*) &addonsMgrParams))
     {
         perror("pthread_create");
         return EXIT_FAILURE;
     }
 
+#ifndef NDEBUG
     printf("Début du chargement du module Format\n");
+#endif
     if (pthread_create(&formatThread, NULL, format, (void*) &formatParams))
     {
         perror("pthread_create");
         return EXIT_FAILURE;
     }
 
+#ifndef NDEBUG
     printf("Début de l'envoi des messages\n");
+#endif
     if (pthread_create(&senderThread, NULL, sender, (void*) &senderParams))
     {
         perror("pthread_create");

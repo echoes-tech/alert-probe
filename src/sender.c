@@ -135,7 +135,9 @@ int sendMessage(
              (int)difftime (now, collectTime),
              afterOffset);
 
+#ifndef NDEBUG
     printf("%s", completMsg);
+#endif
     
     /* Sending data */
     if (*protocol == 1)
@@ -233,7 +235,9 @@ void *sender(void *arg)
         SLEEP(1);
     }
 
+#ifndef NDEBUG
     printf("Fin de l'envoi des messages\n");
+#endif
     
     pthread_exit(NULL);
 }

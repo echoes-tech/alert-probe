@@ -20,8 +20,8 @@ CND_ARTIFACT_DIR_Release=dist/Release/GNU-Linux-x86
 CND_ARTIFACT_NAME_Release=probe
 CND_ARTIFACT_PATH_Release=dist/Release/GNU-Linux-x86/probe
 CND_PACKAGE_DIR_Release=dist/Release/GNU-Linux-x86/package
-CND_PACKAGE_NAME_Release=probe.tar
-CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux-x86/package/probe.tar
+CND_PACKAGE_NAME_Release=echoes-alert-probe_0.1.0-alpha-1.deb
+CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux-x86/package/echoes-alert-probe_0.1.0-alpha-1.deb
 #
 # include compiler specific variables
 #

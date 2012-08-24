@@ -26,15 +26,12 @@ int cleanSuite(void)
 
 void testSenderUDP()
 {
-    int port = 7171;
-    int proto = 1;
-    int res = sender("127.0.0.1", &port, &proto);
-    CU_ASSERT_EQUAL(res, EXIT_SUCCESS);
+    /*TODO*/
 }
 
 void testSenderTCP()
 {
-    //TODO
+    /*TODO*/
 }
 
 int main()

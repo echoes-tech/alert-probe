@@ -165,8 +165,9 @@ void *addonLog(void *arg)
     /*TODO: faire un check du protocole file://, socket://, etc. */
     const char *path = srcInfoParams->path + 7;
 
-
+#ifndef NDEBUG
     printf("Dans le thread addonLog.\n");
+#endif
 
     /* What time is it ? */
     time(&now);

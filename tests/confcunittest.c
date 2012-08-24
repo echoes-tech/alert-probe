@@ -28,7 +28,7 @@ void testParseConf()
 {
     char line[] = "engine_fqdn=localhost";
     Conf *conf;
-    int result = parseLineConf(line, conf);
+    int result = parseLineConf(conf, line);
     CU_ASSERT_EQUAL(result,EXIT_SUCCESS);
 }
 
@@ -36,11 +36,11 @@ void testLoadConf()
 {
     char confDir[] = "conf/echoes-alert.conf";
     Conf conf;
-    int result = loadConf(confDir, &conf);
+    int result = loadConf(&conf, confDir);
     CU_ASSERT_STRING_EQUAL(conf.engineFQDN,"localhost");
     CU_ASSERT_EQUAL(conf.enginePort,7171);
-    CU_ASSERT_STRING_EQUAL(conf.pluginDir,"plugins/");
-    if (conf.probeProto == 0 || conf.probeProto == 1)
+    CU_ASSERT_STRING_EQUAL(conf.probePluginDir,"plugins/");
+    if (conf.transportProto == 0 || conf.transportProto == 1)
     {
         CU_PASS(conf.probeProto);
     }

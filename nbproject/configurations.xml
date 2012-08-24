@@ -2,7 +2,7 @@
 <configurationDescriptor version="84">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <logicalFolder name="conf" displayName="Conf" projectFiles="true">
-      <itemPath>conf/echoes-alert.conf</itemPath>
+      <itemPath>conf/probe.conf</itemPath>
     </logicalFolder>
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
@@ -17,6 +17,20 @@
       <itemPath>include/format.h</itemPath>
       <itemPath>include/plugin.h</itemPath>
       <itemPath>include/sender.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="packages" displayName="Packages" projectFiles="true">
+      <logicalFolder name="deb" displayName="deb" projectFiles="true">
+        <itemPath>packages/deb/README.Debian</itemPath>
+        <itemPath>packages/deb/changelog</itemPath>
+        <itemPath>packages/deb/conffiles</itemPath>
+        <itemPath>packages/deb/copyright</itemPath>
+        <itemPath>packages/deb/echoes-alert-probe.default</itemPath>
+        <itemPath>packages/deb/echoes-alert-probe.init</itemPath>
+        <itemPath>packages/deb/postinst</itemPath>
+        <itemPath>packages/deb/postrm</itemPath>
+        <itemPath>packages/deb/preinst.ex</itemPath>
+        <itemPath>packages/deb/prerm</itemPath>
+      </logicalFolder>
     </logicalFolder>
     <logicalFolder name="plugins" displayName="Plugins" projectFiles="true">
       <itemPath>plugins/Helios_Debian6.0-Syslog-Test.json</itemPath>
@@ -76,6 +90,9 @@
           <commandLine>-Wall -pedantic</commandLine>
         </cTool>
         <linkerTool>
+          <linkerDynSerch>
+            <pElem>/opt/echoes-alert/probe/lib</pElem>
+          </linkerDynSerch>
           <linkerLibItems>
             <linkerLibStdlibItem>CUnit</linkerLibStdlibItem>
             <linkerOptionItem>`pkg-config --libs libssl gobject-2.0 json-glib-1.0`</linkerOptionItem>
@@ -94,7 +111,7 @@
           <incDir>
             <pElem>include</pElem>
           </incDir>
-          <commandLine>-Wall</commandLine>
+          <commandLine>-Wall -DNDEBUG</commandLine>
         </cTool>
         <ccTool>
           <developmentMode>5</developmentMode>
@@ -106,12 +123,109 @@
           <developmentMode>5</developmentMode>
         </asmTool>
         <linkerTool>
+          <linkerDynSerch>
+            <pElem>/opt/echoes-alert/probe/lib</pElem>
+          </linkerDynSerch>
           <linkerLibItems>
             <linkerLibStdlibItem>CUnit</linkerLibStdlibItem>
             <linkerOptionItem>`pkg-config --libs libssl gobject-2.0 json-glib-1.0`</linkerOptionItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
+      <packaging>
+        <packType>Debian</packType>
+        <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/echoes-alert-probe_0.1.0-alpha-1.deb</output>
+        <packTopDir>/opt/echoes-alert/probe</packTopDir>
+        <packFileList>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}sbin/echoes-alert-probe"
+                            from="${OUTPUT_PATH}"
+                            perm="750"
+                            owner="root"
+                            group="root"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}etc/probe.conf"
+                            from="conf/probe.conf"
+                            perm="640"
+                            owner="root"
+                            group="root"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}etc/plugins/Helios_Debian6.0-System-Test.json"
+                            from="plugins/Helios_Debian6.0-System-Test.json"
+                            perm="640"
+                            owner="root"
+                            group="root"/>
+          <packFileListElem type="File"
+                            to="DEBIAN/README.Debian"
+                            from="packages/deb/README.Debian"
+                            perm="644"
+                            owner="root"
+                            group="root"/>
+          <packFileListElem type="File"
+                            to="DEBIAN/changelog"
+                            from="packages/deb/changelog"
+                            perm="644"
+                            owner="root"
+                            group="root"/>
+          <packFileListElem type="File"
+                            to="DEBIAN/copyright"
+                            from="packages/deb/copyright"
+                            perm="644"
+                            owner="root"
+                            group="root"/>
+          <packFileListElem type="File"
+                            to="DEBIAN/conffiles"
+                            from="packages/deb/conffiles"
+                            perm="644"
+                            owner="root"
+                            group="root"/>
+          <packFileListElem type="File"
+                            to="DEBIAN/postrm"
+                            from="packages/deb/postrm"
+                            perm="755"
+                            owner="root"
+                            group="root"/>
+          <packFileListElem type="File"
+                            to="DEBIAN/postinst"
+                            from="packages/deb/postinst"
+                            perm="755"
+                            owner="root"
+                            group="root"/>
+          <packFileListElem type="File"
+                            to="DEBIAN/prerm"
+                            from="packages/deb/prerm"
+                            perm="755"
+                            owner="root"
+                            group="root"/>
+          <packFileListElem type="File"
+                            to="/etc/init.d/echoes-alert-probe"
+                            from="packages/deb/echoes-alert-probe.init"
+                            perm="755"
+                            owner="root"
+                            group="root"/>
+        </packFileList>
+        <packInfoList>
+          <packInfoListElem name="Source" value="echoes-alert-probe" mandatory="false"/>
+          <packInfoListElem name="Version" value="0.1.0-alpha-1" mandatory="true"/>
+          <packInfoListElem name="Section" value="non-free/admin" mandatory="false"/>
+          <packInfoListElem name="Priority" value="optional" mandatory="false"/>
+          <packInfoListElem name="Maintainer"
+                            value="Florent Poinsaut &lt;florent.poinsaut@echoes-tech.com>"
+                            mandatory="false"/>
+          <packInfoListElem name="Homepage"
+                            value="http://alert.echoes-tech.com"
+                            mandatory="false"/>
+          <packInfoListElem name="" value="" mandatory="false"/>
+          <packInfoListElem name="Package" value="echoes-alert-probe" mandatory="true"/>
+          <packInfoListElem name="Architecture" value="all" mandatory="false"/>
+          <packInfoListElem name="Depends"
+                            value="libssl0.9.8 | libssl1.0.0"
+                            mandatory="false"/>
+          <packInfoListElem name="Description"
+                            value="The ECHOES Alert Probe"
+                            mandatory="false"/>
+        </packInfoList>
+      </packaging>
     </conf>
   </confs>
 </configurationDescriptor>

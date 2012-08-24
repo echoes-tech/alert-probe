@@ -107,7 +107,9 @@ void *addon(void *arg)
         addonInfo = addonInfo->nxt;
     }
 
+#ifndef NDEBUG
     printf("Fin du chargement des addons\n");
+#endif
     
     /* Attente de la fin des threads */
     for (i = 0; i < numThread; i++)

@@ -138,7 +138,9 @@ void *addonFile(void *arg)
     char line[MAX_SIZE] = "";
     unsigned int n = 0;
 
+#ifndef NDEBUG
     printf("Dans le thread addonFile.\n");
+#endif
 
     /* What time is it ? */
     time(&now);
