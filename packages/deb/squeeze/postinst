@@ -1,0 +1,97 @@
+#!/bin/sh
+# postinst script for echoes-alert-probe
+
+set -e
+
+# summary of how this script can be called:
+#        * <postinst> `configure' <most-recently-configured-version>
+#        * <old-postinst> `abort-upgrade' <new version>
+#        * <conflictor's-postinst> `abort-remove' `in-favour' <package>
+#          <new-version>
+#        * <postinst> `abort-remove'
+#        * <deconfigured's-postinst> `abort-deconfigure' `in-favour'
+#          <failed-install-package> <version> `removing'
+#          <conflicting-package> <version>
+# for details, see http://www.debian.org/doc/debian-policy/ or
+# the debian-policy package
+
+
+case "$1" in
+    configure)
+
+        update-rc.d -f ea-probe defaults
+
+        JSON_GLIB_VERSION=$(dpkg-query -W -f='${Version}\n' libjson-glib-1.0* | head -n 1)
+        GLIB_VERSION=$(dpkg-query -W -f='${Version}\n' libglib2.0* | head -n 1)
+        ARCH=$(dpkg --print-architecture)
+
+        cd /opt/echoes-alert/probe/
+
+        if [ $(dpkg --compare-versions "$JSON_GLIB_VERSION" ">=" "0.12" && echo "yes" || echo "no") = "yes" ]
+        then
+            echo "JSON_GLIB est là dans la bonne version"
+        else
+            echo "JSON_GLIB n'est pas là dans la bonne version"
+            echo "Téléchargement de bibliothèques JSON-Glib"
+
+            case "$ARCH" in
+                i386)
+                    wget --no-check-certificate https://forge.echoes-tech.com/attachments/download/3/json-glib_echoes-alert-probe_squeeze_i386.tar.gz
+                    tar xvzf json-glib_echoes-alert-probe_squeeze_i386.tar.gz
+                    rm -f json-glib_echoes-alert-probe_squeeze_i386.tar.gz
+                    ;;
+                x86_64)
+                    wget --no-check-certificate https://forge.echoes-tech.com/attachments/download/1/json-glib_echoes-alert-probe_squeeze_amd64.tar.gz
+                    tar xvzf json-glib_echoes-alert-probe_squeeze_amd64.tar.gz
+                    rm -f json-glib_echoes-alert-probe_squeeze_amd64.tar.gz
+                    ;;
+                *)
+                    echo "Votre architecture n'est pas supportée. Veuillez compiler la bibliothèque json-glib >= 0.14 manuellement."
+                    ;;
+            esac
+
+            if [ $(dpkg --compare-versions "$GLIB_VERSION" ">=" "2.32" && echo "yes" || echo "no") = "yes" ]
+            then
+                    echo "JGLIB est là dans la bonne version"
+            else
+                echo "GLIB n'est pas là dans la bonne version"
+                echo "Téléchargement de bibliothèques Glib"
+                case "$ARCH" in
+                    i386)
+                        wget --no-check-certificate https://forge.echoes-tech.com/attachments/download/4/glib_echoes-alert-probe_squeeze_i386.tar.gz
+                        tar xvzf glib_echoes-alert-probe_squeeze_i386.tar.gz
+                        rm -f glib_echoes-alert-probe_squeeze_i386.tar.gz
+                        ;;
+                    x86_64)
+                        wget --no-check-certificate https://forge.echoes-tech.com/attachments/download/2/glib_echoes-alert-probe_squeeze_amd64.tar.gz
+                        tar xvzf glib_echoes-alert-probe_squeeze_amd64.tar.gz
+                        rm -f glib_echoes-alert-probe_squeeze_amd64.tar.gz
+                        ;;
+                    *)
+                        echo "Votre architecture n'est pas supportée. Veuillez compiler la bibliothèque glib >= 2.32.4 manuellement."
+                        ;;
+                esac
+            fi
+        fi
+        chown -R root:root . /etc/init.d/ea-probe
+        chown -R root:adm /var/log/echoes-alert
+        if [ -d lib ]
+        then
+            find lib -type d -exec chmod 755 {} \;
+        fi
+        if [ -d doc ]
+        then
+            find doc -type d -exec chmod 755 {} \;
+        fi
+    ;;
+
+    abort-upgrade|abort-remove|abort-deconfigure)
+    ;;
+
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 1
+    ;;
+esac
+
+exit 0

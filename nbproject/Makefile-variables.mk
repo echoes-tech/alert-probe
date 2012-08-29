@@ -20,8 +20,40 @@ CND_ARTIFACT_DIR_Release=dist/Release/GNU-Linux-x86
 CND_ARTIFACT_NAME_Release=probe
 CND_ARTIFACT_PATH_Release=dist/Release/GNU-Linux-x86/probe
 CND_PACKAGE_DIR_Release=dist/Release/GNU-Linux-x86/package
-CND_PACKAGE_NAME_Release=echoes-alert-probe_0.1.0-alpha-1.deb
-CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux-x86/package/echoes-alert-probe_0.1.0-alpha-1.deb
+CND_PACKAGE_NAME_Release=probe.tar
+CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux-x86/package/probe.tar
+# Deb_32bits_Release configuration
+CND_PLATFORM_Deb_32bits_Release=GNU-Linux-x86
+CND_ARTIFACT_DIR_Deb_32bits_Release=dist/Deb_32bits_Release/GNU-Linux-x86
+CND_ARTIFACT_NAME_Deb_32bits_Release=probe
+CND_ARTIFACT_PATH_Deb_32bits_Release=dist/Deb_32bits_Release/GNU-Linux-x86/probe
+CND_PACKAGE_DIR_Deb_32bits_Release=dist/Deb_32bits_Release/GNU-Linux-x86/package
+CND_PACKAGE_NAME_Deb_32bits_Release=echoes-alert-probe_0.1.0-alpha-1_i386.deb
+CND_PACKAGE_PATH_Deb_32bits_Release=dist/Deb_32bits_Release/GNU-Linux-x86/package/echoes-alert-probe_0.1.0-alpha-1_i386.deb
+# Deb_64bits_Release configuration
+CND_PLATFORM_Deb_64bits_Release=GNU-Linux-x86
+CND_ARTIFACT_DIR_Deb_64bits_Release=dist/Deb_64bits_Release/GNU-Linux-x86
+CND_ARTIFACT_NAME_Deb_64bits_Release=probe
+CND_ARTIFACT_PATH_Deb_64bits_Release=dist/Deb_64bits_Release/GNU-Linux-x86/probe
+CND_PACKAGE_DIR_Deb_64bits_Release=dist/Deb_64bits_Release/GNU-Linux-x86/package
+CND_PACKAGE_NAME_Deb_64bits_Release=echoes-alert-probe_0.1.0-alpha-1_amd64.deb
+CND_PACKAGE_PATH_Deb_64bits_Release=dist/Deb_64bits_Release/GNU-Linux-x86/package/echoes-alert-probe_0.1.0-alpha-1_amd64.deb
+# Debian6_32bits_Release configuration
+CND_PLATFORM_Debian6_32bits_Release=GNU-Linux-x86
+CND_ARTIFACT_DIR_Debian6_32bits_Release=dist/Debian6_32bits_Release/GNU-Linux-x86
+CND_ARTIFACT_NAME_Debian6_32bits_Release=probe
+CND_ARTIFACT_PATH_Debian6_32bits_Release=dist/Debian6_32bits_Release/GNU-Linux-x86/probe
+CND_PACKAGE_DIR_Debian6_32bits_Release=dist/Debian6_32bits_Release/GNU-Linux-x86/package
+CND_PACKAGE_NAME_Debian6_32bits_Release=echoes-alert-probe_0.1.0-alpha-1_squeeze_i386.deb
+CND_PACKAGE_PATH_Debian6_32bits_Release=dist/Debian6_32bits_Release/GNU-Linux-x86/package/echoes-alert-probe_0.1.0-alpha-1_squeeze_i386.deb
+# Debian6_64bits_Release configuration
+CND_PLATFORM_Debian6_64bits_Release=GNU-Linux-x86
+CND_ARTIFACT_DIR_Debian6_64bits_Release=dist/Debian6_64bits_Release/GNU-Linux-x86
+CND_ARTIFACT_NAME_Debian6_64bits_Release=probe
+CND_ARTIFACT_PATH_Debian6_64bits_Release=dist/Debian6_64bits_Release/GNU-Linux-x86/probe
+CND_PACKAGE_DIR_Debian6_64bits_Release=dist/Debian6_64bits_Release/GNU-Linux-x86/package
+CND_PACKAGE_NAME_Debian6_64bits_Release=echoes-alert-probe_0.1.0-alpha-1_squeeze_amd64.deb
+CND_PACKAGE_PATH_Debian6_64bits_Release=dist/Debian6_64bits_Release/GNU-Linux-x86/package/echoes-alert-probe_0.1.0-alpha-1_squeeze_amd64.deb
 #
 # include compiler specific variables
 #
