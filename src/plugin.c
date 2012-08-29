@@ -108,7 +108,7 @@ int listPlugins(
             /* Add filename for plugin path */
             strcat(plgPath, read->d_name);
 
-            printf("Loading plugin %s\n", plgPath);
+            g_message("Loading plugin %s", plgPath);
 
             if (file2data(plgPath, data))
             {
@@ -644,7 +644,7 @@ int plugin(
         perror("listPlugins()");
         return (errno);
     }
-    printf("%d plugins load.\n", nbPlg);
+    g_message("%d plugins loaded", nbPlg);
 
     return (EXIT_SUCCESS);
 }

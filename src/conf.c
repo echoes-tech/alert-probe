@@ -28,7 +28,11 @@ int parseLineConf(Conf *conf, const char* line)
         else if (!strcmp(line, "probe_plugin_dir"))
         {
             /*TODO: test format */
+#ifdef NDEBUG
             strncpy(conf->probePluginDir, value, (strlen(value) - 1));
+#else
+            strcpy(conf->probePluginDir, "./plugins/");
+#endif
         }
         else if (!strcmp(line, "transport_proto"))
         {
@@ -82,7 +86,7 @@ int loadConf(Conf *conf,const char *confPath)
     }
     else
     {
-        perror("fopen()");
+        g_message("%s: %s", strerror(errno), confPath);
         return (errno);
     }
 

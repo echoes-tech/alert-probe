@@ -8,6 +8,8 @@
 #include <stdlib.h>
 #include <errno.h>
 
+/* To init Log */
+#include "log.h"
 /* To init struct Conf */
 #include "conf.h"
 /* To init struct PlgList */
@@ -21,7 +23,7 @@
 
 /* Probe Names */
 #define PRODUCT_NAME "ECHOES Alert - Probe"
-#define APP_NAME "echoes-alert-probe"
+#define APP_NAME "ea-probe"
 /* Probe Version */
 #define VERSION "0.1.0-alpha"
 /* Conf Repository */
@@ -40,10 +42,14 @@ int main(int argc, char** argv)
     /*
      *Initialization
      */ 
-    
+
     /* Probe Configuration initialisation */
     Conf conf = CONF_INITIALIZER;
-    
+     
+    /* Log Params initialisation */
+    /*TODO: Add logFile in conf param */
+    LogParams logParams = {g_get_host_name(), APP_NAME, getpid(), "/var/log/echoes-alert/probe.log"};
+   
     /* Plugins List initialisation */
     PlgList plgList = NULL;
     /* Plugins counter initialisation */
@@ -58,7 +64,7 @@ int main(int argc, char** argv)
     /* Queues initialisation */
     SDElementQueue sdElementQueue = {
         PTHREAD_MUTEX_INITIALIZER,
-        NULL,
+        g_get_host_name(),
         APP_NAME,
         &conf.probeID,
         &conf.transportMsgVersion,
@@ -80,20 +86,6 @@ int main(int argc, char** argv)
         0,
         &conf.transportProto
     };
-
-
-    /* Retrieve the Hostname */
-    size_t taille = 10;
-    sdElementQueue.hostname = calloc(1, taille);
-
-    while(gethostname(sdElementQueue.hostname, taille) != 0 && taille < 255) {
-        if (errno != ENAMETOOLONG) {
-            perror("gethostname");
-            exit(EXIT_FAILURE);
-        }
-        taille += 10;
-        sdElementQueue.hostname = realloc(sdElementQueue.hostname, taille);        
-    }
 
     /* Help message and version */
     if (argc > 1)
@@ -118,16 +110,52 @@ int main(int argc, char** argv)
         return (EXIT_SUCCESS);
     }
 
-    /* Affichage à l'écran le démarrage de la sonde */
-    /*TODO: ne l'afficher qu'en mode verbose */
-#ifndef NDEBUG
-    printf("---------- %s %s ----------\n", PRODUCT_NAME, VERSION);
+#ifdef NDEBUG
+    g_log_set_handler(
+                      G_LOG_DOMAIN,
+                      G_LOG_LEVEL_MASK,
+                      log2File,
+                      (gpointer) &logParams
+                      );
+#else
+    g_log_set_handler(
+                      G_LOG_DOMAIN,
+                      G_LOG_LEVEL_MASK,
+                      log2Console,
+                      (gpointer) &logParams
+                      );
+#endif
+    
+    /* Daemonization */
+#ifdef NDEBUG
+    if(chdir("/") != 0)
+    {
+        g_message("%s", strerror(errno));
+        exit (EXIT_FAILURE);
+    }
+    if(fork() != 0)
+        exit(EXIT_SUCCESS);
+    setsid();
+    if(fork() != 0)
+        exit(EXIT_SUCCESS);
+#endif
 
+    g_message(
+              "[origin enterpriseId=\"40311\" software=\"%s\" swVersion=\"%s\"] (re)start",
+              PRODUCT_NAME,
+              VERSION
+              );
+
+#ifndef NDEBUG
     printf("Début du chargement des conf\n");
 #endif
     if (loadConf(&conf, CONF_DIR))
     {
-        perror("loadConf()");
+        g_message(
+                  "[origin enterpriseId=\"40311\" software=\"%s\" swVersion=\"%s\"] stop",
+                  PRODUCT_NAME,
+                  VERSION
+                  );
         return (errno);
     }
 #ifndef NDEBUG
@@ -157,7 +185,7 @@ int main(int argc, char** argv)
     if (pthread_create(&addonsMgrThread, NULL, addon, (void*) &addonsMgrParams))
     {
         perror("pthread_create");
-        return EXIT_FAILURE;
+        return (EXIT_FAILURE);
     }
 
 #ifndef NDEBUG
@@ -166,7 +194,7 @@ int main(int argc, char** argv)
     if (pthread_create(&formatThread, NULL, format, (void*) &formatParams))
     {
         perror("pthread_create");
-        return EXIT_FAILURE;
+        return (EXIT_FAILURE);
     }
 
 #ifndef NDEBUG
@@ -175,7 +203,7 @@ int main(int argc, char** argv)
     if (pthread_create(&senderThread, NULL, sender, (void*) &senderParams))
     {
         perror("pthread_create");
-        return EXIT_FAILURE;
+        return (EXIT_FAILURE);
     }
 
     pthread_join(addonsMgrThread, NULL);
@@ -188,8 +216,12 @@ int main(int argc, char** argv)
     /* Cleanup */
     free(addonsMgrParams.addonsThreads);
 
-    free(sdElementQueue.hostname);
-    
+    g_message(
+              "[origin enterpriseId=\"40311\" software=\"%s\" swVersion=\"%s\"] stop",
+              PRODUCT_NAME,
+              VERSION
+              );
+
     return (EXIT_SUCCESS);
 }
 
