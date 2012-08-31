@@ -54,6 +54,22 @@ CND_ARTIFACT_PATH_Debian6_64bits_Release=dist/Debian6_64bits_Release/GNU-Linux-x
 CND_PACKAGE_DIR_Debian6_64bits_Release=dist/Debian6_64bits_Release/GNU-Linux-x86/package
 CND_PACKAGE_NAME_Debian6_64bits_Release=echoes-alert-probe_0.1.0-alpha-1_squeeze_amd64.deb
 CND_PACKAGE_PATH_Debian6_64bits_Release=dist/Debian6_64bits_Release/GNU-Linux-x86/package/echoes-alert-probe_0.1.0-alpha-1_squeeze_amd64.deb
+# RPM_32bits_Release configuration
+CND_PLATFORM_RPM_32bits_Release=GNU-Linux-x86
+CND_ARTIFACT_DIR_RPM_32bits_Release=dist/RPM_32bits_Release/GNU-Linux-x86
+CND_ARTIFACT_NAME_RPM_32bits_Release=probe
+CND_ARTIFACT_PATH_RPM_32bits_Release=dist/RPM_32bits_Release/GNU-Linux-x86/probe
+CND_PACKAGE_DIR_RPM_32bits_Release=dist/RPM_32bits_Release/GNU-Linux-x86/package
+CND_PACKAGE_NAME_RPM_32bits_Release=
+CND_PACKAGE_PATH_RPM_32bits_Release=
+# RPM_64bits_Release configuration
+CND_PLATFORM_RPM_64bits_Release=GNU-Linux-x86
+CND_ARTIFACT_DIR_RPM_64bits_Release=dist/RPM_64bits_Release/GNU-Linux-x86
+CND_ARTIFACT_NAME_RPM_64bits_Release=probe
+CND_ARTIFACT_PATH_RPM_64bits_Release=dist/RPM_64bits_Release/GNU-Linux-x86/probe
+CND_PACKAGE_DIR_RPM_64bits_Release=dist/RPM_64bits_Release/GNU-Linux-x86/package
+CND_PACKAGE_NAME_RPM_64bits_Release=
+CND_PACKAGE_PATH_RPM_64bits_Release=
 #
 # include compiler specific variables
 #

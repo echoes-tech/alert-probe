@@ -17,7 +17,7 @@ set -e
 
 case "$1" in
     remove)
-        update-rc.d -f echoes-alert-probe remove
+        update-rc.d -f ea-probe remove
 
         cd /opt/echoes-alert/probe
         if [ -d lib ]

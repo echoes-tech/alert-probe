@@ -35,6 +35,9 @@
         <itemPath>packages/deb/preinst.ex</itemPath>
         <itemPath>packages/deb/prerm</itemPath>
       </logicalFolder>
+      <logicalFolder name="rpm" displayName="rpm" projectFiles="true">
+        <itemPath>packages/rpm/echoes-alert-probe.init</itemPath>
+      </logicalFolder>
     </logicalFolder>
     <logicalFolder name="plugins" displayName="Plugins" projectFiles="true">
       <itemPath>plugins/Helios_Debian6.0-Syslog-Test.json</itemPath>
@@ -192,7 +195,7 @@
           <packFileListElem type="File"
                             to="${PACKAGE_TOP_DIR}sbin/ea-probe"
                             from="${OUTPUT_PATH}"
-                            perm="750"
+                            perm="640"
                             owner="root"
                             group="root"/>
           <packFileListElem type="File"
@@ -707,6 +710,230 @@
                             mandatory="false"/>
           <packInfoListElem name="Description"
                             value="The ECHOES Alert Probe"
+                            mandatory="false"/>
+        </packInfoList>
+      </packaging>
+    </conf>
+    <conf name="RPM_32bits_Release" type="1">
+      <toolsSet>
+        <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
+        <compilerSet>default</compilerSet>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>6</developmentMode>
+          <stripSymbols>true</stripSymbols>
+          <architecture>1</architecture>
+          <incDir>
+            <pElem>include</pElem>
+          </incDir>
+          <commandLine>-DNDEBUG</commandLine>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+        <linkerTool>
+          <linkerDynSerch>
+            <pElem>/opt/echoes-alert/probe/lib</pElem>
+          </linkerDynSerch>
+          <linkerLibItems>
+            <linkerOptionItem>`pkg-config --libs libssl gobject-2.0 json-glib-1.0`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </compileType>
+      <packaging>
+        <packType>RPM</packType>
+        <packTopDir>/opt/echoes-alert/probe</packTopDir>
+        <packFileList>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}sbin/ea-probe"
+                            from="${OUTPUT_PATH}"
+                            perm="640"
+                            owner="root"
+                            group="root"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}etc/probe.conf"
+                            from="conf/probe.conf"
+                            perm="640"
+                            owner="root"
+                            group="root"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}etc/plugins/Helios_Debian6.0-System-Test.json"
+                            from="plugins/Helios_Debian6.0-System-Test.json"
+                            perm="640"
+                            owner="root"
+                            group="root"/>
+          <packFileListElem type="Dir"
+                            to="/var/log/echoes-alert/"
+                            from=""
+                            perm="750"
+                            owner="root"
+                            group="adm"/>
+          <packFileListElem type="File"
+                            to="/var/log/echoes-alert/probe.log"
+                            from="/dev/null"
+                            perm="640"
+                            owner="root"
+                            group="adm"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}glib_echoes-alert-probe_squeeze_i386.tar.gz"
+                            from="packages/lib/i386/glib_echoes-alert-probe_squeeze_i386.tar.gz"
+                            perm="640"
+                            owner="root"
+                            group="root"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}json-glib_echoes-alert-probe_squeeze_i386.tar.gz"
+                            from="packages/lib/i386/json-glib_echoes-alert-probe_squeeze_i386.tar.gz"
+                            perm="640"
+                            owner="root"
+                            group="root"/>
+        </packFileList>
+        <packInfoList>
+          <packInfoListElem name="&apos;Summary"
+                            value="The ECHOES Alert Probe&apos;"
+                            mandatory="true"/>
+          <packInfoListElem name="Name" value="ea-probe" mandatory="true"/>
+          <packInfoListElem name="Version" value="0.1.0.alpha" mandatory="true"/>
+          <packInfoListElem name="Release" value="1" mandatory="true"/>
+          <packInfoListElem name="License" value="Proprietary" mandatory="true"/>
+          <packInfoListElem name="Group" value="Applications/System" mandatory="true"/>
+          <packInfoListElem name="URL"
+                            value="http://alert.echoes-tech.com"
+                            mandatory="false"/>
+          <packInfoListElem name="Vendor"
+                            value="ECHOES Technologies SAS"
+                            mandatory="false"/>
+          <packInfoListElem name="&apos;Packager"
+                            value="Florent Poinsaut &lt;florent.poinsaut@echoes-tech.com>&apos;"
+                            mandatory="false"/>
+          <packInfoListElem name="%description"
+                            value="The ECHOES Alert Probe"
+                            mandatory="true"/>
+          <packInfoListElem name="%pre" value="" mandatory="false"/>
+          <packInfoListElem name="%changelog"
+                            value=" * Thu Aug 30 2012 Florent Poinsaut &lt;florent.poinsaut@echoes-tech.com> 0.1.0.alpha-1\n- Initial release"
+                            mandatory="false"/>
+          <packInfoListElem name="%post"
+                            value="cd /opt/echoes-alert/probe\ntar xzf glib_echoes-alert-probe_squeeze_amd64.tar.gz\ntar xzf json-glib_echoes-alert-probe_squeeze_amd64.tar.gz\nrm -f  glib_echoes-alert-probe_squeeze_amd64.tar.gz json-glib_echoes-alert-probe_squeeze_amd64.tar.gz"
+                            mandatory="false"/>
+        </packInfoList>
+      </packaging>
+    </conf>
+    <conf name="RPM_64bits_Release" type="1">
+      <toolsSet>
+        <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
+        <compilerSet>default</compilerSet>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>6</developmentMode>
+          <stripSymbols>true</stripSymbols>
+          <architecture>2</architecture>
+          <incDir>
+            <pElem>include</pElem>
+          </incDir>
+          <commandLine>-DNDEBUG</commandLine>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+        <linkerTool>
+          <linkerDynSerch>
+            <pElem>/opt/echoes-alert/probe/lib</pElem>
+          </linkerDynSerch>
+          <linkerLibItems>
+            <linkerOptionItem>`pkg-config --libs libssl gobject-2.0 json-glib-1.0`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </compileType>
+      <packaging>
+        <packType>RPM</packType>
+        <packTopDir>/opt/echoes-alert/probe</packTopDir>
+        <packFileList>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}sbin/ea-probe"
+                            from="${OUTPUT_PATH}"
+                            perm="750"
+                            owner="root"
+                            group="root"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}etc/probe.conf"
+                            from="conf/probe.conf"
+                            perm="640"
+                            owner="root"
+                            group="root"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}etc/plugins/Helios_Debian6.0-System-Test.json"
+                            from="plugins/Helios_Debian6.0-System-Test.json"
+                            perm="640"
+                            owner="root"
+                            group="root"/>
+          <packFileListElem type="Dir"
+                            to="/var/log/echoes-alert/"
+                            from=""
+                            perm="750"
+                            owner="root"
+                            group="adm"/>
+          <packFileListElem type="File"
+                            to="/var/log/echoes-alert/probe.log"
+                            from="/dev/null"
+                            perm="640"
+                            owner="root"
+                            group="adm"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}glib_echoes-alert-probe_squeeze_amd64.tar.gz"
+                            from="packages/lib/amd64/glib_echoes-alert-probe_squeeze_amd64.tar.gz"
+                            perm="640"
+                            owner="root"
+                            group="root"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}json-glib_echoes-alert-probe_squeeze_amd64.tar.gz"
+                            from="packages/lib/amd64/json-glib_echoes-alert-probe_squeeze_amd64.tar.gz"
+                            perm="640"
+                            owner="root"
+                            group="root"/>
+        </packFileList>
+        <packInfoList>
+          <packInfoListElem name="&apos;Summary"
+                            value="The ECHOES Alert Probe&apos;"
+                            mandatory="true"/>
+          <packInfoListElem name="Name" value="ea-probe" mandatory="true"/>
+          <packInfoListElem name="Version" value="0.1.0.alpha" mandatory="true"/>
+          <packInfoListElem name="Release" value="1" mandatory="true"/>
+          <packInfoListElem name="License" value="Proprietary" mandatory="true"/>
+          <packInfoListElem name="Group" value="Applications/System" mandatory="true"/>
+          <packInfoListElem name="URL"
+                            value="http://alert.echoes-tech.com"
+                            mandatory="false"/>
+          <packInfoListElem name="Vendor"
+                            value="ECHOES Technologies SAS"
+                            mandatory="false"/>
+          <packInfoListElem name="&apos;Packager"
+                            value="Florent Poinsaut &lt;florent.poinsaut@echoes-tech.com>&apos;"
+                            mandatory="false"/>
+          <packInfoListElem name="%description"
+                            value="The ECHOES Alert Probe"
+                            mandatory="true"/>
+          <packInfoListElem name="%changelog"
+                            value=" * Thu Aug 30 2012 Florent Poinsaut &lt;florent.poinsaut@echoes-tech.com> 0.1.0.alpha-1\n- Initial release"
+                            mandatory="false"/>
+          <packInfoListElem name="%post"
+                            value="cd /opt/echoes-alert/probe\ntar xzf glib_echoes-alert-probe_squeeze_amd64.tar.gz\ntar xzf json-glib_echoes-alert-probe_squeeze_amd64.tar.gz\nrm -f  glib_echoes-alert-probe_squeeze_amd64.tar.gz json-glib_echoes-alert-probe_squeeze_amd64.tar.gz"
+                            mandatory="false"/>
+          <packInfoListElem name="%preun"
+                            value="cd /opt/echoes-alert/probe\n if [ -d lib ]\n then\n rm -rf lib\n fi\n if [ -d doc ]\n then\n rm -rf doc\n fi"
                             mandatory="false"/>
         </packInfoList>
       </packaging>

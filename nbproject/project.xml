@@ -37,6 +37,14 @@
                     <name>Debian6_64bits_Release</name>
                     <type>1</type>
                 </confElem>
+                <confElem>
+                    <name>RPM_32bits_Release</name>
+                    <type>1</type>
+                </confElem>
+                <confElem>
+                    <name>RPM_64bits_Release</name>
+                    <type>1</type>
+                </confElem>
             </confList>
         </data>
     </configuration>

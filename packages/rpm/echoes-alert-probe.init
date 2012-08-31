@@ -1,0 +1,114 @@
+#!/bin/sh
+#
+# Start/Stop the ECHOES Alert Probe
+#
+# Copyright ECHOES Technologies SAS 2012
+#
+# Author: Florent Poinsaut <florent.poinsaut@echoes-tech.com>
+# This program is free software; you can redistribute it and/or modify it
+# under the terms of version 2.1 of the GNU Lesser General Public License
+# as published by the Free Software Foundation.
+# 
+# This program is distributed in the hope that it would be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# ea-probe ECHOES Alert Probe
+# chkconfig: 2345 90 10
+# description: The ECHOES Alert Probe
+#
+# processname: ea-probe
+# pidfile: /var/run/ea-probe.pid
+#
+### BEGIN INIT INFO
+# Provides:          ea-probe
+# Required-Start:    $network $local_fs
+# Required-Stop:
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: start and stop the ECHOES Alert Probe
+# Description:       The ECHOES Alert Probe
+### END INIT INFO
+
+prefix=/opt/echoes-alert/probe;exec_prefix=$prefix;sbindir=$prefix/sbin
+DESC="ECHOES Alert Probe"
+NAME=ea-probe
+BIN=$sbindir/$NAME
+SYSCONFIG=/etc/sysconfig/$NAME
+PIDFILE=/var/run/$NAME.pid
+LOCKFILE=/var/lock/subsys/$NAME
+
+[ -x $BIN ] || exit 1
+
+# Source function library & LSB routines
+. /etc/rc.d/init.d/functions
+log_success_msg () {
+    echo -n $*; success "$*"; echo
+}
+log_failure_msg () {
+    echo -n $*; failure "$*"; echo
+}
+log_warning_msg () {
+    echo -n $*; warning "$*"; echo
+}
+
+# Read configuration
+[ -r "$SYSCONFIG" ] && . "$SYSCONFIG"
+
+RETVAL=0
+
+start() {
+    echo -n $"Starting $DESC ($NAME): "
+    if [ -f "$LOCKFILE" ]
+    then
+        log_failure_msg "$NAME is already running with PID $(cat $PIDFILE)"
+        return 0
+    fi
+	daemon $NAME -d --pidfile $PIDFILE $PROBE_OPTS
+	RETVAL=$?
+	echo
+	[ $RETVAL -eq 0 ] && touch $LOCKFILE
+    echo "$(pidof $NAME)" > $PIDFILE
+}
+
+stop() {
+	echo -n $"Shutting down $DESC ($NAME): "
+    if [ ! -f $PDIFILE ]
+    then
+        log_success_msg
+        return 0
+    fi
+    killproc -p $PIDFILE $NAME -TERM
+	RETVAL=$?
+	[ $RETVAL -eq 0 ] && success || failure
+	echo
+	[ $RETVAL -eq 0 ] && rm -f $LOCKFILE && rm -f $PDIFILE
+	return $RETVAL
+}
+
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  status)
+    status -p $PIDFILE $NAME
+    RETVAL=$?
+    ;;
+  restart)
+	stop
+	start
+	RETVAL=$?
+	;;
+  condrestart)
+        [ -e $LOCKFILE ] && restart
+	RETVAL=$?
+	;;
+  *)
+	echo $"Usage: $0 {start|stop|status|restart|condrestart}"
+	RETVAL=1
+esac
+
+exit $RETVAL

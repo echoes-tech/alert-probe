@@ -60,7 +60,7 @@ mkdir -p ${NBTMPDIR}
 # Copy files and create directories and links
 cd "${TOP}"
 makeDirectory "${NBTMPDIR}//opt/echoes-alert/probe/sbin"
-copyFileToTmpDir "${OUTPUT_PATH}" "${NBTMPDIR}/${PACKAGE_TOP_DIR}sbin/ea-probe" 0750
+copyFileToTmpDir "${OUTPUT_PATH}" "${NBTMPDIR}/${PACKAGE_TOP_DIR}sbin/ea-probe" 0640
 
 cd "${TOP}"
 makeDirectory "${NBTMPDIR}//opt/echoes-alert/probe/etc"
