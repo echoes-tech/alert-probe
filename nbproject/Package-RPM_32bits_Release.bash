@@ -93,6 +93,18 @@ cd "${TOP}"
 makeDirectory "${NBTMPDIR}//etc/sysconfig"
 copyFileToTmpDir "packages/rpm/echoes-alert-probe.sysconfig" "${NBTMPDIR}//etc/sysconfig/ea-probe" 0640
 
+cd "${TOP}"
+makeDirectory "${NBTMPDIR}//opt/echoes-alert/probe/doc"
+copyFileToTmpDir "AUTHORS" "${NBTMPDIR}/${PACKAGE_TOP_DIR}doc/AUTHORS" 0640
+
+cd "${TOP}"
+makeDirectory "${NBTMPDIR}//opt/echoes-alert/probe/doc"
+copyFileToTmpDir "COPYING" "${NBTMPDIR}/${PACKAGE_TOP_DIR}doc/COPYING" 0640
+
+cd "${TOP}"
+makeDirectory "${NBTMPDIR}//opt/echoes-alert/probe/doc"
+copyFileToTmpDir "README" "${NBTMPDIR}/${PACKAGE_TOP_DIR}doc/README" 0640
+
 
 # Ensure proper rpm build environment
 RPMMACROS=~/.rpmmacros
@@ -179,6 +191,9 @@ echo \"/${PACKAGE_TOP_DIR}glib_echoes-alert-probe_squeeze_i386.tar.gz\" >> ${SPE
 echo \"/${PACKAGE_TOP_DIR}json-glib_echoes-alert-probe_squeeze_i386.tar.gz\" >> ${SPEC_FILE}
 echo \"//etc/init.d/ea-probe\" >> ${SPEC_FILE}
 echo \"//etc/sysconfig/ea-probe\" >> ${SPEC_FILE}
+echo \"/${PACKAGE_TOP_DIR}doc/AUTHORS\" >> ${SPEC_FILE}
+echo \"/${PACKAGE_TOP_DIR}doc/COPYING\" >> ${SPEC_FILE}
+echo \"/${PACKAGE_TOP_DIR}doc/README\" >> ${SPEC_FILE}
 echo '%dir' >> ${SPEC_FILE}
 echo \"//var/log/echoes-alert/\" >> ${SPEC_FILE}
 

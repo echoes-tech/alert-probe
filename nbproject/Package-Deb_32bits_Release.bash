@@ -109,6 +109,18 @@ cd "${TOP}"
 makeDirectory "${NBTMPDIR}//var/log/echoes-alert"
 copyFileToTmpDir "/dev/null" "${NBTMPDIR}//var/log/echoes-alert/probe.log" 0640
 
+cd "${TOP}"
+makeDirectory "${NBTMPDIR}//opt/echoes-alert/probe/doc"
+copyFileToTmpDir "README" "${NBTMPDIR}/${PACKAGE_TOP_DIR}doc/README" 0640
+
+cd "${TOP}"
+makeDirectory "${NBTMPDIR}//opt/echoes-alert/probe/doc"
+copyFileToTmpDir "COPYING" "${NBTMPDIR}/${PACKAGE_TOP_DIR}doc/COPYING" 0640
+
+cd "${TOP}"
+makeDirectory "${NBTMPDIR}//opt/echoes-alert/probe/doc"
+copyFileToTmpDir "AUTHORS" "${NBTMPDIR}/${PACKAGE_TOP_DIR}doc/AUTHORS" 0640
+
 
 # Create control file
 cd "${TOP}"

@@ -3,8 +3,8 @@ Upstream-Name: echoes-alert-probe
 Maintainer: Florent Poinsaut <florent.poinsaut@echoes-tech.com>
 
 Files: *
-Copyright: 2012 ECHOES Technologies <info@echoes-tech.com>
- THIS PROGRAM IS PROPRIETARY TO ECHOES TECHNOLOGIES AND MAY NOT BE
+Copyright: 2012 ECHOES Technologies SAS <info@echoes-tech.com>
+ THIS PROGRAM IS PROPRIETARY TO ECHOES TECHNOLOGIES SAS AND MAY NOT BE
  REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS WITHOUT COMPANY AUTHORIZATION.
 
 Files: DEBIAN/*

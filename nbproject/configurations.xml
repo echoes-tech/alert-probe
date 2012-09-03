@@ -77,6 +77,7 @@
                    kind="IMPORTANT_FILES_FOLDER">
       <itemPath>.gitignore</itemPath>
       <itemPath>AUTHORS</itemPath>
+      <itemPath>COPYING</itemPath>
       <itemPath>Makefile</itemPath>
       <itemPath>README</itemPath>
     </logicalFolder>
@@ -271,6 +272,24 @@
                             perm="640"
                             owner="root"
                             group="adm"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}doc/README"
+                            from="README"
+                            perm="640"
+                            owner="root"
+                            group="root"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}doc/COPYING"
+                            from="COPYING"
+                            perm="640"
+                            owner="root"
+                            group="root"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}doc/AUTHORS"
+                            from="AUTHORS"
+                            perm="640"
+                            owner="root"
+                            group="root"/>
         </packFileList>
         <packInfoList>
           <packInfoListElem name="Source" value="echoes-alert-probe" mandatory="false"/>
@@ -411,6 +430,24 @@
                             perm="640"
                             owner="root"
                             group="adm"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}doc/AUTHORS"
+                            from="AUTHORS"
+                            perm="640"
+                            owner="root"
+                            group="root"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}doc/COPYING"
+                            from="COPYING"
+                            perm="640"
+                            owner="root"
+                            group="root"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}doc/README"
+                            from="README"
+                            perm="640"
+                            owner="root"
+                            group="root"/>
         </packFileList>
         <packInfoList>
           <packInfoListElem name="Source" value="echoes-alert-probe" mandatory="false"/>
@@ -551,6 +588,24 @@
                             perm="640"
                             owner="root"
                             group="adm"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}doc/AUTHORS"
+                            from="AUTHORS"
+                            perm="640"
+                            owner="root"
+                            group="root"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}doc/COPYING"
+                            from="COPYING"
+                            perm="640"
+                            owner="root"
+                            group="root"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}doc/README"
+                            from="README"
+                            perm="640"
+                            owner="root"
+                            group="root"/>
         </packFileList>
         <packInfoList>
           <packInfoListElem name="Source" value="echoes-alert-probe" mandatory="false"/>
@@ -691,6 +746,24 @@
                             perm="640"
                             owner="root"
                             group="adm"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}doc/AUTHORS"
+                            from="AUTHORS"
+                            perm="640"
+                            owner="root"
+                            group="root"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}doc/COPYING"
+                            from="COPYING"
+                            perm="640"
+                            owner="root"
+                            group="root"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}doc/README"
+                            from="README"
+                            perm="640"
+                            owner="root"
+                            group="root"/>
         </packFileList>
         <packInfoList>
           <packInfoListElem name="Source" value="echoes-alert-probe" mandatory="false"/>
@@ -804,6 +877,24 @@
           <packFileListElem type="File"
                             to="/etc/sysconfig/ea-probe"
                             from="packages/rpm/echoes-alert-probe.sysconfig"
+                            perm="640"
+                            owner="root"
+                            group="root"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}doc/AUTHORS"
+                            from="AUTHORS"
+                            perm="640"
+                            owner="root"
+                            group="root"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}doc/COPYING"
+                            from="COPYING"
+                            perm="640"
+                            owner="root"
+                            group="root"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}doc/README"
+                            from="README"
                             perm="640"
                             owner="root"
                             group="root"/>
@@ -936,6 +1027,24 @@
           <packFileListElem type="File"
                             to="/etc/sysconfig/ea-probe"
                             from="packages/rpm/echoes-alert-probe.sysconfig"
+                            perm="640"
+                            owner="root"
+                            group="root"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}doc/AUTHORS"
+                            from="AUTHORS"
+                            perm="640"
+                            owner="root"
+                            group="root"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}doc/COPYING"
+                            from="COPYING"
+                            perm="640"
+                            owner="root"
+                            group="root"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}doc/README"
+                            from="README"
                             perm="640"
                             owner="root"
                             group="root"/>

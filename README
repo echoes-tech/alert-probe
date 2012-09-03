@@ -4,25 +4,17 @@ ECHOES Alert - Probe
 ECHOES Alert desc.
 
 For more information, see:
+  • ECHOES Alert: http://alert.echoes-tech.com
   • ECHOES Technologies: http://www.echoes-tech.com
 
 REQUIREMENTS
 ------------
-In order to build ECHOES Alert - Probe you will need:
+In order to run ECHOES Alert - Probe you will need:
 
-  • json-glib-dev >= 0.12
-Debian/Ubuntu : apt-get intall libjson-glib-dev
-  • libssl-dev
-Debian/Ubuntu : apt-get intall libssl-dev
-  • CUnit = 2.1 (http://cunit.sourceforge.net/)
-
-INSTALLATION
--------------------------------------------------------------------------------
-To build ECHOES Alert - Probe just run:
-
-  $ ./configure
-  $ make all
-  # make install
+  • json-glib >= 0.12
+Source : https://live.gnome.org/JsonGlib/
+  • openssl
+Source : http://www.openssl.org/
 
 BUGS
 -------------------------------------------------------------------------------
@@ -33,14 +25,13 @@ If you find a bug in ECHOES Alert - Probe, please create a Redmine entry here:
 Attaching:
 
   • the version of ECHOES Alert - Probe
-    ◦ if it is a development version, the branch of the git repository
   • a small test case, if none of the test units exhibit the behaviour
   • in case of a segmentation fault, a full stack trace with debugging
     symbols obtained through gdb is greatly appreaciated
 
 RELEASE NOTES
 -------------------------------------------------------------------------------
-• 
+  • 0.1.0.alpha : Initial release
 
 AUTHOR, COPYRIGHT AND LICENSING
 -------------------------------------------------------------------------------
