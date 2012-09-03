@@ -37,6 +37,7 @@
       </logicalFolder>
       <logicalFolder name="rpm" displayName="rpm" projectFiles="true">
         <itemPath>packages/rpm/echoes-alert-probe.init</itemPath>
+        <itemPath>packages/rpm/echoes-alert-probe.sysconfig</itemPath>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="plugins" displayName="Plugins" projectFiles="true">
@@ -749,12 +750,13 @@
       </compileType>
       <packaging>
         <packType>RPM</packType>
+        <additionalOptions>--target i386</additionalOptions>
         <packTopDir>/opt/echoes-alert/probe</packTopDir>
         <packFileList>
           <packFileListElem type="File"
                             to="${PACKAGE_TOP_DIR}sbin/ea-probe"
                             from="${OUTPUT_PATH}"
-                            perm="640"
+                            perm="750"
                             owner="root"
                             group="root"/>
           <packFileListElem type="File"
@@ -793,6 +795,18 @@
                             perm="640"
                             owner="root"
                             group="root"/>
+          <packFileListElem type="File"
+                            to="/etc/init.d/ea-probe"
+                            from="packages/rpm/echoes-alert-probe.init"
+                            perm="755"
+                            owner="root"
+                            group="root"/>
+          <packFileListElem type="File"
+                            to="/etc/sysconfig/ea-probe"
+                            from="packages/rpm/echoes-alert-probe.sysconfig"
+                            perm="640"
+                            owner="root"
+                            group="root"/>
         </packFileList>
         <packInfoList>
           <packInfoListElem name="&apos;Summary"
@@ -812,15 +826,23 @@
           <packInfoListElem name="&apos;Packager"
                             value="Florent Poinsaut &lt;florent.poinsaut@echoes-tech.com>&apos;"
                             mandatory="false"/>
+          <packInfoListElem name="Requires" value="openssl" mandatory="false"/>
+          <packInfoListElem name="AutoReqProv" value="no" mandatory="false"/>
           <packInfoListElem name="%description"
                             value="The ECHOES Alert Probe"
                             mandatory="true"/>
           <packInfoListElem name="%pre" value="" mandatory="false"/>
+          <packInfoListElem name="%post"
+                            value="cd /opt/echoes-alert/probe\ntar xzf glib_echoes-alert-probe_squeeze_i386.tar.gz\ntar xzf json-glib_echoes-alert-probe_squeeze_i386.tar.gz\nrm -f  glib_echoes-alert-probe_squeeze_i386.tar.gz json-glib_echoes-alert-probe_squeeze_i386.tar.gz\nchkconfig --add ea-probe &amp;&amp; chkconfig ea-probe on"
+                            mandatory="false"/>
+          <packInfoListElem name="%preun"
+                            value="cd /opt/echoes-alert/probe\n if [ -d lib ]\n then\n rm -rf lib\n fi\n if [ -d doc ]\n then\n rm -rf doc\n fi\nchkconfig ea-probe off"
+                            mandatory="false"/>
+          <packInfoListElem name="%postun"
+                            value="if [ `find /opt/echoes-alert/probe -type f | wc -l` -eq 0 ]\nthen\nrm -rf /opt/echoes-alert/probe\nif [ `find /opt/echoes-alert -type f | wc -l` -eq 0 ]\nthen\nrm -rf /opt/echoes-alert\nfi\nfi"
+                            mandatory="false"/>
           <packInfoListElem name="%changelog"
                             value=" * Thu Aug 30 2012 Florent Poinsaut &lt;florent.poinsaut@echoes-tech.com> 0.1.0.alpha-1\n- Initial release"
-                            mandatory="false"/>
-          <packInfoListElem name="%post"
-                            value="cd /opt/echoes-alert/probe\ntar xzf glib_echoes-alert-probe_squeeze_amd64.tar.gz\ntar xzf json-glib_echoes-alert-probe_squeeze_amd64.tar.gz\nrm -f  glib_echoes-alert-probe_squeeze_amd64.tar.gz json-glib_echoes-alert-probe_squeeze_amd64.tar.gz"
                             mandatory="false"/>
         </packInfoList>
       </packaging>
@@ -860,6 +882,7 @@
       </compileType>
       <packaging>
         <packType>RPM</packType>
+        <additionalOptions>--target x86_64</additionalOptions>
         <packTopDir>/opt/echoes-alert/probe</packTopDir>
         <packFileList>
           <packFileListElem type="File"
@@ -904,6 +927,18 @@
                             perm="640"
                             owner="root"
                             group="root"/>
+          <packFileListElem type="File"
+                            to="/etc/init.d/ea-probe"
+                            from="packages/rpm/echoes-alert-probe.init"
+                            perm="755"
+                            owner="root"
+                            group="root"/>
+          <packFileListElem type="File"
+                            to="/etc/sysconfig/ea-probe"
+                            from="packages/rpm/echoes-alert-probe.sysconfig"
+                            perm="640"
+                            owner="root"
+                            group="root"/>
         </packFileList>
         <packInfoList>
           <packInfoListElem name="&apos;Summary"
@@ -923,17 +958,22 @@
           <packInfoListElem name="&apos;Packager"
                             value="Florent Poinsaut &lt;florent.poinsaut@echoes-tech.com>&apos;"
                             mandatory="false"/>
+          <packInfoListElem name="Requires" value="openssl" mandatory="false"/>
+          <packInfoListElem name="AutoReqProv" value="no" mandatory="false"/>
           <packInfoListElem name="%description"
                             value="The ECHOES Alert Probe"
                             mandatory="true"/>
-          <packInfoListElem name="%changelog"
-                            value=" * Thu Aug 30 2012 Florent Poinsaut &lt;florent.poinsaut@echoes-tech.com> 0.1.0.alpha-1\n- Initial release"
-                            mandatory="false"/>
           <packInfoListElem name="%post"
-                            value="cd /opt/echoes-alert/probe\ntar xzf glib_echoes-alert-probe_squeeze_amd64.tar.gz\ntar xzf json-glib_echoes-alert-probe_squeeze_amd64.tar.gz\nrm -f  glib_echoes-alert-probe_squeeze_amd64.tar.gz json-glib_echoes-alert-probe_squeeze_amd64.tar.gz"
+                            value="cd /opt/echoes-alert/probe\ntar xzf glib_echoes-alert-probe_squeeze_amd64.tar.gz\ntar xzf json-glib_echoes-alert-probe_squeeze_amd64.tar.gz\nrm -f  glib_echoes-alert-probe_squeeze_amd64.tar.gz json-glib_echoes-alert-probe_squeeze_amd64.tar.gz\nchkconfig --add ea-probe &amp;&amp; chkconfig ea-probe on"
                             mandatory="false"/>
           <packInfoListElem name="%preun"
-                            value="cd /opt/echoes-alert/probe\n if [ -d lib ]\n then\n rm -rf lib\n fi\n if [ -d doc ]\n then\n rm -rf doc\n fi"
+                            value="cd /opt/echoes-alert/probe\n if [ -d lib ]\n then\n rm -rf lib\n fi\n if [ -d doc ]\n then\n rm -rf doc\n fi\nchkconfig ea-probe off"
+                            mandatory="false"/>
+          <packInfoListElem name="%postun"
+                            value="if [ `find /opt/echoes-alert/probe -type f | wc -l` -eq 0 ]\nthen\nrm -rf /opt/echoes-alert/probe\nif [ `find /opt/echoes-alert -type f | wc -l` -eq 0 ]\nthen\nrm -rf /opt/echoes-alert\nfi\nfi"
+                            mandatory="false"/>
+          <packInfoListElem name="%changelog"
+                            value=" * Thu Aug 30 2012 Florent Poinsaut &lt;florent.poinsaut@echoes-tech.com> 0.1.0.alpha-1\n- Initial release"
                             mandatory="false"/>
         </packInfoList>
       </packaging>

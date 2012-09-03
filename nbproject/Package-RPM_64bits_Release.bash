@@ -85,6 +85,14 @@ cd "${TOP}"
 makeDirectory "${NBTMPDIR}//opt/echoes-alert/probe"
 copyFileToTmpDir "packages/lib/amd64/json-glib_echoes-alert-probe_squeeze_amd64.tar.gz" "${NBTMPDIR}/${PACKAGE_TOP_DIR}json-glib_echoes-alert-probe_squeeze_amd64.tar.gz" 0640
 
+cd "${TOP}"
+makeDirectory "${NBTMPDIR}//etc/init.d"
+copyFileToTmpDir "packages/rpm/echoes-alert-probe.init" "${NBTMPDIR}//etc/init.d/ea-probe" 0755
+
+cd "${TOP}"
+makeDirectory "${NBTMPDIR}//etc/sysconfig"
+copyFileToTmpDir "packages/rpm/echoes-alert-probe.sysconfig" "${NBTMPDIR}//etc/sysconfig/ea-probe" 0640
+
 
 # Ensure proper rpm build environment
 RPMMACROS=~/.rpmmacros
@@ -122,18 +130,17 @@ echo Group: Applications/System >> ${SPEC_FILE}
 echo URL: http://alert.echoes-tech.com >> ${SPEC_FILE}
 echo Vendor: ECHOES Technologies SAS >> ${SPEC_FILE}
 echo 'Packager: Florent Poinsaut <florent.poinsaut@echoes-tech.com>' >> ${SPEC_FILE}
+echo Requires: openssl >> ${SPEC_FILE}
+echo AutoReqProv: no >> ${SPEC_FILE}
 echo '%description' >> ${SPEC_FILE}
 echo 'The ECHOES Alert Probe' >> ${SPEC_FILE}
-echo  >> ${SPEC_FILE}
-echo '%changelog' >> ${SPEC_FILE}
-echo ' * Thu Aug 30 2012 Florent Poinsaut <florent.poinsaut@echoes-tech.com> 0.1.0.alpha-1' >> ${SPEC_FILE}
-echo '- Initial release' >> ${SPEC_FILE}
 echo  >> ${SPEC_FILE}
 echo '%post' >> ${SPEC_FILE}
 echo 'cd /opt/echoes-alert/probe' >> ${SPEC_FILE}
 echo 'tar xzf glib_echoes-alert-probe_squeeze_amd64.tar.gz' >> ${SPEC_FILE}
 echo 'tar xzf json-glib_echoes-alert-probe_squeeze_amd64.tar.gz' >> ${SPEC_FILE}
 echo 'rm -f  glib_echoes-alert-probe_squeeze_amd64.tar.gz json-glib_echoes-alert-probe_squeeze_amd64.tar.gz' >> ${SPEC_FILE}
+echo 'chkconfig --add ea-probe && chkconfig ea-probe on' >> ${SPEC_FILE}
 echo  >> ${SPEC_FILE}
 echo '%preun' >> ${SPEC_FILE}
 echo 'cd /opt/echoes-alert/probe' >> ${SPEC_FILE}
@@ -145,6 +152,21 @@ echo ' if [ -d doc ]' >> ${SPEC_FILE}
 echo ' then' >> ${SPEC_FILE}
 echo ' rm -rf doc' >> ${SPEC_FILE}
 echo ' fi' >> ${SPEC_FILE}
+echo 'chkconfig ea-probe off' >> ${SPEC_FILE}
+echo  >> ${SPEC_FILE}
+echo '%postun' >> ${SPEC_FILE}
+echo 'if [ `find /opt/echoes-alert/probe -type f | wc -l` -eq 0 ]' >> ${SPEC_FILE}
+echo 'then' >> ${SPEC_FILE}
+echo 'rm -rf /opt/echoes-alert/probe' >> ${SPEC_FILE}
+echo 'if [ `find /opt/echoes-alert -type f | wc -l` -eq 0 ]' >> ${SPEC_FILE}
+echo 'then' >> ${SPEC_FILE}
+echo 'rm -rf /opt/echoes-alert' >> ${SPEC_FILE}
+echo 'fi' >> ${SPEC_FILE}
+echo 'fi' >> ${SPEC_FILE}
+echo  >> ${SPEC_FILE}
+echo '%changelog' >> ${SPEC_FILE}
+echo ' * Thu Aug 30 2012 Florent Poinsaut <florent.poinsaut@echoes-tech.com> 0.1.0.alpha-1' >> ${SPEC_FILE}
+echo '- Initial release' >> ${SPEC_FILE}
 echo  >> ${SPEC_FILE}
 echo '%files' >> ${SPEC_FILE}
 echo \"/${PACKAGE_TOP_DIR}sbin/ea-probe\" >> ${SPEC_FILE}
@@ -153,13 +175,15 @@ echo \"/${PACKAGE_TOP_DIR}etc/plugins/Helios_Debian6.0-System-Test.json\" >> ${S
 echo \"//var/log/echoes-alert/probe.log\" >> ${SPEC_FILE}
 echo \"/${PACKAGE_TOP_DIR}glib_echoes-alert-probe_squeeze_amd64.tar.gz\" >> ${SPEC_FILE}
 echo \"/${PACKAGE_TOP_DIR}json-glib_echoes-alert-probe_squeeze_amd64.tar.gz\" >> ${SPEC_FILE}
+echo \"//etc/init.d/ea-probe\" >> ${SPEC_FILE}
+echo \"//etc/sysconfig/ea-probe\" >> ${SPEC_FILE}
 echo '%dir' >> ${SPEC_FILE}
 echo \"//var/log/echoes-alert/\" >> ${SPEC_FILE}
 
 # Create RPM Package
 cd "${TOP}"
 LOG_FILE=${NBTMPDIR}/../${OUTPUT_BASENAME}.log
-rpmbuild --buildroot ${TOP}/${NBTMPDIR}  -bb ${SPEC_FILE} > ${LOG_FILE}
+rpmbuild --buildroot ${TOP}/${NBTMPDIR} --target x86_64 -bb ${SPEC_FILE} > ${LOG_FILE}
 makeDirectory "${NBTMPDIR}"
 checkReturnCode
 cat ${LOG_FILE}

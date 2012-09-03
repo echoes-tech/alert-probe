@@ -64,7 +64,7 @@ start() {
         log_failure_msg "$NAME is already running with PID $(cat $PIDFILE)"
         return 0
     fi
-	daemon $NAME -d --pidfile $PIDFILE $PROBE_OPTS
+	daemon --pidfile $PIDFILE $BIN $PROBE_OPTS
 	RETVAL=$?
 	echo
 	[ $RETVAL -eq 0 ] && touch $LOCKFILE
