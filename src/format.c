@@ -24,6 +24,7 @@ int pushSDElementQueue(
                        unsigned int idSearch,
                        unsigned int valueNum,
                        unsigned short lotNum,
+                       unsigned int lineNum,
                        const gchar *b64Value,
                        time_t time
                        )
@@ -53,13 +54,14 @@ int pushSDElementQueue(
 
     sprintf(
             new->afterOffset,
-            "%d-%d-%d-%d-%d-%d=\"%s\"]",
+            "%d-%d-%d-%d-%d-%d-%d=\"%s\"]",
             idPlg,
             idAsset,
             idSrc,
             idSearch,
             valueNum,
             lotNum,
+            lineNum,
             b64Value
         );
     
@@ -110,6 +112,7 @@ int popCollectQueue(CollectQueue *collectQueue, SDElementQueue *sdElementQueue)
                            popedElement->idSearch,
                            popedElement->valueNum,
                            popedElement->lotNum,
+                           popedElement->lineNum,
                            /*TODO: Tester le retour de base64 */
                            g_base64_encode(popedElement->value, strlen(popedElement->value)),
                            popedElement->time

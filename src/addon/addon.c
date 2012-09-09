@@ -20,6 +20,7 @@ int pushCollectQueue(
                      const unsigned int idSearch,
                      const unsigned int valueNum,
                      const unsigned short lotNum,
+                     const unsigned int lineNum, 
                      const char *value,
                      time_t time
                      )
@@ -36,6 +37,7 @@ int pushCollectQueue(
     new->idSearch = idSearch;
     new->valueNum = valueNum;
     new->lotNum = lotNum;
+    new->lineNum = lineNum;
     strcpy(new->value, value);
     new->time = time;
 
@@ -82,6 +84,7 @@ void *addon(void *arg)
             addonParamsInfo->collectQueue = &addonsMgrParams->collectQueue;
             addonParamsInfo->lotNumPtr = &addonsMgrParams->lotNum;
             addonParamsInfo->mutex = &addonsMgrParams->mutex;
+            addonParamsInfo->lineNum = 0;
 
             switch (*addonInfo->idAddon)
             {

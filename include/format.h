@@ -52,6 +52,7 @@ int pushSDElementQueue(
                        unsigned int idSearch,
                        unsigned int valueNum,
                        unsigned short lotNum,
+                       unsigned int lineNum,
                        const gchar *b64Value,
                        time_t time
                        );

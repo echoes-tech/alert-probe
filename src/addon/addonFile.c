@@ -17,6 +17,7 @@ int addonFileRegex(
                    const char *line,
                    void *params,
                    unsigned short lotNum,
+                   unsigned int *lineNum,
                    unsigned int *valueNum,
                    IDList *idList,
                    time_t *now
@@ -53,7 +54,7 @@ int addonFileRegex(
                     /* Tant que l'on n'est pas au bout de la liste */
                     while (idInfo != NULL)
                     {
-                        if (pushCollectQueue(collectQueue, *idInfo->idPlg, *idInfo->idAsset, *idInfo->idSrc, *idInfo->idSearch, *valueNum, lotNum, res, *now))
+                        if (pushCollectQueue(collectQueue, *idInfo->idPlg, *idInfo->idAsset, *idInfo->idSrc, *idInfo->idSearch, *valueNum, lotNum, lineNum, res, *now))
                         {
                             perror("pushCollectQueue()");
                             exit(EXIT_FAILURE);
@@ -121,7 +122,7 @@ int addonFileLocation(
         /* Tant que l'on n'est pas au bout de la liste */
         while (idInfo != NULL)
         {
-            if (pushCollectQueue(collectQueue, *idInfo->idPlg, *idInfo->idAsset, *idInfo->idSrc, *idInfo->idSearch, *valueNum, lotNum, res, *now))
+            if (pushCollectQueue(collectQueue, *idInfo->idPlg, *idInfo->idAsset, *idInfo->idSrc, *idInfo->idSearch, *valueNum, lotNum, *lineNum, res, *now))
             {
                 perror("pushCollectQueue()");
                 exit(EXIT_FAILURE);
@@ -200,6 +201,7 @@ void *addonFile(void *arg)
                                            line,
                                            addonTypeParamsInfo->params,
                                            addonParamsInfo->lotNum,
+                                           n,
                                            &addonTypeParamsInfo->valueNum,
                                            &addonTypeParamsInfo->IDList,
                                            &now

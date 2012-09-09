@@ -26,7 +26,7 @@ typedef struct CollectQueueElement CollectQueueElement;
 struct CollectQueueElement
 {
     unsigned int idPlg, idAsset, idSrc, idSearch, valueNum;
-    unsigned short lotNum;
+    unsigned short lotNum, lineNum;
     char value[1000];
     time_t time;
     CollectQueueElement *next;
@@ -79,7 +79,7 @@ typedef struct AddonParamsInfo AddonParamsInfo;
 struct AddonParamsInfo
 {
     void *params;
-    unsigned int *period, *staticValues;
+    unsigned int *period, *staticValues, *lineNum;
     unsigned short *lotNumPtr, lotNum;
     pthread_mutex_t *mutex;
     CollectQueue *collectQueue;

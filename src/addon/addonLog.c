@@ -17,6 +17,7 @@ int addonLogRegex(
                   const char *line,
                   void *params,
                   unsigned short lotNum,
+                  unsigned int *lineNum,
                   unsigned int *valueNum,
                   IDList *idList,
                   time_t *now
@@ -53,7 +54,7 @@ int addonLogRegex(
                     /* Tant que l'on n'est pas au bout de la liste */
                     while (idInfo != NULL)
                     {
-                        if (pushCollectQueue(collectQueue, *idInfo->idPlg, *idInfo->idAsset, *idInfo->idSrc, *idInfo->idSearch, *valueNum, lotNum, res, *now))
+                        if (pushCollectQueue(collectQueue, *idInfo->idPlg, *idInfo->idAsset, *idInfo->idSrc, *idInfo->idSearch, *valueNum, lotNum, *lineNum, res, *now))
                         {
                             perror("pushCollectQueue()");
                             exit(EXIT_FAILURE);
@@ -75,6 +76,7 @@ int addonLogLocation(
                      const char *line,
                      void *params,
                      unsigned short lotNum,
+                     unsigned int *lineNum,
                      unsigned int *valueNum,
                      IDList *idList,
                      time_t *now
@@ -96,7 +98,7 @@ int addonLogLocation(
     /* Tant que l'on n'est pas au bout de la liste */
     while (idInfo != NULL)
     {
-        if (pushCollectQueue(collectQueue, *idInfo->idPlg, *idInfo->idAsset, *idInfo->idSrc, *idInfo->idSearch, *valueNum, lotNum, res, *now))
+        if (pushCollectQueue(collectQueue, *idInfo->idPlg, *idInfo->idAsset, *idInfo->idSrc, *idInfo->idSearch, *valueNum, lotNum, 0, res, *now))
         {
             perror("pushCollectQueue()");
             exit(EXIT_FAILURE);
@@ -128,6 +130,7 @@ void whileAddonTypeInfo(AddonParamsInfo *addonParamsInfo, const char *line, time
                               line,
                               addonTypeParamsInfo->params,
                               addonParamsInfo->lotNum,
+                              0,
                               &addonTypeParamsInfo->valueNum,
                               &addonTypeParamsInfo->IDList,
                               now
@@ -139,6 +142,7 @@ void whileAddonTypeInfo(AddonParamsInfo *addonParamsInfo, const char *line, time
                                  line,
                                  addonTypeParamsInfo->params,
                                  addonParamsInfo->lotNum,
+                                 0,
                                  &addonTypeParamsInfo->valueNum,
                                  &addonTypeParamsInfo->IDList,
                                  now

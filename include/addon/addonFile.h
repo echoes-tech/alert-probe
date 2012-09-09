@@ -44,6 +44,7 @@ int addonFileRegex(
                    const char *line,
                    void *params,
                    unsigned short lotNum,
+                   unsigned int *lineNum,
                    unsigned int *valueNum,
                    IDList *idList,
                    time_t *now
