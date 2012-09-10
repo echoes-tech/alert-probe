@@ -15,9 +15,9 @@
 int addonLogRegex(
                   CollectQueue *collectQueue,
                   const char *line,
+                  unsigned int lineNum,
                   void *params,
                   unsigned short lotNum,
-                  unsigned int *lineNum,
                   unsigned int *valueNum,
                   IDList *idList,
                   time_t *now
@@ -54,7 +54,7 @@ int addonLogRegex(
                     /* Tant que l'on n'est pas au bout de la liste */
                     while (idInfo != NULL)
                     {
-                        if (pushCollectQueue(collectQueue, *idInfo->idPlg, *idInfo->idAsset, *idInfo->idSrc, *idInfo->idSearch, *valueNum, lotNum, *lineNum, res, *now))
+                        if (pushCollectQueue(collectQueue, *idInfo->idPlg, *idInfo->idAsset, *idInfo->idSrc, *idInfo->idSearch, *valueNum, lotNum, lineNum, res, *now))
                         {
                             perror("pushCollectQueue()");
                             exit(EXIT_FAILURE);
@@ -74,9 +74,9 @@ int addonLogRegex(
 int addonLogLocation(
                      CollectQueue *collectQueue,
                      const char *line,
+                     unsigned int lineNum,
                      void *params,
                      unsigned short lotNum,
-                     unsigned int *lineNum,
                      unsigned int *valueNum,
                      IDList *idList,
                      time_t *now
@@ -98,7 +98,7 @@ int addonLogLocation(
     /* Tant que l'on n'est pas au bout de la liste */
     while (idInfo != NULL)
     {
-        if (pushCollectQueue(collectQueue, *idInfo->idPlg, *idInfo->idAsset, *idInfo->idSrc, *idInfo->idSearch, *valueNum, lotNum, 0, res, *now))
+        if (pushCollectQueue(collectQueue, *idInfo->idPlg, *idInfo->idAsset, *idInfo->idSrc, *idInfo->idSearch, *valueNum, lotNum, lineNum, res, *now))
         {
             perror("pushCollectQueue()");
             exit(EXIT_FAILURE);
@@ -110,7 +110,12 @@ int addonLogLocation(
     return(EXIT_SUCCESS);
 }
 
-void whileAddonTypeInfo(AddonParamsInfo *addonParamsInfo, const char *line, time_t *now)
+void whileAddonTypeInfo(
+                        AddonParamsInfo *addonParamsInfo,
+                        const char *line,
+                        unsigned int lineNum,
+                        time_t *now
+                        )
 {
     AddonTypeInfo *addonTypeInfo = addonParamsInfo->addonTypeList;
 
@@ -128,9 +133,9 @@ void whileAddonTypeInfo(AddonParamsInfo *addonParamsInfo, const char *line, time
                 addonLogRegex(
                               addonParamsInfo->collectQueue,
                               line,
+                              lineNum,
                               addonTypeParamsInfo->params,
                               addonParamsInfo->lotNum,
-                              0,
                               &addonTypeParamsInfo->valueNum,
                               &addonTypeParamsInfo->IDList,
                               now
@@ -140,9 +145,9 @@ void whileAddonTypeInfo(AddonParamsInfo *addonParamsInfo, const char *line, time
                 addonLogLocation(
                                  addonParamsInfo->collectQueue,
                                  line,
+                                 lineNum,
                                  addonTypeParamsInfo->params,
                                  addonParamsInfo->lotNum,
-                                 0,
                                  &addonTypeParamsInfo->valueNum,
                                  &addonTypeParamsInfo->IDList,
                                  now
@@ -214,7 +219,7 @@ void *addonLog(void *arg)
                 /* Reading file line by line */
                 while (fgets(line, MAX_SIZE, file) != NULL)
                 {
-                    whileAddonTypeInfo(addonParamsInfo, line, &now);
+                    whileAddonTypeInfo(addonParamsInfo, line, n, &now);
                     ++n;
                 }
             }
@@ -244,7 +249,7 @@ void *addonLog(void *arg)
                         /* Reading file line by line */
                         while (fgets(line, MAX_SIZE, file) != NULL)
                         {
-                            whileAddonTypeInfo(addonParamsInfo, line, &now);
+                            whileAddonTypeInfo(addonParamsInfo, line, n, &now);
                         }
                     }
                     else if (n < srcInfoParams->nbLine)
@@ -252,7 +257,7 @@ void *addonLog(void *arg)
                         /* Reading file line by line */
                         while (fgets(line, MAX_SIZE, file) != NULL)
                         {
-                            whileAddonTypeInfo(addonParamsInfo, line, &now);
+                            whileAddonTypeInfo(addonParamsInfo, line, n, &now);
                         }
                     }
                 }

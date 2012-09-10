@@ -232,7 +232,6 @@ int pushAddonList(
         addonParamsInfo->staticValues = staticValues;
         addonParamsInfo->lotNumPtr = NULL;
         addonParamsInfo->lotNum = 0;
-        addonParamsInfo->lineNum = 0;
         addonParamsInfo->mutex = NULL;
         addonParamsInfo->collectQueue = NULL;
 

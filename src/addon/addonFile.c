@@ -15,9 +15,9 @@
 int addonFileRegex(
                    CollectQueue *collectQueue,
                    const char *line,
+                   unsigned int lineNum,
                    void *params,
                    unsigned short lotNum,
-                   unsigned int *lineNum,
                    unsigned int *valueNum,
                    IDList *idList,
                    time_t *now
@@ -97,7 +97,7 @@ int addonFileRegex(
 int addonFileLocation(
                       CollectQueue *collectQueue,
                       const char *line,
-                      unsigned int *lineNum,
+                      unsigned int lineNum,
                       void *params,
                       unsigned short lotNum,
                       unsigned int *valueNum,
@@ -110,7 +110,7 @@ int addonFileLocation(
     char res[MAX_SIZE]= "";
     unsigned int i = 0;
 
-    if (*lineNum == searchInfoParams->line)
+    if (lineNum == searchInfoParams->line)
     {
         IDInfo *idInfo;
         for (i = 0; i < searchInfoParams->length; ++i)
@@ -122,7 +122,7 @@ int addonFileLocation(
         /* Tant que l'on n'est pas au bout de la liste */
         while (idInfo != NULL)
         {
-            if (pushCollectQueue(collectQueue, *idInfo->idPlg, *idInfo->idAsset, *idInfo->idSrc, *idInfo->idSearch, *valueNum, lotNum, *lineNum, res, *now))
+            if (pushCollectQueue(collectQueue, *idInfo->idPlg, *idInfo->idAsset, *idInfo->idSrc, *idInfo->idSearch, *valueNum, lotNum, lineNum, res, *now))
             {
                 perror("pushCollectQueue()");
                 exit(EXIT_FAILURE);
@@ -199,9 +199,9 @@ void *addonFile(void *arg)
                             addonFileRegex(
                                            addonParamsInfo->collectQueue,
                                            line,
+                                           n,
                                            addonTypeParamsInfo->params,
                                            addonParamsInfo->lotNum,
-                                           n,
                                            &addonTypeParamsInfo->valueNum,
                                            &addonTypeParamsInfo->IDList,
                                            &now
@@ -211,7 +211,7 @@ void *addonFile(void *arg)
                             addonFileLocation(
                                               addonParamsInfo->collectQueue,
                                               line,
-                                              &n,
+                                              n,
                                               addonTypeParamsInfo->params,
                                               addonParamsInfo->lotNum,
                                               &addonTypeParamsInfo->valueNum,

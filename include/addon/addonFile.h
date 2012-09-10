@@ -27,7 +27,7 @@ extern "C" {
 int addonFileLocation(
                       CollectQueue *collectQueue,
                       const char *line,
-                      unsigned int *lineNum,
+                      unsigned int lineNum,
                       void *params,
                       unsigned short lotNum,
                       unsigned int *valueNum,
@@ -42,9 +42,9 @@ int addonFileLocation(
 int addonFileRegex(
                    CollectQueue *collectQueue,
                    const char *line,
+                   unsigned int lineNum,
                    void *params,
                    unsigned short lotNum,
-                   unsigned int *lineNum,
                    unsigned int *valueNum,
                    IDList *idList,
                    time_t *now

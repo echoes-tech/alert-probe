@@ -22,9 +22,9 @@ extern "C" {
 int addonLogRegex(
                   CollectQueue *collectQueue,
                   const char *line,
+                  unsigned int lineNum,
                   void *params,
                   unsigned short lotNum,
-                  unsigned int *lineNum,
                   unsigned int *valueNum,
                   IDList *idList,
                   time_t *now
@@ -37,16 +37,21 @@ int addonLogRegex(
 int addonLogLocation(
                      CollectQueue *collectQueue,
                      const char *line,
+                     unsigned int lineNum,
                      void *params,
                      unsigned short lotNum,
-                     unsigned int *lineNum,
                      unsigned int *valueNum,
                      IDList *idList,
                      time_t *now
                      );
 
 
-void whileAddonTypeInfo(AddonParamsInfo *addonParamsInfo, const char *line, time_t *now);
+void whileAddonTypeInfo(
+                        AddonParamsInfo *addonParamsInfo,
+                        const char *line,
+                        unsigned int lineNum,
+                        time_t *now
+                        );
 
 /**
  * Thread - Addon Log.

@@ -25,8 +25,8 @@ extern "C" {
 typedef struct CollectQueueElement CollectQueueElement;
 struct CollectQueueElement
 {
-    unsigned int idPlg, idAsset, idSrc, idSearch, valueNum;
-    unsigned short lotNum, lineNum;
+    unsigned int idPlg, idAsset, idSrc, idSearch, lineNum, valueNum;
+    unsigned short lotNum;
     char value[1000];
     time_t time;
     CollectQueueElement *next;
@@ -79,7 +79,7 @@ typedef struct AddonParamsInfo AddonParamsInfo;
 struct AddonParamsInfo
 {
     void *params;
-    unsigned int *period, *staticValues, *lineNum;
+    unsigned int *period, *staticValues;
     unsigned short *lotNumPtr, lotNum;
     pthread_mutex_t *mutex;
     CollectQueue *collectQueue;
