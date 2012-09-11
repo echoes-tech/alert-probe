@@ -41,8 +41,8 @@
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="plugins" displayName="Plugins" projectFiles="true">
-      <itemPath>plugins/Helios_Debian6.0-Syslog-Test.json</itemPath>
-      <itemPath>plugins/Helios_Debian6.0-System-Test.json</itemPath>
+      <itemPath>plugins/Linux-Syslog.json</itemPath>
+      <itemPath>plugins/Linux-System.json</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -191,7 +191,7 @@
       </compileType>
       <packaging>
         <packType>Debian</packType>
-        <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/echoes-alert-probe_0.1.0-alpha-1_i386.deb</output>
+        <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/echoes-alert-probe_0.1.0.alpha-1_i386.deb</output>
         <packTopDir>/opt/echoes-alert/probe</packTopDir>
         <packFileList>
           <packFileListElem type="File"
@@ -207,8 +207,8 @@
                             owner="root"
                             group="root"/>
           <packFileListElem type="File"
-                            to="${PACKAGE_TOP_DIR}etc/plugins/Helios_Debian6.0-System-Test.json"
-                            from="plugins/Helios_Debian6.0-System-Test.json"
+                            to="${PACKAGE_TOP_DIR}etc/plugins/Linux-System.json"
+                            from="plugins/Linux-System.json"
                             perm="640"
                             owner="root"
                             group="root"/>
@@ -293,7 +293,7 @@
         </packFileList>
         <packInfoList>
           <packInfoListElem name="Source" value="echoes-alert-probe" mandatory="false"/>
-          <packInfoListElem name="Version" value="0.1.0-alpha-1" mandatory="true"/>
+          <packInfoListElem name="Version" value="0.1.0.alpha-1" mandatory="true"/>
           <packInfoListElem name="Section" value="non-free/admin" mandatory="false"/>
           <packInfoListElem name="Priority" value="optional" mandatory="false"/>
           <packInfoListElem name="Maintainer"
@@ -349,7 +349,7 @@
       </compileType>
       <packaging>
         <packType>Debian</packType>
-        <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/echoes-alert-probe_0.1.0-alpha-1_amd64.deb</output>
+        <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/echoes-alert-probe_0.1.0.alpha-1_amd64.deb</output>
         <packTopDir>/opt/echoes-alert/probe</packTopDir>
         <packFileList>
           <packFileListElem type="File"
@@ -365,8 +365,8 @@
                             owner="root"
                             group="root"/>
           <packFileListElem type="File"
-                            to="${PACKAGE_TOP_DIR}etc/plugins/Helios_Debian6.0-System-Test.json"
-                            from="plugins/Helios_Debian6.0-System-Test.json"
+                            to="${PACKAGE_TOP_DIR}etc/plugins/Linux-System.json"
+                            from="plugins/Linux-System.json"
                             perm="640"
                             owner="root"
                             group="root"/>
@@ -451,7 +451,7 @@
         </packFileList>
         <packInfoList>
           <packInfoListElem name="Source" value="echoes-alert-probe" mandatory="false"/>
-          <packInfoListElem name="Version" value="0.1.0-alpha-1" mandatory="true"/>
+          <packInfoListElem name="Version" value="0.1.0.alpha-1" mandatory="true"/>
           <packInfoListElem name="Section" value="non-free/admin" mandatory="false"/>
           <packInfoListElem name="Priority" value="optional" mandatory="false"/>
           <packInfoListElem name="Maintainer"
@@ -507,7 +507,7 @@
       </compileType>
       <packaging>
         <packType>Debian</packType>
-        <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/echoes-alert-probe_0.1.0-alpha-1_squeeze_i386.deb</output>
+        <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/echoes-alert-probe_0.1.0.alpha-1_squeeze_i386.deb</output>
         <packTopDir>/opt/echoes-alert/probe</packTopDir>
         <packFileList>
           <packFileListElem type="File"
@@ -523,8 +523,8 @@
                             owner="root"
                             group="root"/>
           <packFileListElem type="File"
-                            to="${PACKAGE_TOP_DIR}etc/plugins/Helios_Debian6.0-System-Test.json"
-                            from="plugins/Helios_Debian6.0-System-Test.json"
+                            to="${PACKAGE_TOP_DIR}etc/plugins/Linux-System.json"
+                            from="plugins/Linux-System.json"
                             perm="640"
                             owner="root"
                             group="root"/>
@@ -609,7 +609,7 @@
         </packFileList>
         <packInfoList>
           <packInfoListElem name="Source" value="echoes-alert-probe" mandatory="false"/>
-          <packInfoListElem name="Version" value="0.1.0-alpha-1" mandatory="true"/>
+          <packInfoListElem name="Version" value="0.1.0.alpha-1" mandatory="true"/>
           <packInfoListElem name="Section" value="non-free/admin" mandatory="false"/>
           <packInfoListElem name="Priority" value="optional" mandatory="false"/>
           <packInfoListElem name="Maintainer"
@@ -665,7 +665,7 @@
       </compileType>
       <packaging>
         <packType>Debian</packType>
-        <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/echoes-alert-probe_0.1.0-alpha-1_squeeze_amd64.deb</output>
+        <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/echoes-alert-probe_0.1.0.alpha-1_squeeze_amd64.deb</output>
         <packTopDir>/opt/echoes-alert/probe</packTopDir>
         <packFileList>
           <packFileListElem type="File"
@@ -682,7 +682,7 @@
                             group="root"/>
           <packFileListElem type="File"
                             to="${PACKAGE_TOP_DIR}etc/plugins/Helios_Debian6.0-System-Test.json"
-                            from="plugins/Helios_Debian6.0-System-Test.json"
+                            from="plugins/Linux-System.json"
                             perm="640"
                             owner="root"
                             group="root"/>
@@ -767,7 +767,7 @@
         </packFileList>
         <packInfoList>
           <packInfoListElem name="Source" value="echoes-alert-probe" mandatory="false"/>
-          <packInfoListElem name="Version" value="0.1.0-alpha-1" mandatory="true"/>
+          <packInfoListElem name="Version" value="0.1.0.alpha-1" mandatory="true"/>
           <packInfoListElem name="Section" value="non-free/admin" mandatory="false"/>
           <packInfoListElem name="Priority" value="optional" mandatory="false"/>
           <packInfoListElem name="Maintainer"
@@ -839,8 +839,8 @@
                             owner="root"
                             group="root"/>
           <packFileListElem type="File"
-                            to="${PACKAGE_TOP_DIR}etc/plugins/Helios_Debian6.0-System-Test.json"
-                            from="plugins/Helios_Debian6.0-System-Test.json"
+                            to="${PACKAGE_TOP_DIR}etc/plugins/Linux-System.json"
+                            from="plugins/Linux-System.json"
                             perm="640"
                             owner="root"
                             group="root"/>
@@ -924,10 +924,10 @@
                             mandatory="true"/>
           <packInfoListElem name="%pre" value="" mandatory="false"/>
           <packInfoListElem name="%post"
-                            value="cd /opt/echoes-alert/probe\ntar xzf glib_echoes-alert-probe_squeeze_i386.tar.gz\ntar xzf json-glib_echoes-alert-probe_squeeze_i386.tar.gz\nrm -f  glib_echoes-alert-probe_squeeze_i386.tar.gz json-glib_echoes-alert-probe_squeeze_i386.tar.gz\nchkconfig --add ea-probe &amp;&amp; chkconfig ea-probe on"
+                            value="cd /opt/echoes-alert/probe\ntar xzf glib_echoes-alert-probe_squeeze_i386.tar.gz\ntar xzf json-glib_echoes-alert-probe_squeeze_i386.tar.gz\nrm -f  glib_echoes-alert-probe_squeeze_i386.tar.gz json-glib_echoes-alert-probe_squeeze_i386.tar.gz\nchkconfig --add ea-probe &amp;&amp; chkconfig ea-probe on\nservice ea-probe start"
                             mandatory="false"/>
           <packInfoListElem name="%preun"
-                            value="cd /opt/echoes-alert/probe\n if [ -d lib ]\n then\n rm -rf lib\n fi\n if [ -d doc ]\n then\n rm -rf doc\n fi\nchkconfig ea-probe off"
+                            value="service ea-probe stop\ncd /opt/echoes-alert/probe\n if [ -d lib ]\n then\n rm -rf lib\n fi\n if [ -d doc ]\n then\n rm -rf doc\n fi\nchkconfig ea-probe off"
                             mandatory="false"/>
           <packInfoListElem name="%postun"
                             value="if [ `find /opt/echoes-alert/probe -type f | wc -l` -eq 0 ]\nthen\nrm -rf /opt/echoes-alert/probe\nif [ `find /opt/echoes-alert -type f | wc -l` -eq 0 ]\nthen\nrm -rf /opt/echoes-alert\nfi\nfi"
@@ -989,8 +989,8 @@
                             owner="root"
                             group="root"/>
           <packFileListElem type="File"
-                            to="${PACKAGE_TOP_DIR}etc/plugins/Helios_Debian6.0-System-Test.json"
-                            from="plugins/Helios_Debian6.0-System-Test.json"
+                            to="${PACKAGE_TOP_DIR}etc/plugins/Linux-System.json"
+                            from="plugins/Linux-System.json"
                             perm="640"
                             owner="root"
                             group="root"/>
@@ -1073,10 +1073,10 @@
                             value="The ECHOES Alert Probe"
                             mandatory="true"/>
           <packInfoListElem name="%post"
-                            value="cd /opt/echoes-alert/probe\ntar xzf glib_echoes-alert-probe_squeeze_amd64.tar.gz\ntar xzf json-glib_echoes-alert-probe_squeeze_amd64.tar.gz\nrm -f  glib_echoes-alert-probe_squeeze_amd64.tar.gz json-glib_echoes-alert-probe_squeeze_amd64.tar.gz\nchkconfig --add ea-probe &amp;&amp; chkconfig ea-probe on"
+                            value="cd /opt/echoes-alert/probe\ntar xzf glib_echoes-alert-probe_squeeze_amd64.tar.gz\ntar xzf json-glib_echoes-alert-probe_squeeze_amd64.tar.gz\nrm -f  glib_echoes-alert-probe_squeeze_amd64.tar.gz json-glib_echoes-alert-probe_squeeze_amd64.tar.gz\nchkconfig --add ea-probe &amp;&amp; chkconfig ea-probe on\nservice ea-probe start"
                             mandatory="false"/>
           <packInfoListElem name="%preun"
-                            value="cd /opt/echoes-alert/probe\n if [ -d lib ]\n then\n rm -rf lib\n fi\n if [ -d doc ]\n then\n rm -rf doc\n fi\nchkconfig ea-probe off"
+                            value="service ea-probe stop\ncd /opt/echoes-alert/probe\n if [ -d lib ]\n then\n rm -rf lib\n fi\n if [ -d doc ]\n then\n rm -rf doc\n fi\nchkconfig ea-probe off"
                             mandatory="false"/>
           <packInfoListElem name="%postun"
                             value="if [ `find /opt/echoes-alert/probe -type f | wc -l` -eq 0 ]\nthen\nrm -rf /opt/echoes-alert/probe\nif [ `find /opt/echoes-alert -type f | wc -l` -eq 0 ]\nthen\nrm -rf /opt/echoes-alert\nfi\nfi"

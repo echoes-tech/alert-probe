@@ -32,7 +32,7 @@
 #define MAX_SIZE 300
 
 /* Default period (second) */
-#define DEFAULT 10
+#define DEFAULT 60
 
 /* Search Informations Parameters for Addon 3 Type 1 */
 typedef struct SearchInfoParams2_1 SearchInfoParams3_1;

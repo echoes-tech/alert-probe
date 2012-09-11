@@ -17,6 +17,8 @@ set -e
 
 case "$1" in
     remove)
+        service ea-probe stop
+
         update-rc.d -f ea-probe remove
 
         cd /opt/echoes-alert/probe

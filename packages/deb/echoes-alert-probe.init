@@ -39,6 +39,7 @@ SCRIPTNAME=/etc/init.d/$NAME
 
 # Load the VERBOSE setting and other rcS variables
 . /lib/init/vars.sh
+VERBOSE=yes
 
 # Define LSB log_* functions.
 . /lib/lsb/init-functions

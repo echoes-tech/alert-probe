@@ -18,9 +18,6 @@ set -e
 
 case "$1" in
     configure)
-
-        update-rc.d -f ea-probe defaults
-
         JSON_GLIB_VERSION=$(dpkg-query -W -f='${Version}\n' libjson-glib-1.0* | head -n 1)
         GLIB_VERSION=$(dpkg-query -W -f='${Version}\n' libglib2.0* | head -n 1)
         ARCH=$(dpkg --print-architecture)
@@ -83,6 +80,10 @@ case "$1" in
         then
             find doc -type d -exec chmod 755 {} \;
         fi
+
+        update-rc.d -f ea-probe defaults
+
+        service ea-probe start
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

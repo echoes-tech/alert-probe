@@ -68,7 +68,7 @@ copyFileToTmpDir "conf/probe.conf" "${NBTMPDIR}/${PACKAGE_TOP_DIR}etc/probe.conf
 
 cd "${TOP}"
 makeDirectory "${NBTMPDIR}//opt/echoes-alert/probe/etc/plugins"
-copyFileToTmpDir "plugins/Helios_Debian6.0-System-Test.json" "${NBTMPDIR}/${PACKAGE_TOP_DIR}etc/plugins/Helios_Debian6.0-System-Test.json" 0640
+copyFileToTmpDir "plugins/Linux-System.json" "${NBTMPDIR}/${PACKAGE_TOP_DIR}etc/plugins/Linux-System.json" 0640
 
 cd "${TOP}"
 makeDirectory  "${NBTMPDIR}//var/log/echoes-alert/" 0750
@@ -153,8 +153,10 @@ echo 'tar xzf glib_echoes-alert-probe_squeeze_amd64.tar.gz' >> ${SPEC_FILE}
 echo 'tar xzf json-glib_echoes-alert-probe_squeeze_amd64.tar.gz' >> ${SPEC_FILE}
 echo 'rm -f  glib_echoes-alert-probe_squeeze_amd64.tar.gz json-glib_echoes-alert-probe_squeeze_amd64.tar.gz' >> ${SPEC_FILE}
 echo 'chkconfig --add ea-probe && chkconfig ea-probe on' >> ${SPEC_FILE}
+echo 'service ea-probe start' >> ${SPEC_FILE}
 echo  >> ${SPEC_FILE}
 echo '%preun' >> ${SPEC_FILE}
+echo 'service ea-probe stop' >> ${SPEC_FILE}
 echo 'cd /opt/echoes-alert/probe' >> ${SPEC_FILE}
 echo ' if [ -d lib ]' >> ${SPEC_FILE}
 echo ' then' >> ${SPEC_FILE}
@@ -183,7 +185,7 @@ echo  >> ${SPEC_FILE}
 echo '%files' >> ${SPEC_FILE}
 echo \"/${PACKAGE_TOP_DIR}sbin/ea-probe\" >> ${SPEC_FILE}
 echo \"/${PACKAGE_TOP_DIR}etc/probe.conf\" >> ${SPEC_FILE}
-echo \"/${PACKAGE_TOP_DIR}etc/plugins/Helios_Debian6.0-System-Test.json\" >> ${SPEC_FILE}
+echo \"/${PACKAGE_TOP_DIR}etc/plugins/Linux-System.json\" >> ${SPEC_FILE}
 echo \"//var/log/echoes-alert/probe.log\" >> ${SPEC_FILE}
 echo \"/${PACKAGE_TOP_DIR}glib_echoes-alert-probe_squeeze_amd64.tar.gz\" >> ${SPEC_FILE}
 echo \"/${PACKAGE_TOP_DIR}json-glib_echoes-alert-probe_squeeze_amd64.tar.gz\" >> ${SPEC_FILE}

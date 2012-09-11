@@ -68,7 +68,7 @@ copyFileToTmpDir "conf/probe.conf" "${NBTMPDIR}/${PACKAGE_TOP_DIR}etc/probe.conf
 
 cd "${TOP}"
 makeDirectory "${NBTMPDIR}//opt/echoes-alert/probe/etc/plugins"
-copyFileToTmpDir "plugins/Helios_Debian6.0-System-Test.json" "${NBTMPDIR}/${PACKAGE_TOP_DIR}etc/plugins/Helios_Debian6.0-System-Test.json" 0640
+copyFileToTmpDir "plugins/Linux-System.json" "${NBTMPDIR}/${PACKAGE_TOP_DIR}etc/plugins/Linux-System.json" 0640
 
 cd "${TOP}"
 makeDirectory "${NBTMPDIR}/DEBIAN"
@@ -130,7 +130,7 @@ mkdir -p ${NBTMPDIR}/DEBIAN
 
 cd "${TOP}"
 echo 'Source: echoes-alert-probe' >> ${CONTROL_FILE}
-echo 'Version: 0.1.0-alpha-1' >> ${CONTROL_FILE}
+echo 'Version: 0.1.0.alpha-1' >> ${CONTROL_FILE}
 echo 'Section: non-free/admin' >> ${CONTROL_FILE}
 echo 'Priority: optional' >> ${CONTROL_FILE}
 echo 'Maintainer: Florent Poinsaut <florent.poinsaut@echoes-tech.com>' >> ${CONTROL_FILE}
@@ -147,9 +147,9 @@ dpkg-deb  --build ${TMPDIRNAME}
 checkReturnCode
 cd "${TOP}"
 mkdir -p  ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package
-mv ${NBTMPDIR}.deb ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/echoes-alert-probe_0.1.0-alpha-1_amd64.deb
+mv ${NBTMPDIR}.deb ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/echoes-alert-probe_0.1.0.alpha-1_amd64.deb
 checkReturnCode
-echo Debian: ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/echoes-alert-probe_0.1.0-alpha-1_amd64.deb
+echo Debian: ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/echoes-alert-probe_0.1.0.alpha-1_amd64.deb
 
 # Cleanup
 cd "${TOP}"

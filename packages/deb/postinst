@@ -18,11 +18,12 @@ set -e
 
 case "$1" in
     configure)
+        chown -R root:root /opt/echoes-alert/probe /etc/init.d/ea-probe
+        chown -R root:adm /var/log/echoes-alert
 
         update-rc.d -f ea-probe defaults
 
-        chown -R root:root . /etc/init.d/ea-probe
-        chown -R root:adm /var/log/echoes-alert
+        service ea-probe start
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
