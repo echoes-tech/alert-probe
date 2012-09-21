@@ -47,20 +47,20 @@ int addonFileRegex(
                 res = malloc(sizeof (*res) * (size  + 1));
                 if (res)
                 {
-                    IDInfo *idInfo;
                     strncpy(res, &line[start], size);
                     res[size] = '\0';
-                    idInfo = *idList;
-                    /* Tant que l'on n'est pas au bout de la liste */
-                    while (idInfo != NULL)
+                    if (pushCollectQueue(
+                                         collectQueue,
+                                         idList,
+                                         *valueNum,
+                                         lotNum,
+                                         lineNum,
+                                         res,
+                                         *now
+                                         ))
                     {
-                        if (pushCollectQueue(collectQueue, *idInfo->idPlg, *idInfo->idAsset, *idInfo->idSrc, *idInfo->idSearch, *valueNum, lotNum, lineNum, res, *now))
-                        {
-                            perror("pushCollectQueue()");
-                            exit(EXIT_FAILURE);
-                        }
-                        /* On avance d'une case */
-                        idInfo = idInfo->nxt;
+                        perror("pushCollectQueue()");
+                        exit(EXIT_FAILURE);
                     }
                     free(res);
                 }
@@ -112,23 +112,23 @@ int addonFileLocation(
 
     if (lineNum == searchInfoParams->line)
     {
-        IDInfo *idInfo;
         for (i = 0; i < searchInfoParams->length; ++i)
         {
             res[i] = line[searchInfoParams->firstChar + i - 1];
         }
 
-        idInfo = *idList;
-        /* Tant que l'on n'est pas au bout de la liste */
-        while (idInfo != NULL)
+        if (pushCollectQueue(
+                             collectQueue,
+                             idList,
+                             *valueNum,
+                             lotNum,
+                             lineNum,
+                             res,
+                             *now
+                             ))
         {
-            if (pushCollectQueue(collectQueue, *idInfo->idPlg, *idInfo->idAsset, *idInfo->idSrc, *idInfo->idSearch, *valueNum, lotNum, lineNum, res, *now))
-            {
-                perror("pushCollectQueue()");
-                exit(EXIT_FAILURE);
-            }
-            /* On avance d'une case */
-            idInfo = idInfo->nxt;
+            perror("pushCollectQueue()");
+            exit(EXIT_FAILURE);
         }
     }
 

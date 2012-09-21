@@ -39,6 +39,7 @@
         <itemPath>packages/rpm/echoes-alert-probe.init</itemPath>
         <itemPath>packages/rpm/echoes-alert-probe.sysconfig</itemPath>
       </logicalFolder>
+      <itemPath>packages/install.sh</itemPath>
     </logicalFolder>
     <logicalFolder name="plugins" displayName="Plugins" projectFiles="true">
       <itemPath>plugins/Linux-Syslog.json</itemPath>
@@ -70,6 +71,18 @@
                    displayName="Test Files"
                    projectFiles="false"
                    kind="TEST_LOGICAL_FOLDER">
+      <logicalFolder name="f2"
+                     displayName="Addon Test"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/addon.c</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f1"
+                     displayName="Plugin Test"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/plugin.c</itemPath>
+      </logicalFolder>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -109,6 +122,36 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
+      <folder path="TestFiles/f1">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f1</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f2">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f2</output>
+        </linkerTool>
+      </folder>
     </conf>
     <conf name="Release" type="1">
       <toolsSet>

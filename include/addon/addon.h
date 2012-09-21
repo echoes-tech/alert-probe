@@ -49,6 +49,27 @@ struct AddonsMgrParams
 #define ADDON_PARAMS_INITIALIZER {NULL, NULL, 0, PTHREAD_MUTEX_INITIALIZER, COLLECT_QUEUE_INITIALIZER}
 
 /**
+ * Push a new element to CollectQueue
+ * @param collectQueue 
+ * @param idList
+ * @param valueNum
+ * @param lotNum
+ * @param lineNum
+ * @param value
+ * @param time
+ * @return Exit status
+ */
+int pushCollectQueue(
+                     CollectQueue *collectQueue,
+                     IDList *idList,
+                     const unsigned int valueNum,
+                     const unsigned short lotNum,
+                     const unsigned int lineNum, 
+                     const char *value,
+                     time_t time
+                     );
+
+/**
  * Thread - Main function of Addons Manager.
  * @param arg (void*)AddonsMgrParams*
  */

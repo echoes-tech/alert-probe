@@ -4,7 +4,8 @@
  * @date 19/02/2012
  * 
  * THIS PROGRAM IS CONFIDENTIAL AND PROPRIETARY TO ECHOES TECHNOLOGIES SAS
- * AND MAY NOT BE REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS WITHOUT COMPANY AUTHORIZATION.
+ * AND MAY NOT BE REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS WITHOUT
+ * COMPANY AUTHORIZATION.
  * 
  * COPYRIGHT 2012 BY ECHOES TECHNOLGIES SAS
  * 
@@ -31,7 +32,7 @@
 #define PRODUCT_NAME "ECHOES Alert - Probe"
 #define APP_NAME "ea-probe"
 /* Probe Version */
-#define VERSION "0.1.0-alpha"
+#define VERSION "0.1.0.alpha"
 /* Conf Repository */
 #ifdef NDEBUG
     #define CONF_DIR "/opt/echoes-alert/probe/etc/probe.conf"
@@ -54,7 +55,12 @@ int main(int argc, char** argv)
      
     /* Log Params initialisation */
     /*TODO: Add logFile in conf param */
-    LogParams logParams = {g_get_host_name(), APP_NAME, getpid(), "/var/log/echoes-alert/probe.log"};
+    LogParams logParams = {
+        g_get_host_name(),
+        APP_NAME,
+        getpid(),
+        "/var/log/echoes-alert/probe.log"
+    };
    
     /* Plugins List initialisation */
     PlgList plgList = NULL;

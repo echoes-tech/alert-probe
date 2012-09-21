@@ -4,7 +4,8 @@
  * @date 27/08/2012
  * 
  * THIS PROGRAM IS CONFIDENTIAL AND PROPRIETARY TO ECHOES TECHNOLOGIES SAS
- * AND MAY NOT BE REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS WITHOUT COMPANY AUTHORIZATION.
+ * AND MAY NOT BE REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS WITHOUT
+ * COMPANY AUTHORIZATION.
  * 
  * COPYRIGHT 2012 BY ECHOES TECHNOLGIES SAS
  * 
@@ -48,7 +49,11 @@ void log2File(
         log2Console(
                     log_domain,
                     log_level,
-                    g_strdup_printf("%s: %s", strerror(errno), logParams->logFilePath),
+                    g_strdup_printf(
+                                    "%s: %s",
+                                    strerror(errno),
+                                    logParams->logFilePath
+                                    ),
                     user_data
                     );
         /*  Fall  back  to  console  output  if  unable  to  open  file  */

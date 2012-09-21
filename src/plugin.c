@@ -12,15 +12,15 @@
 
 #include "plugin.h"
 
-int verifExt(const char *s)
+gboolean verifExt(const char *s)
 {
     int i = strlen(s);
 
     if ((s[i - 5] == '.') && (s[i - 4] == 'j') && (s[i - 3] == 's') && (s[i - 2] == 'o') && (s[i - 1] == 'n'))
     {
-        return EXIT_SUCCESS;
+        return TRUE;
     }
-    return EXIT_FAILURE;
+    return FALSE;
 }
 
 int addBackslash(char *string)
@@ -103,7 +103,7 @@ int listPlugins(
     /* Reading filename file by file */
     while ((read = readdir(dir)))
     {
-        if (!verifExt(read->d_name))
+        if (verifExt(read->d_name))
         {
             char plgPath[255] = "";
             /*TODO: define max line by plugin */

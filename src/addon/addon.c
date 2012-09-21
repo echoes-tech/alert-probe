@@ -4,7 +4,8 @@
  * @date 13/03/2012
  * 
  * THIS PROGRAM IS CONFIDENTIAL AND PROPRIETARY TO ECHOES TECHNOLOGIES SAS
- * AND MAY NOT BE REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS WITHOUT COMPANY AUTHORIZATION.
+ * AND MAY NOT BE REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS WITHOUT
+ * COMPANY AUTHORIZATION.
  * 
  * COPYRIGHT 2012 BY ECHOES TECHNOLGIES SAS
  * 
@@ -14,10 +15,7 @@
 
 int pushCollectQueue(
                      CollectQueue *collectQueue,
-                     const unsigned int idPlg,
-                     const unsigned int idAsset,
-                     const unsigned int idSrc,
-                     const unsigned int idSearch,
+                     IDList *idList,
                      const unsigned int valueNum,
                      const unsigned short lotNum,
                      const unsigned int lineNum, 
@@ -25,43 +23,52 @@ int pushCollectQueue(
                      time_t time
                      )
 {
-    CollectQueueElement *new = calloc(1, sizeof(CollectQueueElement));
-    if (collectQueue == NULL || new == NULL)
-    {
-        exit(EXIT_FAILURE);
-    }
+    IDInfo *idInfo;
 
-    new->idPlg = idPlg;
-    new->idAsset = idAsset;
-    new->idSrc = idSrc;
-    new->idSearch = idSearch;
-    new->valueNum = valueNum;
-    new->lotNum = lotNum;
-    new->lineNum = lineNum;
-    strcpy(new->value, value);
-    new->time = time;
-
-    /* Debut de la zone protegee. */
-    pthread_mutex_lock (& collectQueue->mutex);
-    
-    if (collectQueue->first != NULL) /* La file n'est pas vide */
+    idInfo = *idList;
+    /* Tant que l'on n'est pas au bout de la liste */
+    while (idInfo != NULL)
     {
-        /* On se positionne à la fin de la file */
-        CollectQueueElement *lastElement = collectQueue->first;
-        while (lastElement->next != NULL)
+        CollectQueueElement *new = calloc(1, sizeof(CollectQueueElement));
+        if (collectQueue == NULL || new == NULL)
         {
-            lastElement = lastElement->next;
+            exit(EXIT_FAILURE);
         }
-        lastElement->next = new;
-    }
-    else /* La file est vide, notre élément est le premier */
-    {
-        collectQueue->first = new;
-    }
-    
-    /* Fin de la zone protegee. */
-    pthread_mutex_unlock (& collectQueue->mutex);
 
+        new->idPlg = *idInfo->idPlg;
+        new->idAsset = *idInfo->idAsset;
+        new->idSrc = *idInfo->idSrc;
+        new->idSearch = *idInfo->idSearch;
+        new->valueNum = valueNum;
+        new->lotNum = lotNum;
+        new->lineNum = lineNum;
+        strcpy(new->value, value);
+        new->time = time;
+
+        /* Debut de la zone protegee. */
+        pthread_mutex_lock (& collectQueue->mutex);
+
+        if (collectQueue->first != NULL) /* La file n'est pas vide */
+        {
+            /* On se positionne à la fin de la file */
+            CollectQueueElement *lastElement = collectQueue->first;
+            while (lastElement->next != NULL)
+            {
+                lastElement = lastElement->next;
+            }
+            lastElement->next = new;
+        }
+        else /* La file est vide, notre élément est le premier */
+        {
+            collectQueue->first = new;
+        }
+
+        /* Fin de la zone protegee. */
+        pthread_mutex_unlock(& collectQueue->mutex);
+
+        /* On avance d'une case */
+        idInfo = idInfo->nxt;
+    }
     return (EXIT_SUCCESS);
 }
 
