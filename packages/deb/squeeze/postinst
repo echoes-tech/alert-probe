@@ -37,7 +37,7 @@ case "$1" in
                     tar xvzf json-glib_echoes-alert-probe_squeeze_i386.tar.gz
                     rm -f json-glib_echoes-alert-probe_squeeze_i386.tar.gz
                     ;;
-                x86_64)
+                amd64)
                     wget --no-check-certificate https://forge.echoes-tech.com/attachments/download/1/json-glib_echoes-alert-probe_squeeze_amd64.tar.gz
                     tar xvzf json-glib_echoes-alert-probe_squeeze_amd64.tar.gz
                     rm -f json-glib_echoes-alert-probe_squeeze_amd64.tar.gz
@@ -59,7 +59,7 @@ case "$1" in
                         tar xvzf glib_echoes-alert-probe_squeeze_i386.tar.gz
                         rm -f glib_echoes-alert-probe_squeeze_i386.tar.gz
                         ;;
-                    x86_64)
+                    amd64)
                         wget --no-check-certificate https://forge.echoes-tech.com/attachments/download/2/glib_echoes-alert-probe_squeeze_amd64.tar.gz
                         tar xvzf glib_echoes-alert-probe_squeeze_amd64.tar.gz
                         rm -f glib_echoes-alert-probe_squeeze_amd64.tar.gz

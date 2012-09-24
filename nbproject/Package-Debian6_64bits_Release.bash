@@ -68,7 +68,7 @@ copyFileToTmpDir "conf/probe.conf" "${NBTMPDIR}/${PACKAGE_TOP_DIR}etc/probe.conf
 
 cd "${TOP}"
 makeDirectory "${NBTMPDIR}//opt/echoes-alert/probe/etc/plugins"
-copyFileToTmpDir "plugins/Linux-System.json" "${NBTMPDIR}/${PACKAGE_TOP_DIR}etc/plugins/Helios_Debian6.0-System-Test.json" 0640
+copyFileToTmpDir "plugins/Linux-System.json" "${NBTMPDIR}/${PACKAGE_TOP_DIR}etc/plugins/Linux-System.json" 0640
 
 cd "${TOP}"
 makeDirectory "${NBTMPDIR}/DEBIAN"
