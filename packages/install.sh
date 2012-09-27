@@ -88,12 +88,18 @@ get() {
             echo "$ERR_INSTALL_MSG: can't find HTTP command line client (wget or curl)."
             exit 1
         fi
-	HTTP_CODE=$(head -n 1 "$2_header" | sed -e 's/HTTP\/.* \(.*\) .*/\1/' -e 's/ //g')
-	if [ $HTTP_CODE != 200 -a $HTTP_CODE != 202 ]
+	HTTP_CODE=$(head -n 1 "$2_header" | sed -e 's/HTTP\/.* \([0-9]*\) .*/\1/' -e 's/ //g')
+	if [ "$(echo $HTTP_CODE | grep "^[ [:digit:] ]*$")" ]
 	then
-		echo "$ERR_INSTALL_MSG:"
-		cat "$2_header"
-		cat "$2"
+		if [ $HTTP_CODE -lt 200 -o $HTTP_CODE -ge 300 ]
+		then
+			echo "$ERR_INSTALL_MSG:"
+			cat "$2_header"
+			cat "$2"
+			exit 1
+		fi
+	else
+		echo "$ERR_INSTALL_MSG."
 		exit 1
 	fi
 }
@@ -110,13 +116,19 @@ post() {
             echo "$ERR_INSTALL_MSG: can't find HTTP command line client (wget or curl)."
             exit 1
         fi
-        HTTP_CODE=$(head -n 1 "$3_header" | sed -e 's/HTTP\/.* \(.*\) .*/\1/' -e 's/ //g')
-	if [ $HTTP_CODE != 200 -a $HTTP_CODE != 202 ]
+        HTTP_CODE=$(head -n 1 "$3_header" | sed -e 's/HTTP\/.* \([0-9]*\) .*/\1/' -e 's/ //g')
+	if [ "$(echo $HTTP_CODE | grep "^[ [:digit:] ]*$")" ]
 	then
-		echo "$ERR_INSTALL_MSG:"
-		cat "$3_header"
-		cat $3
-		exit 1
+		if [ $HTTP_CODE -lt 200 -o $HTTP_CODE -ge 300 ]
+		then
+			echo "$ERR_INSTALL_MSG:"
+			cat "$3_header"
+			cat $3
+			exit 1
+		fi
+        else
+                echo "$ERR_INSTALL_MSG."
+                exit 1
 	fi
 }
 
