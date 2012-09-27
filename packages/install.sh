@@ -11,18 +11,18 @@
 ########################
 # VARIRABLES DEFINITIONS
 ########################
-
 LOGIN="contact@echoes-tech.com"
 PASSWORD=""
 
-PROBE_ID=0
 ASSET_ID=1
+PROBE_ID=0
 
 API_URI='https://alert-api.echoes-tech.com'
 
 CURRENT_DIR=$(pwd)
 
 HOST_DISTRIB=""
+DISTRIB_RELEASE=0
 HOST_ARCH=""
 
 PKG_TYPE=""
@@ -60,6 +60,15 @@ check_host_distrib() {
 	fi
 }
 
+check_distrib_release() {
+	if [ -x '/usr/bin/lsb_release' ]
+	then
+		DISTRIB_RELEASE=$(/usr/bin/lsb_release -rs)
+	else
+		echo "$ERR_INSTALL_MSG: can't find distrib release."
+	fi
+}
+
 check_host_arch() {
 	if [ -x '/usr/bin/arch' ]
 	then
@@ -74,37 +83,55 @@ check_host_arch() {
 }
 
 get() {
+	HTTP_CODE=0
         if [ -x '/usr/bin/wget' ]
 	then
-		/usr/bin/wget -q --save-headers -O $2 "$1"
+		/usr/bin/wget -q -S -O "$2" "$1" > "$2_header" 2>&1
 	elif [ -x '/usr/bin/curl' ] 
 	then
-		/usr/bin/curl -# -i -o $2 -O "$1"
+		/usr/bin/curl -# -D "$2_header" -o "$2" -O "$1"
         else
             echo "$ERR_INSTALL_MSG: can't find HTTP command line client (wget or curl)."
             exit 1
         fi
+	HTTP_CODE=$(head -n 1 "$2_header" | sed -e 's/HTTP\/.* \(.*\) .*/\1/' -e 's/ //g')
+	if [ $HTTP_CODE != 200 -a $HTTP_CODE != 202 ]
+	then
+		echo "$ERR_INSTALL_MSG:"
+		cat "$2_header"
+		cat "$2"
+		exit 1
+	fi
 }
 
 post() {
+	HTTP_CODE=0
         if [ -x '/usr/bin/wget' ]
 	then
-		/usr/bin/wget -q --save-headers -O $3 --post-data=$2 "$1" 
+		/usr/bin/wget -q --header='Content-Type: application/json; charset=utf-8' -S -O "$3" --post-data="$2" "$1" > "$3_header" 2>&1
 	elif [ -x '/usr/bin/curl' ] 
 	then
-		/usr/bin/curl -# -i -o $3 -d $2 -O "$1"
+		/usr/bin/curl -# --header 'Content-Type: application/json; charset=utf-8' -D "$3_header" -o "$3" -d "$2" -O "$1"
         else
             echo "$ERR_INSTALL_MSG: can't find HTTP command line client (wget or curl)."
             exit 1
         fi
+        HTTP_CODE=$(head -n 1 "$3_header" | sed -e 's/HTTP\/.* \(.*\) .*/\1/' -e 's/ //g')
+	if [ $HTTP_CODE != 200 -a $HTTP_CODE != 202 ]
+	then
+		echo "$ERR_INSTALL_MSG:"
+		cat "$3_header"
+		cat $3
+		exit 1
+	fi
 }
 
 parse_probe_request_res()
 {
 	PROBE_ID=$(cat probe_request_res | grep \"id\" | sed -e 's/ //g' | cut -d':' -f 2 | cut -d',' -f 1)
-	PKG=$(cat probe_request_res | grep \"pakage_name\" | sed -e 's/ //g' | cut -d':' -f 2 | cut -d',' -f 1)
-	PKG_TYPE=$(cat probe_request_res | grep \"pakage_type\" | sed -e 's/ //g' | cut -d':' -f 2 | cut -d',' -f 1)
-	INSTALL_DIR=$(cat probe_request_res | grep \"install_dir\" | sed -e 's/ //g' | cut -d':' -f 2 | cut -d',' -f 1)
+	PKG=$(cat probe_request_res | grep \"pakage_name\" | sed -e 's/ //g' | cut -d':' -f 2 | cut -d',' -f 1 | sed -e 's/"//g' )
+	PKG_TYPE=$(cat probe_request_res | grep \"pakage_type\" | sed -e 's/ //g' | cut -d':' -f 2 | cut -d',' -f 1 | sed -e 's/"//g')
+	INSTALL_DIR=$(cat probe_request_res | grep \"install_dir\" | sed -e 's/ //g' | cut -d':' -f 2 | cut -d',' -f 1 | sed -e 's/"//g')
 }
 
 probe_installation() {
@@ -122,7 +149,7 @@ probe_installation() {
 		if [ -x '/bin/rpm' ]
 		then
 			/bin/rpm -Uvh $PKG
-		els
+		else
 			echo "$ERR_INSTALL_MSG: can't find rpm conmmand."
 			exit 1
 		fi
@@ -139,67 +166,32 @@ probe_installation() {
 
 are_you_root
 check_host_distrib
+check_distrib_release
 check_host_arch
 
 echo "To download ECHOES Alert Probe, you have to enter your password."
 echo "Note: login is $LOGIN"
-echo -n "Password: "
-read PASSWORD
+read -s -p "Password: " PASSWORD
+echo -e "\n"
 
 
 TMP_DIR=$(mktemp -d -t ea-probe-install-XXXXXXXXXX)
 cd $TMP_DIR
 
-#post "$API_URI/asset/$ASSET_ID/probe?login=$LOGIN&password=$PASSWORD" "'{\"distrib\" : \"$HOST_DISTRIB\", \"arch\" : \"$HOST_ARCH\"}'" probe_request_res
-
-echo 'HTTP/1.1 200 OK
-Date: Wed, 19 Sep 2012 11:36:58 GMT
-Server: Apache
-Keep-Alive: timeout=15, max=100
-Connection: Keep-Alive
-Transfer-Encoding: chunked
-Content-Type: text/plain
-
-{
-    "id" : 1,
-    "pakage_name" : "echoes-alert-probe_0.1.0.alpha-1_i386.deb",
-    "pakage_type" : "deb",
-    "install_dir" : "/opt/echoes-alert/probe"
-}' > probe_request_res
+post "$API_URI/asset/$ASSET_ID/probe?login=$LOGIN&password=$PASSWORD" "{\"distrib\":{\"name\":\"$HOST_DISTRIB\",\"release\":\"$DISTRIB_RELEASE\"},\"arch\":\"$HOST_ARCH\"}" probe_request_res
 
 parse_probe_request_res
 
-# Téléchargement de la sonde
-#get "$API_URI/probe/$PROBE_ID?login=$LOGIN&password=$PASSWORD" $PKG
+get "$API_URI/probe/$PROBE_ID?login=$LOGIN&password=$PASSWORD" $PKG
 echo "ECHOES Alert Probe downloaded."
 
-#probe_installation
+probe_installation
 echo "ECHOES Alert Probe installed."
 
-#sed -i -e "s/\(probe_id=\).*/\1$PROBE_ID/" $INSTALL_DIR/etc/probe.conf
+sed -i -e "s/\(probe_id=\).*/\1$PROBE_ID/" $INSTALL_DIR/etc/probe.conf
 echo "ECHOES Alert Probe configured."
 
-# Liste des plugins attribués à l'asset
-#get "$API_URI/asset/$ASSET_ID/plugin?login=$LOGIN&password=$PASSWORD" plugins_list_res
-
-echo 'HTTP/1.1 200 OK
-Date: Wed, 19 Sep 2012 11:36:58 GMT
-Server: Apache
-Keep-Alive: timeout=15, max=100
-Connection: Keep-Alive
-Transfer-Encoding: chunked
-Content-Type: text/plain
-
-[
-    {
-         "id" : 1,
-         "name" : "Linux-System.json"
-    },
-    {
-         "id" : 2,
-         "name" : "Linux-Syslog.json"
-    }
-]' > plugins_list_res
+get "$API_URI/asset/$ASSET_ID/plugin?login=$LOGIN&password=$PASSWORD" plugins_list_res
 
 while read line
 do
@@ -207,8 +199,8 @@ do
 	tmp_name=$(echo $line | grep \"name\" | sed -e 's/ //g' | cut -d':' -f 2 | cut -d',' -f 1 | sed -e 's/\"//g')
 	if [ $tmp_id ]
 	then
-		plugins_id_list[$i]=$tmp_id
 		i=$(($i + 1))
+		plugins_id_list[$i]=$tmp_id
 	elif [ $tmp_name ]
 	then
 		plugins_name_list[$i]=$tmp_name
@@ -218,12 +210,15 @@ done < plugins_list_res
 mkdir plugins
 cd plugins
 
-for j in "${plugins_id_list[@]}"
+for (( j=1; j<=$i ; ++j))
 do
-	#get "$API_URI/asset/$ASSET_ID/plugin/${plugins_id_list[$i]}?login=$LOGIN&password=$PASSWORD" ${plugins_name_list[$i]}
+	get "$API_URI/asset/$ASSET_ID/plugin/${plugins_id_list[$j]}?login=$LOGIN&password=$PASSWORD" ${plugins_name_list[$j]}
 done
 
-#cp * $INSTALL_DIR/etc/plugins/
+rm -f *_header
+cp * $INSTALL_DIR/etc/plugins/
 
 cd "$CURRENT_DIR"
 rm -rf "$TMP_DIR"
+
+service ea-probe start
