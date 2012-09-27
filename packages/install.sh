@@ -29,12 +29,6 @@ PKG_TYPE=""
 
 ERR_INSTALL_MSG="Unable to install ECHOES Alert Probe"
 
-i=0;
-j=0;
-
-plugins_id_list[$i]=1
-plugins_name_list[$i]='Linux-System.json'
-
 #######################
 # FUNCTIONS DEFINITIONS
 #######################
@@ -172,7 +166,7 @@ check_host_arch
 echo "To download ECHOES Alert Probe, you have to enter your password."
 echo "Note: login is $LOGIN"
 read -s -p "Password: " PASSWORD
-echo -e "\n"
+echo ""
 
 
 TMP_DIR=$(mktemp -d -t ea-probe-install-XXXXXXXXXX)
@@ -193,27 +187,34 @@ echo "ECHOES Alert Probe configured."
 
 get "$API_URI/asset/$ASSET_ID/plugin?login=$LOGIN&password=$PASSWORD" plugins_list_res
 
-while read line
-do
-	tmp_id=$(echo $line | grep \"id\" | sed -e 's/ //g' | cut -d':' -f 2 | cut -d',' -f 1)
-	tmp_name=$(echo $line | grep \"name\" | sed -e 's/ //g' | cut -d':' -f 2 | cut -d',' -f 1 | sed -e 's/\"//g')
-	if [ $tmp_id ]
-	then
-		i=$(($i + 1))
-		plugins_id_list[$i]=$tmp_id
-	elif [ $tmp_name ]
-	then
-		plugins_name_list[$i]=$tmp_name
-	fi
-done < plugins_list_res
-
 mkdir plugins
 cd plugins
 
-for (( j=1; j<=$i ; ++j))
+plugin_id=""
+plugin_name=""
+
+check_id=true
+
+while read line
 do
-	get "$API_URI/asset/$ASSET_ID/plugin/${plugins_id_list[$j]}?login=$LOGIN&password=$PASSWORD" ${plugins_name_list[$j]}
-done
+	if [ $($check_id && echo "true" || echo "false") == "true" ]
+	then
+		plugin_id=$(echo $line | grep \"id\" | sed -e 's/ //g' | cut -d':' -f 2 | cut -d',' -f 1)
+	fi
+
+	if [ $plugin_id ]
+	then
+		check_id=false
+		plugin_name=$(echo $line | grep \"name\" | sed -e 's/ //g' | cut -d':' -f 2 | cut -d',' -f 1 | sed -e 's/\"//g')
+		if [ $plugin_name ]
+		then
+			check_id=true
+			get "$API_URI/asset/$ASSET_ID/plugin/$plugin_id?login=$LOGIN&password=$PASSWORD" "$plugin_name"
+			plugin_id=""
+			plugin_name=""
+		fi
+	fi
+done < ../plugins_list_res
 
 rm -f *_header
 cp * $INSTALL_DIR/etc/plugins/
