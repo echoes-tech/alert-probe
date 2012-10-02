@@ -339,6 +339,67 @@ int data2llist(
                                 srcInfo->params = (void*)srcInfoParams;
                                 break;
                             }
+                            case 4:
+                            {
+                                SrcInfoParams4 *srcInfoParams = calloc(1, sizeof (SrcInfoParams4));
+                                if (json_reader_read_member (reader, "host"))
+                                {
+                                    srcInfoParams->host = g_strdup(json_reader_get_string_value(reader));
+                                }
+                                else
+                                {
+                                    printf("Invalid Plugin '%s': Invalid host of Source ID '%d'\n", plgPath, srcInfo->idSrc);
+                                    return (EXIT_FAILURE);
+                                }
+                                json_reader_end_member (reader);
+
+                                if (json_reader_read_member (reader, "user"))
+                                {
+                                    srcInfoParams->user = g_strdup(json_reader_get_string_value(reader));
+                                }
+                                else
+                                {
+                                    printf("Invalid Plugin '%s': Invalid user of Source ID '%d'\n", plgPath, srcInfo->idSrc);
+                                    return (EXIT_FAILURE);
+                                }
+                                json_reader_end_member (reader);
+
+                                if (json_reader_read_member (reader, "passwd"))
+                                {
+                                    srcInfoParams->passwd = g_strdup(json_reader_get_string_value(reader));
+                                }
+                                else
+                                {
+                                    printf("Invalid Plugin '%s': Invalid passwd of Source ID '%d'\n", plgPath, srcInfo->idSrc);
+                                    return (EXIT_FAILURE);
+                                }
+                                json_reader_end_member (reader);
+
+                                if (json_reader_read_member (reader, "db"))
+                                {
+                                    srcInfoParams->db = g_strdup(json_reader_get_string_value(reader));
+                                }
+                                else
+                                {
+                                    printf("Invalid Plugin '%s': Invalid db of Source ID '%d'\n", plgPath, srcInfo->idSrc);
+                                    return (EXIT_FAILURE);
+                                }
+                                json_reader_end_member (reader);
+
+                                if (json_reader_read_member (reader, "port"))
+                                {
+                                    srcInfoParams->port = json_reader_get_int_value(reader);
+                                }
+                                else
+                                {
+                                    printf("Invalid Plugin '%s': Invalid db of Source ID '%d'\n", plgPath, srcInfo->idSrc);
+                                    return (EXIT_FAILURE);
+                                }
+                                json_reader_end_member (reader);
+
+                                srcInfo->params = (void*)srcInfoParams;
+                                break;
+                            }
                             default:
                                 break;
                         }
@@ -542,6 +603,30 @@ int data2llist(
                                                 {
                                                     printf("Invalid Plugin '%s': Invalid length of Search ID '%d' of Source ID '%d'\n", plgPath, searchInfo->idSearch, srcInfo->idSrc);
                                                     exit(EXIT_FAILURE);
+                                                }
+                                                json_reader_end_member (reader);
+
+                                                searchInfo->params = (void*)searchInfoParams;
+                                                break;
+                                            }
+                                            default:
+                                                break;
+                                            }
+                                            break;
+                                        case 4:
+                                            switch (searchInfo->idType)
+                                            {
+                                            case 1:
+                                            {
+                                                SearchInfoParams4_1 *searchInfoParams = calloc(1, sizeof (SearchInfoParams4_1));
+                                                if (json_reader_read_member(reader, "query"))
+                                                {
+                                                    searchInfoParams->query = g_strdup(json_reader_get_string_value(reader));
+                                                }
+                                                else
+                                                {
+                                                    printf("Invalid Plugin '%s': Invalid query of Search ID '%d' of Source ID '%d'\n", plgPath, searchInfo->idSearch, srcInfo->idSrc);
+                                                    return (EXIT_FAILURE);
                                                 }
                                                 json_reader_end_member (reader);
 

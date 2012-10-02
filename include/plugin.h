@@ -62,6 +62,13 @@ struct SearchInfoParams3_2
     unsigned int firstChar, length;
 };
 
+/* Search Informations Parameters for Addon MySQL Type Query */
+typedef struct SearchInfoParams4_1 SearchInfoParams4_1;
+struct SearchInfoParams4_1
+{
+    gchar *query;
+};
+
 /* Search Informations */
 typedef struct SearchInfo SearchInfo;
 struct SearchInfo
@@ -72,6 +79,14 @@ struct SearchInfo
 };
 /* Search List */
 typedef SearchInfo* SearchList;
+
+/* Source Informations Parameters for Addon MySQL */
+typedef struct SrcInfoParams4 SrcInfoParams4;
+struct SrcInfoParams4
+{
+    gchar *host, *user, *passwd, *db;
+    unsigned short port;
+};
 
 /* Source Informations Parameters for Addon Log */
 typedef struct SrcInfoParams3 SrcInfoParams3;

@@ -115,8 +115,7 @@ int popCollectQueue(CollectQueue *collectQueue, SDElementQueue *sdElementQueue)
                            popedElement->lotNum,
                            popedElement->lineNum,
                            /*TODO: Tester le retour de base64 */
-                           //g_base64_encode(popedElement->value, strlen(popedElement->value)),
-                           popedElement->value,
+                           g_base64_encode(popedElement->value, strlen(popedElement->value)),
                            popedElement->time
                            );
         collectQueue->first = popedElement->next;

@@ -23,6 +23,10 @@ extern "C" {
 #include <pthread.h>
 
 #include "plugin.h"
+    
+#include "addon/addonFile.h"
+#include "addon/addonLog.h"
+#include "addon/addonMySQL.h"
 
 /* Portable sleep */
 #if defined (WIN32) || defined (WIN64)
@@ -75,9 +79,6 @@ int pushCollectQueue(
  * @param arg (void*)AddonsMgrParams*
  */
 void *addon(void *arg);
-
-#include "addonFile.h"
-#include "addonLog.h"
 
 #ifdef	__cplusplus
 }

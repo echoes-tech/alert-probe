@@ -172,15 +172,15 @@ void *addonFile(void *arg)
 
         /* Number of line */
         n = 1;
-        
-        /* What time is it ? */
-        time(&now);
 
         /* Opening file */
         file = fopen(srcInfoParams->path, "r");
 
         if (file != NULL)
-        {
+        {        
+            /* What time is it ? */
+            time(&now);
+
             /* Reading file line by line */
             while (fgets(line, MAX_SIZE, file) != NULL)
             {

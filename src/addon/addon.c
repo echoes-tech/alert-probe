@@ -108,6 +108,13 @@ void *addon(void *arg)
                     pthread_exit(NULL);
                 }
                 break;
+            case 4:
+                if (pthread_create(&addonsMgrParams->addonsThreads[numThread], NULL, addonMySQL, (void*) addonParamsInfo))
+                {
+                    perror("pthread_create");
+                    pthread_exit(NULL);
+                }
+                break;
             default:
                 break;
             }

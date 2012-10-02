@@ -12,6 +12,7 @@
         <itemPath>include/addon/addonFile.h</itemPath>
         <itemPath>include/addon/addonList.h</itemPath>
         <itemPath>include/addon/addonLog.h</itemPath>
+        <itemPath>include/addon/addonMySQL.h</itemPath>
       </logicalFolder>
       <itemPath>include/conf.h</itemPath>
       <itemPath>include/format.h</itemPath>
@@ -44,6 +45,7 @@
     <logicalFolder name="plugins" displayName="Plugins" projectFiles="true">
       <itemPath>plugins/Linux-Syslog.json</itemPath>
       <itemPath>plugins/Linux-System.json</itemPath>
+      <itemPath>plugins/MySQL.json</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -58,6 +60,7 @@
           <itemPath>src/addon/addonFile.c</itemPath>
           <itemPath>src/addon/addonList.c</itemPath>
           <itemPath>src/addon/addonLog.c</itemPath>
+          <itemPath>src/addon/addonMySQL.c</itemPath>
         </logicalFolder>
         <itemPath>src/conf.c</itemPath>
         <itemPath>src/format.c</itemPath>
@@ -113,6 +116,7 @@
           </linkerDynSerch>
           <linkerLibItems>
             <linkerOptionItem>`pkg-config --libs libssl gobject-2.0 json-glib-1.0`</linkerOptionItem>
+            <linkerLibLibItem>mysqlclient</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
@@ -145,8 +149,10 @@
           <linkerDynSerch>
             <pElem>/opt/echoes-alert/probe/lib</pElem>
           </linkerDynSerch>
+          <stripSymbols>true</stripSymbols>
           <linkerLibItems>
             <linkerOptionItem>`pkg-config --libs libssl gobject-2.0 json-glib-1.0`</linkerOptionItem>
+            <linkerLibLibItem>mysqlclient</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
@@ -191,8 +197,10 @@
           <linkerDynSerch>
             <pElem>/opt/echoes-alert/probe/lib</pElem>
           </linkerDynSerch>
+          <stripSymbols>true</stripSymbols>
           <linkerLibItems>
             <linkerOptionItem>`pkg-config --libs libssl gobject-2.0 json-glib-1.0`</linkerOptionItem>
+            <linkerLibLibItem>mysqlclient</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
@@ -349,8 +357,10 @@
           <linkerDynSerch>
             <pElem>/opt/echoes-alert/probe/lib</pElem>
           </linkerDynSerch>
+          <stripSymbols>true</stripSymbols>
           <linkerLibItems>
             <linkerOptionItem>`pkg-config --libs libssl gobject-2.0 json-glib-1.0`</linkerOptionItem>
+            <linkerLibLibItem>mysqlclient</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
@@ -507,8 +517,10 @@
           <linkerDynSerch>
             <pElem>/opt/echoes-alert/probe/lib</pElem>
           </linkerDynSerch>
+          <stripSymbols>true</stripSymbols>
           <linkerLibItems>
             <linkerOptionItem>`pkg-config --libs libssl gobject-2.0 json-glib-1.0`</linkerOptionItem>
+            <linkerLibLibItem>mysqlclient</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
@@ -681,8 +693,10 @@
           <linkerDynSerch>
             <pElem>/opt/echoes-alert/probe/lib</pElem>
           </linkerDynSerch>
+          <stripSymbols>true</stripSymbols>
           <linkerLibItems>
             <linkerOptionItem>`pkg-config --libs libssl gobject-2.0 json-glib-1.0`</linkerOptionItem>
+            <linkerLibLibItem>mysqlclient</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
@@ -851,8 +865,10 @@
           <linkerDynSerch>
             <pElem>/opt/echoes-alert/probe/lib</pElem>
           </linkerDynSerch>
+          <stripSymbols>true</stripSymbols>
           <linkerLibItems>
             <linkerOptionItem>`pkg-config --libs libssl gobject-2.0 json-glib-1.0`</linkerOptionItem>
+            <linkerLibLibItem>mysqlclient</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
@@ -1001,8 +1017,10 @@
           <linkerDynSerch>
             <pElem>/opt/echoes-alert/probe/lib</pElem>
           </linkerDynSerch>
+          <stripSymbols>true</stripSymbols>
           <linkerLibItems>
             <linkerOptionItem>`pkg-config --libs libssl gobject-2.0 json-glib-1.0`</linkerOptionItem>
+            <linkerLibLibItem>mysqlclient</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>

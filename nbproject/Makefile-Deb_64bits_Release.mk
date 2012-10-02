@@ -35,6 +35,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/src/addon/addonMySQL.o \
 	${OBJECTDIR}/src/format.o \
 	${OBJECTDIR}/src/addon/addonList.o \
 	${OBJECTDIR}/src/log.o \
@@ -61,7 +62,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-Wl,-rpath,/opt/echoes-alert/probe/lib `pkg-config --libs libssl gobject-2.0 json-glib-1.0`  
+LDLIBSOPTIONS=-Wl,-rpath,/opt/echoes-alert/probe/lib `pkg-config --libs libssl gobject-2.0 json-glib-1.0` -lmysqlclient  
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
@@ -69,7 +70,12 @@ LDLIBSOPTIONS=-Wl,-rpath,/opt/echoes-alert/probe/lib `pkg-config --libs libssl g
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/probe: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/probe ${OBJECTFILES} ${LDLIBSOPTIONS} 
+	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/probe -s ${OBJECTFILES} ${LDLIBSOPTIONS} 
+
+${OBJECTDIR}/src/addon/addonMySQL.o: src/addon/addonMySQL.c 
+	${MKDIR} -p ${OBJECTDIR}/src/addon
+	${RM} $@.d
+	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags libssl gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonMySQL.o src/addon/addonMySQL.c
 
 ${OBJECTDIR}/src/format.o: src/format.c 
 	${MKDIR} -p ${OBJECTDIR}/src

@@ -48,7 +48,6 @@ int addonLogRegex(
                 res = malloc(sizeof (*res) * (size  + 1));
                 if (res)
                 {
-
                     strncpy(res, &line[start], size);
                     res[size] = '\0';
                     if (pushCollectQueue(
@@ -207,14 +206,14 @@ void *addonLog(void *arg)
         /* Number of line */
         n = 1;
 
-        /* What time is it ? */
-        time(&now);
-
         /* Opening file */
         file = fopen(path, "r");
 
         if (file != NULL)
         {
+            /* What time is it ? */
+            time(&now);
+
             if (srcInfoParams->nbLine == 0)
             {
                 if (srcInfoParams->lastNLines == 0)
@@ -242,6 +241,7 @@ void *addonLog(void *arg)
 
                     if (file != NULL)
                     {
+                        /* Number of line */
                         i = 1;
                         /* Reading file line by line */
                         while (i < (n - srcInfoParams->lastNLines) && fgets(line, MAX_SIZE, file) != NULL)
