@@ -4,7 +4,8 @@
  * @date 14/02/2012
  * 
  * THIS PROGRAM IS CONFIDENTIAL AND PROPRIETARY TO ECHOES TECHNOLOGIES SAS
- * AND MAY NOT BE REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS WITHOUT COMPANY AUTHORIZATION.
+ * AND MAY NOT BE REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS
+ * WITHOUT COMPANY AUTHORIZATION.
  * 
  * COPYRIGHT 2012 BY ECHOES TECHNOLGIES SAS
  * 
@@ -56,7 +57,7 @@ static int initConnection(
     }
     else
     {
-        /* UDP so SOCK_STREAM */
+        /* TCP so SOCK_STREAM */
         *sock = socket(AF_INET, SOCK_STREAM, 0);
     }
 
@@ -71,7 +72,7 @@ static int initConnection(
     sin->sin_port = htons(*port);
     sin->sin_family = AF_INET;
 
-    if (*protocol != 1)
+    if (*protocol == 0)
     {
         /* Open a connection */
         if (connect(*sock, (SOCKADDR *) sin, sizeof (SOCKADDR)) == SOCKET_ERROR)

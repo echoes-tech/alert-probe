@@ -4,7 +4,8 @@
  * @date 06/08/2012
  * 
  * THIS PROGRAM IS CONFIDENTIAL AND PROPRIETARY TO ECHOES TECHNOLOGIES SAS
- * AND MAY NOT BE REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS WITHOUT COMPANY AUTHORIZATION.
+ * AND MAY NOT BE REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS
+ * WITHOUT COMPANY AUTHORIZATION.
  * 
  * COPYRIGHT 2012 BY ECHOES TECHNOLGIES SAS
  * 
@@ -175,7 +176,7 @@ void *addonLog(void *arg)
     time_t now, temp;
     FILE* file = NULL;
     char line[MAX_SIZE] = "";
-    unsigned int i = 0, n = 0;
+    unsigned int i = 1, n = 1;
 
     /*TODO: faire un check du protocole file://, socket://, etc. */
     const char *path = srcInfoParams->path + 7;
@@ -216,11 +217,49 @@ void *addonLog(void *arg)
         {
             if (srcInfoParams->nbLine == 0)
             {
-                /* Reading file line by line */
-                while (fgets(line, MAX_SIZE, file) != NULL)
+                if (srcInfoParams->lastNLines == 0)
                 {
-                    whileAddonTypeInfo(addonParamsInfo, line, n, &now);
-                    ++n;
+                    /* Reading file line by line */
+                    while (fgets(line, MAX_SIZE, file) != NULL)
+                    {
+                        whileAddonTypeInfo(addonParamsInfo, line, n, &now);
+                        ++n;
+                    }
+                }
+                else
+                {
+                    /* Count the number of line */
+                    while (fgets(line, MAX_SIZE, file) != NULL)
+                    {
+                        ++n;
+                    }
+
+                    /* Closing file */
+                    fclose(file);
+
+                    /* Opening file */
+                    file = fopen(path, "r");
+
+                    if (file != NULL)
+                    {
+                        i = 1;
+                        /* Reading file line by line */
+                        while (i < (n - srcInfoParams->lastNLines) && fgets(line, MAX_SIZE, file) != NULL)
+                        {
+                            ++i;
+                        }
+                        /* Reading file line by line */
+                        while (fgets(line, MAX_SIZE, file) != NULL)
+                        {
+                            whileAddonTypeInfo(addonParamsInfo, line, i, &now);
+                            ++i;
+                        }
+                    }
+                    else
+                    {
+                        perror("fopen()");
+                        pthread_exit(NULL);
+                    }
                 }
             }
             else
@@ -241,6 +280,7 @@ void *addonLog(void *arg)
                 {
                     if (n > srcInfoParams->nbLine)
                     {
+                        i = 1;
                         /* Reading file line by line */
                         while (i < srcInfoParams->nbLine && fgets(line, MAX_SIZE, file) != NULL)
                         {
@@ -249,7 +289,8 @@ void *addonLog(void *arg)
                         /* Reading file line by line */
                         while (fgets(line, MAX_SIZE, file) != NULL)
                         {
-                            whileAddonTypeInfo(addonParamsInfo, line, n, &now);
+                            whileAddonTypeInfo(addonParamsInfo, line, i, &now);
+                            ++i;
                         }
                     }
                     else if (n < srcInfoParams->nbLine)
@@ -257,7 +298,8 @@ void *addonLog(void *arg)
                         /* Reading file line by line */
                         while (fgets(line, MAX_SIZE, file) != NULL)
                         {
-                            whileAddonTypeInfo(addonParamsInfo, line, n, &now);
+                            whileAddonTypeInfo(addonParamsInfo, line, i, &now);
+                            ++i;
                         }
                     }
                 }

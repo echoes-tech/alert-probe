@@ -4,7 +4,8 @@
  * @date 19/02/2012
  * 
  * THIS PROGRAM IS CONFIDENTIAL AND PROPRIETARY TO ECHOES TECHNOLOGIES SAS
- * AND MAY NOT BE REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS WITHOUT COMPANY AUTHORIZATION.
+ * AND MAY NOT BE REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS
+ * WITHOUT COMPANY AUTHORIZATION.
  * 
  * COPYRIGHT 2012 BY ECHOES TECHNOLGIES SAS
  * 
@@ -320,6 +321,17 @@ int data2llist(
                                 else
                                 {
                                     printf("Invalid Plugin '%s': Invalid path of Source ID '%d'\n", plgPath, srcInfo->idSrc);
+                                    return (EXIT_FAILURE);
+                                }
+                                json_reader_end_member (reader);
+
+                                if (json_reader_read_member (reader, "lastNLines"))
+                                {
+                                    srcInfoParams->lastNLines = json_reader_get_int_value(reader);
+                                }
+                                else
+                                {
+                                    printf("Invalid Plugin '%s': Invalid lastNLines of Source ID '%d'\n", plgPath, srcInfo->idSrc);
                                     return (EXIT_FAILURE);
                                 }
                                 json_reader_end_member (reader);

@@ -4,7 +4,8 @@
  * @date 19/02/2012
   * 
  * THIS PROGRAM IS CONFIDENTIAL AND PROPRIETARY TO ECHOES TECHNOLOGIES SAS
- * AND MAY NOT BE REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS WITHOUT COMPANY AUTHORIZATION.
+ * AND MAY NOT BE REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS
+ * WITHOUT COMPANY AUTHORIZATION.
  * 
  * COPYRIGHT 2012 BY ECHOES TECHNOLGIES SAS
  * 
@@ -34,9 +35,9 @@
 /* Default period (second) */
 #define DEFAULT 60
 
-/* Search Informations Parameters for Addon 3 Type 1 */
+/* Search Informations Parameters for Addon Log Type Regex */
 typedef struct SearchInfoParams2_1 SearchInfoParams3_1;
-/* Search Informations Parameters for Addon 2 Type 1 */
+/* Search Informations Parameters for Addon File Type Regex */
 typedef struct SearchInfoParams2_1 SearchInfoParams2_1;
 struct SearchInfoParams2_1
 {
@@ -47,14 +48,14 @@ struct SearchInfoParams2_1
     regmatch_t *pmatch;
 };
 
-/* Search Informations Parameters for Addon 2 Type 2 */
+/* Search Informations Parameters for Addon File Type Localisation */
 typedef struct SearchInfoParams2_2 SearchInfoParams2_2;
 struct SearchInfoParams2_2
 {
     unsigned int line, firstChar, length;
 };
 
-/* Search Informations Parameters for Addon 3 Type 2 */
+/* Search Informations Parameters for Addon Log Type Localisation */
 typedef struct SearchInfoParams3_2 SearchInfoParams3_2;
 struct SearchInfoParams3_2
 {
@@ -72,15 +73,15 @@ struct SearchInfo
 /* Search List */
 typedef SearchInfo* SearchList;
 
-/* Source Informations Parameters for Addon 3 */
+/* Source Informations Parameters for Addon Log */
 typedef struct SrcInfoParams3 SrcInfoParams3;
 struct SrcInfoParams3
 {
     gchar *path;
-    unsigned int nbLine;
+    unsigned int nbLine, lastNLines;
 };
 
-/* Source Informations Parameters for Addon 2 */
+/* Source Informations Parameters for Addon File */
 typedef struct SrcInfoParams2 SrcInfoParams2;
 struct SrcInfoParams2
 {

@@ -4,7 +4,8 @@
  * @date 24/04/2012
  * 
  * THIS PROGRAM IS CONFIDENTIAL AND PROPRIETARY TO ECHOES TECHNOLOGIES SAS
- * AND MAY NOT BE REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS WITHOUT COMPANY AUTHORIZATION.
+ * AND MAY NOT BE REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS
+ * WITHOUT COMPANY AUTHORIZATION.
  * 
  * COPYRIGHT 2012 BY ECHOES TECHNOLGIES SAS
  * 
@@ -114,7 +115,8 @@ int popCollectQueue(CollectQueue *collectQueue, SDElementQueue *sdElementQueue)
                            popedElement->lotNum,
                            popedElement->lineNum,
                            /*TODO: Tester le retour de base64 */
-                           g_base64_encode(popedElement->value, strlen(popedElement->value)),
+                           //g_base64_encode(popedElement->value, strlen(popedElement->value)),
+                           popedElement->value,
                            popedElement->time
                            );
         collectQueue->first = popedElement->next;
