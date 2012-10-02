@@ -50,9 +50,9 @@ void log2File(
                     log_domain,
                     log_level,
                     g_strdup_printf(
-                                    "%s: %s",
-                                    strerror(errno),
-                                    logParams->logFilePath
+                                    "Error opening file %s: %s",
+                                    logParams->logFilePath,
+                                    strerror(errno)
                                     ),
                     user_data
                     );

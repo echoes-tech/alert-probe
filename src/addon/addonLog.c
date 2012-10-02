@@ -85,26 +85,32 @@ int addonLogLocation(
 {
     SearchInfoParams3_2 *searchInfoParams = (SearchInfoParams3_2*)params;
 
-    char res[MAX_SIZE] = "";
-    unsigned int i = 0;
+    char *res = NULL;
 
-    for (i = 0; i < searchInfoParams->length; ++i)
+    res = calloc(searchInfoParams->length, sizeof (char));
+    if (res)
     {
-        res[i] = line[searchInfoParams->firstChar + i - 1];
-    }
+        strncpy(
+                res,
+                &line[searchInfoParams->firstChar - 1],
+                searchInfoParams->length
+                );
 
-    if (pushCollectQueue(
-                         collectQueue,
-                         idList,
-                         *valueNum,
-                         lotNum,
-                         lineNum,
-                         res,
-                         *now
-                         ))
-    {
-        perror("pushCollectQueue()");
-        exit(EXIT_FAILURE);
+        if (pushCollectQueue(
+                             collectQueue,
+                             idList,
+                             *valueNum,
+                             lotNum,
+                             lineNum,
+                             res,
+                             *now
+                             ))
+        {
+            perror("pushCollectQueue()");
+            exit(EXIT_FAILURE);
+        }
+        /* Cleanup */
+        free(res);
     }
 
     return(EXIT_SUCCESS);
@@ -257,8 +263,11 @@ void *addonLog(void *arg)
                     }
                     else
                     {
-                        perror("fopen()");
-                        pthread_exit(NULL);
+                        g_warning(
+                                  "Error opening file %s: %s",
+                                  srcInfoParams->path,
+                                  strerror(errno)
+                                  );
                     }
                 }
             }
@@ -303,17 +312,27 @@ void *addonLog(void *arg)
                         }
                     }
                 }
+                else
+                {
+                    g_warning(
+                              "Error opening file %s: %s",
+                              srcInfoParams->path,
+                              strerror(errno)
+                              );
+                }
             }
-
+            
+            /* Closing file */
+            fclose(file);
         }
         else
         {
-            perror("fopen()");
-            pthread_exit(NULL);
+            g_warning(
+                      "Error opening file %s: %s",
+                      srcInfoParams->path,
+                      strerror(errno)
+                      );
         }
-
-        /* Closing file */
-        fclose(file);
         
         srcInfoParams->nbLine = n;
 

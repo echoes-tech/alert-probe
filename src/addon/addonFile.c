@@ -108,28 +108,35 @@ int addonFileLocation(
 {
     SearchInfoParams2_2 *searchInfoParams = (SearchInfoParams2_2*)params;
 
-    char res[MAX_SIZE]= "";
-    unsigned int i = 0;
+    char *res = NULL;
 
     if (lineNum == searchInfoParams->line)
     {
-        for (i = 0; i < searchInfoParams->length; ++i)
+        res = calloc(searchInfoParams->length, sizeof (char));
+        if (res)
         {
-            res[i] = line[searchInfoParams->firstChar + i - 1];
-        }
+            strncpy(
+                    res,
+                    &line[searchInfoParams->firstChar - 1],
+                    searchInfoParams->length
+                    );
 
-        if (pushCollectQueue(
-                             collectQueue,
-                             idList,
-                             *valueNum,
-                             lotNum,
-                             lineNum,
-                             res,
-                             *now
-                             ))
-        {
-            perror("pushCollectQueue()");
-            exit(EXIT_FAILURE);
+            if (pushCollectQueue(
+                                 collectQueue,
+                                 idList,
+                                 *valueNum,
+                                 lotNum,
+                                 lineNum,
+                                 res,
+                                 *now
+                                 ))
+            {
+                perror("pushCollectQueue()");
+                exit(EXIT_FAILURE);
+            }
+
+            /* Cleanup */
+            free(res);
         }
     }
 
@@ -177,7 +184,7 @@ void *addonFile(void *arg)
         file = fopen(srcInfoParams->path, "r");
 
         if (file != NULL)
-        {        
+        {
             /* What time is it ? */
             time(&now);
 
@@ -234,15 +241,18 @@ void *addonFile(void *arg)
             
                 ++n;
             }
+        
+            /* Closing file */
+            fclose(file);
         }
         else
         {
-            perror("fopen()");
-            pthread_exit(NULL);
+            g_warning(
+                      "Error opening file %s: %s",
+                      srcInfoParams->path,
+                      strerror(errno)
+                      );
         }
-        
-        /* Closing file */
-        fclose(file);
 
         SLEEP(*addonParamsInfo->period);
     }

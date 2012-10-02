@@ -25,7 +25,7 @@ int addonMySQLQuery(
 {
     SearchInfoParams4_1 *searchInfoParams = (SearchInfoParams4_1*)params;
 
-    char res[1000];
+    char *res = NULL;
 
     /* Objects */
     MYSQL_RES *result = NULL;
@@ -52,19 +52,25 @@ int addonMySQLQuery(
         /* Loop to retrieve each field */
         for(i = 0; i < num_champs; i++)
         {
-            sprintf(res, "%.*s", (int) lengths[i], row[i] ? row[i] : "NULL");
-            if (pushCollectQueue(
-                                 collectQueue,
-                                 idList,
-                                 (i + 1),
-                                 lotNum,
-                                 n,
-                                 res,
-                                 *now
-                                 ))
+            res = calloc(lengths[i], sizeof (char));
+            if (res)
             {
-                perror("pushCollectQueue()");
-                exit(EXIT_FAILURE);
+                strncpy(res, row[i] ? row[i] : "NULL", lengths[i]);
+                if (pushCollectQueue(
+                                     collectQueue,
+                                     idList,
+                                     (i + 1),
+                                     lotNum,
+                                     n,
+                                     res,
+                                     *now
+                                     ))
+                {
+                    perror("pushCollectQueue()");
+                    exit(EXIT_FAILURE);
+                }
+                /* Cleanup */
+                free(res);
             }
         }
         ++n;
@@ -166,8 +172,7 @@ void *addonMySQL(void *arg)
         }
         else
         {
-            perror("mysql_real_connect()");
-            pthread_exit(NULL);
+            g_warning("%s", mysql_error(&mysql));
         }
         
         /* Closing MySQL session */
