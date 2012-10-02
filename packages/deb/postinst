@@ -22,8 +22,6 @@ case "$1" in
         chown -R root:adm /var/log/echoes-alert
 
         update-rc.d -f ea-probe defaults
-
-        service ea-probe start
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

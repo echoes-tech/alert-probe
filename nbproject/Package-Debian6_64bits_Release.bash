@@ -121,6 +121,14 @@ cd "${TOP}"
 makeDirectory "${NBTMPDIR}//opt/echoes-alert/probe/doc"
 copyFileToTmpDir "README" "${NBTMPDIR}/${PACKAGE_TOP_DIR}doc/README" 0640
 
+cd "${TOP}"
+makeDirectory "${NBTMPDIR}//opt/echoes-alert/probe"
+copyFileToTmpDir "packages/lib/amd64/glib_echoes-alert-probe_squeeze_amd64.tar.gz" "${NBTMPDIR}/${PACKAGE_TOP_DIR}glib_echoes-alert-probe_squeeze_amd64.tar.gz" 0640
+
+cd "${TOP}"
+makeDirectory "${NBTMPDIR}//opt/echoes-alert/probe"
+copyFileToTmpDir "packages/lib/amd64/json-glib_echoes-alert-probe_squeeze_amd64.tar.gz" "${NBTMPDIR}/${PACKAGE_TOP_DIR}json-glib_echoes-alert-probe_squeeze_amd64.tar.gz" 0640
+
 
 # Create control file
 cd "${TOP}"
@@ -129,13 +137,13 @@ rm -f ${CONTROL_FILE}
 mkdir -p ${NBTMPDIR}/DEBIAN
 
 cd "${TOP}"
-echo 'Source: echoes-alert-probe' >> ${CONTROL_FILE}
-echo 'Version: 0.1.0.alpha-1' >> ${CONTROL_FILE}
+echo 'Source: ea-probe' >> ${CONTROL_FILE}
+echo 'Version: 0.1.0.alpha-2' >> ${CONTROL_FILE}
 echo 'Section: non-free/admin' >> ${CONTROL_FILE}
 echo 'Priority: optional' >> ${CONTROL_FILE}
 echo 'Maintainer: Florent Poinsaut <florent.poinsaut@echoes-tech.com>' >> ${CONTROL_FILE}
 echo 'Homepage: http://alert.echoes-tech.com' >> ${CONTROL_FILE}
-echo 'Package: echoes-alert-probe' >> ${CONTROL_FILE}
+echo 'Package: ea-probe' >> ${CONTROL_FILE}
 echo 'Architecture: amd64' >> ${CONTROL_FILE}
 echo 'Depends: libssl0.9.8 | libssl1.0.0' >> ${CONTROL_FILE}
 echo 'Description: The ECHOES Alert Probe' >> ${CONTROL_FILE}
@@ -147,9 +155,9 @@ dpkg-deb  --build ${TMPDIRNAME}
 checkReturnCode
 cd "${TOP}"
 mkdir -p  ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package
-mv ${NBTMPDIR}.deb ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/echoes-alert-probe_0.1.0.alpha-1_squeeze_amd64.deb
+mv ${NBTMPDIR}.deb ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/ea-probe_0.1.0.alpha-2_squeeze_amd64.deb
 checkReturnCode
-echo Debian: ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/echoes-alert-probe_0.1.0.alpha-1_squeeze_amd64.deb
+echo Debian: ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/ea-probe_0.1.0.alpha-2_squeeze_amd64.deb
 
 # Cleanup
 cd "${TOP}"

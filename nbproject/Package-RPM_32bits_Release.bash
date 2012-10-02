@@ -136,7 +136,7 @@ echo BuildRoot: ${TOP}/${NBTMPDIR} >> ${SPEC_FILE}
 echo 'Summary: The ECHOES Alert Probe' >> ${SPEC_FILE}
 echo Name: ea-probe >> ${SPEC_FILE}
 echo Version: 0.1.0.alpha >> ${SPEC_FILE}
-echo Release: 1 >> ${SPEC_FILE}
+echo Release: 2 >> ${SPEC_FILE}
 echo License: Proprietary >> ${SPEC_FILE}
 echo Group: Applications/System >> ${SPEC_FILE}
 echo URL: http://alert.echoes-tech.com >> ${SPEC_FILE}
@@ -155,7 +155,6 @@ echo 'tar xzf glib_echoes-alert-probe_squeeze_i386.tar.gz' >> ${SPEC_FILE}
 echo 'tar xzf json-glib_echoes-alert-probe_squeeze_i386.tar.gz' >> ${SPEC_FILE}
 echo 'rm -f  glib_echoes-alert-probe_squeeze_i386.tar.gz json-glib_echoes-alert-probe_squeeze_i386.tar.gz' >> ${SPEC_FILE}
 echo 'chkconfig --add ea-probe && chkconfig ea-probe on' >> ${SPEC_FILE}
-echo 'service ea-probe start' >> ${SPEC_FILE}
 echo  >> ${SPEC_FILE}
 echo '%preun' >> ${SPEC_FILE}
 echo 'service ea-probe stop' >> ${SPEC_FILE}

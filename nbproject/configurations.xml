@@ -71,18 +71,6 @@
                    displayName="Test Files"
                    projectFiles="false"
                    kind="TEST_LOGICAL_FOLDER">
-      <logicalFolder name="f2"
-                     displayName="Addon Test"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/addon.c</itemPath>
-      </logicalFolder>
-      <logicalFolder name="f1"
-                     displayName="Plugin Test"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/plugin.c</itemPath>
-      </logicalFolder>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -113,6 +101,12 @@
           <commandLine>-pedantic</commandLine>
           <warningLevel>2</warningLevel>
         </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
         <linkerTool>
           <linkerDynSerch>
             <pElem>/opt/echoes-alert/probe/lib</pElem>
@@ -122,36 +116,6 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
-      <folder path="TestFiles/f1">
-        <cTool>
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
-        </cTool>
-        <ccTool>
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f1</output>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f2">
-        <cTool>
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
-        </cTool>
-        <ccTool>
-          <incDir>
-            <pElem>.</pElem>
-          </incDir>
-        </ccTool>
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f2</output>
-        </linkerTool>
-      </folder>
     </conf>
     <conf name="Release" type="1">
       <toolsSet>
@@ -234,7 +198,7 @@
       </compileType>
       <packaging>
         <packType>Debian</packType>
-        <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/echoes-alert-probe_0.1.0.alpha-1_i386.deb</output>
+        <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/ea-probe_0.1.0.alpha-2_i386.deb</output>
         <packTopDir>/opt/echoes-alert/probe</packTopDir>
         <packFileList>
           <packFileListElem type="File"
@@ -335,8 +299,8 @@
                             group="root"/>
         </packFileList>
         <packInfoList>
-          <packInfoListElem name="Source" value="echoes-alert-probe" mandatory="false"/>
-          <packInfoListElem name="Version" value="0.1.0.alpha-1" mandatory="true"/>
+          <packInfoListElem name="Source" value="ea-probe" mandatory="false"/>
+          <packInfoListElem name="Version" value="0.1.0.alpha-2" mandatory="true"/>
           <packInfoListElem name="Section" value="non-free/admin" mandatory="false"/>
           <packInfoListElem name="Priority" value="optional" mandatory="false"/>
           <packInfoListElem name="Maintainer"
@@ -346,7 +310,7 @@
                             value="http://alert.echoes-tech.com"
                             mandatory="false"/>
           <packInfoListElem name="" value="" mandatory="false"/>
-          <packInfoListElem name="Package" value="echoes-alert-probe" mandatory="true"/>
+          <packInfoListElem name="Package" value="ea-probe" mandatory="true"/>
           <packInfoListElem name="Architecture" value="i386" mandatory="false"/>
           <packInfoListElem name="Depends"
                             value="libssl0.9.8 | libssl1.0.0, libjson-glib-1.0-0 (>= 0.12.0)"
@@ -392,7 +356,7 @@
       </compileType>
       <packaging>
         <packType>Debian</packType>
-        <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/echoes-alert-probe_0.1.0.alpha-1_amd64.deb</output>
+        <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/ea-probe_0.1.0.alpha-2_amd64.deb</output>
         <packTopDir>/opt/echoes-alert/probe</packTopDir>
         <packFileList>
           <packFileListElem type="File"
@@ -493,8 +457,8 @@
                             group="root"/>
         </packFileList>
         <packInfoList>
-          <packInfoListElem name="Source" value="echoes-alert-probe" mandatory="false"/>
-          <packInfoListElem name="Version" value="0.1.0.alpha-1" mandatory="true"/>
+          <packInfoListElem name="Source" value="ea-probe" mandatory="false"/>
+          <packInfoListElem name="Version" value="0.1.0.alpha-2" mandatory="true"/>
           <packInfoListElem name="Section" value="non-free/admin" mandatory="false"/>
           <packInfoListElem name="Priority" value="optional" mandatory="false"/>
           <packInfoListElem name="Maintainer"
@@ -504,7 +468,7 @@
                             value="http://alert.echoes-tech.com"
                             mandatory="false"/>
           <packInfoListElem name="" value="" mandatory="false"/>
-          <packInfoListElem name="Package" value="echoes-alert-probe" mandatory="true"/>
+          <packInfoListElem name="Package" value="ea-probe" mandatory="true"/>
           <packInfoListElem name="Architecture" value="amd64" mandatory="false"/>
           <packInfoListElem name="Depends"
                             value="libssl0.9.8 | libssl1.0.0, libjson-glib-1.0-0 (>= 0.12.0)"
@@ -550,7 +514,7 @@
       </compileType>
       <packaging>
         <packType>Debian</packType>
-        <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/echoes-alert-probe_0.1.0.alpha-1_squeeze_i386.deb</output>
+        <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/ea-probe_0.1.0.alpha-2_squeeze_i386.deb</output>
         <packTopDir>/opt/echoes-alert/probe</packTopDir>
         <packFileList>
           <packFileListElem type="File"
@@ -649,10 +613,22 @@
                             perm="640"
                             owner="root"
                             group="root"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}glib_echoes-alert-probe_squeeze_i386.tar.gz"
+                            from="packages/lib/i386/glib_echoes-alert-probe_squeeze_i386.tar.gz"
+                            perm="640"
+                            owner="root"
+                            group="root"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}json-glib_echoes-alert-probe_squeeze_i386.tar.gz"
+                            from="packages/lib/i386/json-glib_echoes-alert-probe_squeeze_i386.tar.gz"
+                            perm="640"
+                            owner="root"
+                            group="root"/>
         </packFileList>
         <packInfoList>
-          <packInfoListElem name="Source" value="echoes-alert-probe" mandatory="false"/>
-          <packInfoListElem name="Version" value="0.1.0.alpha-1" mandatory="true"/>
+          <packInfoListElem name="Source" value="ea-probe" mandatory="false"/>
+          <packInfoListElem name="Version" value="0.1.0.alpha-2" mandatory="true"/>
           <packInfoListElem name="Section" value="non-free/admin" mandatory="false"/>
           <packInfoListElem name="Priority" value="optional" mandatory="false"/>
           <packInfoListElem name="Maintainer"
@@ -662,7 +638,7 @@
                             value="http://alert.echoes-tech.com"
                             mandatory="false"/>
           <packInfoListElem name="" value="" mandatory="false"/>
-          <packInfoListElem name="Package" value="echoes-alert-probe" mandatory="true"/>
+          <packInfoListElem name="Package" value="ea-probe" mandatory="true"/>
           <packInfoListElem name="Architecture" value="i386" mandatory="false"/>
           <packInfoListElem name="Depends"
                             value="libssl0.9.8 | libssl1.0.0"
@@ -690,6 +666,10 @@
         </cTool>
         <ccTool>
           <developmentMode>5</developmentMode>
+          <incDir>
+            <pElem>.</pElem>
+            <pElem>.</pElem>
+          </incDir>
         </ccTool>
         <fortranCompilerTool>
           <developmentMode>5</developmentMode>
@@ -708,7 +688,7 @@
       </compileType>
       <packaging>
         <packType>Debian</packType>
-        <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/echoes-alert-probe_0.1.0.alpha-1_squeeze_amd64.deb</output>
+        <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/ea-probe_0.1.0.alpha-2_squeeze_amd64.deb</output>
         <packTopDir>/opt/echoes-alert/probe</packTopDir>
         <packFileList>
           <packFileListElem type="File"
@@ -724,7 +704,7 @@
                             owner="root"
                             group="root"/>
           <packFileListElem type="File"
-                            to="${PACKAGE_TOP_DIR}etc/plugins/Helios_Debian6.0-System-Test.json"
+                            to="${PACKAGE_TOP_DIR}etc/plugins/Linux-System.json"
                             from="plugins/Linux-System.json"
                             perm="640"
                             owner="root"
@@ -807,10 +787,22 @@
                             perm="640"
                             owner="root"
                             group="root"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}glib_echoes-alert-probe_squeeze_amd64.tar.gz"
+                            from="packages/lib/amd64/glib_echoes-alert-probe_squeeze_amd64.tar.gz"
+                            perm="640"
+                            owner="root"
+                            group="root"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}json-glib_echoes-alert-probe_squeeze_amd64.tar.gz"
+                            from="packages/lib/amd64/json-glib_echoes-alert-probe_squeeze_amd64.tar.gz"
+                            perm="640"
+                            owner="root"
+                            group="root"/>
         </packFileList>
         <packInfoList>
-          <packInfoListElem name="Source" value="echoes-alert-probe" mandatory="false"/>
-          <packInfoListElem name="Version" value="0.1.0.alpha-1" mandatory="true"/>
+          <packInfoListElem name="Source" value="ea-probe" mandatory="false"/>
+          <packInfoListElem name="Version" value="0.1.0.alpha-2" mandatory="true"/>
           <packInfoListElem name="Section" value="non-free/admin" mandatory="false"/>
           <packInfoListElem name="Priority" value="optional" mandatory="false"/>
           <packInfoListElem name="Maintainer"
@@ -820,7 +812,7 @@
                             value="http://alert.echoes-tech.com"
                             mandatory="false"/>
           <packInfoListElem name="" value="" mandatory="false"/>
-          <packInfoListElem name="Package" value="echoes-alert-probe" mandatory="true"/>
+          <packInfoListElem name="Package" value="ea-probe" mandatory="true"/>
           <packInfoListElem name="Architecture" value="amd64" mandatory="false"/>
           <packInfoListElem name="Depends"
                             value="libssl0.9.8 | libssl1.0.0"
@@ -948,7 +940,7 @@
                             mandatory="true"/>
           <packInfoListElem name="Name" value="ea-probe" mandatory="true"/>
           <packInfoListElem name="Version" value="0.1.0.alpha" mandatory="true"/>
-          <packInfoListElem name="Release" value="1" mandatory="true"/>
+          <packInfoListElem name="Release" value="2" mandatory="true"/>
           <packInfoListElem name="License" value="Proprietary" mandatory="true"/>
           <packInfoListElem name="Group" value="Applications/System" mandatory="true"/>
           <packInfoListElem name="URL"
@@ -967,7 +959,7 @@
                             mandatory="true"/>
           <packInfoListElem name="%pre" value="" mandatory="false"/>
           <packInfoListElem name="%post"
-                            value="cd /opt/echoes-alert/probe\ntar xzf glib_echoes-alert-probe_squeeze_i386.tar.gz\ntar xzf json-glib_echoes-alert-probe_squeeze_i386.tar.gz\nrm -f  glib_echoes-alert-probe_squeeze_i386.tar.gz json-glib_echoes-alert-probe_squeeze_i386.tar.gz\nchkconfig --add ea-probe &amp;&amp; chkconfig ea-probe on\nservice ea-probe start"
+                            value="cd /opt/echoes-alert/probe\ntar xzf glib_echoes-alert-probe_squeeze_i386.tar.gz\ntar xzf json-glib_echoes-alert-probe_squeeze_i386.tar.gz\nrm -f  glib_echoes-alert-probe_squeeze_i386.tar.gz json-glib_echoes-alert-probe_squeeze_i386.tar.gz\nchkconfig --add ea-probe &amp;&amp; chkconfig ea-probe on"
                             mandatory="false"/>
           <packInfoListElem name="%preun"
                             value="service ea-probe stop\ncd /opt/echoes-alert/probe\n if [ -d lib ]\n then\n rm -rf lib\n fi\n if [ -d doc ]\n then\n rm -rf doc\n fi\nchkconfig ea-probe off"
@@ -1098,7 +1090,7 @@
                             mandatory="true"/>
           <packInfoListElem name="Name" value="ea-probe" mandatory="true"/>
           <packInfoListElem name="Version" value="0.1.0.alpha" mandatory="true"/>
-          <packInfoListElem name="Release" value="1" mandatory="true"/>
+          <packInfoListElem name="Release" value="2" mandatory="true"/>
           <packInfoListElem name="License" value="Proprietary" mandatory="true"/>
           <packInfoListElem name="Group" value="Applications/System" mandatory="true"/>
           <packInfoListElem name="URL"
@@ -1116,7 +1108,7 @@
                             value="The ECHOES Alert Probe"
                             mandatory="true"/>
           <packInfoListElem name="%post"
-                            value="cd /opt/echoes-alert/probe\ntar xzf glib_echoes-alert-probe_squeeze_amd64.tar.gz\ntar xzf json-glib_echoes-alert-probe_squeeze_amd64.tar.gz\nrm -f  glib_echoes-alert-probe_squeeze_amd64.tar.gz json-glib_echoes-alert-probe_squeeze_amd64.tar.gz\nchkconfig --add ea-probe &amp;&amp; chkconfig ea-probe on\nservice ea-probe start"
+                            value="cd /opt/echoes-alert/probe\ntar xzf glib_echoes-alert-probe_squeeze_amd64.tar.gz\ntar xzf json-glib_echoes-alert-probe_squeeze_amd64.tar.gz\nrm -f  glib_echoes-alert-probe_squeeze_amd64.tar.gz json-glib_echoes-alert-probe_squeeze_amd64.tar.gz\nchkconfig --add ea-probe &amp;&amp; chkconfig ea-probe on"
                             mandatory="false"/>
           <packInfoListElem name="%preun"
                             value="service ea-probe stop\ncd /opt/echoes-alert/probe\n if [ -d lib ]\n then\n rm -rf lib\n fi\n if [ -d doc ]\n then\n rm -rf doc\n fi\nchkconfig ea-probe off"

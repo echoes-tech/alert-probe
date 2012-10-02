@@ -29,17 +29,15 @@ case "$1" in
             echo "JSON_GLIB est là dans la bonne version"
         else
             echo "JSON_GLIB n'est pas là dans la bonne version"
-            echo "Téléchargement de bibliothèques JSON-Glib"
+            echo "Extraction de bibliothèques JSON-Glib"
 
             case "$ARCH" in
                 i386)
-                    wget --no-check-certificate https://forge.echoes-tech.com/attachments/download/3/json-glib_echoes-alert-probe_squeeze_i386.tar.gz
-                    tar xvzf json-glib_echoes-alert-probe_squeeze_i386.tar.gz
+                    tar xzf json-glib_echoes-alert-probe_squeeze_i386.tar.gz
                     rm -f json-glib_echoes-alert-probe_squeeze_i386.tar.gz
                     ;;
                 amd64)
-                    wget --no-check-certificate https://forge.echoes-tech.com/attachments/download/1/json-glib_echoes-alert-probe_squeeze_amd64.tar.gz
-                    tar xvzf json-glib_echoes-alert-probe_squeeze_amd64.tar.gz
+                    tar xzf json-glib_echoes-alert-probe_squeeze_amd64.tar.gz
                     rm -f json-glib_echoes-alert-probe_squeeze_amd64.tar.gz
                     ;;
                 *)
@@ -49,20 +47,16 @@ case "$1" in
 
             if [ $(dpkg --compare-versions "$GLIB_VERSION" ">=" "2.32" && echo "yes" || echo "no") = "yes" ]
             then
-                    echo "JGLIB est là dans la bonne version"
+                echo "GLIB est là dans la bonne version"
             else
                 echo "GLIB n'est pas là dans la bonne version"
-                echo "Téléchargement de bibliothèques Glib"
+                echo "Extraction de bibliothèques Glib"
                 case "$ARCH" in
                     i386)
-                        wget --no-check-certificate https://forge.echoes-tech.com/attachments/download/4/glib_echoes-alert-probe_squeeze_i386.tar.gz
-                        tar xvzf glib_echoes-alert-probe_squeeze_i386.tar.gz
-                        rm -f glib_echoes-alert-probe_squeeze_i386.tar.gz
+                        tar xzf glib_echoes-alert-probe_squeeze_i386.tar.gz
                         ;;
                     amd64)
-                        wget --no-check-certificate https://forge.echoes-tech.com/attachments/download/2/glib_echoes-alert-probe_squeeze_amd64.tar.gz
-                        tar xvzf glib_echoes-alert-probe_squeeze_amd64.tar.gz
-                        rm -f glib_echoes-alert-probe_squeeze_amd64.tar.gz
+                        tar xzf glib_echoes-alert-probe_squeeze_amd64.tar.gz
                         ;;
                     *)
                         echo "Votre architecture n'est pas supportée. Veuillez compiler la bibliothèque glib >= 2.32.4 manuellement."
@@ -70,6 +64,19 @@ case "$1" in
                 esac
             fi
         fi
+
+        case "$ARCH" in
+            i386)
+                rm -f json-glib_echoes-alert-probe_squeeze_i386.tar.gz
+                rm -f glib_echoes-alert-probe_squeeze_i386.tar.gz
+                ;;
+            amd64)
+                rm -f json-glib_echoes-alert-probe_squeeze_amd64.tar.gz
+                rm -f glib_echoes-alert-probe_squeeze_amd64.tar.gz
+                ;;
+        esac
+
+
         chown -R root:root . /etc/init.d/ea-probe
         chown -R root:adm /var/log/echoes-alert
         if [ -d lib ]
@@ -82,8 +89,6 @@ case "$1" in
         fi
 
         update-rc.d -f ea-probe defaults
-
-        service ea-probe start
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
