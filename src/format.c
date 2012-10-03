@@ -19,14 +19,7 @@
 
 int pushSDElementQueue(
                        SDElementQueue *sdElementQueue,
-                       unsigned int idPlg,
-                       unsigned int idAsset,
-                       unsigned int idSrc,
-                       unsigned int idSearch,
-                       unsigned int valueNum,
-                       unsigned short lotNum,
-                       unsigned int lineNum,
-                       const gchar *b64Value,
+                       char *afterOffset,
                        time_t time
                        )
 {
@@ -37,7 +30,7 @@ int pushSDElementQueue(
     }
 
     new->time = time;
-
+            
     sprintf(
             new->beforeMsgID,
             "%s %s %d ID",
@@ -52,19 +45,8 @@ int pushSDElementQueue(
             *sdElementQueue->transportMsgVersion,
             *sdElementQueue->probeID
         );
-
-    sprintf(
-            new->afterOffset,
-            "%d-%d-%d-%d-%d-%d-%d=\"%s\"]",
-            idPlg,
-            idAsset,
-            idSrc,
-            idSearch,
-            valueNum,
-            lotNum,
-            lineNum,
-            b64Value
-        );
+    
+    new->afterOffset = strdup(afterOffset);
     
     /* Debut de la zone protegee. */
     pthread_mutex_lock (& sdElementQueue->mutex);
@@ -92,6 +74,10 @@ int pushSDElementQueue(
 
 int popCollectQueue(CollectQueue *collectQueue, SDElementQueue *sdElementQueue)
 {
+    char afterOffset[10000] = "";
+    char afterOffsetTmp[10000] = "";
+    unsigned short i = 0;
+
     if (collectQueue == NULL)
     {
         exit(EXIT_FAILURE);
@@ -104,18 +90,28 @@ int popCollectQueue(CollectQueue *collectQueue, SDElementQueue *sdElementQueue)
     if (collectQueue->first != NULL)
     {
         CollectQueueElement *popedElement = collectQueue->first;
+
+        for(i = 0; i < popedElement->valuesLength; i++)
+        {
+            sprintf(
+                    afterOffsetTmp,
+                    " %d-%d-%d-%d-%d-%d-%d=\"%s\"",
+                    popedElement->idPlg,
+                    popedElement->idAsset,
+                    popedElement->idSrc,
+                    popedElement->idSearch,
+                    (i + 1),
+                    popedElement->lotNum,
+                    popedElement->lineNum,
+                    /*TODO: Tester le retour de base64 */
+                    g_base64_encode(popedElement->values[i], strlen(popedElement->values[i]))
+                );
+            strcat(afterOffset, afterOffsetTmp);
+        }
         
         pushSDElementQueue(
                            sdElementQueue,
-                           popedElement->idPlg,
-                           popedElement->idAsset,
-                           popedElement->idSrc,
-                           popedElement->idSearch,
-                           popedElement->valueNum,
-                           popedElement->lotNum,
-                           popedElement->lineNum,
-                           /*TODO: Tester le retour de base64 */
-                           g_base64_encode(popedElement->value, strlen(popedElement->value)),
+                           afterOffset,
                            popedElement->time
                            );
         collectQueue->first = popedElement->next;

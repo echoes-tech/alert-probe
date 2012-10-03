@@ -26,9 +26,9 @@ extern "C" {
 typedef struct CollectQueueElement CollectQueueElement;
 struct CollectQueueElement
 {
-    unsigned int idPlg, idAsset, idSrc, idSearch, lineNum, valueNum;
+    unsigned int idPlg, idAsset, idSrc, idSearch, lineNum, valuesLength;
     unsigned short lotNum;
-    char value[1000];
+    char **values;
     time_t time;
     CollectQueueElement *next;
 };
@@ -56,7 +56,6 @@ typedef IDInfo* IDList;
 typedef struct AddonTypeParamsInfo AddonTypeParamsInfo;
 struct AddonTypeParamsInfo
 {
-    unsigned int valueNum;
     void *params;
     IDList IDList;
     AddonTypeParamsInfo *nxt;

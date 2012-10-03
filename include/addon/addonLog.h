@@ -26,7 +26,6 @@ int addonLogRegex(
                   unsigned int lineNum,
                   void *params,
                   unsigned short lotNum,
-                  unsigned int *valueNum,
                   IDList *idList,
                   time_t *now
                   );
@@ -41,7 +40,6 @@ int addonLogLocation(
                      unsigned int lineNum,
                      void *params,
                      unsigned short lotNum,
-                     unsigned int *valueNum,
                      IDList *idList,
                      time_t *now
                      );

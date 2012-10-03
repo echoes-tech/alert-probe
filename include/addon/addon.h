@@ -57,20 +57,20 @@ struct AddonsMgrParams
  * Push a new element to CollectQueue
  * @param collectQueue 
  * @param idList
- * @param valueNum
  * @param lotNum
  * @param lineNum
- * @param value
+ * @param valuesLength
+ * @param values
  * @param time
  * @return Exit status
  */
 int pushCollectQueue(
                      CollectQueue *collectQueue,
                      IDList *idList,
-                     const unsigned int valueNum,
                      const unsigned short lotNum,
-                     const unsigned int lineNum, 
-                     const char *value,
+                     const unsigned int lineNum,
+                     const unsigned int valuesLength,
+                     char **values,
                      time_t time
                      );
 

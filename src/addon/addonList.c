@@ -268,7 +268,6 @@ int pushAddonList(
     if(addonTypeInfo->addonTypeParamsList == NULL || addonTypeParamsInfoTmp == NULL)
     {
         addonTypeParamsInfo = calloc(1, sizeof (AddonTypeParamsInfo));
-        addonTypeParamsInfo->valueNum = 1;
         addonTypeParamsInfo->params = searchParams;
 
         /* Assign the address of the next element in the new element */

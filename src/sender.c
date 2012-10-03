@@ -134,7 +134,7 @@ int sendMessage(
     snprintf(
         completMsg,
              480,
-             "<118>1 %s %s%d %s%d %s\n",
+             "<118>1 %s %s%d %s%d%s]\n",
              timestamp,
              beforeMsgID,
              *msgID,

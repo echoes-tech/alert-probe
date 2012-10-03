@@ -16,14 +16,16 @@
 int pushCollectQueue(
                      CollectQueue *collectQueue,
                      IDList *idList,
-                     const unsigned int valueNum,
                      const unsigned short lotNum,
-                     const unsigned int lineNum, 
-                     const char *value,
+                     const unsigned int lineNum,
+                     const unsigned int valuesLength,
+                     char **values,
                      time_t time
                      )
 {
     IDInfo *idInfo;
+
+    unsigned short i = 0;
 
     idInfo = *idList;
     /* Tant que l'on n'est pas au bout de la liste */
@@ -39,10 +41,14 @@ int pushCollectQueue(
         new->idAsset = *idInfo->idAsset;
         new->idSrc = *idInfo->idSrc;
         new->idSearch = *idInfo->idSearch;
-        new->valueNum = valueNum;
         new->lotNum = lotNum;
         new->lineNum = lineNum;
-        strcpy(new->value, value);
+        new->valuesLength = valuesLength;
+        new->values = calloc(new->valuesLength, sizeof (char*));
+        for(i = 0; i < valuesLength; ++i)
+        {
+            new->values[i] = strdup(values[i]);
+        }
         new->time = time;
 
         /* Debut de la zone protegee. */

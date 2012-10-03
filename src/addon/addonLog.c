@@ -19,13 +19,14 @@ int addonLogRegex(
                   unsigned int lineNum,
                   void *params,
                   unsigned short lotNum,
-                  unsigned int *valueNum,
                   IDList *idList,
                   time_t *now
                   )
 {
     SearchInfoParams3_1 *searchInfoParams = (SearchInfoParams3_1*)params;
     char *res = NULL;
+    char **values = NULL;
+    unsigned short i = 0;
 
     if (searchInfoParams->pmatch)
     {
@@ -39,10 +40,12 @@ int addonLogRegex(
                                           );
         if (searchInfoParams->match == 0)
         {
-            for (*valueNum = 1; *valueNum < searchInfoParams->nmatch; ++*valueNum)
+            values = calloc(searchInfoParams->nmatch, sizeof (char*));
+
+            for (i = 1; i < searchInfoParams->nmatch; ++i)
             {
-                int start = searchInfoParams->pmatch[*valueNum].rm_so;
-                int end = searchInfoParams->pmatch[*valueNum].rm_eo;
+                int start = searchInfoParams->pmatch[i].rm_so;
+                int end = searchInfoParams->pmatch[i].rm_eo;
                 size_t size = end - start;
 
                 res = malloc(sizeof (*res) * (size  + 1));
@@ -50,22 +53,28 @@ int addonLogRegex(
                 {
                     strncpy(res, &line[start], size);
                     res[size] = '\0';
-                    if (pushCollectQueue(
-                                         collectQueue,
-                                         idList,
-                                         *valueNum,
-                                         lotNum,
-                                         lineNum,
-                                         res,
-                                         *now
-                                         ))
-                    {
-                        perror("pushCollectQueue()");
-                        exit(EXIT_FAILURE);
-                    }
+
+                    values[i - 1] = strdup(res);
+
                     free(res);
                 }
             }
+            if (pushCollectQueue(
+                                 collectQueue,
+                                 idList,
+                                 lotNum,
+                                 lineNum,
+                                 (searchInfoParams->nmatch - 1),
+                                 values,
+                                 *now
+                                 ))
+            {
+                perror("pushCollectQueue()");
+                exit(EXIT_FAILURE);
+            }
+
+            /* Cleanup */
+            free(values);
         }
     }
 
@@ -78,7 +87,6 @@ int addonLogLocation(
                      unsigned int lineNum,
                      void *params,
                      unsigned short lotNum,
-                     unsigned int *valueNum,
                      IDList *idList,
                      time_t *now
                      )
@@ -86,6 +94,7 @@ int addonLogLocation(
     SearchInfoParams3_2 *searchInfoParams = (SearchInfoParams3_2*)params;
 
     char *res = NULL;
+    char *values[1];
 
     res = calloc(searchInfoParams->length, sizeof (char));
     if (res)
@@ -96,21 +105,25 @@ int addonLogLocation(
                 searchInfoParams->length
                 );
 
-        if (pushCollectQueue(
-                             collectQueue,
-                             idList,
-                             *valueNum,
-                             lotNum,
-                             lineNum,
-                             res,
-                             *now
-                             ))
-        {
-            perror("pushCollectQueue()");
-            exit(EXIT_FAILURE);
-        }
+
+        values[0] = strdup(res);
+
         /* Cleanup */
         free(res);
+    }
+
+    if (pushCollectQueue(
+                         collectQueue,
+                         idList,
+                         lotNum,
+                         lineNum,
+                         1,
+                         values,
+                         *now
+                         ))
+    {
+        perror("pushCollectQueue()");
+        exit(EXIT_FAILURE);
     }
 
     return(EXIT_SUCCESS);
@@ -142,7 +155,6 @@ void whileAddonTypeInfo(
                               lineNum,
                               addonTypeParamsInfo->params,
                               addonParamsInfo->lotNum,
-                              &addonTypeParamsInfo->valueNum,
                               &addonTypeParamsInfo->IDList,
                               now
                               );
@@ -154,7 +166,6 @@ void whileAddonTypeInfo(
                                  lineNum,
                                  addonTypeParamsInfo->params,
                                  addonParamsInfo->lotNum,
-                                 &addonTypeParamsInfo->valueNum,
                                  &addonTypeParamsInfo->IDList,
                                  now
                                  );

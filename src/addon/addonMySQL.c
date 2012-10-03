@@ -18,7 +18,6 @@ int addonMySQLQuery(
                     MYSQL *mysql,
                     void *params,
                     unsigned short lotNum,
-                    unsigned int *valueNum,
                     IDList *idList,
                     time_t *now
                     )
@@ -26,13 +25,14 @@ int addonMySQLQuery(
     SearchInfoParams4_1 *searchInfoParams = (SearchInfoParams4_1*)params;
 
     char *res = NULL;
+    char **values = NULL;
 
     /* Objects */
     MYSQL_RES *result = NULL;
     MYSQL_ROW row;
 
     unsigned int i = 0, n = 1;
-    unsigned int num_champs = 0;
+    unsigned int nbFields = 0;
 
     /* Query */
     mysql_query(mysql, searchInfoParams->query);
@@ -41,8 +41,10 @@ int addonMySQLQuery(
     result = mysql_use_result(mysql);
 
     /* Number of fields */
-    num_champs = mysql_num_fields(result);
+    nbFields = mysql_num_fields(result);
 
+    values = calloc(nbFields, sizeof (char*));
+    
     while ((row = mysql_fetch_row(result)))
     {
         unsigned long *lengths;
@@ -50,33 +52,37 @@ int addonMySQLQuery(
         lengths = mysql_fetch_lengths(result);
 
         /* Loop to retrieve each field */
-        for(i = 0; i < num_champs; i++)
+        for(i = 0; i < nbFields; i++)
         {
             res = calloc(lengths[i], sizeof (char));
             if (res)
             {
                 strncpy(res, row[i] ? row[i] : "NULL", lengths[i]);
-                if (pushCollectQueue(
-                                     collectQueue,
-                                     idList,
-                                     (i + 1),
-                                     lotNum,
-                                     n,
-                                     res,
-                                     *now
-                                     ))
-                {
-                    perror("pushCollectQueue()");
-                    exit(EXIT_FAILURE);
-                }
+
+                values[i] = strdup(res);
+
                 /* Cleanup */
                 free(res);
             }
+        }
+        if (pushCollectQueue(
+                             collectQueue,
+                             idList,
+                             lotNum,
+                             n,
+                             nbFields,
+                             values,
+                             *now
+                             ))
+        {
+            perror("pushCollectQueue()");
+            exit(EXIT_FAILURE);
         }
         ++n;
     }
 
     /* Cleanup */
+    free(values);
     mysql_free_result(result);
 
     return(EXIT_SUCCESS);
@@ -149,14 +155,13 @@ void *addonMySQL(void *arg)
                     {
                     case 1:
                         addonMySQLQuery(
-                                       addonParamsInfo->collectQueue,
-                                       &mysql,
-                                       addonTypeParamsInfo->params,
-                                       addonParamsInfo->lotNum,
-                                       &addonTypeParamsInfo->valueNum,
-                                       &addonTypeParamsInfo->IDList,
-                                       &now
-                                       );
+                                        addonParamsInfo->collectQueue,
+                                        &mysql,
+                                        addonTypeParamsInfo->params,
+                                        addonParamsInfo->lotNum,
+                                        &addonTypeParamsInfo->IDList,
+                                        &now
+                                        );
                         break;
                     default:
                         break;

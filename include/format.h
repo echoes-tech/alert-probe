@@ -20,7 +20,7 @@
 typedef struct SDElementQueueElement SDElementQueueElement;
 struct SDElementQueueElement
 {
-    char beforeMsgID[10000], afterMsgID[10000], afterOffset[10000];
+    char beforeMsgID[10000], afterMsgID[10000], *afterOffset;
     time_t time;
     SDElementQueueElement *next;
 };
@@ -47,14 +47,7 @@ struct FormatParams
  */
 int pushSDElementQueue(
                        SDElementQueue *sdElementQueue,
-                       unsigned int idPlg,
-                       unsigned int idAsset,
-                       unsigned int idSrc,
-                       unsigned int idSearch,
-                       unsigned int valueNum,
-                       unsigned short lotNum,
-                       unsigned int lineNum,
-                       const gchar *b64Value,
+                       char *afterOffset,
                        time_t time
                        );
 
