@@ -101,7 +101,7 @@
         </environment>
       </runprofile>
     </conf>
-    <conf name="Deb_64bits_Release" type="1">
+    <conf name="Deb_Release" type="1">
       <toolsSet>
         <developmentServer>localhost</developmentServer>
         <platform>2</platform>
@@ -167,7 +167,7 @@
         </environment>
       </runprofile>
     </conf>
-    <conf name="Debian6_64bits_Release" type="1">
+    <conf name="Debian6_Release" type="1">
       <toolsSet>
         <developmentServer>localhost</developmentServer>
         <platform>2</platform>
@@ -233,7 +233,7 @@
         </environment>
       </runprofile>
     </conf>
-    <conf name="RPM_64bits_Release" type="1">
+    <conf name="RPM_Release" type="1">
       <toolsSet>
         <developmentServer>localhost</developmentServer>
         <platform>2</platform>

@@ -7,7 +7,7 @@
 # Macros
 TOP=`pwd`
 CND_PLATFORM=GNU-Linux-x86
-CND_CONF=RPM_64bits_Release
+CND_CONF=RPM_Release
 CND_DISTDIR=dist
 CND_BUILDDIR=build
 NBTMPDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tmp-packaging
@@ -99,11 +99,11 @@ copyFileToTmpDir "AUTHORS" "${NBTMPDIR}/${PACKAGE_TOP_DIR}doc/AUTHORS" 0640
 
 cd "${TOP}"
 makeDirectory "${NBTMPDIR}//opt/echoes-alert/probe/doc"
-copyFileToTmpDir "COPYING" "${NBTMPDIR}/${PACKAGE_TOP_DIR}doc/COPYING" 0640
+copyFileToTmpDir "README" "${NBTMPDIR}/${PACKAGE_TOP_DIR}doc/README" 0640
 
 cd "${TOP}"
 makeDirectory "${NBTMPDIR}//opt/echoes-alert/probe/doc"
-copyFileToTmpDir "README" "${NBTMPDIR}/${PACKAGE_TOP_DIR}doc/README" 0640
+copyFileToTmpDir "COPYRIGHT" "${NBTMPDIR}/${PACKAGE_TOP_DIR}doc/COPYRIGHT" 0640
 
 
 # Ensure proper rpm build environment
@@ -135,14 +135,14 @@ cd "${TOP}"
 echo BuildRoot: ${TOP}/${NBTMPDIR} >> ${SPEC_FILE}
 echo 'Summary: The ECHOES Alert Probe' >> ${SPEC_FILE}
 echo Name: ea-probe >> ${SPEC_FILE}
-echo Version: 0.1.0.alpha >> ${SPEC_FILE}
-echo Release: 2 >> ${SPEC_FILE}
+echo Version: 0.1.0.beta >> ${SPEC_FILE}
+echo Release: 1 >> ${SPEC_FILE}
 echo License: Proprietary >> ${SPEC_FILE}
 echo Group: Applications/System >> ${SPEC_FILE}
 echo URL: http://alert.echoes-tech.com >> ${SPEC_FILE}
 echo Vendor: ECHOES Technologies SAS >> ${SPEC_FILE}
 echo 'Packager: Florent Poinsaut <florent.poinsaut@echoes-tech.com>' >> ${SPEC_FILE}
-echo Requires: openssl >> ${SPEC_FILE}
+echo Requires: openssl, mysql-libs >> ${SPEC_FILE}
 echo AutoReqProv: no >> ${SPEC_FILE}
 echo '%description' >> ${SPEC_FILE}
 echo 'The ECHOES Alert Probe' >> ${SPEC_FILE}
@@ -178,7 +178,7 @@ echo 'fi' >> ${SPEC_FILE}
 echo 'fi' >> ${SPEC_FILE}
 echo  >> ${SPEC_FILE}
 echo '%changelog' >> ${SPEC_FILE}
-echo ' * Thu Aug 30 2012 Florent Poinsaut <florent.poinsaut@echoes-tech.com> 0.1.0.alpha-1' >> ${SPEC_FILE}
+echo ' * Thu Aug 30 2012 Florent Poinsaut <florent.poinsaut@echoes-tech.com> 0.1.0.beta-1' >> ${SPEC_FILE}
 echo '- Initial release' >> ${SPEC_FILE}
 echo  >> ${SPEC_FILE}
 echo '%files' >> ${SPEC_FILE}
@@ -191,8 +191,8 @@ echo \"/${PACKAGE_TOP_DIR}json-glib_echoes-alert-probe_squeeze_amd64.tar.gz\" >>
 echo \"//etc/init.d/ea-probe\" >> ${SPEC_FILE}
 echo \"//etc/sysconfig/ea-probe\" >> ${SPEC_FILE}
 echo \"/${PACKAGE_TOP_DIR}doc/AUTHORS\" >> ${SPEC_FILE}
-echo \"/${PACKAGE_TOP_DIR}doc/COPYING\" >> ${SPEC_FILE}
 echo \"/${PACKAGE_TOP_DIR}doc/README\" >> ${SPEC_FILE}
+echo \"/${PACKAGE_TOP_DIR}doc/COPYRIGHT\" >> ${SPEC_FILE}
 echo '%dir' >> ${SPEC_FILE}
 echo \"//var/log/echoes-alert/\" >> ${SPEC_FILE}
 

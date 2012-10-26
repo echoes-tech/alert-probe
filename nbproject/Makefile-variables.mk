@@ -30,14 +30,14 @@ CND_ARTIFACT_PATH_Deb_32bits_Release=dist/Deb_32bits_Release/GNU-Linux-x86/probe
 CND_PACKAGE_DIR_Deb_32bits_Release=dist/Deb_32bits_Release/GNU-Linux-x86/package
 CND_PACKAGE_NAME_Deb_32bits_Release=ea-probe_0.1.0.alpha-2_i386.deb
 CND_PACKAGE_PATH_Deb_32bits_Release=dist/Deb_32bits_Release/GNU-Linux-x86/package/ea-probe_0.1.0.alpha-2_i386.deb
-# Deb_64bits_Release configuration
-CND_PLATFORM_Deb_64bits_Release=GNU-Linux-x86
-CND_ARTIFACT_DIR_Deb_64bits_Release=dist/Deb_64bits_Release/GNU-Linux-x86
-CND_ARTIFACT_NAME_Deb_64bits_Release=probe
-CND_ARTIFACT_PATH_Deb_64bits_Release=dist/Deb_64bits_Release/GNU-Linux-x86/probe
-CND_PACKAGE_DIR_Deb_64bits_Release=dist/Deb_64bits_Release/GNU-Linux-x86/package
-CND_PACKAGE_NAME_Deb_64bits_Release=ea-probe_0.1.0.alpha-2_amd64.deb
-CND_PACKAGE_PATH_Deb_64bits_Release=dist/Deb_64bits_Release/GNU-Linux-x86/package/ea-probe_0.1.0.alpha-2_amd64.deb
+# Deb_Release configuration
+CND_PLATFORM_Deb_Release=GNU-Linux-x86
+CND_ARTIFACT_DIR_Deb_Release=dist/Deb_Release/GNU-Linux-x86
+CND_ARTIFACT_NAME_Deb_Release=probe
+CND_ARTIFACT_PATH_Deb_Release=dist/Deb_Release/GNU-Linux-x86/probe
+CND_PACKAGE_DIR_Deb_Release=dist/Deb_Release/GNU-Linux-x86/package
+CND_PACKAGE_NAME_Deb_Release=ea-probe_0.1.0.beta-1_amd64.deb
+CND_PACKAGE_PATH_Deb_Release=dist/Deb_Release/GNU-Linux-x86/package/ea-probe_0.1.0.beta-1_amd64.deb
 # Debian6_32bits_Release configuration
 CND_PLATFORM_Debian6_32bits_Release=GNU-Linux-x86
 CND_ARTIFACT_DIR_Debian6_32bits_Release=dist/Debian6_32bits_Release/GNU-Linux-x86
@@ -46,14 +46,14 @@ CND_ARTIFACT_PATH_Debian6_32bits_Release=dist/Debian6_32bits_Release/GNU-Linux-x
 CND_PACKAGE_DIR_Debian6_32bits_Release=dist/Debian6_32bits_Release/GNU-Linux-x86/package
 CND_PACKAGE_NAME_Debian6_32bits_Release=ea-probe_0.1.0.alpha-2_squeeze_i386.deb
 CND_PACKAGE_PATH_Debian6_32bits_Release=dist/Debian6_32bits_Release/GNU-Linux-x86/package/ea-probe_0.1.0.alpha-2_squeeze_i386.deb
-# Debian6_64bits_Release configuration
-CND_PLATFORM_Debian6_64bits_Release=GNU-Linux-x86
-CND_ARTIFACT_DIR_Debian6_64bits_Release=dist/Debian6_64bits_Release/GNU-Linux-x86
-CND_ARTIFACT_NAME_Debian6_64bits_Release=probe
-CND_ARTIFACT_PATH_Debian6_64bits_Release=dist/Debian6_64bits_Release/GNU-Linux-x86/probe
-CND_PACKAGE_DIR_Debian6_64bits_Release=dist/Debian6_64bits_Release/GNU-Linux-x86/package
-CND_PACKAGE_NAME_Debian6_64bits_Release=ea-probe_0.1.0.alpha-2_squeeze_amd64.deb
-CND_PACKAGE_PATH_Debian6_64bits_Release=dist/Debian6_64bits_Release/GNU-Linux-x86/package/ea-probe_0.1.0.alpha-2_squeeze_amd64.deb
+# Debian6_Release configuration
+CND_PLATFORM_Debian6_Release=GNU-Linux-x86
+CND_ARTIFACT_DIR_Debian6_Release=dist/Debian6_Release/GNU-Linux-x86
+CND_ARTIFACT_NAME_Debian6_Release=probe
+CND_ARTIFACT_PATH_Debian6_Release=dist/Debian6_Release/GNU-Linux-x86/probe
+CND_PACKAGE_DIR_Debian6_Release=dist/Debian6_Release/GNU-Linux-x86/package
+CND_PACKAGE_NAME_Debian6_Release=ea-probe_0.1.0.beta-1_squeeze_amd64.deb
+CND_PACKAGE_PATH_Debian6_Release=dist/Debian6_Release/GNU-Linux-x86/package/ea-probe_0.1.0.beta-1_squeeze_amd64.deb
 # RPM_32bits_Release configuration
 CND_PLATFORM_RPM_32bits_Release=GNU-Linux-x86
 CND_ARTIFACT_DIR_RPM_32bits_Release=dist/RPM_32bits_Release/GNU-Linux-x86
@@ -62,14 +62,14 @@ CND_ARTIFACT_PATH_RPM_32bits_Release=dist/RPM_32bits_Release/GNU-Linux-x86/probe
 CND_PACKAGE_DIR_RPM_32bits_Release=dist/RPM_32bits_Release/GNU-Linux-x86/package
 CND_PACKAGE_NAME_RPM_32bits_Release=
 CND_PACKAGE_PATH_RPM_32bits_Release=
-# RPM_64bits_Release configuration
-CND_PLATFORM_RPM_64bits_Release=GNU-Linux-x86
-CND_ARTIFACT_DIR_RPM_64bits_Release=dist/RPM_64bits_Release/GNU-Linux-x86
-CND_ARTIFACT_NAME_RPM_64bits_Release=probe
-CND_ARTIFACT_PATH_RPM_64bits_Release=dist/RPM_64bits_Release/GNU-Linux-x86/probe
-CND_PACKAGE_DIR_RPM_64bits_Release=dist/RPM_64bits_Release/GNU-Linux-x86/package
-CND_PACKAGE_NAME_RPM_64bits_Release=
-CND_PACKAGE_PATH_RPM_64bits_Release=
+# RPM_Release configuration
+CND_PLATFORM_RPM_Release=GNU-Linux-x86
+CND_ARTIFACT_DIR_RPM_Release=dist/RPM_Release/GNU-Linux-x86
+CND_ARTIFACT_NAME_RPM_Release=probe
+CND_ARTIFACT_PATH_RPM_Release=dist/RPM_Release/GNU-Linux-x86/probe
+CND_PACKAGE_DIR_RPM_Release=dist/RPM_Release/GNU-Linux-x86/package
+CND_PACKAGE_NAME_RPM_Release=
+CND_PACKAGE_PATH_RPM_Release=
 #
 # include compiler specific variables
 #

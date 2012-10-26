@@ -99,11 +99,11 @@ copyFileToTmpDir "AUTHORS" "${NBTMPDIR}/${PACKAGE_TOP_DIR}doc/AUTHORS" 0640
 
 cd "${TOP}"
 makeDirectory "${NBTMPDIR}//opt/echoes-alert/probe/doc"
-copyFileToTmpDir "COPYING" "${NBTMPDIR}/${PACKAGE_TOP_DIR}doc/COPYING" 0640
+copyFileToTmpDir "README" "${NBTMPDIR}/${PACKAGE_TOP_DIR}doc/README" 0640
 
 cd "${TOP}"
 makeDirectory "${NBTMPDIR}//opt/echoes-alert/probe/doc"
-copyFileToTmpDir "README" "${NBTMPDIR}/${PACKAGE_TOP_DIR}doc/README" 0640
+copyFileToTmpDir "COPYRIGHT" "${NBTMPDIR}/${PACKAGE_TOP_DIR}doc/COPYRIGHT" 0640
 
 
 # Ensure proper rpm build environment
@@ -142,7 +142,7 @@ echo Group: Applications/System >> ${SPEC_FILE}
 echo URL: http://alert.echoes-tech.com >> ${SPEC_FILE}
 echo Vendor: ECHOES Technologies SAS >> ${SPEC_FILE}
 echo 'Packager: Florent Poinsaut <florent.poinsaut@echoes-tech.com>' >> ${SPEC_FILE}
-echo Requires: openssl >> ${SPEC_FILE}
+echo Requires: openssl, mysql-libs >> ${SPEC_FILE}
 echo AutoReqProv: no >> ${SPEC_FILE}
 echo '%description' >> ${SPEC_FILE}
 echo 'The ECHOES Alert Probe' >> ${SPEC_FILE}
@@ -193,8 +193,8 @@ echo \"/${PACKAGE_TOP_DIR}json-glib_echoes-alert-probe_squeeze_i386.tar.gz\" >> 
 echo \"//etc/init.d/ea-probe\" >> ${SPEC_FILE}
 echo \"//etc/sysconfig/ea-probe\" >> ${SPEC_FILE}
 echo \"/${PACKAGE_TOP_DIR}doc/AUTHORS\" >> ${SPEC_FILE}
-echo \"/${PACKAGE_TOP_DIR}doc/COPYING\" >> ${SPEC_FILE}
 echo \"/${PACKAGE_TOP_DIR}doc/README\" >> ${SPEC_FILE}
+echo \"/${PACKAGE_TOP_DIR}doc/COPYRIGHT\" >> ${SPEC_FILE}
 echo '%dir' >> ${SPEC_FILE}
 echo \"//var/log/echoes-alert/\" >> ${SPEC_FILE}
 

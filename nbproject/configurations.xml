@@ -333,7 +333,7 @@
         </packInfoList>
       </packaging>
     </conf>
-    <conf name="Deb_64bits_Release" type="1">
+    <conf name="Deb_Release" type="1">
       <toolsSet>
         <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
         <compilerSet>default</compilerSet>
@@ -370,7 +370,7 @@
       </compileType>
       <packaging>
         <packType>Debian</packType>
-        <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/ea-probe_0.1.0.alpha-2_amd64.deb</output>
+        <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/ea-probe_0.1.0.beta-1_amd64.deb</output>
         <packTopDir>/opt/echoes-alert/probe</packTopDir>
         <packFileList>
           <packFileListElem type="File"
@@ -472,7 +472,7 @@
         </packFileList>
         <packInfoList>
           <packInfoListElem name="Source" value="ea-probe" mandatory="false"/>
-          <packInfoListElem name="Version" value="0.1.0.alpha-2" mandatory="true"/>
+          <packInfoListElem name="Version" value="0.1.0.beta-1" mandatory="true"/>
           <packInfoListElem name="Section" value="non-free/admin" mandatory="false"/>
           <packInfoListElem name="Priority" value="optional" mandatory="false"/>
           <packInfoListElem name="Maintainer"
@@ -665,7 +665,7 @@
         </packInfoList>
       </packaging>
     </conf>
-    <conf name="Debian6_64bits_Release" type="1">
+    <conf name="Debian6_Release" type="1">
       <toolsSet>
         <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
         <compilerSet>default</compilerSet>
@@ -706,7 +706,7 @@
       </compileType>
       <packaging>
         <packType>Debian</packType>
-        <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/ea-probe_0.1.0.alpha-2_squeeze_amd64.deb</output>
+        <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/ea-probe_0.1.0.beta-1_squeeze_amd64.deb</output>
         <packTopDir>/opt/echoes-alert/probe</packTopDir>
         <packFileList>
           <packFileListElem type="File"
@@ -820,7 +820,7 @@
         </packFileList>
         <packInfoList>
           <packInfoListElem name="Source" value="ea-probe" mandatory="false"/>
-          <packInfoListElem name="Version" value="0.1.0.alpha-2" mandatory="true"/>
+          <packInfoListElem name="Version" value="0.1.0.beta-1" mandatory="true"/>
           <packInfoListElem name="Section" value="non-free/admin" mandatory="false"/>
           <packInfoListElem name="Priority" value="optional" mandatory="false"/>
           <packInfoListElem name="Maintainer"
@@ -993,7 +993,7 @@
         </packInfoList>
       </packaging>
     </conf>
-    <conf name="RPM_64bits_Release" type="1">
+    <conf name="RPM_Release" type="1">
       <toolsSet>
         <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
         <compilerSet>default</compilerSet>
@@ -1111,8 +1111,8 @@
                             value="The ECHOES Alert Probe&apos;"
                             mandatory="true"/>
           <packInfoListElem name="Name" value="ea-probe" mandatory="true"/>
-          <packInfoListElem name="Version" value="0.1.0.alpha" mandatory="true"/>
-          <packInfoListElem name="Release" value="2" mandatory="true"/>
+          <packInfoListElem name="Version" value="0.1.0.beta" mandatory="true"/>
+          <packInfoListElem name="Release" value="1" mandatory="true"/>
           <packInfoListElem name="License" value="Proprietary" mandatory="true"/>
           <packInfoListElem name="Group" value="Applications/System" mandatory="true"/>
           <packInfoListElem name="URL"
@@ -1139,7 +1139,7 @@
                             value="if [ `find /opt/echoes-alert/probe -type f | wc -l` -eq 0 ]\nthen\nrm -rf /opt/echoes-alert/probe\nif [ `find /opt/echoes-alert -type f | wc -l` -eq 0 ]\nthen\nrm -rf /opt/echoes-alert\nfi\nfi"
                             mandatory="false"/>
           <packInfoListElem name="%changelog"
-                            value=" * Thu Aug 30 2012 Florent Poinsaut &lt;florent.poinsaut@echoes-tech.com> 0.1.0.alpha-1\n- Initial release"
+                            value=" * Thu Aug 30 2012 Florent Poinsaut &lt;florent.poinsaut@echoes-tech.com> 0.1.0.beta-1\n- Initial release"
                             mandatory="false"/>
         </packInfoList>
       </packaging>

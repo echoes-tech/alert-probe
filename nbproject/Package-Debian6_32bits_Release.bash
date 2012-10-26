@@ -115,10 +115,6 @@ copyFileToTmpDir "AUTHORS" "${NBTMPDIR}/${PACKAGE_TOP_DIR}doc/AUTHORS" 0640
 
 cd "${TOP}"
 makeDirectory "${NBTMPDIR}//opt/echoes-alert/probe/doc"
-copyFileToTmpDir "COPYING" "${NBTMPDIR}/${PACKAGE_TOP_DIR}doc/COPYING" 0640
-
-cd "${TOP}"
-makeDirectory "${NBTMPDIR}//opt/echoes-alert/probe/doc"
 copyFileToTmpDir "README" "${NBTMPDIR}/${PACKAGE_TOP_DIR}doc/README" 0640
 
 cd "${TOP}"
@@ -128,6 +124,10 @@ copyFileToTmpDir "packages/lib/i386/glib_echoes-alert-probe_squeeze_i386.tar.gz"
 cd "${TOP}"
 makeDirectory "${NBTMPDIR}//opt/echoes-alert/probe"
 copyFileToTmpDir "packages/lib/i386/json-glib_echoes-alert-probe_squeeze_i386.tar.gz" "${NBTMPDIR}/${PACKAGE_TOP_DIR}json-glib_echoes-alert-probe_squeeze_i386.tar.gz" 0640
+
+cd "${TOP}"
+makeDirectory "${NBTMPDIR}//opt/echoes-alert/probe/doc"
+copyFileToTmpDir "COPYRIGHT" "${NBTMPDIR}/${PACKAGE_TOP_DIR}doc/COPYRIGHT" 0640
 
 
 # Create control file
@@ -145,7 +145,7 @@ echo 'Maintainer: Florent Poinsaut <florent.poinsaut@echoes-tech.com>' >> ${CONT
 echo 'Homepage: http://alert.echoes-tech.com' >> ${CONTROL_FILE}
 echo 'Package: ea-probe' >> ${CONTROL_FILE}
 echo 'Architecture: i386' >> ${CONTROL_FILE}
-echo 'Depends: libssl0.9.8 | libssl1.0.0' >> ${CONTROL_FILE}
+echo 'Depends: libssl0.9.8, libffi5, libmysqlclient16' >> ${CONTROL_FILE}
 echo 'Description: The ECHOES Alert Probe' >> ${CONTROL_FILE}
 
 # Create Debian Package
