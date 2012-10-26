@@ -145,18 +145,25 @@ probe_installation() {
 	then
 		if [ -x '/usr/bin/dpkg' ]
 		then
-			/usr/bin/dpkg -i $PKG
+			if [ -x '/usr/bin/apt-get' ]
+			then
+				/usr/bin/dpkg -i $PKG
+				/usr/bin/apt-get -f install
+			else
+                	        echo "$ERR_INSTALL_MSG: can't find apt-get conmmand."
+        	                exit 1
+	                fi
 		else
 			echo "$ERR_INSTALL_MSG: can't find dpkg conmmand."
 			exit 1
 		fi
 	elif [ $PKG_TYPE = 'rpm' ]
 	then
-		if [ -x '/bin/rpm' ]
+		if [ -x '/usr/bin/yum' ]
 		then
-			/bin/rpm -Uvh $PKG
+			/usr/bin/yum install
 		else
-			echo "$ERR_INSTALL_MSG: can't find rpm conmmand."
+			echo "$ERR_INSTALL_MSG: can't find yum conmmand."
 			exit 1
 		fi
 	else
