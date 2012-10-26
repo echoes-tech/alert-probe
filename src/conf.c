@@ -32,6 +32,10 @@ int parseLineConf(Conf *conf, const char* line)
             /*TODO: test format */
             conf->probeID = atoi(value);
         }
+        else if (!strcmp(line, "token"))
+        {
+            strncpy(conf->token, value, (strlen(value) - 1));
+        }
         else if (!strcmp(line, "probe_plugin_dir"))
         {
             /*TODO: test format */

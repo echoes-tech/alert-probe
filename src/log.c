@@ -21,7 +21,7 @@ void log2Console(
                  )
 {
     LogParams *logParams = user_data;
-    
+
     g_print(
             "%s %s %s %d - %s\n",
             g_date_time_format(g_date_time_new_now_local(), "%FT%T%z"),

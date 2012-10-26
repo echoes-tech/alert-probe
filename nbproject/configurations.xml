@@ -81,7 +81,7 @@
                    kind="IMPORTANT_FILES_FOLDER">
       <itemPath>.gitignore</itemPath>
       <itemPath>AUTHORS</itemPath>
-      <itemPath>COPYING</itemPath>
+      <itemPath>COPYRIGHT</itemPath>
       <itemPath>Makefile</itemPath>
       <itemPath>README</itemPath>
     </logicalFolder>
@@ -128,7 +128,7 @@
       </toolsSet>
       <compileType>
         <cTool>
-          <developmentMode>5</developmentMode>
+          <developmentMode>2</developmentMode>
           <stripSymbols>true</stripSymbols>
           <incDir>
             <pElem>include</pElem>
@@ -146,6 +146,10 @@
           <developmentMode>5</developmentMode>
         </asmTool>
         <linkerTool>
+          <linkerAddLib>
+            <pElem>/usr/lib64/mysql</pElem>
+            <pElem>/usr/lib/mysql</pElem>
+          </linkerAddLib>
           <linkerDynSerch>
             <pElem>/opt/echoes-alert/probe/lib</pElem>
           </linkerDynSerch>
@@ -294,14 +298,14 @@
                             owner="root"
                             group="root"/>
           <packFileListElem type="File"
-                            to="${PACKAGE_TOP_DIR}doc/COPYING"
-                            from="COPYING"
+                            to="${PACKAGE_TOP_DIR}doc/AUTHORS"
+                            from="AUTHORS"
                             perm="640"
                             owner="root"
                             group="root"/>
           <packFileListElem type="File"
-                            to="${PACKAGE_TOP_DIR}doc/AUTHORS"
-                            from="AUTHORS"
+                            to="${PACKAGE_TOP_DIR}doc/COPYRIGHT"
+                            from="COPYRIGHT"
                             perm="640"
                             owner="root"
                             group="root"/>
@@ -321,7 +325,7 @@
           <packInfoListElem name="Package" value="ea-probe" mandatory="true"/>
           <packInfoListElem name="Architecture" value="i386" mandatory="false"/>
           <packInfoListElem name="Depends"
-                            value="libssl0.9.8 | libssl1.0.0, libjson-glib-1.0-0 (>= 0.12.0)"
+                            value="libssl1.0.0, libjson-glib-1.0-0 (>= 0.12.0), libffi5, libmysqlclient18"
                             mandatory="false"/>
           <packInfoListElem name="Description"
                             value="The ECHOES Alert Probe"
@@ -454,14 +458,14 @@
                             owner="root"
                             group="root"/>
           <packFileListElem type="File"
-                            to="${PACKAGE_TOP_DIR}doc/COPYING"
-                            from="COPYING"
+                            to="${PACKAGE_TOP_DIR}doc/README"
+                            from="README"
                             perm="640"
                             owner="root"
                             group="root"/>
           <packFileListElem type="File"
-                            to="${PACKAGE_TOP_DIR}doc/README"
-                            from="README"
+                            to="${PACKAGE_TOP_DIR}doc/COPYRIGHT"
+                            from="COPYRIGHT"
                             perm="640"
                             owner="root"
                             group="root"/>
@@ -481,7 +485,7 @@
           <packInfoListElem name="Package" value="ea-probe" mandatory="true"/>
           <packInfoListElem name="Architecture" value="amd64" mandatory="false"/>
           <packInfoListElem name="Depends"
-                            value="libssl0.9.8 | libssl1.0.0, libjson-glib-1.0-0 (>= 0.12.0)"
+                            value=" libssl1.0.0, libjson-glib-1.0-0 (>= 0.12.0),libffi5, libmysqlclient18"
                             mandatory="false"/>
           <packInfoListElem name="Description"
                             value="The ECHOES Alert Probe"
@@ -520,7 +524,7 @@
           <stripSymbols>true</stripSymbols>
           <linkerLibItems>
             <linkerOptionItem>`pkg-config --libs libssl gobject-2.0 json-glib-1.0`</linkerOptionItem>
-            <linkerLibLibItem>mysqlclient</linkerLibLibItem>
+            <linkerLibFileItem>/usr/local/lib32/libmysqlclient.so.16</linkerLibFileItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
@@ -614,12 +618,6 @@
                             owner="root"
                             group="root"/>
           <packFileListElem type="File"
-                            to="${PACKAGE_TOP_DIR}doc/COPYING"
-                            from="COPYING"
-                            perm="640"
-                            owner="root"
-                            group="root"/>
-          <packFileListElem type="File"
                             to="${PACKAGE_TOP_DIR}doc/README"
                             from="README"
                             perm="640"
@@ -634,6 +632,12 @@
           <packFileListElem type="File"
                             to="${PACKAGE_TOP_DIR}json-glib_echoes-alert-probe_squeeze_i386.tar.gz"
                             from="packages/lib/i386/json-glib_echoes-alert-probe_squeeze_i386.tar.gz"
+                            perm="640"
+                            owner="root"
+                            group="root"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}doc/COPYRIGHT"
+                            from="COPYRIGHT"
                             perm="640"
                             owner="root"
                             group="root"/>
@@ -653,7 +657,7 @@
           <packInfoListElem name="Package" value="ea-probe" mandatory="true"/>
           <packInfoListElem name="Architecture" value="i386" mandatory="false"/>
           <packInfoListElem name="Depends"
-                            value="libssl0.9.8 | libssl1.0.0"
+                            value="libssl0.9.8, libffi5, libmysqlclient16"
                             mandatory="false"/>
           <packInfoListElem name="Description"
                             value="The ECHOES Alert Probe"
@@ -696,7 +700,7 @@
           <stripSymbols>true</stripSymbols>
           <linkerLibItems>
             <linkerOptionItem>`pkg-config --libs libssl gobject-2.0 json-glib-1.0`</linkerOptionItem>
-            <linkerLibLibItem>mysqlclient</linkerLibLibItem>
+            <linkerLibFileItem>/usr/local/lib/libmysqlclient.so.16</linkerLibFileItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
@@ -790,12 +794,6 @@
                             owner="root"
                             group="root"/>
           <packFileListElem type="File"
-                            to="${PACKAGE_TOP_DIR}doc/COPYING"
-                            from="COPYING"
-                            perm="640"
-                            owner="root"
-                            group="root"/>
-          <packFileListElem type="File"
                             to="${PACKAGE_TOP_DIR}doc/README"
                             from="README"
                             perm="640"
@@ -810,6 +808,12 @@
           <packFileListElem type="File"
                             to="${PACKAGE_TOP_DIR}json-glib_echoes-alert-probe_squeeze_amd64.tar.gz"
                             from="packages/lib/amd64/json-glib_echoes-alert-probe_squeeze_amd64.tar.gz"
+                            perm="640"
+                            owner="root"
+                            group="root"/>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}doc/COPYRIGHT"
+                            from="COPYRIGHT"
                             perm="640"
                             owner="root"
                             group="root"/>
@@ -829,7 +833,7 @@
           <packInfoListElem name="Package" value="ea-probe" mandatory="true"/>
           <packInfoListElem name="Architecture" value="amd64" mandatory="false"/>
           <packInfoListElem name="Depends"
-                            value="libssl0.9.8 | libssl1.0.0"
+                            value="libssl0.9.8 , libffi5, libmysqlclient16"
                             mandatory="false"/>
           <packInfoListElem name="Description"
                             value="The ECHOES Alert Probe"
@@ -938,14 +942,14 @@
                             owner="root"
                             group="root"/>
           <packFileListElem type="File"
-                            to="${PACKAGE_TOP_DIR}doc/COPYING"
-                            from="COPYING"
+                            to="${PACKAGE_TOP_DIR}doc/README"
+                            from="README"
                             perm="640"
                             owner="root"
                             group="root"/>
           <packFileListElem type="File"
-                            to="${PACKAGE_TOP_DIR}doc/README"
-                            from="README"
+                            to="${PACKAGE_TOP_DIR}doc/COPYRIGHT"
+                            from="COPYRIGHT"
                             perm="640"
                             owner="root"
                             group="root"/>
@@ -968,7 +972,7 @@
           <packInfoListElem name="&apos;Packager"
                             value="Florent Poinsaut &lt;florent.poinsaut@echoes-tech.com>&apos;"
                             mandatory="false"/>
-          <packInfoListElem name="Requires" value="openssl" mandatory="false"/>
+          <packInfoListElem name="Requires" value="openssl, mysql-libs" mandatory="false"/>
           <packInfoListElem name="AutoReqProv" value="no" mandatory="false"/>
           <packInfoListElem name="%description"
                             value="The ECHOES Alert Probe"
@@ -1090,14 +1094,14 @@
                             owner="root"
                             group="root"/>
           <packFileListElem type="File"
-                            to="${PACKAGE_TOP_DIR}doc/COPYING"
-                            from="COPYING"
+                            to="${PACKAGE_TOP_DIR}doc/README"
+                            from="README"
                             perm="640"
                             owner="root"
                             group="root"/>
           <packFileListElem type="File"
-                            to="${PACKAGE_TOP_DIR}doc/README"
-                            from="README"
+                            to="${PACKAGE_TOP_DIR}doc/COPYRIGHT"
+                            from="COPYRIGHT"
                             perm="640"
                             owner="root"
                             group="root"/>
@@ -1120,7 +1124,7 @@
           <packInfoListElem name="&apos;Packager"
                             value="Florent Poinsaut &lt;florent.poinsaut@echoes-tech.com>&apos;"
                             mandatory="false"/>
-          <packInfoListElem name="Requires" value="openssl" mandatory="false"/>
+          <packInfoListElem name="Requires" value="openssl, mysql-libs" mandatory="false"/>
           <packInfoListElem name="AutoReqProv" value="no" mandatory="false"/>
           <packInfoListElem name="%description"
                             value="The ECHOES Alert Probe"

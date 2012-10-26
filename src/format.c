@@ -41,9 +41,10 @@ int pushSDElementQueue(
 
     sprintf(
             new->afterMsgID,
-            "[prop@40311 ver=%d probe=%d][res1@40311 offset=",
+            "[prop@40311 ver=%d probe=%d token=\"%s\"][res1@40311 offset=",
             *sdElementQueue->transportMsgVersion,
-            *sdElementQueue->probeID
+            *sdElementQueue->probeID,
+            sdElementQueue->token
         );
     
     new->afterOffset = strdup(afterOffset);

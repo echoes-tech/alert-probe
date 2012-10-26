@@ -31,11 +31,11 @@ struct Conf
     unsigned int probeID;
     unsigned short enginePort;
     unsigned char transportProto, transportMsgVersion;
-    char probePluginDir[255], engineFQDN[255];
+    char probePluginDir[255], engineFQDN[255], token[25];
 };
 
 /* Probe Configuration Initializer */
-#define CONF_INITIALIZER {0, 0, 0, 0, "", ""}
+#define CONF_INITIALIZER {0, 0, 0, 0, "", "", ""}
 
 /**
  * Parse line from Configuration file

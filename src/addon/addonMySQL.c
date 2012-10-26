@@ -40,50 +40,54 @@ int addonMySQLQuery(
     /* Storing result */
     result = mysql_use_result(mysql);
 
-    /* Number of fields */
-    nbFields = mysql_num_fields(result);
-
-    values = calloc(nbFields, sizeof (char*));
-    
-    while ((row = mysql_fetch_row(result)))
+    /* Have we a result ? */
+    if(result)
     {
-        unsigned long *lengths;
+        /* Number of fields */
+        nbFields = mysql_num_fields(result);
 
-        lengths = mysql_fetch_lengths(result);
+        values = calloc(nbFields, sizeof (char*));
 
-        /* Loop to retrieve each field */
-        for(i = 0; i < nbFields; i++)
+        while ((row = mysql_fetch_row(result)))
         {
-            res = calloc(lengths[i], sizeof (char));
-            if (res)
+            unsigned long *lengths;
+
+            lengths = mysql_fetch_lengths(result);
+
+            /* Loop to retrieve each field */
+            for(i = 0; i < nbFields; i++)
             {
-                strncpy(res, row[i] ? row[i] : "NULL", lengths[i]);
+                res = calloc(lengths[i], sizeof (char));
+                if (res)
+                {
+                    strncpy(res, row[i] ? row[i] : "NULL", lengths[i]);
 
-                values[i] = strdup(res);
+                    values[i] = strdup(res);
 
-                /* Cleanup */
-                free(res);
+                    /* Cleanup */
+                    free(res);
+                }
             }
+            if (pushCollectQueue(
+                                 collectQueue,
+                                 idList,
+                                 lotNum,
+                                 n,
+                                 nbFields,
+                                 values,
+                                 *now
+                                 ))
+            {
+                perror("pushCollectQueue()");
+                exit(EXIT_FAILURE);
+            }
+            ++n;
         }
-        if (pushCollectQueue(
-                             collectQueue,
-                             idList,
-                             lotNum,
-                             n,
-                             nbFields,
-                             values,
-                             *now
-                             ))
-        {
-            perror("pushCollectQueue()");
-            exit(EXIT_FAILURE);
-        }
-        ++n;
-    }
 
-    /* Cleanup */
-    free(values);
-    mysql_free_result(result);
+        /* Cleanup */
+        free(values);
+        mysql_free_result(result);
+    }
 
     return(EXIT_SUCCESS);
 }

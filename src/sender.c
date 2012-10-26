@@ -111,8 +111,8 @@ int sendMessage(
     SOCKET sock; /* Socket */
 
     time_t now;
-    struct tm instant;
-    char timestamp[480], completMsg[480];
+    GTimeVal g_time;
+    char completMsg[480];
 
     /* Init just for Win32 */
     init();
@@ -126,16 +126,14 @@ int sendMessage(
     
     /* Adding PRI, VERSION and TIMESTAMP */
     time(&now);
-    instant=*localtime(&now);
-
-    strftime(timestamp, 480, "%Y-%m-%dT%XZ", &instant);
+    g_get_current_time(&g_time);
     
     /* Caution: keep the Line Feed to work with TCP */
     snprintf(
         completMsg,
              480,
              "<118>1 %s %s%d %s%d%s]\n",
-             timestamp,
+             g_time_val_to_iso8601(&g_time),
              beforeMsgID,
              *msgID,
              afterMsgID,

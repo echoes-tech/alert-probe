@@ -491,7 +491,7 @@ int data2llist(
                                                     else
                                                     {
                                                         printf("Invalid Plugin '%s': Compilation failed of regex of Search ID '%d' of Source ID '%d'\n", plgPath, searchInfo->idSearch, srcInfo->idSrc);
-                                                        exit(EXIT_FAILURE);
+                                                        return(EXIT_FAILURE);
                                                     }
                                                 }
                                                 else
@@ -515,7 +515,7 @@ int data2llist(
                                                 else
                                                 {
                                                     printf("Invalid Plugin '%s': Invalid line of Search ID '%d' of Source ID '%d'\n", plgPath, searchInfo->idSearch, srcInfo->idSrc);
-                                                    exit(EXIT_FAILURE);
+                                                    return(EXIT_FAILURE);
                                                 }
                                                 json_reader_end_member (reader);
 
@@ -526,7 +526,7 @@ int data2llist(
                                                 else
                                                 {
                                                     printf("Invalid Plugin '%s': Invalid firstChar of Search ID '%d' of Source ID '%d'\n", plgPath, searchInfo->idSearch, srcInfo->idSrc);
-                                                    exit(EXIT_FAILURE);
+                                                    return(EXIT_FAILURE);
                                                 }
                                                 json_reader_end_member (reader);
 
@@ -537,7 +537,7 @@ int data2llist(
                                                 else
                                                 {
                                                     printf("Invalid Plugin '%s': Invalid length of Search ID '%d' of Source ID '%d'\n", plgPath, searchInfo->idSearch, srcInfo->idSrc);
-                                                    exit(EXIT_FAILURE);
+                                                    return(EXIT_FAILURE);
                                                 }
                                                 json_reader_end_member (reader);
 
@@ -568,7 +568,7 @@ int data2llist(
                                                     else
                                                     {
                                                         printf("Invalid Plugin '%s': Compilation failed of regex of Search ID '%d' of Source ID '%d'\n", plgPath, searchInfo->idSearch, srcInfo->idSrc);
-                                                        exit(EXIT_FAILURE);
+                                                        return(EXIT_FAILURE);
                                                     }
                                                 }
                                                 else
@@ -591,7 +591,7 @@ int data2llist(
                                                 else
                                                 {
                                                     printf("Invalid Plugin '%s': Invalid firstChar of Search ID '%d' of Source ID '%d'\n", plgPath, searchInfo->idSearch, srcInfo->idSrc);
-                                                    exit(EXIT_FAILURE);
+                                                    return(EXIT_FAILURE);
                                                 }
                                                 json_reader_end_member (reader);
 
@@ -602,7 +602,7 @@ int data2llist(
                                                 else
                                                 {
                                                     printf("Invalid Plugin '%s': Invalid length of Search ID '%d' of Source ID '%d'\n", plgPath, searchInfo->idSearch, srcInfo->idSrc);
-                                                    exit(EXIT_FAILURE);
+                                                    return(EXIT_FAILURE);
                                                 }
                                                 json_reader_end_member (reader);
 

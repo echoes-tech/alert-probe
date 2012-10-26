@@ -30,6 +30,7 @@ struct SDElementQueue
 {
     pthread_mutex_t mutex;
     const char *hostname, appName[19];
+    char *token;
     unsigned int *probeID;
     unsigned char *transportMsgVersion;
     pid_t pID;

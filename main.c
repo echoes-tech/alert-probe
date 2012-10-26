@@ -32,7 +32,7 @@
 #define PRODUCT_NAME "ECHOES Alert - Probe"
 #define APP_NAME "ea-probe"
 /* Probe Version */
-#define VERSION "0.1.0.alpha"
+#define VERSION "0.1.0.beta"
 /* Conf Repository */
 #ifdef NDEBUG
     #define CONF_DIR "/opt/echoes-alert/probe/etc/probe.conf"
@@ -52,7 +52,7 @@ int main(int argc, char** argv)
 
     /* Probe Configuration initialisation */
     Conf conf = CONF_INITIALIZER;
-     
+
     /* Log Params initialisation */
     /*TODO: Add logFile in conf param */
     LogParams logParams = {
@@ -61,12 +61,12 @@ int main(int argc, char** argv)
         getpid(),
         "/var/log/echoes-alert/probe.log"
     };
-   
+
     /* Plugins List initialisation */
     PlgList plgList = NULL;
     /* Plugins counter initialisation */
     unsigned int nbThreads = 0;
-    
+
     /* Addons Manager, Format Module and Sender Module threads initialisations */
     pthread_t addonsMgrThread = 0, formatThread = 0, senderThread = 0;
 
@@ -78,6 +78,7 @@ int main(int argc, char** argv)
         PTHREAD_MUTEX_INITIALIZER,
         g_get_host_name(),
         APP_NAME,
+        conf.token,
         &conf.probeID,
         &conf.transportMsgVersion,
         getpid(),
