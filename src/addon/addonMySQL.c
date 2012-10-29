@@ -24,7 +24,6 @@ int addonMySQLQuery(
 {
     SearchInfoParams4_1 *searchInfoParams = (SearchInfoParams4_1*)params;
 
-    char *res = NULL;
     char **values = NULL;
 
     /* Objects */
@@ -50,23 +49,10 @@ int addonMySQLQuery(
 
         while ((row = mysql_fetch_row(result)))
         {
-            unsigned long *lengths;
-
-            lengths = mysql_fetch_lengths(result);
-
             /* Loop to retrieve each field */
             for(i = 0; i < nbFields; i++)
             {
-                res = calloc(lengths[i], sizeof (char));
-                if (res)
-                {
-                    strncpy(res, row[i] ? row[i] : "NULL", lengths[i]);
-
-                    values[i] = strdup(res);
-
-                    /* Cleanup */
-                    free(res);
-                }
+                    values[i] = strdup(row[i] ? row[i] : "");
             }
             if (pushCollectQueue(
                                  collectQueue,
