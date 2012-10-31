@@ -114,16 +114,6 @@ int sendMessage(
     GTimeVal g_time;
     char completMsg[480];
 
-    /* Init just for Win32 */
-    init();
-
-    /* Creating the Socket */
-    if (initConnection(address, port, protocol, &sin, &sock))
-    {
-        perror("initConnection()");
-        return (errno);
-    }
-    
     /* Adding PRI, VERSION and TIMESTAMP */
     time(&now);
     g_get_current_time(&g_time);
@@ -144,33 +134,88 @@ int sendMessage(
     printf("%s", completMsg);
 #endif
     
-    /* Sending data */
-    if (*protocol == 1)
+    /* TCP/TLS or UDP */
+    if (*protocol == 0)
     {
+        GError *error = NULL;
+
+        /* Create a new connection */
+        GSocketConnection *connection = NULL;
+        GSocketClient *client = g_socket_client_new();
+        GTlsCertificateFlags flags;
+
+        GOutputStream *ostream = NULL;
+
+        gchar uri[265] = "simple://";
+        strcat(uri, address);
+
+        /* Following flags are used to allow self-signed certificates */
+        flags = g_socket_client_get_tls_validation_flags (client);
+        flags &= ~(G_TLS_CERTIFICATE_UNKNOWN_CA);
+        g_socket_client_set_tls_validation_flags (client, flags);
+
+        /* Set TLS */
+        g_socket_client_set_tls(client, TRUE);
+
+        /* Connect to the host */
+        connection = g_socket_client_connect_to_uri(
+                                                    client,
+                                                    uri,
+                                                    (guint16) *port,
+                                                    NULL,
+                                                    &error
+                                                    );
+
+        /* don't forget to check for errors */
+        if (error != NULL)
+        {
+            g_error(error->message);
+        }
+
+        /* use the connection */
+        ostream = g_io_stream_get_output_stream(G_IO_STREAM(connection));
+
+        g_output_stream_write(ostream,
+                              completMsg,
+                              strlen(completMsg),
+                              NULL,
+                              &error);
+
+        /* don't forget to check for errors */
+        if (error != NULL)
+        {
+            g_error(error->message);
+        }
+    }
+    else
+    {
+        /* Init just for Win32 */
+        init();
+
+        /* Creating the Socket */
+        if (initConnection(address, port, protocol, &sin, &sock))
+        {
+            perror("initConnection()");
+            return (errno);
+        }
+
+        /* Sending data */
         if (sendto(sock, completMsg, strlen(completMsg), 0, (SOCKADDR *) & sin, sizeof sin) < 0)
         {
             perror("sendto()");
             return (errno);
         }
-    }
-    else
-    {
-        if (send(sock, completMsg, strlen(completMsg), 0) < 0)
+
+        /* Closing the socket */
+        if (endConnection(&sock))
         {
             perror("send()");
             return (errno);
         }
-    }
 
-    /* Closing the socket */
-    if (endConnection(&sock))
-    {
-        perror("send()");
-        return (errno);
+        /* End just for Win32 */
+        end();
     }
-
-    /* End just for Win32 */
-    end();
 
     return (EXIT_SUCCESS);
 }

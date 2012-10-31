@@ -45,6 +45,7 @@
     <logicalFolder name="plugins" displayName="Plugins" projectFiles="true">
       <itemPath>plugins/Linux-Syslog.json</itemPath>
       <itemPath>plugins/Linux-System.json</itemPath>
+      <itemPath>plugins/MySQL-ISPConfig-WebTraffic.json</itemPath>
       <itemPath>plugins/MySQL.json</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -94,7 +95,7 @@
     <conf name="Debug" type="1">
       <toolsSet>
         <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
-        <compilerSet>default</compilerSet>
+        <compilerSet>GNU|GNU</compilerSet>
       </toolsSet>
       <compileType>
         <cTool>
