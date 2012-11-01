@@ -169,7 +169,8 @@ int sendMessage(
         /* don't forget to check for errors */
         if (error != NULL)
         {
-            g_error(error->message);
+            g_warning("%s: %s:%u", error->message, address, *port);
+            return (EXIT_FAILURE);
         }
 
         /* use the connection */
@@ -184,7 +185,8 @@ int sendMessage(
         /* don't forget to check for errors */
         if (error != NULL)
         {
-            g_error(error->message);
+            g_warning("%s: %s:%u", error->message, address, *port);
+            return (EXIT_FAILURE);
         }
     }
     else
@@ -195,21 +197,21 @@ int sendMessage(
         /* Creating the Socket */
         if (initConnection(address, port, protocol, &sin, &sock))
         {
-            perror("initConnection()");
+            g_warning("%s: %s:%u", strerror(errno), address, *port);
             return (errno);
         }
 
         /* Sending data */
         if (sendto(sock, completMsg, strlen(completMsg), 0, (SOCKADDR *) & sin, sizeof sin) < 0)
         {
-            perror("sendto()");
+            g_warning("%s: %s:%u", strerror(errno), address, *port);
             return (errno);
         }
 
         /* Closing the socket */
         if (endConnection(&sock))
         {
-            perror("send()");
+            g_warning("%s: %s:%u", strerror(errno), address, *port);
             return (errno);
         }
 

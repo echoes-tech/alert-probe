@@ -97,7 +97,7 @@ int loadConf(Conf *conf,const char *confPath)
     }
     else
     {
-        g_message("%s: %s", strerror(errno), confPath);
+        g_warning("%s: %s", strerror(errno), confPath);
         return (errno);
     }
 
