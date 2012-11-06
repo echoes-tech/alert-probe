@@ -15,6 +15,7 @@ LOGIN="contact@echoes-tech.com"
 PASSWORD=""
 
 ASSET_ID=1
+TOKEN="abcdefghijklmo0123456789"
 PROBE_ID=0
 
 API_URI='https://alert-api.echoes-tech.com'
@@ -161,7 +162,7 @@ probe_installation() {
 	then
 		if [ -x '/usr/bin/yum' ]
 		then
-			/usr/bin/yum install
+			/usr/bin/yum install $PKG
 		else
 			echo "$ERR_INSTALL_MSG: can't find yum conmmand."
 			exit 1
@@ -201,7 +202,7 @@ echo "ECHOES Alert Probe downloaded."
 probe_installation
 echo "ECHOES Alert Probe installed."
 
-sed -i -e "s/\(probe_id=\).*/\1$PROBE_ID/" $INSTALL_DIR/etc/probe.conf
+sed -i -e "s/\(probe_id=\).*/\1$PROBE_ID/" -e "s/\(token=\).*/\1$TOKEN/" $INSTALL_DIR/etc/probe.conf
 echo "ECHOES Alert Probe configured."
 
 get "$API_URI/asset/$ASSET_ID/plugin?login=$LOGIN&password=$PASSWORD" plugins_list_res
