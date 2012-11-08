@@ -41,9 +41,8 @@ struct Conf
  * Parse line from Configuration file
  * @param *conf Pointer of Configurations
  * @param *line Line of configuration file
- * @return Exit status
  */
-int parseLineConf(Conf *conf, const char *line);
+void parseLineConf(Conf *conf, const char *line);
 
 /**
  * Load probe configuration file

@@ -24,61 +24,47 @@ int addonLogRegex(
                   )
 {
     SearchInfoParams3_1 *searchInfoParams = (SearchInfoParams3_1*)params;
-    char *res = NULL;
+
     char **values = NULL;
-    unsigned short i = 0;
 
-    if (searchInfoParams->pmatch)
+    values = calloc(searchInfoParams->nmatch, sizeof (char*));
+    
+    if(values)
     {
-        /* TODO: Comprendre le comportement étrange avec \d */
-        searchInfoParams->match = regexec(
-                                          &searchInfoParams->preg,
-                                          line,
-                                          searchInfoParams->nmatch,
-                                          searchInfoParams->pmatch,
-                                          0
-                                          );
-        if (searchInfoParams->match == 0)
+        if (searchRegex(
+                        values,
+                        line,
+                        &searchInfoParams->err,
+                        &searchInfoParams->preg,
+                        &searchInfoParams->nmatch,
+                        searchInfoParams->pmatch
+                        ))
         {
-            values = calloc(searchInfoParams->nmatch, sizeof (char*));
-
-            for (i = 1; i < searchInfoParams->nmatch; ++i)
-            {
-                int start = searchInfoParams->pmatch[i].rm_so;
-                int end = searchInfoParams->pmatch[i].rm_eo;
-                size_t size = end - start;
-
-                res = malloc(sizeof (*res) * (size  + 1));
-                if (res)
-                {
-                    strncpy(res, &line[start], size);
-                    res[size] = '\0';
-
-                    values[i - 1] = strdup(res);
-
-                    free(res);
-                }
-            }
-            if (pushCollectQueue(
-                                 collectQueue,
-                                 idList,
-                                 lotNum,
-                                 lineNum,
-                                 (searchInfoParams->nmatch - 1),
-                                 values,
-                                 *now
-                                 ))
-            {
-                perror("pushCollectQueue()");
-                exit(EXIT_FAILURE);
-            }
-
             /* Cleanup */
             free(values);
+            return EXIT_FAILURE;
         }
+
+        if (pushCollectQueue(
+                             collectQueue,
+                             idList,
+                             lotNum,
+                             lineNum,
+                             (searchInfoParams->nmatch - 1),
+                             values,
+                             *now
+                             ))
+        {
+            /* Cleanup */
+            free(values);
+            return EXIT_FAILURE;
+        }
+
+        /* Cleanup */
+        free(values);
     }
 
-    return(EXIT_SUCCESS);
+    return EXIT_SUCCESS;
 }
 
 int addonLogLocation(
@@ -93,24 +79,15 @@ int addonLogLocation(
 {
     SearchInfoParams3_2 *searchInfoParams = (SearchInfoParams3_2*)params;
 
-    char *res = NULL;
     char *values[1];
 
-    res = calloc(searchInfoParams->length, sizeof (char));
-    if (res)
-    {
-        strncpy(
-                res,
-                &line[searchInfoParams->firstChar - 1],
-                searchInfoParams->length
-                );
-
-
-        values[0] = strdup(res);
-
-        /* Cleanup */
-        free(res);
-    }
+    if (searchLocation(
+                       values,
+                       line,
+                       &searchInfoParams->length,
+                       &searchInfoParams->firstChar
+                       ))
+        return EXIT_FAILURE;
 
     if (pushCollectQueue(
                          collectQueue,
@@ -121,12 +98,9 @@ int addonLogLocation(
                          values,
                          *now
                          ))
-    {
-        perror("pushCollectQueue()");
-        exit(EXIT_FAILURE);
-    }
+        return EXIT_FAILURE;
 
-    return(EXIT_SUCCESS);
+    return EXIT_SUCCESS;
 }
 
 void whileAddonTypeInfo(

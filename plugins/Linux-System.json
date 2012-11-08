@@ -23,7 +23,7 @@
             "params": {
                 "regex": "^MemTotal:\s+([0-9]+)\skB"
             },
-            "period": "default", /* default or [1-60]s or [1-60]m or [1-24]h or [1-365]d */
+            "period": 60,
             "staticValues": 0
         },
         {
@@ -32,7 +32,7 @@
             "params": {
                 "regex": "^MemFree:\s+([0-9]+)\skB"
             },
-            "period": "default", /* default or [1-60]s or [1-60]m or [1-24]h or [1-365]d */
+            "period": 60,
             "staticValues": 0
         },
         {
@@ -41,7 +41,7 @@
             "params": {
                 "regex": "^Buffers:\s+([0-9]+)\skB"
             },
-            "period": "default", /* default or [1-60]s or [1-60]m or [1-24]h or [1-365]d */
+            "period": 60,
             "staticValues": 0
         },
 		{
@@ -50,7 +50,7 @@
             "params": {
                 "regex": "^Cached:\s+([0-9]+)\skB"
             },
-            "period": "default", /* default or [1-60]s or [1-60]m or [1-24]h or [1-365]d */
+            "period": 60,
             "staticValues": 0
         },
 		{
@@ -59,7 +59,7 @@
             "params": {
                 "regex": "^SwapTotal:\s+([0-9]+)\skB"
             },
-            "period": "default", /* default or [1-60]s or [1-60]m or [1-24]h or [1-365]d */
+            "period": 60,
             "staticValues": 0
         },
 		{
@@ -68,7 +68,7 @@
             "params": {
                 "regex": "^SwapFree:\s+([0-9]+)\skB"
             },
-            "period": "default", /* default or [1-60]s or [1-60]m or [1-24]h or [1-365]d */
+            "period": 60,
             "staticValues": 0
         }
         ]
@@ -97,7 +97,7 @@
                  * groupe 9 : Transmit drop
                  */
            },
-            "period": "default", /* default or [1-60]s or [1-60]m or [1-24]h or [1-365]d */
+            "period": 60,
             "staticValues": 0
         }
         ]
@@ -120,7 +120,7 @@
                  * groupe 3 : valeur de charge moyenne sur 15 minutes
                  */
             },
-            "period": "default", /* default or [1-60]s or [1-60]m or [1-24]h or [1-365]d */
+            "period": 60,
             "staticValues": 0
 		}
         ]
@@ -145,7 +145,7 @@
                  * groupe 5 : Temps, mesuré en en unité de USER_HZ correspondant au temps d'inactivité du système
                  */
             },
-            "period": "default", /* default or [1-60]s or [1-60]m or [1-24]h or [1-365]d */
+            "period": 60,
             "staticValues": 0
         }
 		]

@@ -42,6 +42,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/plugin.o \
 	${OBJECTDIR}/src/addon/addon.o \
 	${OBJECTDIR}/src/addon/addonLog.o \
+	${OBJECTDIR}/src/search.o \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/src/sender.o \
 	${OBJECTDIR}/src/addon/addonFile.o \
@@ -106,6 +107,11 @@ ${OBJECTDIR}/src/addon/addonLog.o: src/addon/addonLog.c
 	${MKDIR} -p ${OBJECTDIR}/src/addon
 	${RM} $@.d
 	$(COMPILE.c) -g -Wall -Iinclude `pkg-config --cflags libssl gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonLog.o src/addon/addonLog.c
+
+${OBJECTDIR}/src/search.o: src/search.c 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.c) -g -Wall -Iinclude `pkg-config --cflags libssl gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/search.o src/search.c
 
 ${OBJECTDIR}/main.o: main.c 
 	${MKDIR} -p ${OBJECTDIR}

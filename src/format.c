@@ -25,9 +25,7 @@ int pushSDElementQueue(
 {
     SDElementQueueElement *new = calloc(1, sizeof(SDElementQueueElement));
     if (sdElementQueue == NULL || new == NULL)
-    {
-        exit(EXIT_FAILURE);
-    }
+        g_error("Error: Queue of SD-Element unavailable");
 
     new->time = time;
             
@@ -70,7 +68,7 @@ int pushSDElementQueue(
     /* Fin de la zone protegee. */
     pthread_mutex_unlock (& sdElementQueue->mutex);
 
-    return (EXIT_SUCCESS);
+    return EXIT_SUCCESS;
 }
 
 int popCollectQueue(CollectQueue *collectQueue, SDElementQueue *sdElementQueue)
@@ -80,9 +78,7 @@ int popCollectQueue(CollectQueue *collectQueue, SDElementQueue *sdElementQueue)
     unsigned short i = 0;
 
     if (collectQueue == NULL)
-    {
-        exit(EXIT_FAILURE);
-    }
+        g_error("Error: Queue of collected data unavailable");
 
     /* Debut de la zone protegee. */
     pthread_mutex_lock (& collectQueue->mutex);
@@ -125,7 +121,7 @@ int popCollectQueue(CollectQueue *collectQueue, SDElementQueue *sdElementQueue)
     /* Fin de la zone protegee. */
     pthread_mutex_unlock (& collectQueue->mutex);
 
-    return (EXIT_SUCCESS);
+    return EXIT_SUCCESS;
 }
 
 void *format(void *arg)

@@ -46,8 +46,8 @@ static int initConnection(
     /* Whether no info, return an error by stopping probe */
     if (hostinfo == NULL)
     {
-        fprintf(stderr, "Unknown host %s.\n", address);
-        return (EXIT_FAILURE);
+        g_warning("Unknown host %s.", address);
+        return EXIT_FAILURE;
     }
 
     if (*protocol == 1)
@@ -63,8 +63,8 @@ static int initConnection(
 
     if (*sock == INVALID_SOCKET)
     {
-        perror("socket()");
-        return (errno);
+        g_critical("Critical: %s", strerror(errno));
+        return errno;
     }
 
     /* Emission info */
@@ -77,22 +77,22 @@ static int initConnection(
         /* Open a connection */
         if (connect(*sock, (SOCKADDR *) sin, sizeof (SOCKADDR)) == SOCKET_ERROR)
         {
-            perror("connect()");
-            return (errno);
+            g_critical("Critical: %s", strerror(errno));
+            return errno;
         }
     }
 
-    return (EXIT_SUCCESS);
+    return EXIT_SUCCESS;
 }
 
 static int endConnection(SOCKET *sock)
 {
     if (closesocket(*sock))
     {
-        perror("closesocket()");
-        return (errno);
+        g_critical("Critical: %s", strerror(errno));
+        return errno;
     }
-    return (EXIT_SUCCESS);
+    return EXIT_SUCCESS;
 }
 
 int sendMessage(
@@ -170,7 +170,7 @@ int sendMessage(
         if (error != NULL)
         {
             g_warning("%s: %s:%u", error->message, address, *port);
-            return (EXIT_FAILURE);
+            return EXIT_FAILURE;
         }
 
         /* use the connection */
@@ -186,7 +186,7 @@ int sendMessage(
         if (error != NULL)
         {
             g_warning("%s: %s:%u", error->message, address, *port);
-            return (EXIT_FAILURE);
+            return EXIT_FAILURE;
         }
     }
     else
@@ -198,28 +198,28 @@ int sendMessage(
         if (initConnection(address, port, protocol, &sin, &sock))
         {
             g_warning("%s: %s:%u", strerror(errno), address, *port);
-            return (errno);
+            return errno;
         }
 
         /* Sending data */
         if (sendto(sock, completMsg, strlen(completMsg), 0, (SOCKADDR *) & sin, sizeof sin) < 0)
         {
             g_warning("%s: %s:%u", strerror(errno), address, *port);
-            return (errno);
+            return errno;
         }
 
         /* Closing the socket */
         if (endConnection(&sock))
         {
             g_warning("%s: %s:%u", strerror(errno), address, *port);
-            return (errno);
+            return errno;
         }
 
         /* End just for Win32 */
         end();
     }
 
-    return (EXIT_SUCCESS);
+    return EXIT_SUCCESS;
 }
 
 int popSDElementQueue(
@@ -231,9 +231,7 @@ int popSDElementQueue(
                       )
 {
     if (sdElementQueue == NULL)
-    {
-        exit(EXIT_FAILURE);
-    }
+        g_error("Error: Queue of collected data unavailable");
 
     /* Debut de la zone protegee. */
     pthread_mutex_lock (& sdElementQueue->mutex);
@@ -260,7 +258,7 @@ int popSDElementQueue(
     /* Fin de la zone protegee. */
     pthread_mutex_unlock (& sdElementQueue->mutex);
 
-    return (EXIT_SUCCESS);
+    return EXIT_SUCCESS;
 }
 
 void *sender(void *arg)

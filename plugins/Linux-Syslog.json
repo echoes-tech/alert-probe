@@ -24,7 +24,7 @@
             "params": {
                 "regex": "(.*) (.*)test"
             },
-            "period": "default", /* default or [1-60]s or [1-60]m or [1-24]h or [1-365]d */
+            "period": 60,
             "staticValues": 0
         },
         {
@@ -34,7 +34,7 @@
                 "firstChar": 1,
                 "length": 10
             },
-            "period": "default", /* default or [1-60]s or [1-60]m or [1-24]h or [1-365]d */
+            "period": 60,
             "staticValues": 0
         }
         ]
@@ -54,7 +54,7 @@
                 "firstChar": 25,
                 "length": 10
             },
-            "period": "default", /* default or [1-60]s or [1-60]m or [1-24]h or [1-365]d */
+            "period": 60,
             "staticValues": 0
         }
         ]
@@ -74,7 +74,7 @@
                 "firstChar": 5,
                 "length": 10
             },
-            "period": "default", /* default or [1-60]s or [1-60]m or [1-24]h or [1-365]d */
+            "period": 60,
             "staticValues": 0
         }
         ]

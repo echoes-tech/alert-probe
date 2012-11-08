@@ -24,7 +24,7 @@ gboolean verifExt(const char *s)
     return FALSE;
 }
 
-int addBackslash(char *string)
+void addBackslash(char *string)
 {
     char *backslash = NULL, *rest = NULL, tmp[25500] = "";
 
@@ -48,47 +48,12 @@ int addBackslash(char *string)
         strcpy(string, tmp);
     }
 
-    return (EXIT_SUCCESS);
-}
-
-int periodString2Int(unsigned int *periodSec, const char *periodString)
-{
-     /* default or [1-60]s or [1-60]m or [1-24]h or [1-365]d */
-    
-    int i = strlen(periodString);
-    
-    if(periodString[i - 1] == 's')
-    {
-       /*periodString[i - 1] = '\0'; */
-       *periodSec = atoi(periodString);
-    }
-    else if(periodString[i - 1] == 'm')
-    {
-       /*periodString[i - 1] = '\0'; */
-       *periodSec = 60 * atoi(periodString);
-    }
-    else if(periodString[i - 1] == 'h')
-    {
-       /*periodString[i - 1] = '\0'; */
-       *periodSec = 60 * 60 * atoi(periodString);
-    }
-    else if(periodString[i - 1] == 'd')
-    {
-       /*periodString[i - 1] = '\0'; */
-       *periodSec = 24 * 60 * 60 * atoi(periodString);
-    }
-    
-    if (*periodSec == 0)
-    {
-        *periodSec = DEFAULT;
-    }
-
-    return (EXIT_SUCCESS);
+    return;
 }
 
 int listPlugins(
                 const char *plgDir,
-                int *nbPlg,
+                gushort *nbPlg,
                 PlgList *plgList,
                 AddonList *addonList,
                 unsigned int *nbThreads
@@ -99,7 +64,10 @@ int listPlugins(
 
     dir = opendir(plgDir);
     if (dir == NULL)
-        return (EXIT_FAILURE);
+    {
+        g_critical("Critical: %s: %s", strerror(errno), plgDir);
+        return EXIT_FAILURE;
+    }
 
     /* Reading filename file by file */
     while ((read = readdir(dir)))
@@ -117,19 +85,10 @@ int listPlugins(
 
             g_message("Loading plugin %s", plgPath);
 
-            if (file2data(plgPath, data))
-            {
-                perror("file2datat()");
-                return (errno);                
-            }
+            if (file2data(plgPath, data)) continue;
 
-            if (data2llist(plgList, addonList, nbThreads, plgPath, data))
-            /*if (file2llist(plgList, addonList, nbThreads, collectQueue, plgPath))*/
-            {
-                perror("data2llist()");
-                /*perror("file2llist()");*/
-                return (errno);
-            }
+            if (data2llist(plgList, addonList, nbThreads, plgPath, data)) continue;
+            /*if (file2llist(plgList, addonList, nbThreads, collectQueue, plgPath)) continue;*/
 
             /* Count number of plugin */
             (*nbPlg)++;
@@ -138,8 +97,8 @@ int listPlugins(
 
     if (closedir(dir))
     {
-        perror("closedir()");
-        return (errno);
+        g_critical("Critical: %s: %s", strerror(errno), plgDir);
+        return errno;
     }
     return EXIT_SUCCESS;
 }
@@ -168,11 +127,61 @@ int file2data(const char *plgPath, gchar* data)
     }
     else
     {
-        perror("fopen()");
-        return (errno);
+        g_critical("Critical: %s: %s", strerror(errno), plgPath);
+        return errno;
     }
 
-    return (EXIT_SUCCESS);
+    return EXIT_SUCCESS;
+}
+
+gushort getIntValue(
+                    JsonParser *parser,
+                    JsonReader *reader,
+                    const char *key,
+                    gint64 *value,
+                    const char *plgPath,
+                    const char *errorMsg
+                    )
+{
+    if (json_reader_read_member(reader, key))
+    {
+        *value = json_reader_get_int_value(reader);
+    }
+    else
+    {
+        g_warning("Invalid Plugin '%s': %s", plgPath, errorMsg);
+        g_object_unref(parser);
+        g_object_unref(reader);
+        return EXIT_FAILURE;
+    }
+    json_reader_end_member(reader);
+
+    return EXIT_SUCCESS;
+}
+
+gushort getStringValue(
+                       JsonParser *parser,
+                       JsonReader *reader,
+                       const char *key,
+                       gchar **value,
+                       const char *plgPath,
+                       const char *errorMsg
+                       )
+{
+    if (json_reader_read_member(reader, key))
+    {
+        *value = g_strdup(json_reader_get_string_value(reader));
+    }
+    else
+    {
+        g_warning("Invalid Plugin '%s': %s", plgPath, errorMsg);
+        g_object_unref(reader);
+        g_object_unref(parser);
+        return EXIT_FAILURE;
+    }
+    json_reader_end_member(reader);
+
+    return EXIT_SUCCESS;
 }
 
 int data2llist(
@@ -198,14 +207,14 @@ int data2llist(
     parser = json_parser_new();
     if (!JSON_IS_PARSER(parser))
     {
-        g_print("Unable to create a parser for '%s'\n", plgPath);
+        g_warning("Unable to create a parser for '%s'", plgPath);
         return EXIT_FAILURE;
     }
 
     json_parser_load_from_data (parser, data, -1, &error);
     if (error)
     {
-        g_print("Unable to parse '%s': %s\n", plgPath, error->message);
+        g_warning("Unable to parse '%s': %s", plgPath, error->message);
         g_error_free(error);
         g_object_unref(parser);
         return EXIT_FAILURE;
@@ -213,7 +222,7 @@ int data2llist(
     /*json_parser_load_from_file(parser, plgPath, &error);
     if (error)
     {
-        g_print("Unable to parse '%s': %s\n", plgPath, error->message);
+        g_warning("Unable to parse '%s': %s", plgPath, error->message);
         g_error_free(error);
         g_object_unref(parser);
         return EXIT_FAILURE;
@@ -222,39 +231,31 @@ int data2llist(
     root = json_parser_get_root(parser);
     if (NULL == root)
     {
-        g_print("Unable to retrieves the top level node of file '%s'.\n", plgPath);
+        g_warning("Unable to retrieves the top level node of file '%s'.", plgPath);
+        g_object_unref(parser);
         return EXIT_FAILURE;
     }
     
     reader = json_reader_new(root);
     if (NULL == reader)
     {
-        g_print("Unable to create new JsonReader for file '%s'.\n", plgPath);
+        g_warning("Unable to create new JsonReader for file '%s'.", plgPath);
+        g_object_unref(parser);
         return EXIT_FAILURE;
     }
 
     /* Find out where to store the values */
-    if (json_reader_read_member (reader, "id"))
-    {
-        plgInfo->idPlg = json_reader_get_int_value (reader);
-    }
-    else
-    {
-        printf("Invalid Plugin '%s': Invalid Plugin ID\n", plgPath);
-        return (EXIT_FAILURE);
-    }
-    json_reader_end_member (reader);
+    if (getIntValue(
+                    parser, reader, "id", (gint64*) & plgInfo->idPlg,
+                    plgPath, "Invalid Plugin ID"
+                    ))
+        return EXIT_FAILURE;
 
-    if (json_reader_read_member (reader, "idAsset"))
-    {
-        plgInfo->idAsset = json_reader_get_int_value (reader);
-    }
-    else
-    {
-        printf("Invalid Plugin '%s': Invalid idAsset\n", plgPath);
-        return (EXIT_FAILURE);
-    }
-    json_reader_end_member (reader);
+    if (getIntValue(
+                    parser, reader, "idAsset", (gint64*) & plgInfo->idAsset,
+                    plgPath, "Invalid idAsset"
+                    ))
+        return EXIT_FAILURE;
 
     if (json_reader_read_member (reader, "sources"))
     {
@@ -267,27 +268,17 @@ int data2llist(
                 {
                     SrcInfo* srcInfo = calloc(1, sizeof (SrcInfo));
 
-                    if (json_reader_read_member (reader, "id"))
-                    {
-                        srcInfo->idSrc = json_reader_get_int_value (reader);
-                    }
-                    else
-                    {
-                        printf("Invalid Plugin '%s': Invalid Source ID for Source n°%d\n", plgPath, i + 1);
-                        return (EXIT_FAILURE);
-                    }
-                    json_reader_end_member (reader);
+                    if (getIntValue(
+                                    parser, reader, "id", (gint64*) & srcInfo->idSrc, plgPath,
+                                    g_strdup_printf("Invalid Source ID for Source n°%d", i + 1)
+                                    ))
+                        return EXIT_FAILURE;
 
-                    if (json_reader_read_member (reader, "idAddon"))
-                    {
-                        srcInfo->idAddon = json_reader_get_int_value (reader);
-                    }
-                    else
-                    {
-                        printf("Invalid Plugin '%s': Invalid idAddon of Source ID '%d'\n", plgPath, srcInfo->idSrc);
-                        return (EXIT_FAILURE);
-                    }
-                    json_reader_end_member (reader);
+                    if (getIntValue(
+                                    parser, reader, "idAddon", (gint64*) & srcInfo->idAddon, plgPath,
+                                    g_strdup_printf("Invalid idAddon of Source ID '%d'", srcInfo->idSrc)
+                                    ))
+                        return EXIT_FAILURE;
 
                     if (json_reader_read_member (reader, "params"))
                     {
@@ -296,16 +287,12 @@ int data2llist(
                             case 2:
                             {
                                 SrcInfoParams2 *srcInfoParams = calloc(1, sizeof (SrcInfoParams2));
-                                if (json_reader_read_member (reader, "path"))
-                                {
-                                    srcInfoParams->path = g_strdup(json_reader_get_string_value(reader));
-                                }
-                                else
-                                {
-                                    printf("Invalid Plugin '%s': Invalid path of Source ID '%d'\n", plgPath, srcInfo->idSrc);
-                                    return (EXIT_FAILURE);
-                                }
-                                json_reader_end_member (reader);
+                                
+                                if (getStringValue(
+                                                   parser, reader, "path", &srcInfoParams->path, plgPath,
+                                                   g_strdup_printf("Invalid path of Source ID '%d'", srcInfo->idSrc)
+                                                   ))
+                                    return EXIT_FAILURE;
 
                                 srcInfo->params = (void*)srcInfoParams;
                                 break;
@@ -314,27 +301,18 @@ int data2llist(
                             {
                                 SrcInfoParams3 *srcInfoParams = calloc(1, sizeof (SrcInfoParams3));
                                 srcInfoParams->nbLine = 0;
-                                if (json_reader_read_member (reader, "path"))
-                                {
-                                    srcInfoParams->path = g_strdup(json_reader_get_string_value(reader));
-                                }
-                                else
-                                {
-                                    printf("Invalid Plugin '%s': Invalid path of Source ID '%d'\n", plgPath, srcInfo->idSrc);
-                                    return (EXIT_FAILURE);
-                                }
-                                json_reader_end_member (reader);
 
-                                if (json_reader_read_member (reader, "lastNLines"))
-                                {
-                                    srcInfoParams->lastNLines = json_reader_get_int_value(reader);
-                                }
-                                else
-                                {
-                                    printf("Invalid Plugin '%s': Invalid lastNLines of Source ID '%d'\n", plgPath, srcInfo->idSrc);
-                                    return (EXIT_FAILURE);
-                                }
-                                json_reader_end_member (reader);
+                                if (getStringValue(
+                                                   parser, reader, "path", &srcInfoParams->path, plgPath,
+                                                   g_strdup_printf("Invalid path of Source ID '%d'", srcInfo->idSrc)
+                                                   ))
+                                    return EXIT_FAILURE;
+
+                                if (getIntValue(
+                                                parser, reader, "lastNLines", (gint64*) & srcInfoParams->lastNLines, plgPath,
+                                                g_strdup_printf("Invalid lastNLines of Source ID '%d'", srcInfo->idSrc)
+                                                ))
+                                    return EXIT_FAILURE;
 
                                 srcInfo->params = (void*)srcInfoParams;
                                 break;
@@ -342,60 +320,36 @@ int data2llist(
                             case 4:
                             {
                                 SrcInfoParams4 *srcInfoParams = calloc(1, sizeof (SrcInfoParams4));
-                                if (json_reader_read_member (reader, "host"))
-                                {
-                                    srcInfoParams->host = g_strdup(json_reader_get_string_value(reader));
-                                }
-                                else
-                                {
-                                    printf("Invalid Plugin '%s': Invalid host of Source ID '%d'\n", plgPath, srcInfo->idSrc);
-                                    return (EXIT_FAILURE);
-                                }
-                                json_reader_end_member (reader);
 
-                                if (json_reader_read_member (reader, "user"))
-                                {
-                                    srcInfoParams->user = g_strdup(json_reader_get_string_value(reader));
-                                }
-                                else
-                                {
-                                    printf("Invalid Plugin '%s': Invalid user of Source ID '%d'\n", plgPath, srcInfo->idSrc);
-                                    return (EXIT_FAILURE);
-                                }
-                                json_reader_end_member (reader);
+                                if (getStringValue(
+                                                   parser, reader, "host", &srcInfoParams->host, plgPath,
+                                                   g_strdup_printf("Invalid host of Source ID '%d'", srcInfo->idSrc)
+                                                   ))
+                                    return EXIT_FAILURE;
 
-                                if (json_reader_read_member (reader, "passwd"))
-                                {
-                                    srcInfoParams->passwd = g_strdup(json_reader_get_string_value(reader));
-                                }
-                                else
-                                {
-                                    printf("Invalid Plugin '%s': Invalid passwd of Source ID '%d'\n", plgPath, srcInfo->idSrc);
-                                    return (EXIT_FAILURE);
-                                }
-                                json_reader_end_member (reader);
+                                if (getStringValue(
+                                                   parser, reader, "user", &srcInfoParams->user, plgPath,
+                                                   g_strdup_printf("Invalid user of Source ID '%d'", srcInfo->idSrc)
+                                                   ))
+                                    return EXIT_FAILURE;
 
-                                if (json_reader_read_member (reader, "db"))
-                                {
-                                    srcInfoParams->db = g_strdup(json_reader_get_string_value(reader));
-                                }
-                                else
-                                {
-                                    printf("Invalid Plugin '%s': Invalid db of Source ID '%d'\n", plgPath, srcInfo->idSrc);
-                                    return (EXIT_FAILURE);
-                                }
-                                json_reader_end_member (reader);
+                                if (getStringValue(
+                                                   parser, reader, "passwd", &srcInfoParams->passwd, plgPath,
+                                                   g_strdup_printf("Invalid passwd of Source ID '%d'", srcInfo->idSrc)
+                                                   ))
+                                    return EXIT_FAILURE;
 
-                                if (json_reader_read_member (reader, "port"))
-                                {
-                                    srcInfoParams->port = json_reader_get_int_value(reader);
-                                }
-                                else
-                                {
-                                    printf("Invalid Plugin '%s': Invalid db of Source ID '%d'\n", plgPath, srcInfo->idSrc);
-                                    return (EXIT_FAILURE);
-                                }
-                                json_reader_end_member (reader);
+                                if (getStringValue(
+                                                   parser, reader, "db", &srcInfoParams->db, plgPath,
+                                                   g_strdup_printf("Invalid db of Source ID '%d'", srcInfo->idSrc)
+                                                   ))
+                                    return EXIT_FAILURE;
+
+                                if (getIntValue(
+                                                parser, reader, "port", (gint64*) & srcInfoParams->port, plgPath,
+                                                g_strdup_printf("Invalid port of Source ID '%d'", srcInfo->idSrc)
+                                                ))
+                                    return EXIT_FAILURE;
 
                                 srcInfo->params = (void*)srcInfoParams;
                                 break;
@@ -406,8 +360,10 @@ int data2llist(
                     }
                     else
                     {
-                        printf("Invalid Plugin '%s': Invalid params of Source ID '%d'\n", plgPath, srcInfo->idSrc);
-                        return (EXIT_FAILURE);
+                        g_warning("Invalid Plugin '%s': Invalid params of Source ID '%d'", plgPath, srcInfo->idSrc);
+                        g_object_unref(reader);
+                        g_object_unref(parser);
+                        return EXIT_FAILURE;
                     }
                     json_reader_end_member (reader);
 
@@ -423,49 +379,29 @@ int data2llist(
                                     SearchInfo* searchInfo = calloc(1, sizeof (SearchInfo));
                                     ++(*nbThreads);
 
-                                    if (json_reader_read_member (reader, "id"))
-                                    {
-                                        searchInfo->idSearch = json_reader_get_int_value (reader);
-                                    }
-                                    else
-                                    {
-                                        printf("Invalid Plugin '%s': Invalid Search ID for Search n°%d of Source ID '%d'\n", plgPath, j + 1, srcInfo->idSrc);
-                                        return (EXIT_FAILURE);
-                                    }
-                                    json_reader_end_member (reader);
+                                    if (getIntValue(
+                                                    parser, reader, "id", (gint64*) & searchInfo->idSearch, plgPath,
+                                                    g_strdup_printf("Invalid Search ID for Search n°%d of Source ID '%d'", j + 1, srcInfo->idSrc)
+                                                    ))
+                                        return EXIT_FAILURE;
 
-                                    if (json_reader_read_member (reader, "idType"))
-                                    {
-                                        searchInfo->idType = json_reader_get_int_value (reader);
-                                    }
-                                    else
-                                    {
-                                        printf("Invalid Plugin '%s': Invalid idType of Search ID '%d' of Source ID '%d'\n", plgPath, searchInfo->idSearch, srcInfo->idSrc);
-                                        return (EXIT_FAILURE);
-                                    }
-                                    json_reader_end_member (reader);
+                                    if (getIntValue(
+                                                    parser, reader, "idType", (gint64*) & searchInfo->idType, plgPath,
+                                                    g_strdup_printf("Invalid idType of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, srcInfo->idSrc)
+                                                    ))
+                                        return EXIT_FAILURE;
 
-                                    if (json_reader_read_member (reader, "period"))
-                                    {
-                                        periodString2Int(&searchInfo->period, json_reader_get_string_value (reader));
-                                    }
-                                    else
-                                    {
-                                        printf("Invalid Plugin '%s': Invalid period of Search ID '%d' of Source ID '%d'\n", plgPath, searchInfo->idSearch, srcInfo->idSrc);
-                                        return (EXIT_FAILURE);
-                                    }
-                                    json_reader_end_member (reader);
+                                    if (getIntValue(
+                                                    parser, reader, "period", (gint64*) & searchInfo->period, plgPath,
+                                                    g_strdup_printf("Invalid period of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, srcInfo->idSrc)
+                                                    ))
+                                        return EXIT_FAILURE;
 
-                                    if (json_reader_read_member (reader, "staticValues"))
-                                    {
-                                        searchInfo->staticValues = json_reader_get_boolean_value (reader);
-                                    }
-                                    else
-                                    {
-                                        printf("Invalid Plugin '%s': Invalid staticValues of Search ID '%d' of Source ID '%d'\n", plgPath, searchInfo->idSearch, srcInfo->idSrc);
-                                        return (EXIT_FAILURE);
-                                    }
-                                    json_reader_end_member (reader);
+                                    if (getIntValue(
+                                                    parser, reader, "staticValues", (gint64*) & searchInfo->staticValues, plgPath,
+                                                    g_strdup_printf("Invalid staticValues of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, srcInfo->idSrc)
+                                                    ))
+                                        return EXIT_FAILURE;
 
                                     if (json_reader_read_member (reader, "params"))
                                     {
@@ -477,29 +413,27 @@ int data2llist(
                                             case 1:
                                             {
                                                 SearchInfoParams2_1 *searchInfoParams = calloc(1, sizeof (SearchInfoParams2_1));
-                                                if (json_reader_read_member(reader, "regex"))
-                                                {
-                                                    searchInfoParams->regex = g_strdup(json_reader_get_string_value(reader));
 
-                                                    /* Regex compilation */
-                                                    searchInfoParams->err = regcomp(&searchInfoParams->preg, searchInfoParams->regex, REG_EXTENDED);
-                                                    if (searchInfoParams->err == 0)
-                                                    {
-                                                        searchInfoParams->nmatch = (searchInfoParams->preg.re_nsub + 1);
-                                                        searchInfoParams->pmatch = malloc(sizeof (*searchInfoParams->pmatch) * (searchInfoParams->nmatch));
-                                                    }
-                                                    else
-                                                    {
-                                                        printf("Invalid Plugin '%s': Compilation failed of regex of Search ID '%d' of Source ID '%d'\n", plgPath, searchInfo->idSearch, srcInfo->idSrc);
-                                                        return(EXIT_FAILURE);
-                                                    }
+                                                if (getStringValue(
+                                                                   parser, reader, "regex", &searchInfoParams->regex, plgPath,
+                                                                   g_strdup_printf("Invalid regex of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, srcInfo->idSrc)
+                                                                   ))
+                                                    return EXIT_FAILURE;
+
+                                                /* Regex compilation */
+                                                searchInfoParams->err = regcomp(&searchInfoParams->preg, searchInfoParams->regex, REG_EXTENDED);
+                                                if (searchInfoParams->err == 0)
+                                                {
+                                                    searchInfoParams->nmatch = (searchInfoParams->preg.re_nsub + 1);
+                                                    searchInfoParams->pmatch = malloc(sizeof (*searchInfoParams->pmatch) * (searchInfoParams->nmatch));
                                                 }
                                                 else
                                                 {
-                                                    printf("Invalid Plugin '%s': Invalid regex of Search ID '%d' of Source ID '%d'\n", plgPath, searchInfo->idSearch, srcInfo->idSrc);
-                                                    return (EXIT_FAILURE);
+                                                    g_warning("Invalid Plugin '%s': Compilation failed of regex of Search ID '%d' of Source ID '%d'", plgPath, searchInfo->idSearch, srcInfo->idSrc);
+                                                    g_object_unref(reader);
+                                                    g_object_unref(parser);
+                                                    return EXIT_FAILURE;
                                                 }
-                                                json_reader_end_member (reader);
 
                                                 searchInfo->params = (void*)searchInfoParams;
                                                 break;
@@ -508,38 +442,23 @@ int data2llist(
                                             {
                                                 SearchInfoParams2_2 *searchInfoParams = calloc(1, sizeof (SearchInfoParams2_2));
 
-                                                if (json_reader_read_member(reader, "line"))
-                                                {
-                                                    searchInfoParams->line = json_reader_get_int_value(reader);
-                                                }
-                                                else
-                                                {
-                                                    printf("Invalid Plugin '%s': Invalid line of Search ID '%d' of Source ID '%d'\n", plgPath, searchInfo->idSearch, srcInfo->idSrc);
-                                                    return(EXIT_FAILURE);
-                                                }
-                                                json_reader_end_member (reader);
+                                                if (getIntValue(
+                                                                parser, reader, "line", (gint64*) & searchInfoParams->line, plgPath,
+                                                                g_strdup_printf("Invalid line of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, srcInfo->idSrc)
+                                                                ))
+                                                    return EXIT_FAILURE;
 
-                                                if (json_reader_read_member(reader, "firstChar"))
-                                                {
-                                                    searchInfoParams->firstChar = json_reader_get_int_value(reader);
-                                                }
-                                                else
-                                                {
-                                                    printf("Invalid Plugin '%s': Invalid firstChar of Search ID '%d' of Source ID '%d'\n", plgPath, searchInfo->idSearch, srcInfo->idSrc);
-                                                    return(EXIT_FAILURE);
-                                                }
-                                                json_reader_end_member (reader);
+                                                if (getIntValue(
+                                                                parser, reader, "firstChar", (gint64*) & searchInfoParams->firstChar, plgPath,
+                                                                g_strdup_printf("Invalid firstChar of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, srcInfo->idSrc)
+                                                                ))
+                                                    return EXIT_FAILURE;
 
-                                                if (json_reader_read_member(reader, "length"))
-                                                {
-                                                    searchInfoParams->length = json_reader_get_int_value(reader);
-                                                }
-                                                else
-                                                {
-                                                    printf("Invalid Plugin '%s': Invalid length of Search ID '%d' of Source ID '%d'\n", plgPath, searchInfo->idSearch, srcInfo->idSrc);
-                                                    return(EXIT_FAILURE);
-                                                }
-                                                json_reader_end_member (reader);
+                                                if (getIntValue(
+                                                                parser, reader, "length", (gint64*) & searchInfoParams->length, plgPath,
+                                                                g_strdup_printf("Invalid length of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, srcInfo->idSrc)
+                                                                ))
+                                                    return EXIT_FAILURE;
 
                                                 searchInfo->params = (void*)searchInfoParams;
                                                 break;
@@ -554,29 +473,27 @@ int data2llist(
                                             case 1:
                                             {
                                                 SearchInfoParams3_1 *searchInfoParams = calloc(1, sizeof (SearchInfoParams3_1));
-                                                if (json_reader_read_member(reader, "regex"))
-                                                {
-                                                    searchInfoParams->regex = g_strdup(json_reader_get_string_value(reader));
 
-                                                    /* Regex compilation */
-                                                    searchInfoParams->err = regcomp(&searchInfoParams->preg, searchInfoParams->regex, REG_EXTENDED);
-                                                    if (searchInfoParams->err == 0)
-                                                    {
-                                                        searchInfoParams->nmatch = (searchInfoParams->preg.re_nsub + 1);
-                                                        searchInfoParams->pmatch = malloc(sizeof (*searchInfoParams->pmatch) * (searchInfoParams->nmatch));
-                                                    }
-                                                    else
-                                                    {
-                                                        printf("Invalid Plugin '%s': Compilation failed of regex of Search ID '%d' of Source ID '%d'\n", plgPath, searchInfo->idSearch, srcInfo->idSrc);
-                                                        return(EXIT_FAILURE);
-                                                    }
+                                                if (getStringValue(
+                                                                   parser, reader, "regex", &searchInfoParams->regex, plgPath,
+                                                                   g_strdup_printf("Invalid regex of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, srcInfo->idSrc)
+                                                                   ))
+                                                    return EXIT_FAILURE;
+
+                                                /* Regex compilation */
+                                                searchInfoParams->err = regcomp(&searchInfoParams->preg, searchInfoParams->regex, REG_EXTENDED);
+                                                if (searchInfoParams->err == 0)
+                                                {
+                                                    searchInfoParams->nmatch = (searchInfoParams->preg.re_nsub + 1);
+                                                    searchInfoParams->pmatch = malloc(sizeof (*searchInfoParams->pmatch) * (searchInfoParams->nmatch));
                                                 }
                                                 else
                                                 {
-                                                    printf("Invalid Plugin '%s': Invalid regex of Search ID '%d' of Source ID '%d'\n", plgPath, searchInfo->idSearch, srcInfo->idSrc);
-                                                    return (EXIT_FAILURE);
+                                                    g_warning("Invalid Plugin '%s': Compilation failed of regex of Search ID '%d' of Source ID '%d'", plgPath, searchInfo->idSearch, srcInfo->idSrc);
+                                                    g_object_unref(reader);
+                                                    g_object_unref(parser);
+                                                    return EXIT_FAILURE;
                                                 }
-                                                json_reader_end_member (reader);
 
                                                 searchInfo->params = (void*)searchInfoParams;
                                                 break;
@@ -584,27 +501,18 @@ int data2llist(
                                             case 2:
                                             {
                                                 SearchInfoParams3_2 *searchInfoParams = calloc(1, sizeof (SearchInfoParams3_2));
-                                                if (json_reader_read_member(reader, "firstChar"))
-                                                {
-                                                    searchInfoParams->firstChar = json_reader_get_int_value(reader);
-                                                }
-                                                else
-                                                {
-                                                    printf("Invalid Plugin '%s': Invalid firstChar of Search ID '%d' of Source ID '%d'\n", plgPath, searchInfo->idSearch, srcInfo->idSrc);
-                                                    return(EXIT_FAILURE);
-                                                }
-                                                json_reader_end_member (reader);
 
-                                                if (json_reader_read_member(reader, "length"))
-                                                {
-                                                    searchInfoParams->length = json_reader_get_int_value(reader);
-                                                }
-                                                else
-                                                {
-                                                    printf("Invalid Plugin '%s': Invalid length of Search ID '%d' of Source ID '%d'\n", plgPath, searchInfo->idSearch, srcInfo->idSrc);
-                                                    return(EXIT_FAILURE);
-                                                }
-                                                json_reader_end_member (reader);
+                                                if (getIntValue(
+                                                                parser, reader, "firstChar", (gint64*) & searchInfoParams->firstChar, plgPath,
+                                                                g_strdup_printf("Invalid firstChar of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, srcInfo->idSrc)
+                                                                ))
+                                                    return EXIT_FAILURE;
+
+                                                if (getIntValue(
+                                                                parser, reader, "length", (gint64*) & searchInfoParams->length, plgPath,
+                                                                g_strdup_printf("Invalid length of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, srcInfo->idSrc)
+                                                                ))
+                                                    return EXIT_FAILURE;
 
                                                 searchInfo->params = (void*)searchInfoParams;
                                                 break;
@@ -619,16 +527,13 @@ int data2llist(
                                             case 1:
                                             {
                                                 SearchInfoParams4_1 *searchInfoParams = calloc(1, sizeof (SearchInfoParams4_1));
-                                                if (json_reader_read_member(reader, "query"))
-                                                {
-                                                    searchInfoParams->query = g_strdup(json_reader_get_string_value(reader));
-                                                }
-                                                else
-                                                {
-                                                    printf("Invalid Plugin '%s': Invalid query of Search ID '%d' of Source ID '%d'\n", plgPath, searchInfo->idSearch, srcInfo->idSrc);
-                                                    return (EXIT_FAILURE);
-                                                }
-                                                json_reader_end_member (reader);
+                                                
+
+                                                if (getStringValue(
+                                                                   parser, reader, "query", &searchInfoParams->query, plgPath,
+                                                                   g_strdup_printf("Invalid query of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, srcInfo->idSrc)
+                                                                   ))
+                                                    return EXIT_FAILURE;
 
                                                 searchInfo->params = (void*)searchInfoParams;
                                                 break;
@@ -643,8 +548,10 @@ int data2llist(
                                     }
                                     else
                                     {
-                                        printf("Invalid Plugin '%s': Invalid params of Search ID '%d' of Source ID '%d'\n", plgPath, searchInfo->idSearch, srcInfo->idSrc);
-                                        return (EXIT_FAILURE);
+                                        g_warning("Invalid Plugin '%s': Invalid params of Search ID '%d' of Source ID '%d'", plgPath, searchInfo->idSearch, srcInfo->idSrc);
+                                        g_object_unref(reader);
+                                        g_object_unref(parser);
+                                        return EXIT_FAILURE;
                                     }
                                     json_reader_end_member (reader);
 
@@ -670,7 +577,9 @@ int data2llist(
                                 }
                                 else
                                 {
-                                    g_print("Invalid Plugin '%s': Invalid Search n°%d of Source ID '%d'\n", plgPath, j + 1, srcInfo->idSrc);
+                                    g_warning("Invalid Plugin '%s': Invalid Search n°%d of Source ID '%d'", plgPath, j + 1, srcInfo->idSrc);
+                                    g_object_unref(reader);
+                                    g_object_unref(parser);
                                     return EXIT_FAILURE;
                                 }
                                 json_reader_end_element(reader);
@@ -680,14 +589,18 @@ int data2llist(
                         }
                         else
                         {
-                            printf("Invalid Plugin '%s': Searches of Source ID '%d' must be an array\n", plgPath, srcInfo->idSrc);
-                            return (EXIT_FAILURE);
+                            g_warning("Invalid Plugin '%s': Searches of Source ID '%d' must be an array", plgPath, srcInfo->idSrc);
+                            g_object_unref(reader);
+                            g_object_unref(parser);
+                            return EXIT_FAILURE;
                         }
                     }
                     else
                     {
-                        printf("Invalid Plugin '%s': Invalide searches of Source ID '%d'\n", plgPath, srcInfo->idSrc);
-                        return (EXIT_FAILURE);
+                        g_warning("Invalid Plugin '%s': Invalide searches of Source ID '%d'", plgPath, srcInfo->idSrc);
+                        g_object_unref(reader);
+                        g_object_unref(parser);
+                        return EXIT_FAILURE;
                     }
                     json_reader_end_member (reader);
 
@@ -699,7 +612,9 @@ int data2llist(
                 }
                 else
                 {
-                    g_print("Invalid Plugin '%s': Invalid Source n°%d\n", plgPath, i + 1);
+                    g_warning("Invalid Plugin '%s': Invalid Source n°%d", plgPath, i + 1);
+                    g_object_unref(reader);
+                    g_object_unref(parser);
                     return EXIT_FAILURE;
                 }
                 json_reader_end_element(reader);
@@ -709,14 +624,18 @@ int data2llist(
         }
         else
         {
-            printf("Invalid Plugin '%s': Sources must be an array\n", plgPath);
-            return (EXIT_FAILURE);
+            g_warning("Invalid Plugin '%s': Sources must be an array", plgPath);
+            g_object_unref(reader);
+            g_object_unref(parser);
+            return EXIT_FAILURE;
         }
     }
     else
     {
-        printf("Invalid Plugin '%s': Invalide sources\n", plgPath);
-        return (EXIT_FAILURE);
+        g_warning("Invalid Plugin '%s': Invalide sources", plgPath);
+        g_object_unref(reader);
+        g_object_unref(parser);
+        return EXIT_FAILURE;
     }
     json_reader_end_member (reader);
     
@@ -729,26 +648,24 @@ int data2llist(
     g_object_unref(reader);
     g_object_unref(parser);
 
-    return (EXIT_SUCCESS);
+    return EXIT_SUCCESS;
 }
 
-int plugin(
-           const char *plgDir,
-           PlgList *plgList,
-           AddonList *addonList,
-           unsigned int *nbThreads
-           )
+gushort plugin(
+               const char *plgDir,
+               PlgList *plgList,
+               AddonList *addonList,
+               unsigned int *nbThreads
+               )
 {
     /* Plugins counter initialisation */
-    int nbPlg = 0;
+    gushort nbPlg = 0;
 
     if (listPlugins(plgDir, &nbPlg, plgList, addonList, nbThreads))
-    {
-        perror("listPlugins()");
-        return (errno);
-    }
+        return EXIT_FAILURE;
+
     g_message("%d plugins loaded", nbPlg);
 
-    return (EXIT_SUCCESS);
+    return EXIT_SUCCESS;
 }
 

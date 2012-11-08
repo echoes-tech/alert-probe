@@ -63,10 +63,8 @@ int addonMySQLQuery(
                                  values,
                                  *now
                                  ))
-            {
-                perror("pushCollectQueue()");
-                exit(EXIT_FAILURE);
-            }
+                return EXIT_FAILURE;
+
             ++n;
         }
 
@@ -75,7 +73,7 @@ int addonMySQLQuery(
         mysql_free_result(result);
     }
 
-    return(EXIT_SUCCESS);
+    return EXIT_SUCCESS;
 }
 
 void *addonMySQL(void *arg)
@@ -167,7 +165,7 @@ void *addonMySQL(void *arg)
         }
         else
         {
-            g_warning("%s", mysql_error(&mysql));
+            g_warning("Warning: %s", mysql_error(&mysql));
         }
         
         /* Closing MySQL session */

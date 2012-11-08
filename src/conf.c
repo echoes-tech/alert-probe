@@ -13,7 +13,7 @@
 
 #include "conf.h"
 
-int parseLineConf(Conf *conf, const char* line)
+void parseLineConf(Conf *conf, const char* line)
 {
     char *equal = NULL, *value = NULL;
 
@@ -67,14 +67,13 @@ int parseLineConf(Conf *conf, const char* line)
         }
         else
         {
-            printf("Bad Line!");
-            return (EXIT_FAILURE);
+            g_warning("Warning: Bad line: %s", line);
         }
     }
-    return (EXIT_SUCCESS);
+    return;
 }
 
-int loadConf(Conf *conf,const char *confPath)
+int loadConf(Conf *conf, const char *confPath)
 {
     FILE* confFile = NULL;
     char line[MAX_SIZE] = "";
@@ -97,10 +96,10 @@ int loadConf(Conf *conf,const char *confPath)
     }
     else
     {
-        g_warning("%s: %s", strerror(errno), confPath);
-        return (errno);
+        g_critical("Critical: %s: %s", strerror(errno), confPath);
+        return errno;
     }
 
-    return (EXIT_SUCCESS);
+    return EXIT_SUCCESS;
 }
 

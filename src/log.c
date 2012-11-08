@@ -13,6 +13,15 @@
 
 #include "log.h"
 
+void logStopProbe(const char* probeName, const char* probeVersion)
+{
+    g_critical(
+          "[origin enterpriseId=\"40311\" software=\"%s\" swVersion=\"%s\"] stop",
+          probeName,
+          probeVersion
+          );
+}
+
 void log2Console(
                  const gchar *log_domain,
                  GLogLevelFlags log_level,

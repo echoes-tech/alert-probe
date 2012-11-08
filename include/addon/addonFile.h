@@ -17,9 +17,9 @@
 #ifdef	__cplusplus
 extern "C" {
 #endif
-    
-#include "addon.h"
 
+#include "addon.h"
+#include "search.h"
 
 /**
  * Thread - Addon File Location.

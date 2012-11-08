@@ -42,7 +42,7 @@ typedef struct SearchInfoParams2_1 SearchInfoParams2_1;
 struct SearchInfoParams2_1
 {
     gchar *regex;
-    int err, match;
+    int err;
     regex_t preg;
     size_t nmatch;
     regmatch_t *pmatch;
@@ -137,25 +137,55 @@ int verifExt(const char *s);
 /**
  * Replace \ to \\
  * @param string String
- * @return Exit status
  */
-int addBackslash(char *string);
-
-/**
- * Convert the string period from plugin to a number of seconds
- * @param *periodSec   Pointer of period (second)
- * @param periodString Period (string)
- * @return 
- */
-int periodString2Int(unsigned int *periodSec, const char *periodString);
+void addBackslash(char *string);
 
 /**
  * Load probe plugin file to a String
- * @param *plgPath Plugins file path
+ * @param plgPath Plugins file path
  * @param data     String
  * @return Exit status
  */
 int file2data(const char *plgPath, gchar *data);
+
+/**
+ * Get an integer value on JsonReader
+ * @param parser   JsonParser
+ * @param reader   JsonReader
+ * @param key      Name of the desired key
+ * @param value    Value
+ * @param plgPath  Plugins file path
+ * @param errorMsg Log Error Message
+ * @return Exit status
+ */
+gushort getIntValue(
+                    JsonParser *parser,
+                    JsonReader *reader,
+                    const char *key,
+                    gint64 *value,
+                    const char *plgPath,
+                    const char *errorMsg
+                    );
+
+/**
+ * Get a string value on JsonReader
+ * @param parser   JsonParser
+ * @param reader   JsonReader
+ * @param key      Name of the desired key
+ * @param value    Value
+ * @param plgPath  Plugins file path
+ * @param errorMsg Log Error Message
+ * @return Exit status
+ */
+gushort getStringValue(
+                       JsonParser *parser,
+                       JsonReader *reader,
+                       const char *key,
+                       gchar **value,
+                       const char *plgPath,
+                       const char *errorMsg
+                       );
+
 /**
  * Load data to a linkedlist
  * @param *plgList   Pointer of Plugins list with informations
@@ -172,6 +202,7 @@ int data2llist(
                const char *plgPath,
                const char *data
                );
+
 /**
  * List probe plugin
  * @param *plgDir    Plugins files directory
@@ -182,11 +213,12 @@ int data2llist(
  */
 int listPlugins(
                 const char *plgDir,
-                int *nbPlg,
+                gushort *nbPlg,
                 PlgList *plgList,
                 AddonList *addonList,
                 unsigned int *nbThreads
                 );
+
 /**
  * Main function of Plug-in Manager
  * @param *plgDir    Plugins files directory
@@ -195,12 +227,12 @@ int listPlugins(
  * @param *nbThreads Pointer of Number of Searches
  * @return Exit status
  */
-int plugin(
-           const char *plgDir,
-           PlgList *plgList,
-           AddonList *addonList,
-           unsigned int *nbThreads
-           );
+gushort plugin(
+               const char *plgDir,
+               PlgList *plgList,
+               AddonList *addonList,
+               unsigned int *nbThreads
+               );
 
 #endif	/* PLUGIN_H */
 
