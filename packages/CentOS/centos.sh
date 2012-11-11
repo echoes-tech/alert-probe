@@ -4,7 +4,7 @@
 # Include
 #########
 
-source ${TOP}/packages/var-rpm.sh
+. ${TOP}/packages/var-rpm.sh
 
 ###########
 # Variables

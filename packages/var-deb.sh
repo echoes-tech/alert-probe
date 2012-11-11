@@ -4,7 +4,7 @@
 # Include
 #########
 
-source ${TOP}/packages/pkg.sh
+. ${TOP}/packages/pkg.sh
 
 ###########
 # Variables

@@ -10,7 +10,7 @@ TOP=`pwd`
 # Include
 #########
 
-source ${TOP}/packages/CentOS/centos.sh
+. ${TOP}/packages/CentOS/centos.sh
 
 ###########
 # Variables
@@ -29,4 +29,4 @@ rpm_pkg_name="${rpm_pkg_name}-6.$rpm_target.rpm"
 ###########
 
 addLib
-source ${TOP}/packages/rpm.sh
+. ${TOP}/packages/rpm.sh

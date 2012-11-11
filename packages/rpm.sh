@@ -18,7 +18,7 @@ do
 	tmp_chmod=${dirname}_dir_chmod
 
 	cd "${TOP}"
-	makeDirectory "${!tmp_dir}" ${!tmp_chmod}
+	eval makeDirectory "\$${tmp_dir}" \$${tmp_chmod}
 done
 
 for filename in $file_list
@@ -28,7 +28,7 @@ do
 	tmp_chmod=${filename}_file_chmod
 
 	cd "${TOP}"
-	copyFileToTmpDir "${!tmp_src}" "${!tmp_dst}" ${!tmp_chmod}
+	eval copyFileToTmpDir "\$${tmp_src}" "\$${tmp_dst}" \$${tmp_chmod}
 done
 
 # Ensure proper rpm build environment

@@ -10,7 +10,7 @@ TOP=`pwd`
 # Include
 #########
 
-source ${TOP}/packages/Debian/debian.sh
+. ${TOP}/packages/Debian/debian.sh
 
 ###########
 # Variables
@@ -25,4 +25,4 @@ deb_pkg_name="${deb_pkg_name}_Wheezy_$deb_architecture.deb"
 # Execution
 ###########
 
-source ${TOP}/packages/deb.sh
+. ${TOP}/packages/deb.sh

@@ -4,7 +4,7 @@
 # Include
 #########
 
-source ${TOP}/packages/var-deb.sh
+. ${TOP}/packages/var-deb.sh
 
 ###########
 # Variables
