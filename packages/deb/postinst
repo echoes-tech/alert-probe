@@ -18,7 +18,14 @@ set -e
 
 case "$1" in
     configure)
-        chown -R root:root /opt/echoes-alert/probe /etc/init.d/ea-probe
+        cd /opt/echoes-alert/probe
+        if [ -f lib.tar.gz ]
+        then
+              tar xzf lib.tar.gz
+              rm -f lib.tar.gz
+        fi
+
+        chown -R root:root . /etc/init.d/ea-probe
         chown -R root:adm /var/log/echoes-alert
 
         update-rc.d -f ea-probe defaults

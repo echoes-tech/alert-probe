@@ -22,6 +22,10 @@
       <itemPath>include/sender.h</itemPath>
     </logicalFolder>
     <logicalFolder name="packages" displayName="Packages" projectFiles="true">
+      <logicalFolder name="CentOS" displayName="CentOS" projectFiles="true">
+        <itemPath>packages/CentOS/6.sh</itemPath>
+        <itemPath>packages/CentOS/centos.sh</itemPath>
+      </logicalFolder>
       <logicalFolder name="deb" displayName="deb" projectFiles="true">
         <logicalFolder name="squeeze" displayName="squeeze" projectFiles="true">
           <itemPath>packages/deb/squeeze/postinst</itemPath>
@@ -37,11 +41,35 @@
         <itemPath>packages/deb/preinst.ex</itemPath>
         <itemPath>packages/deb/prerm</itemPath>
       </logicalFolder>
+      <logicalFolder name="Debian" displayName="Debian" projectFiles="true">
+        <itemPath>packages/Debian/6.sh</itemPath>
+        <itemPath>packages/Debian/7.sh</itemPath>
+        <itemPath>packages/Debian/debian.sh</itemPath>
+      </logicalFolder>
+      <logicalFolder name="doc" displayName="doc" projectFiles="true">
+        <logicalFolder name="libglib2.0" displayName="libglib2.0" projectFiles="true">
+          <itemPath>packages/doc/libglib2.0/AUTHORS</itemPath>
+          <itemPath>packages/doc/libglib2.0/NEWS.gz</itemPath>
+          <itemPath>packages/doc/libglib2.0/README.gz</itemPath>
+          <itemPath>packages/doc/libglib2.0/copyright</itemPath>
+        </logicalFolder>
+        <logicalFolder name="libjson-glib-1.0"
+                       displayName="libjson-glib-1.0"
+                       projectFiles="true">
+          <itemPath>packages/doc/libjson-glib-1.0/NEWS.gz</itemPath>
+          <itemPath>packages/doc/libjson-glib-1.0/README</itemPath>
+          <itemPath>packages/doc/libjson-glib-1.0/copyright</itemPath>
+        </logicalFolder>
+      </logicalFolder>
       <logicalFolder name="rpm" displayName="rpm" projectFiles="true">
         <itemPath>packages/rpm/echoes-alert-probe.init</itemPath>
         <itemPath>packages/rpm/echoes-alert-probe.sysconfig</itemPath>
       </logicalFolder>
-      <itemPath>packages/install.sh</itemPath>
+      <itemPath>packages/deb.sh</itemPath>
+      <itemPath>packages/pkg.sh</itemPath>
+      <itemPath>packages/rpm.sh</itemPath>
+      <itemPath>packages/var-deb.sh</itemPath>
+      <itemPath>packages/var-rpm.sh</itemPath>
     </logicalFolder>
     <logicalFolder name="plugins" displayName="Plugins" projectFiles="true">
       <itemPath>plugins/Linux-Syslog.json</itemPath>
@@ -52,6 +80,7 @@
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
                    projectFiles="true">
+      <itemPath>install.sh</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
