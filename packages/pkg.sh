@@ -29,7 +29,7 @@ PACKAGE_TOP_DIR=/opt/echoes-alert/probe/
 # Functions
 ###########
 
-function checkReturnCode
+checkReturnCode ()
 {
     rc=$?
     if [ $rc != 0 ]
@@ -38,7 +38,7 @@ function checkReturnCode
     fi
 }
 
-function makeDirectory
+makeDirectory ()
 # $1 directory path
 # $2 permission (optional)
 {
@@ -51,7 +51,7 @@ function makeDirectory
     fi
 }
 
-function copyFileToTmpDir
+copyFileToTmpDir ()
 # $1 from-file path
 # $2 to-file path
 # $3 permission
@@ -65,7 +65,7 @@ function copyFileToTmpDir
     fi
 }
 
-function createVarDir
+createVarDir ()
 # $1 name
 # $2 path
 # $3 chmod
@@ -76,7 +76,7 @@ function createVarDir
     dir_list="$dir_list $1"
 }
 
-function createVarFile
+createVarFile ()
 # $1 name
 # $2 src
 # $3 dst
@@ -89,7 +89,7 @@ function createVarFile
     file_list="$file_list $1"
 }
 
-function addLib
+addLib ()
 {
    # Lib
    createVarDir "lib" "${NBTMPDIR}/${PACKAGE_TOP_DIR}/lib" $default_dir_right
