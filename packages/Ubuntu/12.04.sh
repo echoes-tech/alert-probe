@@ -10,7 +10,7 @@ TOP=`pwd`
 # Include
 #########
 
-. ${TOP}/packages/Debian/ubuntu.sh
+. ${TOP}/packages/Ubuntu/ubuntu.sh
 
 ###########
 # Variables
