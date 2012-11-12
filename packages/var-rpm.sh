@@ -65,7 +65,8 @@ rpm_files="\"/${PACKAGE_TOP_DIR}sbin/ea-probe\"
 \"/${PACKAGE_TOP_DIR}doc/README\"
 \"/${PACKAGE_TOP_DIR}doc/COPYRIGHT\""
 
-rpm_dir="\"//var/log/echoes-alert/\""
+rpm_dir="\"//var/log/echoes-alert/\"
+\"/${PACKAGE_TOP_DIR}etc/plugins\""
 
 rpm_target=""
 

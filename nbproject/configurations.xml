@@ -65,6 +65,10 @@
         <itemPath>packages/rpm/echoes-alert-probe.init</itemPath>
         <itemPath>packages/rpm/echoes-alert-probe.sysconfig</itemPath>
       </logicalFolder>
+      <logicalFolder name="Ubuntu" displayName="Ubuntu" projectFiles="true">
+        <itemPath>packages/Ubuntu/12.04.sh</itemPath>
+        <itemPath>packages/Ubuntu/ubuntu.sh</itemPath>
+      </logicalFolder>
       <itemPath>packages/deb.sh</itemPath>
       <itemPath>packages/pkg.sh</itemPath>
       <itemPath>packages/rpm.sh</itemPath>
