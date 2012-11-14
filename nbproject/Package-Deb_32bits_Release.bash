@@ -115,11 +115,11 @@ copyFileToTmpDir "README" "${NBTMPDIR}/${PACKAGE_TOP_DIR}doc/README" 0640
 
 cd "${TOP}"
 makeDirectory "${NBTMPDIR}//opt/echoes-alert/probe/doc"
-copyFileToTmpDir "COPYING" "${NBTMPDIR}/${PACKAGE_TOP_DIR}doc/COPYING" 0640
+copyFileToTmpDir "AUTHORS" "${NBTMPDIR}/${PACKAGE_TOP_DIR}doc/AUTHORS" 0640
 
 cd "${TOP}"
 makeDirectory "${NBTMPDIR}//opt/echoes-alert/probe/doc"
-copyFileToTmpDir "AUTHORS" "${NBTMPDIR}/${PACKAGE_TOP_DIR}doc/AUTHORS" 0640
+copyFileToTmpDir "COPYRIGHT" "${NBTMPDIR}/${PACKAGE_TOP_DIR}doc/COPYRIGHT" 0640
 
 
 # Create control file
@@ -137,7 +137,7 @@ echo 'Maintainer: Florent Poinsaut <florent.poinsaut@echoes-tech.com>' >> ${CONT
 echo 'Homepage: http://alert.echoes-tech.com' >> ${CONTROL_FILE}
 echo 'Package: ea-probe' >> ${CONTROL_FILE}
 echo 'Architecture: i386' >> ${CONTROL_FILE}
-echo 'Depends: libssl0.9.8 | libssl1.0.0, libjson-glib-1.0-0 (>= 0.12.0)' >> ${CONTROL_FILE}
+echo 'Depends: libssl1.0.0, libjson-glib-1.0-0 (>= 0.12.0), libffi5, libmysqlclient18' >> ${CONTROL_FILE}
 echo 'Description: The ECHOES Alert Probe' >> ${CONTROL_FILE}
 
 # Create Debian Package

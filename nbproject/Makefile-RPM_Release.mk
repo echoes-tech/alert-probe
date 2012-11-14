@@ -23,7 +23,7 @@ AS=as
 # Macros
 CND_PLATFORM=GNU-Linux-x86
 CND_DLIB_EXT=so
-CND_CONF=Deb_32bits_Release
+CND_CONF=RPM_Release
 CND_DISTDIR=dist
 CND_BUILDDIR=build
 
@@ -50,7 +50,7 @@ OBJECTFILES= \
 
 
 # C Compiler Flags
-CFLAGS=-m32 -DNDEBUG
+CFLAGS=-m64 -DNDEBUG
 
 # CC Compiler Flags
 CCFLAGS=

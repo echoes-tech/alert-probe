@@ -42,6 +42,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/plugin.o \
 	${OBJECTDIR}/src/addon/addon.o \
 	${OBJECTDIR}/src/addon/addonLog.o \
+	${OBJECTDIR}/src/search.o \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/src/sender.o \
 	${OBJECTDIR}/src/addon/addonFile.o \
@@ -62,11 +63,13 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-Wl,-rpath,/opt/echoes-alert/probe/lib `pkg-config --libs libssl gobject-2.0 json-glib-1.0` -lmysqlclient  
+LDLIBSOPTIONS=-Wl,-rpath,/opt/echoes-alert/probe/lib `pkg-config --libs libssl gobject-2.0 json-glib-1.0` /usr/local/lib32/libmysqlclient.so.16  
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
 	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/probe
+
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/probe: /usr/local/lib32/libmysqlclient.so.16
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/probe: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
@@ -106,6 +109,11 @@ ${OBJECTDIR}/src/addon/addonLog.o: src/addon/addonLog.c
 	${MKDIR} -p ${OBJECTDIR}/src/addon
 	${RM} $@.d
 	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags libssl gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonLog.o src/addon/addonLog.c
+
+${OBJECTDIR}/src/search.o: src/search.c 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags libssl gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/search.o src/search.c
 
 ${OBJECTDIR}/main.o: main.c 
 	${MKDIR} -p ${OBJECTDIR}

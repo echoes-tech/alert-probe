@@ -24,7 +24,6 @@ int addonMySQLQuery(
 {
     SearchInfoParams4_1 *searchInfoParams = (SearchInfoParams4_1*)params;
 
-    char *res = NULL;
     char **values = NULL;
 
     /* Objects */
@@ -40,52 +39,41 @@ int addonMySQLQuery(
     /* Storing result */
     result = mysql_use_result(mysql);
 
-    /* Number of fields */
-    nbFields = mysql_num_fields(result);
-
-    values = calloc(nbFields, sizeof (char*));
-    
-    while ((row = mysql_fetch_row(result)))
+    /* Have we a result ? */
+    if(result)
     {
-        unsigned long *lengths;
+        /* Number of fields */
+        nbFields = mysql_num_fields(result);
 
-        lengths = mysql_fetch_lengths(result);
+        values = calloc(nbFields, sizeof (char*));
 
-        /* Loop to retrieve each field */
-        for(i = 0; i < nbFields; i++)
+        while ((row = mysql_fetch_row(result)))
         {
-            res = calloc(lengths[i], sizeof (char));
-            if (res)
+            /* Loop to retrieve each field */
+            for(i = 0; i < nbFields; i++)
             {
-                strncpy(res, row[i] ? row[i] : "NULL", lengths[i]);
-
-                values[i] = strdup(res);
-
-                /* Cleanup */
-                free(res);
+                    values[i] = strdup(row[i] ? row[i] : "");
             }
+            if (pushCollectQueue(
+                                 collectQueue,
+                                 idList,
+                                 lotNum,
+                                 n,
+                                 nbFields,
+                                 values,
+                                 *now
+                                 ))
+                return EXIT_FAILURE;
+
+            ++n;
         }
-        if (pushCollectQueue(
-                             collectQueue,
-                             idList,
-                             lotNum,
-                             n,
-                             nbFields,
-                             values,
-                             *now
-                             ))
-        {
-            perror("pushCollectQueue()");
-            exit(EXIT_FAILURE);
-        }
-        ++n;
+
+        /* Cleanup */
+        free(values);
+        mysql_free_result(result);
     }
 
-    /* Cleanup */
-    free(values);
-    mysql_free_result(result);
-
-    return(EXIT_SUCCESS);
+    return EXIT_SUCCESS;
 }
 
 void *addonMySQL(void *arg)
@@ -177,7 +165,7 @@ void *addonMySQL(void *arg)
         }
         else
         {
-            g_warning("%s", mysql_error(&mysql));
+            g_warning("Warning: %s", mysql_error(&mysql));
         }
         
         /* Closing MySQL session */

@@ -26,7 +26,7 @@
                     <type>1</type>
                 </confElem>
                 <confElem>
-                    <name>Deb_64bits_Release</name>
+                    <name>Deb_Release</name>
                     <type>1</type>
                 </confElem>
                 <confElem>
@@ -34,7 +34,7 @@
                     <type>1</type>
                 </confElem>
                 <confElem>
-                    <name>Debian6_64bits_Release</name>
+                    <name>Debian6_Release</name>
                     <type>1</type>
                 </confElem>
                 <confElem>
@@ -42,7 +42,7 @@
                     <type>1</type>
                 </confElem>
                 <confElem>
-                    <name>RPM_64bits_Release</name>
+                    <name>RPM_Release</name>
                     <type>1</type>
                 </confElem>
             </confList>

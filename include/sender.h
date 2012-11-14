@@ -19,6 +19,8 @@
 #include <errno.h>
 #include <string.h>
 
+#include <gio/gio.h>
+
 #include "format.h"
 
 /* Source : http://broux.developpez.com/articles/c/sockets/ */

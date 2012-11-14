@@ -25,9 +25,7 @@ int pushSDElementQueue(
 {
     SDElementQueueElement *new = calloc(1, sizeof(SDElementQueueElement));
     if (sdElementQueue == NULL || new == NULL)
-    {
-        exit(EXIT_FAILURE);
-    }
+        g_error("Error: Queue of SD-Element unavailable");
 
     new->time = time;
             
@@ -41,9 +39,10 @@ int pushSDElementQueue(
 
     sprintf(
             new->afterMsgID,
-            "[prop@40311 ver=%d probe=%d][res1@40311 offset=",
+            "[prop@40311 ver=%d probe=%d token=\"%s\"][res1@40311 offset=",
             *sdElementQueue->transportMsgVersion,
-            *sdElementQueue->probeID
+            *sdElementQueue->probeID,
+            sdElementQueue->token
         );
     
     new->afterOffset = strdup(afterOffset);
@@ -69,7 +68,7 @@ int pushSDElementQueue(
     /* Fin de la zone protegee. */
     pthread_mutex_unlock (& sdElementQueue->mutex);
 
-    return (EXIT_SUCCESS);
+    return EXIT_SUCCESS;
 }
 
 int popCollectQueue(CollectQueue *collectQueue, SDElementQueue *sdElementQueue)
@@ -79,9 +78,7 @@ int popCollectQueue(CollectQueue *collectQueue, SDElementQueue *sdElementQueue)
     unsigned short i = 0;
 
     if (collectQueue == NULL)
-    {
-        exit(EXIT_FAILURE);
-    }
+        g_error("Error: Queue of collected data unavailable");
 
     /* Debut de la zone protegee. */
     pthread_mutex_lock (& collectQueue->mutex);
@@ -104,7 +101,10 @@ int popCollectQueue(CollectQueue *collectQueue, SDElementQueue *sdElementQueue)
                     popedElement->lotNum,
                     popedElement->lineNum,
                     /*TODO: Tester le retour de base64 */
-                    g_base64_encode(popedElement->values[i], strlen(popedElement->values[i]))
+                    g_base64_encode(
+                                    (guchar *) popedElement->values[i],
+                                    strlen(popedElement->values[i])
+                                    )
                 );
             strcat(afterOffset, afterOffsetTmp);
         }
@@ -121,7 +121,7 @@ int popCollectQueue(CollectQueue *collectQueue, SDElementQueue *sdElementQueue)
     /* Fin de la zone protegee. */
     pthread_mutex_unlock (& collectQueue->mutex);
 
-    return (EXIT_SUCCESS);
+    return EXIT_SUCCESS;
 }
 
 void *format(void *arg)

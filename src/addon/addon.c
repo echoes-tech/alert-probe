@@ -25,7 +25,7 @@ int pushCollectQueue(
 {
     IDInfo *idInfo;
 
-    unsigned short i = 0;
+    gushort i = 0;
 
     idInfo = *idList;
     /* Tant que l'on n'est pas au bout de la liste */
@@ -33,9 +33,7 @@ int pushCollectQueue(
     {
         CollectQueueElement *new = calloc(1, sizeof(CollectQueueElement));
         if (collectQueue == NULL || new == NULL)
-        {
-            exit(EXIT_FAILURE);
-        }
+            g_error("Error: Queue of collected data unavailable");
 
         new->idPlg = *idInfo->idPlg;
         new->idAsset = *idInfo->idAsset;
@@ -75,7 +73,7 @@ int pushCollectQueue(
         /* On avance d'une case */
         idInfo = idInfo->nxt;
     }
-    return (EXIT_SUCCESS);
+    return EXIT_SUCCESS;
 }
 
 void *addon(void *arg)
@@ -103,21 +101,21 @@ void *addon(void *arg)
             case 2:
                 if (pthread_create(&addonsMgrParams->addonsThreads[numThread], NULL, addonFile, (void*) addonParamsInfo))
                 {
-                    perror("pthread_create");
+                    g_critical("Critical: %s: addonFile: %u", strerror(errno), numThread);
                     pthread_exit(NULL);
                 }
                 break;
             case 3:
                 if (pthread_create(&addonsMgrParams->addonsThreads[numThread], NULL, addonLog, (void*) addonParamsInfo))
                 {
-                    perror("pthread_create");
+                    g_critical("Critical: %s: addonFile: %u", strerror(errno), numThread);
                     pthread_exit(NULL);
                 }
                 break;
             case 4:
                 if (pthread_create(&addonsMgrParams->addonsThreads[numThread], NULL, addonMySQL, (void*) addonParamsInfo))
                 {
-                    perror("pthread_create");
+                    g_critical("Critical: %s: addonFile: %u", strerror(errno), numThread);
                     pthread_exit(NULL);
                 }
                 break;

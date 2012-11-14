@@ -34,7 +34,14 @@ struct LogParams
     pid_t pId;
     char *logFilePath;
 };
-   
+
+/**
+ * Log Stop Message
+ * @param productName Name of Probe
+ * @param version     Version of Probe
+ */
+void logStopProbe(const char* probeName, const char* probeVersion);
+
 /**
  * Logs an error or debugging message in current console
  * @param log_domain The log domain, usually G_LOG_DOMAIN

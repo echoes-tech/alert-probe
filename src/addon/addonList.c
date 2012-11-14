@@ -300,6 +300,6 @@ int pushAddonList(
         idInfo = idInfoTmp;
     }
     
-    return (EXIT_SUCCESS);
+    return EXIT_SUCCESS;
 }
 

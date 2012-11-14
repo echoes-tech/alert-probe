@@ -46,8 +46,8 @@ static int initConnection(
     /* Whether no info, return an error by stopping probe */
     if (hostinfo == NULL)
     {
-        fprintf(stderr, "Unknown host %s.\n", address);
-        return (EXIT_FAILURE);
+        g_warning("Unknown host %s.", address);
+        return EXIT_FAILURE;
     }
 
     if (*protocol == 1)
@@ -63,8 +63,8 @@ static int initConnection(
 
     if (*sock == INVALID_SOCKET)
     {
-        perror("socket()");
-        return (errno);
+        g_critical("Critical: %s", strerror(errno));
+        return errno;
     }
 
     /* Emission info */
@@ -77,22 +77,22 @@ static int initConnection(
         /* Open a connection */
         if (connect(*sock, (SOCKADDR *) sin, sizeof (SOCKADDR)) == SOCKET_ERROR)
         {
-            perror("connect()");
-            return (errno);
+            g_critical("Critical: %s", strerror(errno));
+            return errno;
         }
     }
 
-    return (EXIT_SUCCESS);
+    return EXIT_SUCCESS;
 }
 
 static int endConnection(SOCKET *sock)
 {
     if (closesocket(*sock))
     {
-        perror("closesocket()");
-        return (errno);
+        g_critical("Critical: %s", strerror(errno));
+        return errno;
     }
-    return (EXIT_SUCCESS);
+    return EXIT_SUCCESS;
 }
 
 int sendMessage(
@@ -111,31 +111,19 @@ int sendMessage(
     SOCKET sock; /* Socket */
 
     time_t now;
-    struct tm instant;
-    char timestamp[480], completMsg[480];
+    GTimeVal g_time;
+    char completMsg[480];
 
-    /* Init just for Win32 */
-    init();
-
-    /* Creating the Socket */
-    if (initConnection(address, port, protocol, &sin, &sock))
-    {
-        perror("initConnection()");
-        return (errno);
-    }
-    
     /* Adding PRI, VERSION and TIMESTAMP */
     time(&now);
-    instant=*localtime(&now);
-
-    strftime(timestamp, 480, "%Y-%m-%dT%XZ", &instant);
+    g_get_current_time(&g_time);
     
     /* Caution: keep the Line Feed to work with TCP */
     snprintf(
         completMsg,
              480,
              "<118>1 %s %s%d %s%d%s]\n",
-             timestamp,
+             g_time_val_to_iso8601(&g_time),
              beforeMsgID,
              *msgID,
              afterMsgID,
@@ -146,35 +134,92 @@ int sendMessage(
     printf("%s", completMsg);
 #endif
     
-    /* Sending data */
-    if (*protocol == 1)
+    /* TCP/TLS or UDP */
+    if (*protocol == 0)
     {
-        if (sendto(sock, completMsg, strlen(completMsg), 0, (SOCKADDR *) & sin, sizeof sin) < 0)
+        GError *error = NULL;
+
+        /* Create a new connection */
+        GSocketConnection *connection = NULL;
+        GSocketClient *client = g_socket_client_new();
+        GTlsCertificateFlags flags;
+
+        GOutputStream *ostream = NULL;
+
+        gchar uri[265] = "simple://";
+        strcat(uri, address);
+
+        /* Following flags are used to allow self-signed certificates */
+        flags = g_socket_client_get_tls_validation_flags (client);
+        flags &= ~(G_TLS_CERTIFICATE_UNKNOWN_CA);
+        g_socket_client_set_tls_validation_flags (client, flags);
+
+        /* Set TLS */
+        g_socket_client_set_tls(client, TRUE);
+
+        /* Connect to the host */
+        connection = g_socket_client_connect_to_uri(
+                                                    client,
+                                                    uri,
+                                                    (guint16) *port,
+                                                    NULL,
+                                                    &error
+                                                    );
+
+        /* don't forget to check for errors */
+        if (error != NULL)
         {
-            perror("sendto()");
-            return (errno);
+            g_warning("%s: %s:%u", error->message, address, *port);
+            return EXIT_FAILURE;
+        }
+
+        /* use the connection */
+        ostream = g_io_stream_get_output_stream(G_IO_STREAM(connection));
+
+        g_output_stream_write(ostream,
+                              completMsg,
+                              strlen(completMsg),
+                              NULL,
+                              &error);
+
+        /* don't forget to check for errors */
+        if (error != NULL)
+        {
+            g_warning("%s: %s:%u", error->message, address, *port);
+            return EXIT_FAILURE;
         }
     }
     else
     {
-        if (send(sock, completMsg, strlen(completMsg), 0) < 0)
+        /* Init just for Win32 */
+        init();
+
+        /* Creating the Socket */
+        if (initConnection(address, port, protocol, &sin, &sock))
         {
-            perror("send()");
-            return (errno);
+            g_warning("%s: %s:%u", strerror(errno), address, *port);
+            return errno;
         }
+
+        /* Sending data */
+        if (sendto(sock, completMsg, strlen(completMsg), 0, (SOCKADDR *) & sin, sizeof sin) < 0)
+        {
+            g_warning("%s: %s:%u", strerror(errno), address, *port);
+            return errno;
+        }
+
+        /* Closing the socket */
+        if (endConnection(&sock))
+        {
+            g_warning("%s: %s:%u", strerror(errno), address, *port);
+            return errno;
+        }
+
+        /* End just for Win32 */
+        end();
     }
 
-    /* Closing the socket */
-    if (endConnection(&sock))
-    {
-        perror("send()");
-        return (errno);
-    }
-
-    /* End just for Win32 */
-    end();
-
-    return (EXIT_SUCCESS);
+    return EXIT_SUCCESS;
 }
 
 int popSDElementQueue(
@@ -186,9 +231,7 @@ int popSDElementQueue(
                       )
 {
     if (sdElementQueue == NULL)
-    {
-        exit(EXIT_FAILURE);
-    }
+        g_error("Error: Queue of collected data unavailable");
 
     /* Debut de la zone protegee. */
     pthread_mutex_lock (& sdElementQueue->mutex);
@@ -215,7 +258,7 @@ int popSDElementQueue(
     /* Fin de la zone protegee. */
     pthread_mutex_unlock (& sdElementQueue->mutex);
 
-    return (EXIT_SUCCESS);
+    return EXIT_SUCCESS;
 }
 
 void *sender(void *arg)

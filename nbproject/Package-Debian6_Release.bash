@@ -7,7 +7,7 @@
 # Macros
 TOP=`pwd`
 CND_PLATFORM=GNU-Linux-x86
-CND_CONF=Debian6_32bits_Release
+CND_CONF=Debian6_Release
 CND_DISTDIR=dist
 CND_BUILDDIR=build
 NBTMPDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tmp-packaging
@@ -119,11 +119,11 @@ copyFileToTmpDir "README" "${NBTMPDIR}/${PACKAGE_TOP_DIR}doc/README" 0640
 
 cd "${TOP}"
 makeDirectory "${NBTMPDIR}//opt/echoes-alert/probe"
-copyFileToTmpDir "packages/lib/i386/glib_echoes-alert-probe_squeeze_i386.tar.gz" "${NBTMPDIR}/${PACKAGE_TOP_DIR}glib_echoes-alert-probe_squeeze_i386.tar.gz" 0640
+copyFileToTmpDir "packages/lib/amd64/glib_echoes-alert-probe_squeeze_amd64.tar.gz" "${NBTMPDIR}/${PACKAGE_TOP_DIR}glib_echoes-alert-probe_squeeze_amd64.tar.gz" 0640
 
 cd "${TOP}"
 makeDirectory "${NBTMPDIR}//opt/echoes-alert/probe"
-copyFileToTmpDir "packages/lib/i386/json-glib_echoes-alert-probe_squeeze_i386.tar.gz" "${NBTMPDIR}/${PACKAGE_TOP_DIR}json-glib_echoes-alert-probe_squeeze_i386.tar.gz" 0640
+copyFileToTmpDir "packages/lib/amd64/json-glib_echoes-alert-probe_squeeze_amd64.tar.gz" "${NBTMPDIR}/${PACKAGE_TOP_DIR}json-glib_echoes-alert-probe_squeeze_amd64.tar.gz" 0640
 
 cd "${TOP}"
 makeDirectory "${NBTMPDIR}//opt/echoes-alert/probe/doc"
@@ -138,14 +138,14 @@ mkdir -p ${NBTMPDIR}/DEBIAN
 
 cd "${TOP}"
 echo 'Source: ea-probe' >> ${CONTROL_FILE}
-echo 'Version: 0.1.0.alpha-2' >> ${CONTROL_FILE}
+echo 'Version: 0.1.0.beta-1' >> ${CONTROL_FILE}
 echo 'Section: non-free/admin' >> ${CONTROL_FILE}
 echo 'Priority: optional' >> ${CONTROL_FILE}
 echo 'Maintainer: Florent Poinsaut <florent.poinsaut@echoes-tech.com>' >> ${CONTROL_FILE}
 echo 'Homepage: http://alert.echoes-tech.com' >> ${CONTROL_FILE}
 echo 'Package: ea-probe' >> ${CONTROL_FILE}
-echo 'Architecture: i386' >> ${CONTROL_FILE}
-echo 'Depends: libssl0.9.8, libffi5, libmysqlclient16' >> ${CONTROL_FILE}
+echo 'Architecture: amd64' >> ${CONTROL_FILE}
+echo 'Depends: libssl0.9.8 , libffi5, libmysqlclient16' >> ${CONTROL_FILE}
 echo 'Description: The ECHOES Alert Probe' >> ${CONTROL_FILE}
 
 # Create Debian Package
@@ -155,9 +155,9 @@ dpkg-deb  --build ${TMPDIRNAME}
 checkReturnCode
 cd "${TOP}"
 mkdir -p  ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package
-mv ${NBTMPDIR}.deb ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/ea-probe_0.1.0.alpha-2_squeeze_i386.deb
+mv ${NBTMPDIR}.deb ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/ea-probe_0.1.0.beta-1_squeeze_amd64.deb
 checkReturnCode
-echo Debian: ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/ea-probe_0.1.0.alpha-2_squeeze_i386.deb
+echo Debian: ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/package/ea-probe_0.1.0.beta-1_squeeze_amd64.deb
 
 # Cleanup
 cd "${TOP}"

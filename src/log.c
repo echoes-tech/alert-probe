@@ -13,6 +13,15 @@
 
 #include "log.h"
 
+void logStopProbe(const char* probeName, const char* probeVersion)
+{
+    g_critical(
+          "[origin enterpriseId=\"40311\" software=\"%s\" swVersion=\"%s\"] stop",
+          probeName,
+          probeVersion
+          );
+}
+
 void log2Console(
                  const gchar *log_domain,
                  GLogLevelFlags log_level,
@@ -21,7 +30,7 @@ void log2Console(
                  )
 {
     LogParams *logParams = user_data;
-    
+
     g_print(
             "%s %s %s %d - %s\n",
             g_date_time_format(g_date_time_new_now_local(), "%FT%T%z"),

@@ -32,7 +32,7 @@
 #define PRODUCT_NAME "ECHOES Alert - Probe"
 #define APP_NAME "ea-probe"
 /* Probe Version */
-#define VERSION "0.1.0.alpha"
+#define VERSION "0.1.0.beta"
 /* Conf Repository */
 #ifdef NDEBUG
     #define CONF_DIR "/opt/echoes-alert/probe/etc/probe.conf"
@@ -52,7 +52,7 @@ int main(int argc, char** argv)
 
     /* Probe Configuration initialisation */
     Conf conf = CONF_INITIALIZER;
-     
+
     /* Log Params initialisation */
     /*TODO: Add logFile in conf param */
     LogParams logParams = {
@@ -61,12 +61,12 @@ int main(int argc, char** argv)
         getpid(),
         "/var/log/echoes-alert/probe.log"
     };
-   
+
     /* Plugins List initialisation */
     PlgList plgList = NULL;
     /* Plugins counter initialisation */
     unsigned int nbThreads = 0;
-    
+
     /* Addons Manager, Format Module and Sender Module threads initialisations */
     pthread_t addonsMgrThread = 0, formatThread = 0, senderThread = 0;
 
@@ -78,6 +78,7 @@ int main(int argc, char** argv)
         PTHREAD_MUTEX_INITIALIZER,
         g_get_host_name(),
         APP_NAME,
+        conf.token,
         &conf.probeID,
         &conf.transportMsgVersion,
         getpid(),
@@ -119,7 +120,7 @@ int main(int argc, char** argv)
                    PRODUCT_NAME
                    );
         }
-        return (EXIT_SUCCESS);
+        return EXIT_SUCCESS;
     }
 
 #ifdef NDEBUG
@@ -142,8 +143,8 @@ int main(int argc, char** argv)
 #ifdef NDEBUG
     if(chdir("/") != 0)
     {
-        g_message("%s", strerror(errno));
-        exit (EXIT_FAILURE);
+        g_critical("%s", strerror(errno));
+        return EXIT_FAILURE;
     }
     if(fork() != 0)
         exit(EXIT_SUCCESS);
@@ -163,12 +164,8 @@ int main(int argc, char** argv)
 #endif
     if (loadConf(&conf, CONF_DIR))
     {
-        g_message(
-                  "[origin enterpriseId=\"40311\" software=\"%s\" swVersion=\"%s\"] stop",
-                  PRODUCT_NAME,
-                  VERSION
-                  );
-        return (errno);
+        logStopProbe(PRODUCT_NAME, VERSION);
+        return EXIT_FAILURE;
     }
 #ifndef NDEBUG
     printf("Fin du chargement des conf\n");
@@ -177,8 +174,8 @@ int main(int argc, char** argv)
 #endif
     if (plugin(conf.probePluginDir, &plgList, &addonsMgrParams.addonsList, &nbThreads))
     {
-        perror("plugin()");
-        return (errno);
+        logStopProbe(PRODUCT_NAME, VERSION);
+        return EXIT_FAILURE;
     }
 #ifndef NDEBUG
     printf("Fin du chargement des plugins\n");
@@ -188,7 +185,9 @@ int main(int argc, char** argv)
     addonsMgrParams.addonsThreads = calloc(nbThreads, sizeof (pthread_t));
     if (addonsMgrParams.addonsThreads == NULL)
     {
-        return (EXIT_FAILURE);
+        g_critical("Critical: %s: addonsMgrParams.addonsThreads", strerror(errno));
+        logStopProbe(PRODUCT_NAME, VERSION);
+        return EXIT_FAILURE;
     }
 
 #ifndef NDEBUG
@@ -196,8 +195,10 @@ int main(int argc, char** argv)
 #endif
     if (pthread_create(&addonsMgrThread, NULL, addon, (void*) &addonsMgrParams))
     {
-        perror("pthread_create");
-        return (EXIT_FAILURE);
+        g_critical("Critical: %s: addonsMgrThread", strerror(errno));
+        free(addonsMgrParams.addonsThreads);
+        logStopProbe(PRODUCT_NAME, VERSION);
+        return EXIT_FAILURE;
     }
 
 #ifndef NDEBUG
@@ -205,8 +206,10 @@ int main(int argc, char** argv)
 #endif
     if (pthread_create(&formatThread, NULL, format, (void*) &formatParams))
     {
-        perror("pthread_create");
-        return (EXIT_FAILURE);
+        g_critical("Critical: %s: formatThread", strerror(errno));
+        free(addonsMgrParams.addonsThreads);
+        logStopProbe(PRODUCT_NAME, VERSION);
+        return EXIT_FAILURE;
     }
 
 #ifndef NDEBUG
@@ -214,8 +217,10 @@ int main(int argc, char** argv)
 #endif
     if (pthread_create(&senderThread, NULL, sender, (void*) &senderParams))
     {
-        perror("pthread_create");
-        return (EXIT_FAILURE);
+        g_critical("Critical: %s: senderThread", strerror(errno));
+        free(addonsMgrParams.addonsThreads);
+        logStopProbe(PRODUCT_NAME, VERSION);
+        return EXIT_FAILURE;
     }
 
     pthread_join(addonsMgrThread, NULL);
@@ -234,6 +239,6 @@ int main(int argc, char** argv)
               VERSION
               );
 
-    return (EXIT_SUCCESS);
+    return EXIT_SUCCESS;
 }
 
