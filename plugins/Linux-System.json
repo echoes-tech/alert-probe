@@ -136,14 +136,19 @@
             "id": 1,
             "idType": 1, /* Regex */
             "params": {
-                "regex": "^(cpu[0-9]*)\s+([0-9]+)\s([0-9]+)\s([0-9]+)\s([0-9]+)\s[0-9]+\s[0-9]+\s[0-9]+\s[0-9]+\s[0-9]+"
+                /*"regex": "^(cpu[0-9]*)\s+([0-9]+)\s([0-9]+)\s([0-9]+)\s([0-9]+)\s[0-9]+\s[0-9]+\s[0-9]+\s[0-9]+\s[0-9]+"*/
+                "regex": "^(cpu[0-9]*)\s+([0-9]+)\s([0-9]+)\s([0-9]+)\s([0-9]+)\s([0-9]+)\s([0-9]+)\s([0-9]+)\s[0-9]+\s[0-9]+"
 				/* Description des groupes
+                 * Toutes les temps sont mesurés en unité de USER_HZ
                  * groupe 1 : Nom du cpu
-                 * groupe 2 : Temps, mesuré en unité de USER_HZ,que le système a passé en mode utilisateur
-                 * groupe 3 : Temps, mesuré en unité de USER_HZ que le système a passé en mode utilisateur avec une basse priorité
-				 * groupe 4 : Temps, mesuré en unité de USER_HZ, que le système a passé en mode système
-                 * groupe 5 : Temps, mesuré en en unité de USER_HZ correspondant au temps d'inactivité du système
-                 */
+                 * groupe 2 : Temps que le système a passé en mode utilisateur
+                 * groupe 3 : Temps que le système a passé en mode utilisateur avec une basse priorité
+				 * groupe 4 : Temps que le système a passé en mode système
+                 * groupe 5 : Temps d'inactivité du système
+                 * groupe 6 : Temps passé à attendre la fin des I/O 
+                 * groupe 7 : Temps passé pour les interruptions de services (IRQ)
+                 * groupe 8 : soft IRQ
+                 */             
             },
             "period": 60,
             "staticValues": 0
