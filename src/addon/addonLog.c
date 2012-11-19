@@ -63,6 +63,11 @@ int addonLogRegex(
         /* Cleanup */
         free(values);
     }
+    else
+    {
+        g_warning("Critical: Insufficient memory");
+        return EXIT_FAILURE;
+    }
 
     return EXIT_SUCCESS;
 }

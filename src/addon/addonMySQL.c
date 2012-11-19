@@ -47,29 +47,43 @@ int addonMySQLQuery(
 
         values = calloc(nbFields, sizeof (char*));
 
-        while ((row = mysql_fetch_row(result)))
+        if(values)
         {
-            /* Loop to retrieve each field */
-            for(i = 0; i < nbFields; i++)
+            while ((row = mysql_fetch_row(result)))
             {
-                    values[i] = strdup(row[i] ? row[i] : "");
+                /* Loop to retrieve each field */
+                for(i = 0; i < nbFields; i++)
+                {
+                        values[i] = strdup(row[i] ? row[i] : "");
+                }
+                if (pushCollectQueue(
+                                     collectQueue,
+                                     idList,
+                                     lotNum,
+                                     n,
+                                     nbFields,
+                                     values,
+                                     *now
+                                     ))
+                {
+                    /* Cleanup */
+                    free(values);
+                    return EXIT_FAILURE;
+                }
+
+                ++n;
             }
-            if (pushCollectQueue(
-                                 collectQueue,
-                                 idList,
-                                 lotNum,
-                                 n,
-                                 nbFields,
-                                 values,
-                                 *now
-                                 ))
-                return EXIT_FAILURE;
 
-            ++n;
+            /* Cleanup */
+            free(values);
         }
-
+        else
+        {
+            g_warning("Critical: Insufficient memory");
+            return EXIT_FAILURE;
+        }
+        
         /* Cleanup */
-        free(values);
         mysql_free_result(result);
     }
 

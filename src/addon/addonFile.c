@@ -27,6 +27,8 @@ int addonFileRegex(
 
     char **values = NULL;
 
+    values = calloc(searchInfoParams->nmatch, sizeof (char*));
+
     if(values)
     {
         if (searchRegex(
@@ -60,6 +62,11 @@ int addonFileRegex(
 
         /* Cleanup */
         free(values);
+    }
+    else
+    {
+        g_warning("Critical: Insufficient memory");
+        return EXIT_FAILURE;
     }
 
     return EXIT_SUCCESS;
