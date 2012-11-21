@@ -23,6 +23,7 @@
     </logicalFolder>
     <logicalFolder name="packages" displayName="Packages" projectFiles="true">
       <logicalFolder name="CentOS" displayName="CentOS" projectFiles="true">
+        <itemPath>packages/CentOS/5.sh</itemPath>
         <itemPath>packages/CentOS/6.sh</itemPath>
         <itemPath>packages/CentOS/centos.sh</itemPath>
       </logicalFolder>
