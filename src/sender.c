@@ -169,6 +169,7 @@ int sendMessage(
         /* don't forget to check for errors */
         if (error != NULL)
         {
+            g_object_unref(client);
             g_warning("%s: %s:%u", error->message, address, *port);
             return EXIT_FAILURE;
         }
@@ -182,6 +183,9 @@ int sendMessage(
                               NULL,
                               &error);
 
+        g_object_unref(connection);
+        g_object_unref(client);
+        
         /* don't forget to check for errors */
         if (error != NULL)
         {
