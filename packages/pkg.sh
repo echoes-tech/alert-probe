@@ -97,7 +97,7 @@ addLib ()
    mkdir -p "${NBTMPDIR}/${PACKAGE_TOP_DIR}"
 
    cd /usr/local/
-   tar cf ${TOP}/${NBTMPDIR}/${PACKAGE_TOP_DIR}/lib.tar --exclude 'python*' lib
+   tar cf ${TOP}/${NBTMPDIR}/${PACKAGE_TOP_DIR}/lib.tar --exclude 'python*' --exclude '*.la' --exclude '*.a' lib
 
    cd ${TOP}/packages
    tar rf ${TOP}/${NBTMPDIR}/${PACKAGE_TOP_DIR}/lib.tar doc
