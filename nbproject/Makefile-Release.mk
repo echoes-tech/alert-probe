@@ -15,8 +15,8 @@ NM=nm
 CCADMIN=CCadmin
 RANLIB=ranlib
 CC=gcc
-CCC=distcc
-CXX=distcc
+CCC=g++
+CXX=g++
 FC=gfortran
 AS=as
 
@@ -63,7 +63,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-L/usr/lib64/mysql -L/usr/lib/mysql -Wl,-rpath,/opt/echoes-alert/probe/lib `pkg-config --libs libssl gobject-2.0 json-glib-1.0` -lmysqlclient  
+LDLIBSOPTIONS=-Wl,-rpath,/opt/echoes-alert/probe/lib `pkg-config --libs gobject-2.0 json-glib-1.0` -lmysqlclient  
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
@@ -76,62 +76,62 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/probe: ${OBJECTFILES}
 ${OBJECTDIR}/src/addon/addonMySQL.o: src/addon/addonMySQL.c 
 	${MKDIR} -p ${OBJECTDIR}/src/addon
 	${RM} $@.d
-	$(COMPILE.c) -g -O -Wall -s -Iinclude `pkg-config --cflags libssl gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonMySQL.o src/addon/addonMySQL.c
+	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonMySQL.o src/addon/addonMySQL.c
 
 ${OBJECTDIR}/src/format.o: src/format.c 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.c) -g -O -Wall -s -Iinclude `pkg-config --cflags libssl gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/format.o src/format.c
+	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/format.o src/format.c
 
 ${OBJECTDIR}/src/addon/addonList.o: src/addon/addonList.c 
 	${MKDIR} -p ${OBJECTDIR}/src/addon
 	${RM} $@.d
-	$(COMPILE.c) -g -O -Wall -s -Iinclude `pkg-config --cflags libssl gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonList.o src/addon/addonList.c
+	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonList.o src/addon/addonList.c
 
 ${OBJECTDIR}/src/log.o: src/log.c 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.c) -g -O -Wall -s -Iinclude `pkg-config --cflags libssl gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/log.o src/log.c
+	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/log.o src/log.c
 
 ${OBJECTDIR}/src/plugin.o: src/plugin.c 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.c) -g -O -Wall -s -Iinclude `pkg-config --cflags libssl gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/plugin.o src/plugin.c
+	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/plugin.o src/plugin.c
 
 ${OBJECTDIR}/src/addon/addon.o: src/addon/addon.c 
 	${MKDIR} -p ${OBJECTDIR}/src/addon
 	${RM} $@.d
-	$(COMPILE.c) -g -O -Wall -s -Iinclude `pkg-config --cflags libssl gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addon.o src/addon/addon.c
+	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addon.o src/addon/addon.c
 
 ${OBJECTDIR}/src/addon/addonLog.o: src/addon/addonLog.c 
 	${MKDIR} -p ${OBJECTDIR}/src/addon
 	${RM} $@.d
-	$(COMPILE.c) -g -O -Wall -s -Iinclude `pkg-config --cflags libssl gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonLog.o src/addon/addonLog.c
+	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonLog.o src/addon/addonLog.c
 
 ${OBJECTDIR}/src/search.o: src/search.c 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.c) -g -O -Wall -s -Iinclude `pkg-config --cflags libssl gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/search.o src/search.c
+	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/search.o src/search.c
 
 ${OBJECTDIR}/main.o: main.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.c) -g -O -Wall -s -Iinclude `pkg-config --cflags libssl gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.c
+	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.c
 
 ${OBJECTDIR}/src/sender.o: src/sender.c 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.c) -g -O -Wall -s -Iinclude `pkg-config --cflags libssl gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/sender.o src/sender.c
+	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/sender.o src/sender.c
 
 ${OBJECTDIR}/src/addon/addonFile.o: src/addon/addonFile.c 
 	${MKDIR} -p ${OBJECTDIR}/src/addon
 	${RM} $@.d
-	$(COMPILE.c) -g -O -Wall -s -Iinclude `pkg-config --cflags libssl gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonFile.o src/addon/addonFile.c
+	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonFile.o src/addon/addonFile.c
 
 ${OBJECTDIR}/src/conf.o: src/conf.c 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.c) -g -O -Wall -s -Iinclude `pkg-config --cflags libssl gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/conf.o src/conf.c
+	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`    -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/conf.o src/conf.c
 
 # Subprojects
 .build-subprojects:
