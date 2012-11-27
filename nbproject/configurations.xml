@@ -148,6 +148,11 @@
           </incDir>
         </ccTool>
         <linkerTool>
+          <linkerAddLib>
+            <pElem>/usr/lib64/mysql</pElem>
+            <pElem>/usr/lib/mysql</pElem>
+            <pElem>/usr/local/lib</pElem>
+          </linkerAddLib>
           <linkerDynSerch>
             <pElem>/opt/echoes-alert/probe/lib</pElem>
           </linkerDynSerch>
@@ -182,6 +187,11 @@
           <developmentMode>5</developmentMode>
         </asmTool>
         <linkerTool>
+          <linkerAddLib>
+            <pElem>/usr/lib64/mysql</pElem>
+            <pElem>/usr/lib/mysql</pElem>
+            <pElem>/usr/local/lib</pElem>
+          </linkerAddLib>
           <linkerDynSerch>
             <pElem>/opt/echoes-alert/probe/lib</pElem>
           </linkerDynSerch>
