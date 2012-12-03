@@ -17,7 +17,7 @@ TOP=`pwd`
 ###########
 
 rpm_target=$1
-rpm_requires="openssl, mysql-libs"
+rpm_requires="mysql-libs"
 
 rpm_files="$rpm_files
 \"/${PACKAGE_TOP_DIR}lib.tar.gz\""

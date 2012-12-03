@@ -17,7 +17,7 @@ TOP=`pwd`
 ###########
 
 deb_architecture=$1
-deb_depends="libssl1.0.0, libjson-glib-1.0-0 (>= 0.12.0), libffi6, libmysqlclient18"
+deb_depends="glib-networking, libjson-glib-1.0-0 (>= 0.12.0), libffi6, libmysqlclient18"
 
 deb_pkg_name="${deb_pkg_name}_12.04_$deb_architecture.deb"
 
