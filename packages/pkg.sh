@@ -96,7 +96,7 @@ addLib ()
 
    mkdir -p "${NBTMPDIR}/${PACKAGE_TOP_DIR}"
 
-   cd /usr/local/
+   cd /opt/echoes-alert/probe/
    tar cf ${TOP}/${NBTMPDIR}/${PACKAGE_TOP_DIR}/lib.tar --exclude 'python*' --exclude '*.la' --exclude '*.a' lib
 
    cd ${TOP}/packages
