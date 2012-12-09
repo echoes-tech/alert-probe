@@ -190,15 +190,11 @@ void *addonLog(void *arg)
     SLEEP(difftime(temp, now));
     while (1)
     {
-        /* Debut de la zone protegee. */
-        pthread_mutex_lock(addonParamsInfo->mutex);
+        addonParamsInfo->lotNum = increaseLotNum(
+                                                 addonParamsInfo->mutex,
+                                                 addonParamsInfo->lotNumPtr
+                                                 );
 
-        ++*addonParamsInfo->lotNumPtr;
-        addonParamsInfo->lotNum = *addonParamsInfo->lotNumPtr;
-
-        /* Fin de la zone protegee. */
-        pthread_mutex_unlock(addonParamsInfo->mutex);
-        
         /* Number of line */
         n = 1;
 

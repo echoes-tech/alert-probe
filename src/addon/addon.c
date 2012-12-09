@@ -13,6 +13,30 @@
 
 #include "addon/addon.h"
 
+unsigned short increaseLotNum(
+                              pthread_mutex_t *mutexPtr,
+                              unsigned short *lotNumPtr
+                              )
+{
+    unsigned short res;
+    
+    /* Start of protected area */
+    pthread_mutex_lock(mutexPtr);
+
+    ++*lotNumPtr;
+    res = *lotNumPtr;
+
+    if (*lotNumPtr == 65535)
+    {
+        *lotNumPtr = 0;
+    }
+    
+    /* End of protected area */
+    pthread_mutex_unlock(mutexPtr);
+    
+    return res;
+}
+
 int pushCollectQueue(
                      CollectQueue *collectQueue,
                      IDList *idList,

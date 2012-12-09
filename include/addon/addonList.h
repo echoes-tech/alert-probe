@@ -80,6 +80,8 @@ struct AddonParamsInfo
 {
     void *params;
     unsigned int *period, *staticValues;
+    /* lotNumPtr correspond au pointeur sur AddonsMgrParams */
+    /* lotNum stocke le lotNum pour le tour du thread en cours */
     unsigned short *lotNumPtr, lotNum;
     pthread_mutex_t *mutex;
     CollectQueue *collectQueue;

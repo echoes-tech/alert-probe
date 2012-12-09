@@ -54,6 +54,17 @@ struct AddonsMgrParams
 #define ADDON_PARAMS_INITIALIZER {NULL, NULL, 0, PTHREAD_MUTEX_INITIALIZER, COLLECT_QUEUE_INITIALIZER}
 
 /**
+ * Increase lot number
+ * @param mutexPtr  Pointer of mutex
+ * @param lotNumPtr Pointer of lot number
+ * @return Current lot number
+ */
+unsigned short increaseLotNum(
+                              pthread_mutex_t *mutexPtr,
+                              unsigned short *lotNumPtr
+                              );
+
+/**
  * Push a new element to CollectQueue
  * @param collectQueue 
  * @param idList

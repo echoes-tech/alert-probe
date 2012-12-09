@@ -113,14 +113,10 @@ void *addonMySQL(void *arg)
     SLEEP(difftime(temp, now));
     while(1)
     {
-        /* Debut de la zone protegee. */
-        pthread_mutex_lock(addonParamsInfo->mutex);
-
-        ++*addonParamsInfo->lotNumPtr;
-        addonParamsInfo->lotNum = *addonParamsInfo->lotNumPtr;
-
-        /* Fin de la zone protegee. */
-        pthread_mutex_unlock(addonParamsInfo->mutex);
+        addonParamsInfo->lotNum = increaseLotNum(
+                                                 addonParamsInfo->mutex,
+                                                 addonParamsInfo->lotNumPtr
+                                                 );
 
         /* MySQL Initialization */
         mysql_init(&mysql);
