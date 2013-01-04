@@ -132,14 +132,14 @@ void *addon(void *arg)
             case 3:
                 if (pthread_create(&addonsMgrParams->addonsThreads[numThread], NULL, addonLog, (void*) addonParamsInfo))
                 {
-                    g_critical("Critical: %s: addonFile: %u", strerror(errno), numThread);
+                    g_critical("Critical: %s: addonLog: %u", strerror(errno), numThread);
                     pthread_exit(NULL);
                 }
                 break;
             case 4:
                 if (pthread_create(&addonsMgrParams->addonsThreads[numThread], NULL, addonMySQL, (void*) addonParamsInfo))
                 {
-                    g_critical("Critical: %s: addonFile: %u", strerror(errno), numThread);
+                    g_critical("Critical: %s: addonMySQL: %u", strerror(errno), numThread);
                     pthread_exit(NULL);
                 }
                 break;
