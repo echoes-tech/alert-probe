@@ -143,6 +143,13 @@ void *addon(void *arg)
                     pthread_exit(NULL);
                 }
                 break;
+            case 5:
+                if (pthread_create(&addonsMgrParams->addonsThreads[numThread], NULL, addonSNMP, (void*) addonParamsInfo))
+                {
+                    g_critical("Critical: %s: addonSNMP: %u", strerror(errno), numThread);
+                    pthread_exit(NULL);
+                }
+                break;
             default:
                 break;
             }

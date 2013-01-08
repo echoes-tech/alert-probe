@@ -24,6 +24,8 @@
       </nativedebugger>
       <runprofile version="9">
         <runcommandpicklist>
+          <runcommandpicklistitem>valgrind "${OUTPUT_PATH}"</runcommandpicklistitem>
+          <runcommandpicklistitem>valgrind --tool=memcheck --leak-check=yes "${OUTPUT_PATH}"</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}"</runcommandpicklistitem>
         </runcommandpicklist>
         <runcommand>"${OUTPUT_PATH}"</runcommand>

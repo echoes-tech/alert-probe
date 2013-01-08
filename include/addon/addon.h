@@ -27,6 +27,7 @@ extern "C" {
 #include "addon/addonFile.h"
 #include "addon/addonLog.h"
 #include "addon/addonMySQL.h"
+#include "addon/addonSNMP.h"
 
 /* Portable sleep */
 #if defined (WIN32) || defined (WIN64)

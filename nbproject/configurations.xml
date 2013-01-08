@@ -13,6 +13,7 @@
         <itemPath>include/addon/addonList.h</itemPath>
         <itemPath>include/addon/addonLog.h</itemPath>
         <itemPath>include/addon/addonMySQL.h</itemPath>
+        <itemPath>include/addon/addonSNMP.h</itemPath>
       </logicalFolder>
       <itemPath>include/conf.h</itemPath>
       <itemPath>include/format.h</itemPath>
@@ -81,6 +82,7 @@
       <itemPath>plugins/Linux-System.json</itemPath>
       <itemPath>plugins/MySQL-ISPConfig-WebTraffic.json</itemPath>
       <itemPath>plugins/MySQL.json</itemPath>
+      <itemPath>plugins/SNMP.json</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -97,6 +99,7 @@
           <itemPath>src/addon/addonList.c</itemPath>
           <itemPath>src/addon/addonLog.c</itemPath>
           <itemPath>src/addon/addonMySQL.c</itemPath>
+          <itemPath>src/addon/addonSNMP.c</itemPath>
         </logicalFolder>
         <itemPath>src/conf.c</itemPath>
         <itemPath>src/format.c</itemPath>
@@ -111,6 +114,12 @@
                    displayName="Test Files"
                    projectFiles="false"
                    kind="TEST_LOGICAL_FOLDER">
+      <logicalFolder name="f1"
+                     displayName="Addon Tests"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/addon.c</itemPath>
+      </logicalFolder>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -159,9 +168,25 @@
           <linkerLibItems>
             <linkerOptionItem>`pkg-config --libs gobject-2.0 json-glib-1.0`</linkerOptionItem>
             <linkerLibLibItem>mysqlclient</linkerLibLibItem>
+            <linkerLibLibItem>snmp</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
+      <folder path="TestFiles/f1">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f1</output>
+        </linkerTool>
+      </folder>
     </conf>
     <conf name="Release" type="1">
       <toolsSet>
@@ -199,6 +224,7 @@
           <linkerLibItems>
             <linkerOptionItem>`pkg-config --libs gobject-2.0 json-glib-1.0`</linkerOptionItem>
             <linkerLibLibItem>mysqlclient</linkerLibLibItem>
+            <linkerLibLibItem>snmp</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>

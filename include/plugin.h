@@ -69,6 +69,32 @@ struct SearchInfoParams4_1
     gchar *query;
 };
 
+/* Search Informations Parameters for Addon SNMP Type All */
+typedef struct SearchInfoParams5_1 SearchInfoParams5_1;
+struct SearchInfoParams5_1
+{
+    gchar *oid;
+};
+
+/* Search Informations Parameters for Addon SNMP Type Regex */
+typedef struct SearchInfoParams5_2 SearchInfoParams5_2;
+struct SearchInfoParams5_2
+{
+    gchar *oid, *regex;
+    int err;
+    regex_t preg;
+    size_t nmatch;
+    regmatch_t *pmatch;
+};
+
+/* Search Informations Parameters for Addon SNMP Type Localisation */
+typedef struct SearchInfoParams5_3 SearchInfoParams5_3;
+struct SearchInfoParams5_3
+{
+    gchar *oid;
+    unsigned int firstChar, length;
+};
+
 /* Search Informations */
 typedef struct SearchInfo SearchInfo;
 struct SearchInfo
@@ -80,12 +106,11 @@ struct SearchInfo
 /* Search List */
 typedef SearchInfo* SearchList;
 
-/* Source Informations Parameters for Addon MySQL */
-typedef struct SrcInfoParams4 SrcInfoParams4;
-struct SrcInfoParams4
+/* Source Informations Parameters for Addon File */
+typedef struct SrcInfoParams2 SrcInfoParams2;
+struct SrcInfoParams2
 {
-    gchar *host, *user, *passwd, *db;
-    unsigned short port;
+    gchar *path;
 };
 
 /* Source Informations Parameters for Addon Log */
@@ -96,11 +121,20 @@ struct SrcInfoParams3
     unsigned int nbLine, lastNLines;
 };
 
-/* Source Informations Parameters for Addon File */
-typedef struct SrcInfoParams2 SrcInfoParams2;
-struct SrcInfoParams2
+/* Source Informations Parameters for Addon MySQL */
+typedef struct SrcInfoParams4 SrcInfoParams4;
+struct SrcInfoParams4
 {
-    gchar *path;
+    gchar *host, *user, *passwd, *db;
+    unsigned short port;
+};
+
+/* Source Informations Parameters for Addon SNMP */
+typedef struct SrcInfoParams5 SrcInfoParams5;
+struct SrcInfoParams5
+{
+    gchar *host, *community, *user, *authProto, *authPass, *privProto, *privPass;
+    unsigned char version;
 };
 
 /* Source Informations */

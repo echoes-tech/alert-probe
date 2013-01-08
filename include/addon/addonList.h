@@ -103,6 +103,11 @@ struct AddonInfo
 typedef AddonInfo* AddonList;
 
 /**
+ * @param addonParamsList
+ * @param idAddon
+ * @param params
+ * @param period
+ * @param staticValues
  * @return true : Pointer of addonParamsInfo; false : NULL
  */
 AddonParamsInfo* isAddonParamsOnList(
@@ -114,9 +119,15 @@ AddonParamsInfo* isAddonParamsOnList(
                                      );
 
 /**
- * @return true : Pointer of addonInfo; false : NULL
- */
-AddonInfo* isAddonOnList(const AddonList *addonList, const unsigned int *idAddon);
+ * 
+ * @param addonList
+ * @param idAddon
+* @return true : Pointer of addonInfo; false : NULL
+*/
+AddonInfo* isAddonOnList(
+                         const AddonList *addonList,
+                         const unsigned int *idAddon
+                         );
 
 /**
  * Main function of Addon list Manager

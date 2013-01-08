@@ -354,6 +354,67 @@ int data2llist(
                                 srcInfo->params = (void*)srcInfoParams;
                                 break;
                             }
+                            case 5:
+                            {
+                                SrcInfoParams5 *srcInfoParams = calloc(1, sizeof (SrcInfoParams5));
+
+                                if (getStringValue(
+                                                   parser, reader, "host", &srcInfoParams->host, plgPath,
+                                                   g_strdup_printf("Invalid host of Source ID '%d'", srcInfo->idSrc)
+                                                   ))
+                                    return EXIT_FAILURE;
+
+                                if (getIntValue(
+                                                parser, reader, "version", (gint64*) & srcInfoParams->version, plgPath,
+                                                g_strdup_printf("Invalid version of Source ID '%d'", srcInfo->idSrc)
+                                                ))
+                                    return EXIT_FAILURE;
+
+                                /* SNMPv3 */
+                                if (srcInfoParams->version == 3)
+                                {
+                                    if (getStringValue(
+                                                       parser, reader, "user", &srcInfoParams->user, plgPath,
+                                                       g_strdup_printf("Invalid user of Source ID '%d'", srcInfo->idSrc)
+                                                       ))
+                                        return EXIT_FAILURE;
+
+                                    if (getStringValue(
+                                                       parser, reader, "authProto", &srcInfoParams->authProto, plgPath,
+                                                       g_strdup_printf("Invalid authProto of Source ID '%d'", srcInfo->idSrc)
+                                                       ))
+                                        return EXIT_FAILURE;
+
+                                    if (getStringValue(
+                                                       parser, reader, "authPass", &srcInfoParams->authPass, plgPath,
+                                                       g_strdup_printf("Invalid authPass of Source ID '%d'", srcInfo->idSrc)
+                                                       ))
+                                        return EXIT_FAILURE;
+
+                                    if (getStringValue(
+                                                       parser, reader, "privProto", &srcInfoParams->privProto, plgPath,
+                                                       g_strdup_printf("Invalid privProto of Source ID '%d'", srcInfo->idSrc)
+                                                       ))
+                                        return EXIT_FAILURE;
+
+                                    if (getStringValue(
+                                                       parser, reader, "privPass", &srcInfoParams->privPass, plgPath,
+                                                       g_strdup_printf("Invalid privPass of Source ID '%d'", srcInfo->idSrc)
+                                                       ))
+                                        return EXIT_FAILURE;
+                                }
+                                /* SNMPv1 */
+                                else
+                                {
+                                    if (getStringValue(
+                                                       parser, reader, "community", &srcInfoParams->community, plgPath,
+                                                       g_strdup_printf("Invalid community of Source ID '%d'", srcInfo->idSrc)
+                                                       ))
+                                        return EXIT_FAILURE;
+                                }
+                                srcInfo->params = (void*)srcInfoParams;
+                                break;
+                            }
                             default:
                                 break;
                         }
@@ -533,6 +594,85 @@ int data2llist(
                                                                    parser, reader, "query", &searchInfoParams->query, plgPath,
                                                                    g_strdup_printf("Invalid query of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, srcInfo->idSrc)
                                                                    ))
+                                                    return EXIT_FAILURE;
+
+                                                searchInfo->params = (void*)searchInfoParams;
+                                                break;
+                                            }
+                                            default:
+                                                break;
+                                            }
+                                            break;
+                                        case 5:
+                                            switch (searchInfo->idType)
+                                            {
+                                            case 1:
+                                            {
+                                                SearchInfoParams5_1 *searchInfoParams = calloc(1, sizeof (SearchInfoParams5_1));
+
+                                                if (getStringValue(
+                                                                   parser, reader, "oid", &searchInfoParams->oid, plgPath,
+                                                                   g_strdup_printf("Invalid oid of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, srcInfo->idSrc)
+                                                                   ))
+                                                    return EXIT_FAILURE;
+
+                                                searchInfo->params = (void*)searchInfoParams;
+                                                break;
+                                            }
+                                            case 2:
+                                            {
+                                                SearchInfoParams5_2 *searchInfoParams = calloc(1, sizeof (SearchInfoParams5_2));
+
+                                                if (getStringValue(
+                                                                   parser, reader, "oid", &searchInfoParams->oid, plgPath,
+                                                                   g_strdup_printf("Invalid oid of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, srcInfo->idSrc)
+                                                                   ))
+                                                    return EXIT_FAILURE;
+
+                                                if (getStringValue(
+                                                                   parser, reader, "regex", &searchInfoParams->regex, plgPath,
+                                                                   g_strdup_printf("Invalid regex of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, srcInfo->idSrc)
+                                                                   ))
+                                                    return EXIT_FAILURE;
+
+                                                /* Regex compilation */
+                                                searchInfoParams->err = regcomp(&searchInfoParams->preg, searchInfoParams->regex, REG_EXTENDED);
+                                                if (searchInfoParams->err == 0)
+                                                {
+                                                    searchInfoParams->nmatch = (searchInfoParams->preg.re_nsub + 1);
+                                                    searchInfoParams->pmatch = malloc(sizeof (*searchInfoParams->pmatch) * (searchInfoParams->nmatch));
+                                                }
+                                                else
+                                                {
+                                                    g_warning("Invalid Plugin '%s': Compilation failed of regex of Search ID '%d' of Source ID '%d'", plgPath, searchInfo->idSearch, srcInfo->idSrc);
+                                                    g_object_unref(reader);
+                                                    g_object_unref(parser);
+                                                    return EXIT_FAILURE;
+                                                }
+
+                                                searchInfo->params = (void*)searchInfoParams;
+                                                break;
+                                            }
+                                            case 3:
+                                            {
+                                                SearchInfoParams5_3 *searchInfoParams = calloc(1, sizeof (SearchInfoParams5_3));
+
+                                                if (getStringValue(
+                                                                   parser, reader, "oid", &searchInfoParams->oid, plgPath,
+                                                                   g_strdup_printf("Invalid oid of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, srcInfo->idSrc)
+                                                                   ))
+                                                    return EXIT_FAILURE;
+
+                                                if (getIntValue(
+                                                                parser, reader, "firstChar", (gint64*) & searchInfoParams->firstChar, plgPath,
+                                                                g_strdup_printf("Invalid firstChar of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, srcInfo->idSrc)
+                                                                ))
+                                                    return EXIT_FAILURE;
+
+                                                if (getIntValue(
+                                                                parser, reader, "length", (gint64*) & searchInfoParams->length, plgPath,
+                                                                g_strdup_printf("Invalid length of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, srcInfo->idSrc)
+                                                                ))
                                                     return EXIT_FAILURE;
 
                                                 searchInfo->params = (void*)searchInfoParams;
