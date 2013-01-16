@@ -32,7 +32,7 @@
 #define PRODUCT_NAME "ECHOES Alert - Probe"
 #define APP_NAME "ea-probe"
 /* Probe Version */
-#define VERSION "0.1.0.beta"
+#define VERSION "0.1.0.beta-2"
 /* Conf Repository */
 #ifdef NDEBUG
     #define CONF_DIR "/opt/echoes-alert/probe/etc/probe.conf"

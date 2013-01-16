@@ -31,7 +31,7 @@ DEFAULTCONF=Debug
 CONF=${DEFAULTCONF}
 
 # All Configurations
-ALLCONFS=Debug Release Deb_32bits_Release Deb_Release Debian6_32bits_Release Debian6_Release RPM_32bits_Release RPM_Release 
+ALLCONFS=Debug Release 
 
 
 # build

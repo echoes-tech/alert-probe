@@ -73,8 +73,7 @@ int pushSDElementQueue(
 
 int popCollectQueue(CollectQueue *collectQueue, SDElementQueue *sdElementQueue)
 {
-    char afterOffset[10000] = "";
-    char afterOffsetTmp[10000] = "";
+    char afterOffset[10000] = "", afterOffsetTmp[10000] = "";
     unsigned short i = 0;
 
     if (collectQueue == NULL)
@@ -90,6 +89,11 @@ int popCollectQueue(CollectQueue *collectQueue, SDElementQueue *sdElementQueue)
 
         for(i = 0; i < popedElement->valuesLength; i++)
         {
+            gchar *base64encoded = g_base64_encode(
+                                                   (guchar *) popedElement->values[i],
+                                                   strlen(popedElement->values[i])
+                                                   );
+
             sprintf(
                     afterOffsetTmp,
                     " %d-%d-%d-%d-%d-%d-%d=\"%s\"",
@@ -100,14 +104,19 @@ int popCollectQueue(CollectQueue *collectQueue, SDElementQueue *sdElementQueue)
                     (i + 1),
                     popedElement->lotNum,
                     popedElement->lineNum,
-                    /*TODO: Tester le retour de base64 */
-                    g_base64_encode(
-                                    (guchar *) popedElement->values[i],
-                                    strlen(popedElement->values[i])
-                                    )
+                    base64encoded
                 );
+
+            g_free(base64encoded);
+            base64encoded = NULL;
+
             strcat(afterOffset, afterOffsetTmp);
+            
+            free(popedElement->values[i]);
+            popedElement->values[i] = NULL;
         }
+        free(popedElement->values);
+        popedElement->values = NULL;
         
         pushSDElementQueue(
                            sdElementQueue,

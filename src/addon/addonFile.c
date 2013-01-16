@@ -42,6 +42,7 @@ int addonFileRegex(
         {
             /* Cleanup */
             free(values);
+            values = NULL;
             return EXIT_FAILURE;
         }
 
@@ -57,11 +58,13 @@ int addonFileRegex(
         {
             /* Cleanup */
             free(values);
+            values = NULL;
             return EXIT_FAILURE;
         }
 
         /* Cleanup */
         free(values);
+        values = NULL;
     }
     else
     {

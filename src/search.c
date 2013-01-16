@@ -56,6 +56,7 @@ gushort searchRegex(
 
                     /* Cleanup */
                     free(res);
+                    res = NULL;
                 }
             }
         }
@@ -75,6 +76,7 @@ gushort searchRegex(
                 regerror(*err, preg, text, size);
                 g_warning("Critical: %s", text);
                 free(text);
+                text = NULL;
             }
             else
                 g_warning("Critical: Insufficient memory");
@@ -108,6 +110,7 @@ gushort searchLocation(
 
         /* Cleanup */
         free(res);
+        res = NULL;
     }
     else
     {

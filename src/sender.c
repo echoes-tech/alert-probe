@@ -112,23 +112,27 @@ int sendMessage(
 
     time_t now;
     GTimeVal g_time;
-    char completMsg[480];
+    char completMsg[480], *timeVal = NULL;
 
     /* Adding PRI, VERSION and TIMESTAMP */
     time(&now);
     g_get_current_time(&g_time);
-    
+    timeVal = g_time_val_to_iso8601(&g_time);
+
     /* Caution: keep the Line Feed to work with TCP */
     snprintf(
-        completMsg,
+             completMsg,
              480,
              "<118>1 %s %s%d %s%d%s]\n",
-             g_time_val_to_iso8601(&g_time),
+             timeVal,
              beforeMsgID,
              *msgID,
              afterMsgID,
              (int)difftime (now, collectTime),
              afterOffset);
+
+    free(timeVal);
+    timeVal = NULL;
 
 #ifndef NDEBUG
     printf("%s", completMsg);
@@ -256,7 +260,10 @@ int popSDElementQueue(
                     popedElement->afterOffset
                     );
         sdElementQueue->first = popedElement->next;
+        free(popedElement->afterOffset);
+        popedElement->afterOffset = NULL;
         free(popedElement);
+        popedElement = NULL;
     }
 
     /* Fin de la zone protegee. */

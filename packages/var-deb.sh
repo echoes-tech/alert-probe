@@ -11,7 +11,7 @@
 ###########
 
 deb_source="$bin_name"
-deb_version="$bin_version-1"
+deb_version="$bin_version-2"
 deb_section="non-free/admin"
 deb_priority="optional"
 deb_maintainer="$pkg_maintainer"

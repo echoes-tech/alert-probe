@@ -77,6 +77,7 @@ int addonSNMPRegex(
         {
             /* Cleanup */
             free(values);
+            values = NULL;
             return EXIT_FAILURE;
         }
 
@@ -92,11 +93,13 @@ int addonSNMPRegex(
         {
             /* Cleanup */
             free(values);
+            values = NULL;
             return EXIT_FAILURE;
         }
 
         /* Cleanup */
         free(values);
+        values = NULL;
     }
     else
     {
@@ -239,6 +242,11 @@ void *addonSNMP(void *arg)
                             &session.securityAuthKeyLen) != SNMPERR_SUCCESS) {
                 g_warning("Warning: Addon SNMP: Error generating Ku from authentication pass phrase.");
 
+                free(session.peername);
+                session.peername = NULL;
+                free(session.securityName);
+                session.securityName = NULL;
+
                 pthread_exit(NULL);
             }
 
@@ -273,6 +281,11 @@ void *addonSNMP(void *arg)
                             &session.securityPrivKeyLen) != SNMPERR_SUCCESS) {
                 g_warning("Warning: Addon SNMP: Error generating Ku from encryption pass phrase.");
 
+                free(session.peername);
+                session.peername = NULL;
+                free(session.securityName);
+                session.securityName = NULL;
+
                 pthread_exit(NULL);
             }
         }
@@ -301,6 +314,16 @@ void *addonSNMP(void *arg)
             g_warning("Warning: Addon SNMP: %s.", errstr);
 
             free(errstr);
+            errstr = NULL;
+
+            free(session.peername);
+            session.peername = NULL;
+
+            if (srcInfoParams->version == 3)
+            {
+                free(session.securityName);
+                session.securityName = NULL;
+            }
             SOCK_CLEANUP;
             
             SLEEP(*addonParamsInfo->period);
@@ -335,6 +358,14 @@ void *addonSNMP(void *arg)
                         snmp_error(ss, &liberr, &syserr, &errstr);
                         g_warning("Warning: Addon SNMP: %s: %s.", searchInfoParams->oid, errstr);
                         free(errstr);
+                        errstr = NULL;
+                        free(session.peername);
+                        session.peername = NULL;
+                        if (srcInfoParams->version == 3)
+                        {
+                            free(session.securityName);
+                            session.securityName = NULL;
+                        }
                         SOCK_CLEANUP;
                         SLEEP(*addonParamsInfo->period);
                         continue;
@@ -353,6 +384,14 @@ void *addonSNMP(void *arg)
                         snmp_error(ss, &liberr, &syserr, &errstr);
                         g_warning("Warning: Addon SNMP: %s: %s.", searchInfoParams->oid, errstr);
                         free(errstr);
+                        errstr = NULL;
+                        free(session.peername);
+                        session.peername = NULL;
+                        if (srcInfoParams->version == 3)
+                        {
+                            free(session.securityName);
+                            session.securityName = NULL;
+                        }
                         SOCK_CLEANUP;
                         SLEEP(*addonParamsInfo->period);
                         continue;
@@ -371,6 +410,14 @@ void *addonSNMP(void *arg)
                         snmp_error(ss, &liberr, &syserr, &errstr);
                         g_warning("Warning: Addon SNMP: %s: %s.", searchInfoParams->oid, errstr);
                         free(errstr);
+                        errstr = NULL;
+                        free(session.peername);
+                        session.peername = NULL;
+                        if (srcInfoParams->version == 3)
+                        {
+                            free(session.securityName);
+                            session.securityName = NULL;
+                        }
                         SOCK_CLEANUP;
                         SLEEP(*addonParamsInfo->period);
                         continue;
@@ -414,28 +461,27 @@ void *addonSNMP(void *arg)
                 while (addonTypeParamsInfo != NULL)
                 {
                     /* Retrieve the value */
-                     size_t size = 10;
-                     char *res, *tmpRes = calloc(1, sizeof (char*) * size);
+                    size_t size = 10;
+                    char *res, *tmpRes = calloc(1, sizeof (char*) * size);
 
-                     while (snprint_value(tmpRes, size, vars->name, vars->name_length, vars) == -1 && size < 550)
-                     {
-                         size += 10;
-                         tmpRes = realloc(tmpRes, size);
-                     }
-                     res = typeCut(tmpRes);
-                     free(tmpRes);
+                    while (snprint_value(tmpRes, size, vars->name, vars->name_length, vars) == -1 && size < 550)
+                    {
+                        size += 10;
+                        tmpRes = realloc(tmpRes, size);
+                    }
+                    res = typeCut(tmpRes);
 
                     switch (*addonTypeInfo->idType)
                     {
                     case 1:
                         addonSNMPAll(
-                                       addonParamsInfo->collectQueue,
-                                       res,
-                                       n++,
-                                       addonParamsInfo->lotNum,
-                                       &addonTypeParamsInfo->IDList,
-                                       &now
-                                       );
+                                     addonParamsInfo->collectQueue,
+                                     res,
+                                     n++,
+                                     addonParamsInfo->lotNum,
+                                     &addonTypeParamsInfo->IDList,
+                                     &now
+                                     );
                         break;
                     case 2:
                         addonSNMPRegex(
@@ -463,6 +509,9 @@ void *addonSNMP(void *arg)
                         break;
                     }
 
+                    free(tmpRes);
+                    tmpRes = NULL;
+
                     /* On avance d'une case */
                     addonTypeParamsInfo = addonTypeParamsInfo->nxt;
                     vars = vars->next_variable;
@@ -485,6 +534,14 @@ void *addonSNMP(void *arg)
                 snmp_error(ss, NULL, NULL, &errstr);
                 g_warning("Warning: Addon SNMP: %s.", errstr);
                 free(errstr);
+                errstr = NULL;
+                free(session.peername);
+                session.peername = NULL;
+                if (srcInfoParams->version == 3)
+                {
+                    free(session.securityName);
+                    session.securityName = NULL;
+                }
             }
         }
 
@@ -497,6 +554,13 @@ void *addonSNMP(void *arg)
             snmp_free_pdu(response);
         snmp_close(ss);
 
+        free(session.peername);
+        session.peername = NULL;
+        if (srcInfoParams->version == 3)
+        {
+            free(session.securityName);
+            session.securityName = NULL;
+        }
         SOCK_CLEANUP;
 
         SLEEP(*addonParamsInfo->period);

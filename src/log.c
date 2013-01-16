@@ -30,15 +30,22 @@ void log2Console(
                  )
 {
     LogParams *logParams = user_data;
-
+    GDateTime *dateTime = g_date_time_new_now_local();
+    gchar *dateTimeFormat = g_date_time_format(dateTime, "%FT%T%z");
+    
     g_print(
             "%s %s %s %d - %s\n",
-            g_date_time_format(g_date_time_new_now_local(), "%FT%T%z"),
+            dateTimeFormat,
             logParams->hostname,
             logParams->appName,
             logParams->pId,
             message
             );
+
+    g_date_time_unref(dateTime);
+    dateTime = NULL;
+    free(dateTimeFormat);
+    dateTimeFormat = NULL;
 
     return;
 }
@@ -51,35 +58,44 @@ void log2File(
                )
 {
     LogParams *logParams = user_data;
+    GDateTime *dateTime = NULL;
+    gchar *dateTimeFormat = NULL, *errorMsg = NULL;
 
     FILE *logFile = fopen(logParams->logFilePath, "a");
     if (logFile == NULL)
     {
-        log2Console(
-                    log_domain,
-                    log_level,
-                    g_strdup_printf(
-                                    "Error opening file %s: %s",
-                                    logParams->logFilePath,
-                                    strerror(errno)
-                                    ),
-                    user_data
-                    );
+        errorMsg = g_strdup_printf(
+                                   "Error opening file %s: %s",
+                                   logParams->logFilePath,
+                                   strerror(errno)
+                                   );
+        log2Console(log_domain, log_level, errorMsg, user_data);
+        free(errorMsg);
+        errorMsg = NULL;
+
         /*  Fall  back  to  console  output  if  unable  to  open  file  */
         log2Console(log_domain, log_level, message, user_data);
         return;
     }
 
+    dateTime = g_date_time_new_now_local();
+    dateTimeFormat = g_date_time_format(dateTime, "%FT%T%z");
+
     fprintf(
             logFile,
             "%s %s %s %d - %s\n",
-            g_date_time_format(g_date_time_new_now_local(), "%FT%T%z"),
+            dateTimeFormat,
             logParams->hostname,
             logParams->appName,
             logParams->pId,
             message
             );
-    
+
+    g_date_time_unref(dateTime);
+    dateTime = NULL;
+    free(dateTimeFormat);
+    dateTimeFormat = NULL;
+
     fclose(logFile);
 
     return;

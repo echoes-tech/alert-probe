@@ -70,6 +70,8 @@ int pushCollectQueue(
         for(i = 0; i < valuesLength; ++i)
         {
             new->values[i] = strdup(values[i]);
+            free(values[i]);
+            values[i] = NULL;
         }
         new->time = time;
 

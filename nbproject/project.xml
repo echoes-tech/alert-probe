@@ -21,30 +21,6 @@
                     <name>Release</name>
                     <type>1</type>
                 </confElem>
-                <confElem>
-                    <name>Deb_32bits_Release</name>
-                    <type>1</type>
-                </confElem>
-                <confElem>
-                    <name>Deb_Release</name>
-                    <type>1</type>
-                </confElem>
-                <confElem>
-                    <name>Debian6_32bits_Release</name>
-                    <type>1</type>
-                </confElem>
-                <confElem>
-                    <name>Debian6_Release</name>
-                    <type>1</type>
-                </confElem>
-                <confElem>
-                    <name>RPM_32bits_Release</name>
-                    <type>1</type>
-                </confElem>
-                <confElem>
-                    <name>RPM_Release</name>
-                    <type>1</type>
-                </confElem>
             </confList>
         </data>
     </configuration>

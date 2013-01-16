@@ -197,8 +197,8 @@ gushort getIntValue(
                     JsonReader *reader,
                     const char *key,
                     gint64 *value,
-                    const char *plgPath,
-                    const char *errorMsg
+                    const char *formatErrorMsg,
+                    ...
                     );
 
 /**
@@ -216,8 +216,8 @@ gushort getStringValue(
                        JsonReader *reader,
                        const char *key,
                        gchar **value,
-                       const char *plgPath,
-                       const char *errorMsg
+                       const char *formatErrorMsg,
+                       ...
                        );
 
 /**
