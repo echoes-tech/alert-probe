@@ -138,14 +138,82 @@ gushort getIntValue(
                     JsonParser *parser,
                     JsonReader *reader,
                     const char *key,
-                    gint64 *value,
+                    gint *value,
                     const char *formatErrorMsg,
                     ...
                     )
 {
     if (json_reader_read_member(reader, key))
     {
-        *value = json_reader_get_int_value(reader);
+        *value = (gint)json_reader_get_int_value(reader);
+    }
+    else
+    {
+        va_list args;
+
+        va_start (args, formatErrorMsg);
+
+        /* g_warning */
+        g_logv (G_LOG_DOMAIN, G_LOG_LEVEL_WARNING, formatErrorMsg, args);
+
+        va_end (args);
+
+        g_object_unref(reader);
+        g_object_unref(parser);
+
+        return EXIT_FAILURE;
+    }
+    json_reader_end_member(reader);
+
+    return EXIT_SUCCESS;
+}
+
+gushort getUIntValue(
+                     JsonParser *parser,
+                     JsonReader *reader,
+                     const char *key,
+                     guint *value,
+                     const char *formatErrorMsg,
+                     ...
+                     )
+{
+    if (json_reader_read_member(reader, key))
+    {
+        *value = (guint)json_reader_get_int_value(reader);
+    }
+    else
+    {
+        va_list args;
+
+        va_start (args, formatErrorMsg);
+
+        /* g_warning */
+        g_logv (G_LOG_DOMAIN, G_LOG_LEVEL_WARNING, formatErrorMsg, args);
+
+        va_end (args);
+
+        g_object_unref(reader);
+        g_object_unref(parser);
+
+        return EXIT_FAILURE;
+    }
+    json_reader_end_member(reader);
+
+    return EXIT_SUCCESS;
+}
+
+gushort getUShortValue(
+                       JsonParser *parser,
+                       JsonReader *reader,
+                       const char *key,
+                       gushort *value,
+                       const char *formatErrorMsg,
+                       ...
+                       )
+{
+    if (json_reader_read_member(reader, key))
+    {
+        *value = (gushort)json_reader_get_int_value(reader);
     }
     else
     {
@@ -233,7 +301,7 @@ int data2llist(
     if (error)
     {
         g_warning("Unable to parse '%s': %s", plgPath, error->message);
-        g_error_free(error);
+        g_clear_error(&error);
         g_object_unref(parser);
         return EXIT_FAILURE;
     }
@@ -263,16 +331,16 @@ int data2llist(
     }
 
     /* Find out where to store the values */
-    if (getIntValue(
-                    parser, reader, "id", (gint64*) & plgInfo->idPlg,
-                    "Invalid Plugin '%s': Invalid Plugin ID", plgPath
-                    ))
+    if (getUIntValue(
+                     parser, reader, "id", &plgInfo->idPlg,
+                     "Invalid Plugin '%s': Invalid Plugin ID", plgPath
+                     ))
         return EXIT_FAILURE;
 
-    if (getIntValue(
-                    parser, reader, "idAsset", (gint64*) & plgInfo->idAsset,
-                    "Invalid Plugin '%s': Invalid idAsset", plgPath
-                    ))
+    if (getUIntValue(
+                     parser, reader, "idAsset", &plgInfo->idAsset,
+                     "Invalid Plugin '%s': Invalid idAsset", plgPath
+                     ))
         return EXIT_FAILURE;
 
     if (json_reader_read_member (reader, "sources"))
@@ -286,16 +354,16 @@ int data2llist(
                 {
                     SrcInfo* srcInfo = calloc(1, sizeof (SrcInfo));
 
-                    if (getIntValue(
-                                    parser, reader, "id", (gint64*) & srcInfo->idSrc, 
-                                    "Invalid Plugin '%s': Invalid Source ID for Source n°%d", plgPath, i + 1
-                                    ))
+                    if (getUIntValue(
+                                     parser, reader, "id", &srcInfo->idSrc, 
+                                     "Invalid Plugin '%s': Invalid Source ID for Source n°%d", plgPath, i + 1
+                                     ))
                         return EXIT_FAILURE;
 
-                    if (getIntValue(
-                                    parser, reader, "idAddon", (gint64*) & srcInfo->idAddon, 
-                                    "Invalid Plugin '%s': Invalid idAddon of Source ID '%d'", plgPath, srcInfo->idSrc
-                                    ))
+                    if (getUIntValue(
+                                     parser, reader, "idAddon", &srcInfo->idAddon, 
+                                     "Invalid Plugin '%s': Invalid idAddon of Source ID '%d'", plgPath, srcInfo->idSrc
+                                     ))
                         return EXIT_FAILURE;
 
                     if (json_reader_read_member (reader, "params"))
@@ -326,10 +394,10 @@ int data2llist(
                                                    ))
                                     return EXIT_FAILURE;
 
-                                if (getIntValue(
-                                                parser, reader, "lastNLines", (gint64*) & srcInfoParams->lastNLines, 
-                                                "Invalid Plugin '%s': Invalid lastNLines of Source ID '%d'", plgPath, srcInfo->idSrc
-                                                ))
+                                if (getUIntValue(
+                                                 parser, reader, "lastNLines", &srcInfoParams->lastNLines, 
+                                                 "Invalid Plugin '%s': Invalid lastNLines of Source ID '%d'", plgPath, srcInfo->idSrc
+                                                 ))
                                     return EXIT_FAILURE;
 
                                 srcInfo->params = (void*)srcInfoParams;
@@ -363,10 +431,10 @@ int data2llist(
                                                    ))
                                     return EXIT_FAILURE;
 
-                                if (getIntValue(
-                                                parser, reader, "port", (gint64*) & srcInfoParams->port, 
-                                                "Invalid Plugin '%s': Invalid port of Source ID '%d'", plgPath, srcInfo->idSrc
-                                                ))
+                                if (getUShortValue(
+                                                   parser, reader, "port", &srcInfoParams->port, 
+                                                   "Invalid Plugin '%s': Invalid port of Source ID '%d'", plgPath, srcInfo->idSrc
+                                                   ))
                                     return EXIT_FAILURE;
 
                                 srcInfo->params = (void*)srcInfoParams;
@@ -382,10 +450,10 @@ int data2llist(
                                                    ))
                                     return EXIT_FAILURE;
 
-                                if (getIntValue(
-                                                parser, reader, "version", (gint64*) & srcInfoParams->version, 
-                                                "Invalid Plugin '%s': Invalid version of Source ID '%d'", plgPath, srcInfo->idSrc
-                                                ))
+                                if (getUIntValue(
+                                                 parser, reader, "version", (guint*) & srcInfoParams->version, 
+                                                 "Invalid Plugin '%s': Invalid version of Source ID '%d'", plgPath, srcInfo->idSrc
+                                                 ))
                                     return EXIT_FAILURE;
 
                                 /* SNMPv3 */
@@ -458,28 +526,28 @@ int data2llist(
                                     SearchInfo* searchInfo = calloc(1, sizeof (SearchInfo));
                                     ++(*nbThreads);
 
-                                    if (getIntValue(
-                                                    parser, reader, "id", (gint64*) & searchInfo->idSearch, 
-                                                    "Invalid Plugin '%s': Invalid Search ID for Search n°%d of Source ID '%d'", j + 1, plgPath, srcInfo->idSrc
-                                                    ))
+                                    if (getUIntValue(
+                                                     parser, reader, "id", &searchInfo->idSearch, 
+                                                     "Invalid Plugin '%s': Invalid Search ID for Search n°%d of Source ID '%d'", j + 1, plgPath, srcInfo->idSrc
+                                                     ))
                                         return EXIT_FAILURE;
 
-                                    if (getIntValue(
-                                                    parser, reader, "idType", (gint64*) & searchInfo->idType, 
-                                                    "Invalid Plugin '%s': Invalid idType of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, plgPath, srcInfo->idSrc
-                                                    ))
+                                    if (getUIntValue(
+                                                     parser, reader, "idType", &searchInfo->idType, 
+                                                     "Invalid Plugin '%s': Invalid idType of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, plgPath, srcInfo->idSrc
+                                                     ))
                                         return EXIT_FAILURE;
 
-                                    if (getIntValue(
-                                                    parser, reader, "period", (gint64*) & searchInfo->period, 
-                                                    "Invalid Plugin '%s': Invalid period of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, plgPath, srcInfo->idSrc
-                                                    ))
+                                    if (getUIntValue(
+                                                     parser, reader, "period", &searchInfo->period, 
+                                                     "Invalid Plugin '%s': Invalid period of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, plgPath, srcInfo->idSrc
+                                                     ))
                                         return EXIT_FAILURE;
 
-                                    if (getIntValue(
-                                                    parser, reader, "staticValues", (gint64*) & searchInfo->staticValues, 
-                                                    "Invalid Plugin '%s': Invalid staticValues of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, plgPath, srcInfo->idSrc
-                                                    ))
+                                    if (getUIntValue(
+                                                     parser, reader, "staticValues", &searchInfo->staticValues, 
+                                                     "Invalid Plugin '%s': Invalid staticValues of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, plgPath, srcInfo->idSrc
+                                                     ))
                                         return EXIT_FAILURE;
 
                                     if (json_reader_read_member (reader, "params"))
@@ -521,22 +589,22 @@ int data2llist(
                                             {
                                                 SearchInfoParams2_2 *searchInfoParams = calloc(1, sizeof (SearchInfoParams2_2));
 
-                                                if (getIntValue(
-                                                                parser, reader, "line", (gint64*) & searchInfoParams->line, 
-                                                                "Invalid Plugin '%s': Invalid line of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, plgPath, srcInfo->idSrc
-                                                                ))
+                                                if (getUIntValue(
+                                                                 parser, reader, "line", &searchInfoParams->line, 
+                                                                 "Invalid Plugin '%s': Invalid line of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, plgPath, srcInfo->idSrc
+                                                                 ))
                                                     return EXIT_FAILURE;
 
-                                                if (getIntValue(
-                                                                parser, reader, "firstChar", (gint64*) & searchInfoParams->firstChar, 
-                                                                "Invalid Plugin '%s': Invalid firstChar of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, plgPath, srcInfo->idSrc
-                                                                ))
+                                                if (getUIntValue(
+                                                                 parser, reader, "firstChar", &searchInfoParams->firstChar, 
+                                                                 "Invalid Plugin '%s': Invalid firstChar of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, plgPath, srcInfo->idSrc
+                                                                 ))
                                                     return EXIT_FAILURE;
 
-                                                if (getIntValue(
-                                                                parser, reader, "length", (gint64*) & searchInfoParams->length, 
-                                                                "Invalid Plugin '%s': Invalid length of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, plgPath, srcInfo->idSrc
-                                                                ))
+                                                if (getUIntValue(
+                                                                 parser, reader, "length", &searchInfoParams->length, 
+                                                                 "Invalid Plugin '%s': Invalid length of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, plgPath, srcInfo->idSrc
+                                                                 ))
                                                     return EXIT_FAILURE;
 
                                                 searchInfo->params = (void*)searchInfoParams;
@@ -581,16 +649,16 @@ int data2llist(
                                             {
                                                 SearchInfoParams3_2 *searchInfoParams = calloc(1, sizeof (SearchInfoParams3_2));
 
-                                                if (getIntValue(
-                                                                parser, reader, "firstChar", (gint64*) & searchInfoParams->firstChar, 
-                                                                "Invalid Plugin '%s': Invalid firstChar of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, plgPath, srcInfo->idSrc
-                                                                ))
+                                                if (getUIntValue(
+                                                                 parser, reader, "firstChar", &searchInfoParams->firstChar, 
+                                                                 "Invalid Plugin '%s': Invalid firstChar of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, plgPath, srcInfo->idSrc
+                                                                 ))
                                                     return EXIT_FAILURE;
 
-                                                if (getIntValue(
-                                                                parser, reader, "length", (gint64*) & searchInfoParams->length, 
-                                                                "Invalid Plugin '%s': Invalid length of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, plgPath, srcInfo->idSrc
-                                                                ))
+                                                if (getUIntValue(
+                                                                 parser, reader, "length", &searchInfoParams->length, 
+                                                                 "Invalid Plugin '%s': Invalid length of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, plgPath, srcInfo->idSrc
+                                                                 ))
                                                     return EXIT_FAILURE;
 
                                                 searchInfo->params = (void*)searchInfoParams;
@@ -681,16 +749,16 @@ int data2llist(
                                                                    ))
                                                     return EXIT_FAILURE;
 
-                                                if (getIntValue(
-                                                                parser, reader, "firstChar", (gint64*) & searchInfoParams->firstChar, 
-                                                                "Invalid Plugin '%s': Invalid firstChar of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, plgPath, srcInfo->idSrc
-                                                                ))
+                                                if (getUIntValue(
+                                                                 parser, reader, "firstChar", &searchInfoParams->firstChar, 
+                                                                 "Invalid Plugin '%s': Invalid firstChar of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, plgPath, srcInfo->idSrc
+                                                                 ))
                                                     return EXIT_FAILURE;
 
-                                                if (getIntValue(
-                                                                parser, reader, "length", (gint64*) & searchInfoParams->length, 
-                                                                "Invalid Plugin '%s': Invalid length of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, plgPath, srcInfo->idSrc
-                                                                ))
+                                                if (getUIntValue(
+                                                                 parser, reader, "length", &searchInfoParams->length, 
+                                                                 "Invalid Plugin '%s': Invalid length of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, plgPath, srcInfo->idSrc
+                                                                 ))
                                                     return EXIT_FAILURE;
 
                                                 searchInfo->params = (void*)searchInfoParams;

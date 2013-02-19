@@ -196,10 +196,49 @@ gushort getIntValue(
                     JsonParser *parser,
                     JsonReader *reader,
                     const char *key,
-                    gint64 *value,
+                    gint *value,
                     const char *formatErrorMsg,
                     ...
                     );
+
+/**
+ * Get an unsigned integer value on JsonReader
+ * @param parser   JsonParser
+ * @param reader   JsonReader
+ * @param key      Name of the desired key
+ * @param value    Value
+ * @param plgPath  Plugins file path
+ * @param errorMsg Log Error Message
+ * @return Exit status
+ */
+gushort getUIntValue(
+                    JsonParser *parser,
+                    JsonReader *reader,
+                    const char *key,
+                    guint *value,
+                    const char *formatErrorMsg,
+                    ...
+                    );
+
+
+/**
+ * Get an unsigned short value on JsonReader
+ * @param parser   JsonParser
+ * @param reader   JsonReader
+ * @param key      Name of the desired key
+ * @param value    Value
+ * @param plgPath  Plugins file path
+ * @param errorMsg Log Error Message
+ * @return Exit status
+ */
+gushort getUShortValue(
+                       JsonParser *parser,
+                       JsonReader *reader,
+                       const char *key,
+                       gushort *value,
+                       const char *formatErrorMsg,
+                       ...
+                       );
 
 /**
  * Get a string value on JsonReader

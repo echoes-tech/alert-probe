@@ -94,23 +94,16 @@ gushort searchLocation(
                        const unsigned int *length,
                        const unsigned int *firstChar
                        )
-{
-    char *res = NULL;
-    
-    res = calloc(*length, sizeof (char));
-    if (res)
+{   
+    values[0] = calloc(*length + 1, sizeof (char));
+    if (values[0])
     {
         strncpy(
-                res,
+                values[0],
                 &line[*firstChar - 1],
-                *length
+                sizeof (char) * (*length)
                 );
-
-        values[0] = strdup(res);
-
-        /* Cleanup */
-        free(res);
-        res = NULL;
+        values[0][*length] = '\0';
     }
     else
     {
