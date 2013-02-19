@@ -89,6 +89,67 @@ AddonTypeParamsInfo* isAddonTypeParamsOnList(
                 break;
             }
             break;
+        case 4:
+            switch(*idType)
+            {
+            case 1:
+            {
+                SearchInfoParams4_1 *searchInfoParams = (SearchInfoParams4_1*) params;
+                SearchInfoParams4_1 *searchInfoParamsTmp = (SearchInfoParams4_1*) addonTypeParamsInfo->params;
+                if (!strcmp(searchInfoParams->query, searchInfoParamsTmp->query))
+                {
+                    return addonTypeParamsInfo;
+                }
+                break;
+            }
+            default:
+                break;
+            }
+            break;
+        case 5:
+            switch(*idType)
+            {
+            case 1:
+            {
+                SearchInfoParams5_1 *searchInfoParams = (SearchInfoParams5_1*) params;
+                SearchInfoParams5_1 *searchInfoParamsTmp = (SearchInfoParams5_1*) addonTypeParamsInfo->params;
+                if (!strcmp(searchInfoParams->oid, searchInfoParamsTmp->oid))
+                {
+                    return addonTypeParamsInfo;
+                }
+                break;
+            }
+            case 2:
+            {
+                SearchInfoParams5_2 *searchInfoParams = (SearchInfoParams5_2*) params;
+                SearchInfoParams5_2 *searchInfoParamsTmp = (SearchInfoParams5_2*) addonTypeParamsInfo->params;
+                if (
+                    !strcmp(searchInfoParams->oid, searchInfoParamsTmp->oid) &&
+                    !strcmp(searchInfoParams->regex, searchInfoParamsTmp->regex)
+                    )
+                {
+                    return addonTypeParamsInfo;
+                }
+                break;
+            }
+            case 3:
+            {
+                SearchInfoParams5_3 *searchInfoParams = (SearchInfoParams5_3*) params;
+                SearchInfoParams5_3 *searchInfoParamsTmp = (SearchInfoParams5_3*) addonTypeParamsInfo->params;
+                if (
+                    !strcmp(searchInfoParams->oid, searchInfoParamsTmp->oid) &&
+                    searchInfoParams->firstChar == searchInfoParamsTmp->firstChar &&
+                    searchInfoParams->length == searchInfoParamsTmp->length
+                    )
+                {
+                    return addonTypeParamsInfo;
+                }
+                break;
+            }
+            default:
+                break;
+            }
+            break;
         default:
             break;
         }
@@ -149,6 +210,47 @@ AddonParamsInfo* isAddonParamsOnList(
                 SrcInfoParams3 *srcInfoParams = (SrcInfoParams3*) params;
                 SrcInfoParams3 *srcInfoParamsTmp = (SrcInfoParams3*) addonParamsInfo->params;
                 if (!strcmp(srcInfoParams->path, srcInfoParamsTmp->path))
+                {
+                    return addonParamsInfo;
+                }
+                break;
+            }
+            case 4:
+            {
+                SrcInfoParams4 *srcInfoParams = (SrcInfoParams4*) params;
+                SrcInfoParams4 *srcInfoParamsTmp = (SrcInfoParams4*) addonParamsInfo->params;
+                if (
+                    !strcmp(srcInfoParams->host, srcInfoParamsTmp->host) &&
+                    srcInfoParams->port == srcInfoParamsTmp->port &&
+                    !strcmp(srcInfoParams->db, srcInfoParamsTmp->db) &&
+                    !strcmp(srcInfoParams->user, srcInfoParamsTmp->user) &&
+                    !strcmp(srcInfoParams->passwd, srcInfoParamsTmp->passwd)
+                    )
+                {
+                    return addonParamsInfo;
+                }
+                break;
+            }
+            case 5:
+            {
+                SrcInfoParams5 *srcInfoParams = (SrcInfoParams5*) params;
+                SrcInfoParams5 *srcInfoParamsTmp = (SrcInfoParams5*) addonParamsInfo->params;
+                if (
+                    !strcmp(srcInfoParams->host, srcInfoParamsTmp->host) &&
+                    srcInfoParams->version == srcInfoParamsTmp->version &&
+                    (
+                     (
+                      srcInfoParams->version == 3 &&
+                      !strcmp(srcInfoParams->user, srcInfoParamsTmp->user) &&
+                      !strcmp(srcInfoParams->authProto, srcInfoParamsTmp->authProto) &&
+                      !strcmp(srcInfoParams->authPass, srcInfoParamsTmp->authPass) &&
+                      !strcmp(srcInfoParams->privProto, srcInfoParamsTmp->privProto) &&
+                      !strcmp(srcInfoParams->privPass, srcInfoParamsTmp->privPass)
+                     )
+                     ||
+                     (!strcmp(srcInfoParams->community, srcInfoParamsTmp->community))
+                    )
+                   )
                 {
                     return addonParamsInfo;
                 }

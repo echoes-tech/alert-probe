@@ -55,6 +55,12 @@ struct AddonsMgrParams
 #define ADDON_PARAMS_INITIALIZER {NULL, NULL, 0, PTHREAD_MUTEX_INITIALIZER, COLLECT_QUEUE_INITIALIZER}
 
 /**
+ * Method to know when continue the collect
+ * @param period
+ */
+void addonSleep(unsigned int period);
+
+/**
  * Increase lot number
  * @param mutexPtr  Pointer of mutex
  * @param lotNumPtr Pointer of lot number

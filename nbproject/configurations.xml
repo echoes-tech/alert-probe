@@ -140,7 +140,6 @@
         <cTool>
           <incDir>
             <pElem>include</pElem>
-            <pElem>.</pElem>
           </incDir>
           <commandLine>-pedantic</commandLine>
           <warningLevel>2</warningLevel>

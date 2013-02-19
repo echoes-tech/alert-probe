@@ -151,54 +151,43 @@ void *addonSNMP(void *arg)
     AddonParamsInfo *addonParamsInfo = (AddonParamsInfo*) arg;
     SrcInfoParams5 *srcInfoParams = (SrcInfoParams5*)addonParamsInfo->params;
 
-    time_t now, temp;
+    time_t now;
 
-    netsnmp_session session, *ss;
-    netsnmp_pdu *pdu;
-    netsnmp_pdu *response;
+    netsnmp_session Session;
+    void *sessp;  /* <-- an opaque pointer, not a struct pointer */
+    netsnmp_pdu *pdu = NULL, *response = NULL;
 
     oid OID[MAX_OID_LEN];
     size_t OID_len;
 
-    netsnmp_variable_list *vars;
+    netsnmp_variable_list *vars = NULL;
 
-    char *errstr;
-    int liberr, syserr;
+    char *errstr = NULL;
+    int liberr = 0, syserr = 0;
     
-    int status;
+    int status = STAT_ERROR;
     unsigned int n = 1;
 
 #ifndef NDEBUG
     printf("Dans le thread addonSNMP.\n");
 #endif
 
-    /* What time is it ? */
-    time(&now);
-    
-    /* Method to know when start the loop */
-    temp =  ((int)(now / *addonParamsInfo->period) * *addonParamsInfo->period) + *addonParamsInfo->period;
-    
-    /* Diff between now and the start of the loop */
-    SLEEP(difftime(temp, now));
-    while(1)
+    while(TRUE)
     {
         AddonTypeInfo *addonTypeInfo = addonParamsInfo->addonTypeList;
 
+        addonSleep(*addonParamsInfo->period);
+        
         addonParamsInfo->lotNum = increaseLotNum(
                                                  addonParamsInfo->mutex,
                                                  addonParamsInfo->lotNumPtr
                                                  );
 
         /*
-         * Initialize the SNMP library
-         */
-        init_snmp("addonsnmp");
-
-        /*
          * Initialize a "session" that defines who we're going to talk to
          */
-        snmp_sess_init( &session );                   /* set up defaults */
-        session.peername = strdup(srcInfoParams->host);
+        snmp_sess_init(&Session); /* set up defaults */
+        Session.peername = srcInfoParams->host;
         
         /* set up the authentication parameters for talking to the server */
 
@@ -207,45 +196,40 @@ void *addonSNMP(void *arg)
             /* Use SNMPv3 to talk to the experimental server */
 
             /* set the SNMP version number */
-            session.version=SNMP_VERSION_3;
+            Session.version=SNMP_VERSION_3;
 
             /* set the SNMPv3 user name */
-            session.securityName = strdup(srcInfoParams->user);
-            session.securityNameLen = strlen(session.securityName);
+            Session.securityName = srcInfoParams->user;
+            Session.securityNameLen = strlen(Session.securityName);
 
             /* set the security level to authenticated, but not encrypted */
-            session.securityLevel = SNMP_SEC_LEVEL_AUTHPRIV;
+            Session.securityLevel = SNMP_SEC_LEVEL_AUTHPRIV;
 
             /* set the authentication method */
             if(!strcmp(srcInfoParams->authProto, "MD5"))
             {
-                session.securityAuthProto = usmHMACMD5AuthProtocol;
-                session.securityAuthProtoLen = sizeof(usmHMACMD5AuthProtocol)/sizeof(oid);
+                Session.securityAuthProto = usmHMACMD5AuthProtocol;
+                Session.securityAuthProtoLen = sizeof(usmHMACMD5AuthProtocol)/sizeof(oid);
             }
-            else if (!strcmp(srcInfoParams->authProto, "SHA1"))
+            else if (!strcmp(srcInfoParams->authProto, "SHA"))
             {
-                session.securityAuthProto = usmHMACSHA1AuthProtocol;
-                session.securityAuthProtoLen = sizeof(usmHMACSHA1AuthProtocol)/sizeof(oid);
+                Session.securityAuthProto = usmHMACSHA1AuthProtocol;
+                Session.securityAuthProtoLen = sizeof(usmHMACSHA1AuthProtocol)/sizeof(oid);
             }
             else
             {
-                g_warning("Warning: Addon SNMP: Unknown auth protocol: %s (MD5 | SHA1).", srcInfoParams->authProto);
+                g_warning("Warning: Addon SNMP: Unknown auth protocol: %s (MD5 | SHA).", srcInfoParams->authProto);
                 pthread_exit(NULL);
             }
-            session.securityAuthKeyLen = USM_AUTH_KU_LEN;
+            Session.securityAuthKeyLen = USM_AUTH_KU_LEN;
 
             /* set the authentication key to a hashed version of our passphrase */
-            if (generate_Ku(session.securityAuthProto,
-                            session.securityAuthProtoLen,
+            if (generate_Ku(Session.securityAuthProto,
+                            Session.securityAuthProtoLen,
                             (u_char *) srcInfoParams->authPass, strlen(srcInfoParams->authPass),
-                            session.securityAuthKey,
-                            &session.securityAuthKeyLen) != SNMPERR_SUCCESS) {
+                            Session.securityAuthKey,
+                            &Session.securityAuthKeyLen) != SNMPERR_SUCCESS) {
                 g_warning("Warning: Addon SNMP: Error generating Ku from authentication pass phrase.");
-
-                free(session.peername);
-                session.peername = NULL;
-                free(session.securityName);
-                session.securityName = NULL;
 
                 pthread_exit(NULL);
             }
@@ -253,38 +237,33 @@ void *addonSNMP(void *arg)
             /* set the encryption method */
             if(!strcmp(srcInfoParams->privProto, "DES"))
             {
-                session.securityPrivProto = usmDESPrivProtocol;
-                session.securityPrivProtoLen = sizeof(usmDESPrivProtocol)/sizeof(oid);
+                Session.securityPrivProto = usmDESPrivProtocol;
+                Session.securityPrivProtoLen = sizeof(usmDESPrivProtocol)/sizeof(oid);
             }
             else if(!strcmp(srcInfoParams->privProto, "AES"))
             {
-                session.securityPrivProto = usmAESPrivProtocol;
-                session.securityPrivProtoLen = sizeof(usmAESPrivProtocol)/sizeof(oid);
+                Session.securityPrivProto = usmAESPrivProtocol;
+                Session.securityPrivProtoLen = sizeof(usmAESPrivProtocol)/sizeof(oid);
             }
             else if(!strcmp(srcInfoParams->privProto, "AES128"))
             {
-                session.securityPrivProto = usmAES128PrivProtocol;
-                session.securityPrivProtoLen = sizeof(usmAES128PrivProtocol)/sizeof(oid);
+                Session.securityPrivProto = usmAES128PrivProtocol;
+                Session.securityPrivProtoLen = sizeof(usmAES128PrivProtocol)/sizeof(oid);
             }
             else
             {
                 g_warning("Warning: Addon SNMP: Unknown priv protocol: %s (DES | AES | AES128).", srcInfoParams->privProto);
                 pthread_exit(NULL);
             }
-            session.securityPrivKeyLen = USM_PRIV_KU_LEN;
+            Session.securityPrivKeyLen = USM_PRIV_KU_LEN;
 
             /* set the encryption key to hashed version of our passphrase */
-            if (generate_Ku(session.securityAuthProto,
-                            session.securityAuthProtoLen,
+            if (generate_Ku(Session.securityAuthProto,
+                            Session.securityAuthProtoLen,
                             (u_char *) srcInfoParams->privPass, strlen(srcInfoParams->privPass),
-                            session.securityPrivKey,
-                            &session.securityPrivKeyLen) != SNMPERR_SUCCESS) {
+                            Session.securityPrivKey,
+                            &Session.securityPrivKeyLen) != SNMPERR_SUCCESS) {
                 g_warning("Warning: Addon SNMP: Error generating Ku from encryption pass phrase.");
-
-                free(session.peername);
-                session.peername = NULL;
-                free(session.securityName);
-                session.securityName = NULL;
 
                 pthread_exit(NULL);
             }
@@ -294,36 +273,27 @@ void *addonSNMP(void *arg)
             /* we'll use the insecure (but simplier) SNMPv1 */
 
             /* set the SNMP version number */
-            session.version = SNMP_VERSION_1;
+            Session.version = SNMP_VERSION_1;
 
             /* set the SNMPv1 community name used for authentication */
-            session.community = (u_char *)srcInfoParams->community;
-            session.community_len = strlen((char *)session.community);
+            Session.community = (u_char *)srcInfoParams->community;
+            Session.community_len = strlen((char *)Session.community);
         }
 
         /*
          * Open the session
          */
-        SOCK_STARTUP;
-        ss = snmp_open(&session);                     /* establish the session */
-
-        if (!ss)
+        sessp = snmp_sess_open(&Session); /* establish the session */
+        if (sessp == NULL)
         {
-            snmp_error(&session, &liberr, &syserr, &errstr);
+            /* Error codes found in open calling argument */
+            snmp_error(&Session, &liberr, &syserr, &errstr);
 
             g_warning("Warning: Addon SNMP: %s.", errstr);
 
             free(errstr);
             errstr = NULL;
 
-            free(session.peername);
-            session.peername = NULL;
-
-            if (srcInfoParams->version == 3)
-            {
-                free(session.securityName);
-                session.securityName = NULL;
-            }
             SOCK_CLEANUP;
             
             SLEEP(*addonParamsInfo->period);
@@ -355,17 +325,11 @@ void *addonSNMP(void *arg)
                     
                     if (!snmp_parse_oid(searchInfoParams->oid, OID, &OID_len))
                     {
-                        snmp_error(ss, &liberr, &syserr, &errstr);
+                        snmp_sess_error(sessp, &liberr, &syserr, &errstr);
                         g_warning("Warning: Addon SNMP: %s: %s.", searchInfoParams->oid, errstr);
                         free(errstr);
                         errstr = NULL;
-                        free(session.peername);
-                        session.peername = NULL;
-                        if (srcInfoParams->version == 3)
-                        {
-                            free(session.securityName);
-                            session.securityName = NULL;
-                        }
+
                         SOCK_CLEANUP;
                         SLEEP(*addonParamsInfo->period);
                         continue;
@@ -381,17 +345,11 @@ void *addonSNMP(void *arg)
 
                     if (!snmp_parse_oid(searchInfoParams->oid, OID, &OID_len))
                     {
-                        snmp_error(ss, &liberr, &syserr, &errstr);
+                        snmp_sess_error(sessp, &liberr, &syserr, &errstr);
                         g_warning("Warning: Addon SNMP: %s: %s.", searchInfoParams->oid, errstr);
                         free(errstr);
                         errstr = NULL;
-                        free(session.peername);
-                        session.peername = NULL;
-                        if (srcInfoParams->version == 3)
-                        {
-                            free(session.securityName);
-                            session.securityName = NULL;
-                        }
+
                         SOCK_CLEANUP;
                         SLEEP(*addonParamsInfo->period);
                         continue;
@@ -407,17 +365,11 @@ void *addonSNMP(void *arg)
 
                     if (!snmp_parse_oid(searchInfoParams->oid, OID, &OID_len))
                     {
-                        snmp_error(ss, &liberr, &syserr, &errstr);
+                        snmp_sess_error(sessp, &liberr, &syserr, &errstr);
                         g_warning("Warning: Addon SNMP: %s: %s.", searchInfoParams->oid, errstr);
                         free(errstr);
                         errstr = NULL;
-                        free(session.peername);
-                        session.peername = NULL;
-                        if (srcInfoParams->version == 3)
-                        {
-                            free(session.securityName);
-                            session.securityName = NULL;
-                        }
+
                         SOCK_CLEANUP;
                         SLEEP(*addonParamsInfo->period);
                         continue;
@@ -442,7 +394,7 @@ void *addonSNMP(void *arg)
         /*
          * Send the Request out.
          */
-        status = snmp_synch_response(ss, pdu, &response);
+        status = snmp_sess_synch_response(sessp, pdu, &response);
 
         /*
         * Process the response.
@@ -528,20 +480,13 @@ void *addonSNMP(void *arg)
             if (status == STAT_SUCCESS)
                 g_warning("Warning: Addon SNMP: Error in packet\nReason: %s.", snmp_errstring(response->errstat));
             else if (status == STAT_TIMEOUT)
-                g_warning("Warning: Addon SNMP: Timeout: No response from %s.", session.peername);
+                g_warning("Warning: Addon SNMP: Timeout: No response from %s.", Session.peername);
             else
             {
-                snmp_error(ss, NULL, NULL, &errstr);
+                snmp_sess_error(sessp, &liberr, &syserr, &errstr);
                 g_warning("Warning: Addon SNMP: %s.", errstr);
                 free(errstr);
                 errstr = NULL;
-                free(session.peername);
-                session.peername = NULL;
-                if (srcInfoParams->version == 3)
-                {
-                    free(session.securityName);
-                    session.securityName = NULL;
-                }
             }
         }
 
@@ -552,18 +497,7 @@ void *addonSNMP(void *arg)
          */
         if (response)
             snmp_free_pdu(response);
-        snmp_close(ss);
-
-        free(session.peername);
-        session.peername = NULL;
-        if (srcInfoParams->version == 3)
-        {
-            free(session.securityName);
-            session.securityName = NULL;
-        }
-        SOCK_CLEANUP;
-
-        SLEEP(*addonParamsInfo->period);
+        snmp_sess_close(sessp);
     }
 
     pthread_exit(NULL);

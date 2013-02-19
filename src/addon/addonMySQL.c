@@ -95,7 +95,7 @@ void *addonMySQL(void *arg)
     AddonParamsInfo *addonParamsInfo = (AddonParamsInfo*) arg;
     SrcInfoParams4 *srcInfoParams = (SrcInfoParams4*)addonParamsInfo->params;
 
-    time_t now, temp;
+    time_t now;
     /* MySQL Struct pointer */
     MYSQL mysql;
 
@@ -103,16 +103,10 @@ void *addonMySQL(void *arg)
     printf("Dans le thread addonMyQSL.\n");
 #endif
 
-    /* What time is it ? */
-    time(&now);
-    
-    /* Method to know when start the loop */
-    temp =  ((int)(now / *addonParamsInfo->period) * *addonParamsInfo->period) + *addonParamsInfo->period;
-    
-    /* Diff between now and the start of the loop */
-    SLEEP(difftime(temp, now));
-    while(1)
+    while(TRUE)
     {
+        addonSleep(*addonParamsInfo->period);
+
         addonParamsInfo->lotNum = increaseLotNum(
                                                  addonParamsInfo->mutex,
                                                  addonParamsInfo->lotNumPtr
@@ -180,8 +174,6 @@ void *addonMySQL(void *arg)
         
         /* Closing MySQL session */
         mysql_close(&mysql);
-
-        SLEEP(*addonParamsInfo->period);
     }
 
     pthread_exit(NULL);

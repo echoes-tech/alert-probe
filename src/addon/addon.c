@@ -13,6 +13,20 @@
 
 #include "addon/addon.h"
 
+void addonSleep(unsigned int period)
+{
+    time_t now, temp;
+    
+    /* What time is it ? */
+    time(&now);
+    
+    /* Method to know when continue the collect */
+    temp = ((int)(now / period) * period) + period;
+
+    /* Diff between now and the start of the loop */
+    SLEEP(difftime(temp, now));
+}
+
 unsigned short increaseLotNum(
                               pthread_mutex_t *mutexPtr,
                               unsigned short *lotNumPtr
@@ -107,7 +121,9 @@ void *addon(void *arg)
     AddonsMgrParams *addonsMgrParams = (AddonsMgrParams*) arg;
     
     /* Thread Counter + Position on the threads table */
-    unsigned int i, numThread = 0;
+    unsigned int i = 0, numThread = 0;
+    
+    gboolean snmpInit = FALSE;
 
     AddonInfo *addonInfo = addonsMgrParams->addonsList;
     /* Tant que l'on n'est pas au bout de la liste */
@@ -146,6 +162,15 @@ void *addon(void *arg)
                 }
                 break;
             case 5:
+                if (snmpInit == FALSE)
+                {
+                    /* Initialize the SNMP library */
+                    init_snmp("addonSNMP");
+                    SOCK_STARTUP;
+
+                    snmpInit = TRUE;
+                }
+                
                 if (pthread_create(&addonsMgrParams->addonsThreads[numThread], NULL, addonSNMP, (void*) addonParamsInfo))
                 {
                     g_critical("Critical: %s: addonSNMP: %u", strerror(errno), numThread);
@@ -176,6 +201,11 @@ void *addon(void *arg)
         pthread_join(addonsMgrParams->addonsThreads[i], NULL);
     }
 
+    if (snmpInit == TRUE)
+    {
+        SOCK_CLEANUP;
+    }
+    
     pthread_exit(NULL);
 
 }

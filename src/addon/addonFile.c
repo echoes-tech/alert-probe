@@ -119,7 +119,7 @@ void *addonFile(void *arg)
     AddonParamsInfo *addonParamsInfo = (AddonParamsInfo*) arg;
     SrcInfoParams2 *srcInfoParams = (SrcInfoParams2*)addonParamsInfo->params;
 
-    time_t now, temp;
+    time_t now;
     FILE* file = NULL;
     char line[MAX_SIZE] = "";
     unsigned int n = 0;
@@ -128,16 +128,10 @@ void *addonFile(void *arg)
     printf("Dans le thread addonFile.\n");
 #endif
 
-    /* What time is it ? */
-    time(&now);
-    
-    /* Method to know when start the loop */
-    temp =  ((int)(now / *addonParamsInfo->period) * *addonParamsInfo->period) + *addonParamsInfo->period;
-    
-    /* Diff between now and the start of the loop */
-    SLEEP(difftime(temp, now));
-    while(1)
+    while(TRUE)
     {
+        addonSleep(*addonParamsInfo->period);
+
         addonParamsInfo->lotNum = increaseLotNum(
                                                  addonParamsInfo->mutex,
                                                  addonParamsInfo->lotNumPtr
@@ -217,8 +211,6 @@ void *addonFile(void *arg)
                       strerror(errno)
                       );
         }
-
-        SLEEP(*addonParamsInfo->period);
     }
 
     pthread_exit(NULL);
