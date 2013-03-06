@@ -286,7 +286,7 @@ int data2llist(
 
     PlgInfo* plgInfo = calloc(1, sizeof (PlgInfo));
     
-    guint i = 0, j = 0;
+    gint i = 0, j = 0;
 
     g_type_init();
 

@@ -51,7 +51,7 @@ OBJECTFILES= \
 
 
 # C Compiler Flags
-CFLAGS=-pedantic
+CFLAGS=-pedantic -Wextra
 
 # CC Compiler Flags
 CCFLAGS=

@@ -17,7 +17,7 @@ TOP=`pwd`
 ###########
 
 rpm_target=$1
-rpm_requires="gmp, mysql, net-snmp-libs"
+rpm_requires="libffi, gmp, mysql, net-snmp-libs"
 
 rpm_files="$rpm_files
 \"/${PACKAGE_TOP_DIR}lib.tar.gz\""

@@ -126,9 +126,6 @@
       <itemPath>README</itemPath>
     </logicalFolder>
   </logicalFolder>
-  <sourceRootList>
-    <Elem>.</Elem>
-  </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
     <conf name="Debug" type="1">
@@ -141,7 +138,7 @@
           <incDir>
             <pElem>include</pElem>
           </incDir>
-          <commandLine>-pedantic</commandLine>
+          <commandLine>-pedantic -Wextra</commandLine>
           <warningLevel>2</warningLevel>
         </cTool>
         <linkerTool>

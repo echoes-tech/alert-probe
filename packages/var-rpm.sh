@@ -13,7 +13,7 @@
 rpm_summary="The ECHOES Alert Probe"
 rpm_name="$bin_name"
 rpm_version="$bin_version"
-rpm_release="2"
+rpm_release=1
 rpm_license="Proprietary"
 rpm_group="Applications/System"
 rpm_url="$project_url"
