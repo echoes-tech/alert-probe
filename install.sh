@@ -194,6 +194,7 @@ probe_installation() {
       if [ -x '/usr/bin/apt-get' ]
       then
         /usr/bin/dpkg -i $PKG
+        /usr/bin/apt-get update
         /usr/bin/apt-get -f install
       else
         clean_and_exit "can't find apt-get conmmand."
