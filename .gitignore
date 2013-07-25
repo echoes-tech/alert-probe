@@ -1,9 +1,4 @@
-# Modification par FPO
-# 21/04/2012
-
-# Exclusion des dossiers de compilation
-/obj/
-/bin/
+#Source: https://netbeans.org/kb/docs/java/import-eclipse.html#versioning
 /build/
 /dist/
 /nbproject/private/
