@@ -178,6 +178,8 @@ void *addon(void *arg)
                 }
                 break;
             default:
+                g_critical("Critical: idAddon %d does'nt exist", *addonInfo->idAddon);
+                pthread_exit(NULL);
                 break;
             }
             

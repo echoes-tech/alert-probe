@@ -502,6 +502,7 @@ int data2llist(
                                 break;
                             }
                             default:
+                                g_warning("Warning: idAddon %d does'nt exist.", srcInfo->idAddon);
                                 break;
                         }
                     }
@@ -611,6 +612,7 @@ int data2llist(
                                                 break;
                                             }
                                             default:
+                                                g_warning("Warning: idType %d does'nt exist for the File addon.", searchInfo->idType);
                                                 break;
                                             }
                                             break;
@@ -665,6 +667,7 @@ int data2llist(
                                                 break;
                                             }
                                             default:
+                                                g_warning("Warning: idType %d does'nt exist for the Log addon.", searchInfo->idType);
                                                 break;
                                             }
                                             break;
@@ -686,6 +689,7 @@ int data2llist(
                                                 break;
                                             }
                                             default:
+                                                g_warning("Warning: idType %d does'nt exist for the MySQL addon.", searchInfo->idType);
                                                 break;
                                             }
                                             break;
@@ -740,10 +744,12 @@ int data2llist(
                                                 break;
                                             }
                                             default:
+                                                g_warning("Warning: idType %d does'nt exist for the SNMP addon.", searchInfo->idType);
                                                 break;
                                             }
                                             break;
                                         default:
+                                            g_warning("Warning: idAddon %d does'nt exist.", srcInfo->idAddon);
                                             break;
                                         }
                                     }

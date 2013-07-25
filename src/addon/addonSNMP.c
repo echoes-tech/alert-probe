@@ -324,6 +324,7 @@ void *addonSNMP(void *arg)
                     break;
                 }
                 default:
+                    g_warning("Warning: idType %d does'nt exist for the SNMP addon.", *addonTypeInfo->idType);
                     break;
                 }
 

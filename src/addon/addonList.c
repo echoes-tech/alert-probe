@@ -56,6 +56,7 @@ AddonTypeParamsInfo* isAddonTypeParamsOnList(
                 break;
             }
             default:
+                g_warning("Warning: idType %d does'nt exist for the File addon.", *idType);
                 break;
             }
             break;
@@ -86,6 +87,7 @@ AddonTypeParamsInfo* isAddonTypeParamsOnList(
                 break;
             }
             default:
+                g_warning("Warning: idType %d does'nt exist for the Log addon.", *idType);
                 break;
             }
             break;
@@ -103,6 +105,7 @@ AddonTypeParamsInfo* isAddonTypeParamsOnList(
                 break;
             }
             default:
+                g_warning("Warning: idType %d does'nt exist for the MySQL addon.", *idType);
                 break;
             }
             break;
@@ -133,10 +136,12 @@ AddonTypeParamsInfo* isAddonTypeParamsOnList(
                 break;
             }
             default:
+                g_warning("Warning: idType %d does'nt exist for the SNMP addon.", *idType);
                 break;
             }
             break;
         default:
+            g_warning("Warning: idAddon %d does'nt exist.", srcInfo->idAddon);
             break;
         }
         
@@ -243,6 +248,7 @@ AddonParamsInfo* isAddonParamsOnList(
                 break;
             }
             default:
+                g_warning("Warning: idAddon %d does'nt exist.", srcInfo->idAddon);
                 break;
             }
         }
