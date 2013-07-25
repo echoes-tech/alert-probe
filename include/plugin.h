@@ -63,22 +63,15 @@ struct SearchInfoParams3_2
 };
 
 /* Search Informations Parameters for Addon MySQL Type Query */
-typedef struct SearchInfoParams4_1 SearchInfoParams4_1;
-struct SearchInfoParams4_1
+typedef struct SearchInfoParams4_3 SearchInfoParams4_3;
+struct SearchInfoParams4_3
 {
     gchar *query;
 };
 
-/* Search Informations Parameters for Addon SNMP Type All */
-typedef struct SearchInfoParams5_1 SearchInfoParams5_1;
-struct SearchInfoParams5_1
-{
-    gchar *oid;
-};
-
 /* Search Informations Parameters for Addon SNMP Type Regex */
-typedef struct SearchInfoParams5_2 SearchInfoParams5_2;
-struct SearchInfoParams5_2
+typedef struct SearchInfoParams5_4 SearchInfoParams5_4;
+struct SearchInfoParams5_4
 {
     gchar *oid, *regex;
     int err;
@@ -87,12 +80,11 @@ struct SearchInfoParams5_2
     regmatch_t *pmatch;
 };
 
-/* Search Informations Parameters for Addon SNMP Type Localisation */
-typedef struct SearchInfoParams5_3 SearchInfoParams5_3;
-struct SearchInfoParams5_3
+/* Search Informations Parameters for Addon SNMP Type All */
+typedef struct SearchInfoParams5_5 SearchInfoParams5_5;
+struct SearchInfoParams5_5
 {
     gchar *oid;
-    unsigned int firstChar, length;
 };
 
 /* Search Informations */

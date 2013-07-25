@@ -671,9 +671,9 @@ int data2llist(
                                         case 4:
                                             switch (searchInfo->idType)
                                             {
-                                            case 1:
+                                            case 3:
                                             {
-                                                SearchInfoParams4_1 *searchInfoParams = calloc(1, sizeof (SearchInfoParams4_1));
+                                                SearchInfoParams4_3 *searchInfoParams = calloc(1, sizeof (SearchInfoParams4_3));
                                                 
 
                                                 if (getStringValue(
@@ -692,22 +692,9 @@ int data2llist(
                                         case 5:
                                             switch (searchInfo->idType)
                                             {
-                                            case 1:
+                                            case 4:
                                             {
-                                                SearchInfoParams5_1 *searchInfoParams = calloc(1, sizeof (SearchInfoParams5_1));
-
-                                                if (getStringValue(
-                                                                   parser, reader, "oid", &searchInfoParams->oid, 
-                                                                   "Invalid Plugin '%s': Invalid oid of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, plgPath, srcInfo->idSrc
-                                                                   ))
-                                                    return EXIT_FAILURE;
-
-                                                searchInfo->params = (void*)searchInfoParams;
-                                                break;
-                                            }
-                                            case 2:
-                                            {
-                                                SearchInfoParams5_2 *searchInfoParams = calloc(1, sizeof (SearchInfoParams5_2));
+                                                SearchInfoParams5_4 *searchInfoParams = calloc(1, sizeof (SearchInfoParams5_4));
 
                                                 if (getStringValue(
                                                                    parser, reader, "oid", &searchInfoParams->oid, 
@@ -739,26 +726,14 @@ int data2llist(
                                                 searchInfo->params = (void*)searchInfoParams;
                                                 break;
                                             }
-                                            case 3:
+                                            case 5:
                                             {
-                                                SearchInfoParams5_3 *searchInfoParams = calloc(1, sizeof (SearchInfoParams5_3));
+                                                SearchInfoParams5_5 *searchInfoParams = calloc(1, sizeof (SearchInfoParams5_5));
 
                                                 if (getStringValue(
                                                                    parser, reader, "oid", &searchInfoParams->oid, 
                                                                    "Invalid Plugin '%s': Invalid oid of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, plgPath, srcInfo->idSrc
                                                                    ))
-                                                    return EXIT_FAILURE;
-
-                                                if (getUIntValue(
-                                                                 parser, reader, "firstChar", &searchInfoParams->firstChar, 
-                                                                 "Invalid Plugin '%s': Invalid firstChar of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, plgPath, srcInfo->idSrc
-                                                                 ))
-                                                    return EXIT_FAILURE;
-
-                                                if (getUIntValue(
-                                                                 parser, reader, "length", &searchInfoParams->length, 
-                                                                 "Invalid Plugin '%s': Invalid length of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, plgPath, srcInfo->idSrc
-                                                                 ))
                                                     return EXIT_FAILURE;
 
                                                 searchInfo->params = (void*)searchInfoParams;

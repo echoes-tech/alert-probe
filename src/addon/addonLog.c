@@ -129,17 +129,6 @@ void whileAddonTypeInfo(
             {
             case 1:
                 addonLogRegex(
-                              addonParamsInfo->collectQueue,
-                              line,
-                              lineNum,
-                              addonTypeParamsInfo->params,
-                              addonParamsInfo->lotNum,
-                              &addonTypeParamsInfo->IDList,
-                              now
-                              );
-                break;
-            case 2:
-                addonLogLocation(
                                  addonParamsInfo->collectQueue,
                                  line,
                                  lineNum,
@@ -149,7 +138,19 @@ void whileAddonTypeInfo(
                                  now
                                  );
                 break;
+            case 2:
+                addonLogLocation(
+                              addonParamsInfo->collectQueue,
+                              line,
+                              lineNum,
+                              addonTypeParamsInfo->params,
+                              addonParamsInfo->lotNum,
+                              &addonTypeParamsInfo->IDList,
+                              now
+                              );
+                break;
             default:
+                g_warning("Warning: idType %d does'nt exist for the Log addon.", *addonTypeInfo->idType);
                 break;
             }
 

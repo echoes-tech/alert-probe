@@ -92,10 +92,10 @@ AddonTypeParamsInfo* isAddonTypeParamsOnList(
         case 4:
             switch(*idType)
             {
-            case 1:
+            case 3:
             {
-                SearchInfoParams4_1 *searchInfoParams = (SearchInfoParams4_1*) params;
-                SearchInfoParams4_1 *searchInfoParamsTmp = (SearchInfoParams4_1*) addonTypeParamsInfo->params;
+                SearchInfoParams4_3 *searchInfoParams = (SearchInfoParams4_3*) params;
+                SearchInfoParams4_3 *searchInfoParamsTmp = (SearchInfoParams4_3*) addonTypeParamsInfo->params;
                 if (!strcmp(searchInfoParams->query, searchInfoParamsTmp->query))
                 {
                     return addonTypeParamsInfo;
@@ -109,20 +109,10 @@ AddonTypeParamsInfo* isAddonTypeParamsOnList(
         case 5:
             switch(*idType)
             {
-            case 1:
+            case 4:
             {
-                SearchInfoParams5_1 *searchInfoParams = (SearchInfoParams5_1*) params;
-                SearchInfoParams5_1 *searchInfoParamsTmp = (SearchInfoParams5_1*) addonTypeParamsInfo->params;
-                if (!strcmp(searchInfoParams->oid, searchInfoParamsTmp->oid))
-                {
-                    return addonTypeParamsInfo;
-                }
-                break;
-            }
-            case 2:
-            {
-                SearchInfoParams5_2 *searchInfoParams = (SearchInfoParams5_2*) params;
-                SearchInfoParams5_2 *searchInfoParamsTmp = (SearchInfoParams5_2*) addonTypeParamsInfo->params;
+                SearchInfoParams5_4 *searchInfoParams = (SearchInfoParams5_4*) params;
+                SearchInfoParams5_4 *searchInfoParamsTmp = (SearchInfoParams5_4*) addonTypeParamsInfo->params;
                 if (
                     !strcmp(searchInfoParams->oid, searchInfoParamsTmp->oid) &&
                     !strcmp(searchInfoParams->regex, searchInfoParamsTmp->regex)
@@ -132,15 +122,11 @@ AddonTypeParamsInfo* isAddonTypeParamsOnList(
                 }
                 break;
             }
-            case 3:
+            case 5:
             {
-                SearchInfoParams5_3 *searchInfoParams = (SearchInfoParams5_3*) params;
-                SearchInfoParams5_3 *searchInfoParamsTmp = (SearchInfoParams5_3*) addonTypeParamsInfo->params;
-                if (
-                    !strcmp(searchInfoParams->oid, searchInfoParamsTmp->oid) &&
-                    searchInfoParams->firstChar == searchInfoParamsTmp->firstChar &&
-                    searchInfoParams->length == searchInfoParamsTmp->length
-                    )
+                SearchInfoParams5_5 *searchInfoParams = (SearchInfoParams5_5*) params;
+                SearchInfoParams5_5 *searchInfoParamsTmp = (SearchInfoParams5_5*) addonTypeParamsInfo->params;
+                if (!strcmp(searchInfoParams->oid, searchInfoParamsTmp->oid))
                 {
                     return addonTypeParamsInfo;
                 }

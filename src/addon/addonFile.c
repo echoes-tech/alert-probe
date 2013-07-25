@@ -165,17 +165,6 @@ void *addonFile(void *arg)
                         {
                         case 1:
                             addonFileRegex(
-                                           addonParamsInfo->collectQueue,
-                                           line,
-                                           n,
-                                           addonTypeParamsInfo->params,
-                                           addonParamsInfo->lotNum,
-                                           &addonTypeParamsInfo->IDList,
-                                           &now
-                                           );
-                            break;
-                        case 2:
-                            addonFileLocation(
                                               addonParamsInfo->collectQueue,
                                               line,
                                               n,
@@ -185,7 +174,19 @@ void *addonFile(void *arg)
                                               &now
                                               );
                             break;
+                        case 2:
+                            addonFileLocation(
+                                           addonParamsInfo->collectQueue,
+                                           line,
+                                           n,
+                                           addonTypeParamsInfo->params,
+                                           addonParamsInfo->lotNum,
+                                           &addonTypeParamsInfo->IDList,
+                                           &now
+                                           );
+                            break;
                         default:
+                            g_warning("Warning: idType %d does'nt exist for the File addon.", *addonTypeInfo->idType);
                             break;
                         }
 

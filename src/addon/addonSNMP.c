@@ -58,7 +58,7 @@ int addonSNMPRegex(
                    time_t *now
                    )
 {
-    SearchInfoParams5_2 *searchInfoParams = (SearchInfoParams5_2*)params;
+    SearchInfoParams5_4 *searchInfoParams = (SearchInfoParams5_4*)params;
 
     char **values = NULL;
 
@@ -106,42 +106,6 @@ int addonSNMPRegex(
         g_warning("Critical: Insufficient memory");
         return EXIT_FAILURE;
     }
-
-    return EXIT_SUCCESS;
-}
-
-int addonSNMPLocation(
-                      CollectQueue *collectQueue,
-                      const char *res,
-                      unsigned int resNum,
-                      void *params,
-                      unsigned short lotNum,
-                      IDList *idList,
-                      time_t *now
-                      )
-{
-    SearchInfoParams5_3 *searchInfoParams = (SearchInfoParams5_3*)params;
-
-    char *values[1];
-
-    if (searchLocation(
-                       values,
-                       res,
-                       &searchInfoParams->length,
-                       &searchInfoParams->firstChar
-                       ))
-        return EXIT_FAILURE;
-
-    if (pushCollectQueue(
-                         collectQueue,
-                         idList,
-                         lotNum,
-                         resNum,
-                         1,
-                         values,
-                         *now
-                         ))
-        return EXIT_FAILURE;
 
     return EXIT_SUCCESS;
 }
@@ -319,50 +283,30 @@ void *addonSNMP(void *arg)
             {
                 switch (*addonTypeInfo->idType)
                 {
-                case 1:
+                case 4:
                 {
-                    SearchInfoParams5_1 *searchInfoParams = (SearchInfoParams5_1*)addonTypeParamsInfo->params;
+                    SearchInfoParams5_4 *searchInfoParams = (SearchInfoParams5_4*)addonTypeParamsInfo->params;
+
+                    if (!snmp_parse_oid(searchInfoParams->oid, OID, &OID_len))
+                    {
+                        snmp_sess_error(sessp, &liberr, &syserr, &errstr);
+                        g_warning("Warning: Addon SNMP: %s: %s.", searchInfoParams->oid, errstr);
+                        free(errstr);
+                        errstr = NULL;
+
+                        SOCK_CLEANUP;
+                        SLEEP(*addonParamsInfo->period);
+                        continue;
+                    }
+
+                    snmp_add_null_var(pdu, OID, OID_len);
+
+                    break;
+                }
+                case 5:
+                {
+                    SearchInfoParams5_5 *searchInfoParams = (SearchInfoParams5_5*)addonTypeParamsInfo->params;
                     
-                    if (!snmp_parse_oid(searchInfoParams->oid, OID, &OID_len))
-                    {
-                        snmp_sess_error(sessp, &liberr, &syserr, &errstr);
-                        g_warning("Warning: Addon SNMP: %s: %s.", searchInfoParams->oid, errstr);
-                        free(errstr);
-                        errstr = NULL;
-
-                        SOCK_CLEANUP;
-                        SLEEP(*addonParamsInfo->period);
-                        continue;
-                    }
-
-                    snmp_add_null_var(pdu, OID, OID_len);
-
-                    break;
-                }
-                case 2:
-                {
-                    SearchInfoParams5_2 *searchInfoParams = (SearchInfoParams5_2*)addonTypeParamsInfo->params;
-
-                    if (!snmp_parse_oid(searchInfoParams->oid, OID, &OID_len))
-                    {
-                        snmp_sess_error(sessp, &liberr, &syserr, &errstr);
-                        g_warning("Warning: Addon SNMP: %s: %s.", searchInfoParams->oid, errstr);
-                        free(errstr);
-                        errstr = NULL;
-
-                        SOCK_CLEANUP;
-                        SLEEP(*addonParamsInfo->period);
-                        continue;
-                    }
-
-                    snmp_add_null_var(pdu, OID, OID_len);
-
-                    break;
-                }
-                case 3:
-                {
-                    SearchInfoParams5_3 *searchInfoParams = (SearchInfoParams5_3*)addonTypeParamsInfo->params;
-
                     if (!snmp_parse_oid(searchInfoParams->oid, OID, &OID_len))
                     {
                         snmp_sess_error(sessp, &liberr, &syserr, &errstr);
@@ -425,17 +369,7 @@ void *addonSNMP(void *arg)
 
                     switch (*addonTypeInfo->idType)
                     {
-                    case 1:
-                        addonSNMPAll(
-                                     addonParamsInfo->collectQueue,
-                                     res,
-                                     n++,
-                                     addonParamsInfo->lotNum,
-                                     &addonTypeParamsInfo->IDList,
-                                     &now
-                                     );
-                        break;
-                    case 2:
+                    case 4:
                         addonSNMPRegex(
                                        addonParamsInfo->collectQueue,
                                        res,
@@ -446,18 +380,18 @@ void *addonSNMP(void *arg)
                                        &now
                                        );
                         break;
-                    case 3:
-                        addonSNMPLocation(
-                                          addonParamsInfo->collectQueue,
-                                          res,
-                                          n++,
-                                          addonTypeParamsInfo->params,
-                                          addonParamsInfo->lotNum,
-                                          &addonTypeParamsInfo->IDList,
-                                          &now
-                                          );
+                    case 5:
+                        addonSNMPAll(
+                                     addonParamsInfo->collectQueue,
+                                     res,
+                                     n++,
+                                     addonParamsInfo->lotNum,
+                                     &addonTypeParamsInfo->IDList,
+                                     &now
+                                     );
                         break;
                     default:
+                        g_warning("Warning: idType %d does'nt exist for the SNMP addon.", *addonTypeInfo->idType);
                         break;
                     }
 

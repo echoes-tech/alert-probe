@@ -22,7 +22,7 @@ int addonMySQLQuery(
                     time_t *now
                     )
 {
-    SearchInfoParams4_1 *searchInfoParams = (SearchInfoParams4_1*)params;
+    SearchInfoParams4_3 *searchInfoParams = (SearchInfoParams4_3*)params;
 
     char **values = NULL;
 
@@ -145,7 +145,7 @@ void *addonMySQL(void *arg)
                 {
                     switch (*addonTypeInfo->idType)
                     {
-                    case 1:
+                    case 3:
                         addonMySQLQuery(
                                         addonParamsInfo->collectQueue,
                                         &mysql,
@@ -156,6 +156,7 @@ void *addonMySQL(void *arg)
                                         );
                         break;
                     default:
+                        g_warning("Warning: idType %d does'nt exist for the MySQL addon.", *addonTypeInfo->idType);
                         break;
                     }
 
