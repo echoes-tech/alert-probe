@@ -127,7 +127,7 @@ pkg_description="The ECHOES Alert Probe"
 pkg_maintainer="Florent Poinsaut <florent.poinsaut@echoes-tech.com>"
 
 bin_name="ea-probe"
-bin_version="0.1.0.beta3"
+bin_version="0.1.0"
 
 default_file_right=0640
 default_dir_right=0750
