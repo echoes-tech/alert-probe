@@ -141,7 +141,7 @@ AddonTypeParamsInfo* isAddonTypeParamsOnList(
             }
             break;
         default:
-            g_warning("Warning: idAddon %d does'nt exist.", srcInfo->idAddon);
+            g_warning("Warning: idAddon %d does'nt exist.", *idAddon);
             break;
         }
         
@@ -248,7 +248,7 @@ AddonParamsInfo* isAddonParamsOnList(
                 break;
             }
             default:
-                g_warning("Warning: idAddon %d does'nt exist.", srcInfo->idAddon);
+                g_warning("Warning: idAddon %d does'nt exist.", *idAddon);
                 break;
             }
         }
