@@ -3,7 +3,7 @@ Upstream-Name: echoes-alert-probe
 Maintainer: Florent Poinsaut <florent.poinsaut@echoes-tech.com>
 
 Files: *
-Copyright: 2012 ECHOES Technologies SAS <info@echoes-tech.com>
+Copyright: 2012-2013 ECHOES Technologies SAS <info@echoes-tech.com>
  THIS PROGRAM IS PROPRIETARY TO ECHOES TECHNOLOGIES SAS AND MAY NOT BE
  REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS WITHOUT COMPANY AUTHORIZATION.
 
@@ -12,7 +12,7 @@ Copyright: 2012 ECHOES Technologies SAS <info@echoes-tech.com>
  PROFITS OR ANY OTHER KIND OF LOSS WHILE USING OR MISUSING THIS SOFTWARE.
 
 Files: DEBIAN/*
-Copyright: 2012 Florent Poinsaut <florent.poinsaut@echoes-tech.com>
+Copyright: 2012-2013 Florent Poinsaut <florent.poinsaut@echoes-tech.com>
 License: GPL-2+
 
 License: GPL-2+
