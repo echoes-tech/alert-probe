@@ -125,8 +125,7 @@ struct SrcInfoParams4
 typedef struct SrcInfoParams5 SrcInfoParams5;
 struct SrcInfoParams5
 {
-    gchar *host, *community, *user, *authProto, *authPass, *privProto, *privPass;
-    unsigned char version;
+    gchar *host, *version, *community, *user, *authProto, *authPass, *privProto, *privPass;
 };
 
 /* Source Informations */

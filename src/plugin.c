@@ -450,14 +450,23 @@ int data2llist(
                                                    ))
                                     return EXIT_FAILURE;
 
-                                if (getUIntValue(
-                                                 parser, reader, "version", (guint*) & srcInfoParams->version, 
+                                if (getStringValue(
+                                                 parser, reader, "version", &srcInfoParams->version, 
                                                  "Invalid Plugin '%s': Invalid version of Source ID '%d'", plgPath, srcInfo->idSrc
                                                  ))
                                     return EXIT_FAILURE;
 
+                                /* SNMPv1 or SNMPv2c*/
+                                if (strcmp(srcInfoParams->version, "1") == 0 || strcmp(srcInfoParams->version, "2c") == 0)
+                                {
+                                    if (getStringValue(
+                                                       parser, reader, "community", &srcInfoParams->community, 
+                                                       "Invalid Plugin '%s': Invalid community of Source ID '%d'", plgPath, srcInfo->idSrc
+                                                       ))
+                                        return EXIT_FAILURE;
+                                }
                                 /* SNMPv3 */
-                                if (srcInfoParams->version == 3)
+                                else if (strcmp(srcInfoParams->version, "3") == 0)
                                 {
                                     if (getStringValue(
                                                        parser, reader, "user", &srcInfoParams->user, 
@@ -489,20 +498,15 @@ int data2llist(
                                                        ))
                                         return EXIT_FAILURE;
                                 }
-                                /* SNMPv1 */
                                 else
                                 {
-                                    if (getStringValue(
-                                                       parser, reader, "community", &srcInfoParams->community, 
-                                                       "Invalid Plugin '%s': Invalid community of Source ID '%d'", plgPath, srcInfo->idSrc
-                                                       ))
-                                        return EXIT_FAILURE;
+                                    g_warning("Invalid Plugin '%s': bad SNMP version for source ID '%d' (Expected : 1, 2c or 3)", plgPath, srcInfo->idSrc);
                                 }
                                 srcInfo->params = (void*)srcInfoParams;
                                 break;
                             }
                             default:
-                                g_warning("Warning: idAddon %d does'nt exist.", srcInfo->idAddon);
+                                g_warning("Invalid Plugin '%s': idAddon %d does'nt exist (Source ID '%d')", plgPath, srcInfo->idAddon, srcInfo->idSrc);
                                 break;
                         }
                     }
@@ -749,7 +753,7 @@ int data2llist(
                                             }
                                             break;
                                         default:
-                                            g_warning("Warning: idAddon %d does'nt exist.", srcInfo->idAddon);
+                                            g_warning("Invalid Plugin '%s': idAddon %d does'nt exist (Source ID '%d')", plgPath, srcInfo->idAddon, srcInfo->idSrc);
                                             break;
                                         }
                                     }

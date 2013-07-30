@@ -155,10 +155,22 @@ void *addonSNMP(void *arg)
         
         /* set up the authentication parameters for talking to the server */
 
-        if (srcInfoParams->version == 3)
+        /* SNMPv1 or SNMPv2c*/
+        if (strcmp(srcInfoParams->version, "1") == 0 || strcmp(srcInfoParams->version, "2c") == 0)
         {
-            /* Use SNMPv3 to talk to the experimental server */
+            /* set the SNMP version number */
+            if (strcmp(srcInfoParams->version, "1") == 0 )
+                Session.version = SNMP_VERSION_1;
+            else
+                Session.version = SNMP_VERSION_2c;
 
+            /* set the SNMPv1 community name used for authentication */
+            Session.community = (u_char *)srcInfoParams->community;
+            Session.community_len = strlen((char *)Session.community);
+        }
+        /* SNMPv3 */
+        else if (strcmp(srcInfoParams->version, "3") == 0)
+        {
             /* set the SNMP version number */
             Session.version=SNMP_VERSION_3;
 
@@ -234,14 +246,8 @@ void *addonSNMP(void *arg)
         }
         else
         {
-            /* we'll use the insecure (but simplier) SNMPv1 */
-
-            /* set the SNMP version number */
-            Session.version = SNMP_VERSION_1;
-
-            /* set the SNMPv1 community name used for authentication */
-            Session.community = (u_char *)srcInfoParams->community;
-            Session.community_len = strlen((char *)Session.community);
+            g_warning("Warning: Addon SNMP: Unknown version: %s (1 | 2c | 3).", srcInfoParams->version);
+            pthread_exit(NULL);
         }
 
         /*

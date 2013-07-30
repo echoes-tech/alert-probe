@@ -227,19 +227,19 @@ AddonParamsInfo* isAddonParamsOnList(
                 SrcInfoParams5 *srcInfoParams = (SrcInfoParams5*) params;
                 SrcInfoParams5 *srcInfoParamsTmp = (SrcInfoParams5*) addonParamsInfo->params;
                 if (
-                    !strcmp(srcInfoParams->host, srcInfoParamsTmp->host) &&
-                    srcInfoParams->version == srcInfoParamsTmp->version &&
+                    strcmp(srcInfoParams->host, srcInfoParamsTmp->host) == 0 &&
+                    strcmp(srcInfoParams->version, srcInfoParamsTmp->version) == 0 &&
                     (
                      (
-                      srcInfoParams->version == 3 &&
-                      !strcmp(srcInfoParams->user, srcInfoParamsTmp->user) &&
-                      !strcmp(srcInfoParams->authProto, srcInfoParamsTmp->authProto) &&
-                      !strcmp(srcInfoParams->authPass, srcInfoParamsTmp->authPass) &&
-                      !strcmp(srcInfoParams->privProto, srcInfoParamsTmp->privProto) &&
-                      !strcmp(srcInfoParams->privPass, srcInfoParamsTmp->privPass)
+                      strcmp(srcInfoParams->version, "3") == 0 &&
+                      strcmp(srcInfoParams->user, srcInfoParamsTmp->user) == 0 &&
+                      strcmp(srcInfoParams->authProto, srcInfoParamsTmp->authProto) == 0 &&
+                      strcmp(srcInfoParams->authPass, srcInfoParamsTmp->authPass) == 0 &&
+                      strcmp(srcInfoParams->privProto, srcInfoParamsTmp->privProto) == 0 &&
+                      strcmp(srcInfoParams->privPass, srcInfoParamsTmp->privPass) == 0
                      )
                      ||
-                     (!strcmp(srcInfoParams->community, srcInfoParamsTmp->community))
+                     (strcmp(srcInfoParams->community, srcInfoParamsTmp->community) == 0)
                     )
                    )
                 {
