@@ -10,6 +10,7 @@
       <logicalFolder name="addon" displayName="addon" projectFiles="true">
         <itemPath>include/addon/addon.h</itemPath>
         <itemPath>include/addon/addonFile.h</itemPath>
+        <itemPath>include/addon/addonFileSystem.h</itemPath>
         <itemPath>include/addon/addonList.h</itemPath>
         <itemPath>include/addon/addonLog.h</itemPath>
         <itemPath>include/addon/addonMySQL.h</itemPath>
@@ -96,6 +97,7 @@
         <logicalFolder name="addon" displayName="addon" projectFiles="true">
           <itemPath>src/addon/addon.c</itemPath>
           <itemPath>src/addon/addonFile.c</itemPath>
+          <itemPath>src/addon/addonFileSystem.c</itemPath>
           <itemPath>src/addon/addonList.c</itemPath>
           <itemPath>src/addon/addonLog.c</itemPath>
           <itemPath>src/addon/addonMySQL.c</itemPath>
@@ -165,6 +167,8 @@
       <item path="include/addon/addon.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/addon/addonFile.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/addon/addonFileSystem.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/addon/addonList.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -293,6 +297,8 @@
       <item path="src/addon/addon.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="src/addon/addonFile.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="src/addon/addonFileSystem.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="src/addon/addonList.c" ex="false" tool="0" flavor2="0">
       </item>
@@ -375,6 +381,8 @@
       </item>
       <item path="include/addon/addonFile.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="include/addon/addonFileSystem.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/addon/addonList.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/addon/addonLog.h" ex="false" tool="3" flavor2="0">
@@ -502,6 +510,8 @@
       <item path="src/addon/addon.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="src/addon/addonFile.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="src/addon/addonFileSystem.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="src/addon/addonList.c" ex="false" tool="0" flavor2="0">
       </item>

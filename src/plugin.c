@@ -370,6 +370,11 @@ int data2llist(
                     {
                         switch (srcInfo->idAddon)
                         {
+                            case 1:
+                            {
+                                srcInfo->params = NULL;
+                                break;
+                            }
                             case 2:
                             {
                                 SrcInfoParams2 *srcInfoParams = calloc(1, sizeof (SrcInfoParams2));
@@ -559,6 +564,28 @@ int data2llist(
                                     {
                                         switch (srcInfo->idAddon)
                                         {
+                                        case 1:
+                                            switch (searchInfo->idType)
+                                            {
+                                            case 6:
+                                            {
+                                                SearchInfoParams1_6 *searchInfoParams = calloc(1, sizeof (SearchInfoParams1_6));
+                                                
+
+                                                if (getStringValue(
+                                                                   parser, reader, "path", &searchInfoParams->path, 
+                                                                   "Invalid Plugin '%s': Invalid path of Search ID '%d' of Source ID '%d'", searchInfo->idSearch, plgPath, srcInfo->idSrc
+                                                                   ))
+                                                    return EXIT_FAILURE;
+
+                                                searchInfo->params = (void*)searchInfoParams;
+                                                break;
+                                            }
+                                            default:
+                                                g_warning("Warning: idType %d does'nt exist for the FileSystem addon.", searchInfo->idType);
+                                                break;
+                                            }
+                                            break;
                                         case 2:
                                             switch (searchInfo->idType)
                                             {

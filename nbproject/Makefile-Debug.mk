@@ -38,6 +38,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/src/addon/addon.o \
 	${OBJECTDIR}/src/addon/addonFile.o \
+	${OBJECTDIR}/src/addon/addonFileSystem.o \
 	${OBJECTDIR}/src/addon/addonList.o \
 	${OBJECTDIR}/src/addon/addonLog.o \
 	${OBJECTDIR}/src/addon/addonMySQL.o \
@@ -88,6 +89,11 @@ ${OBJECTDIR}/src/addon/addonFile.o: src/addon/addonFile.c
 	${MKDIR} -p ${OBJECTDIR}/src/addon
 	${RM} $@.d
 	$(COMPILE.c) -g -Wall -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -pedantic -Wextra -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonFile.o src/addon/addonFile.c
+
+${OBJECTDIR}/src/addon/addonFileSystem.o: src/addon/addonFileSystem.c 
+	${MKDIR} -p ${OBJECTDIR}/src/addon
+	${RM} $@.d
+	$(COMPILE.c) -g -Wall -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -pedantic -Wextra -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonFileSystem.o src/addon/addonFileSystem.c
 
 ${OBJECTDIR}/src/addon/addonList.o: src/addon/addonList.c 
 	${MKDIR} -p ${OBJECTDIR}/src/addon

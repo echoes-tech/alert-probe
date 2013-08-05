@@ -23,7 +23,8 @@ extern "C" {
 #include <pthread.h>
 
 #include "plugin.h"
-    
+
+#include "addon/addonFileSystem.h"
 #include "addon/addonFile.h"
 #include "addon/addonLog.h"
 #include "addon/addonMySQL.h"

@@ -140,6 +140,13 @@ void *addon(void *arg)
 
             switch (*addonInfo->idAddon)
             {
+            case 1:
+                if (pthread_create(&addonsMgrParams->addonsThreads[numThread], NULL, addonFileSystem, (void*) addonParamsInfo))
+                {
+                    g_critical("Critical: %s: addonFileSystem: %u", strerror(errno), numThread);
+                    pthread_exit(NULL);
+                }
+                break;
             case 2:
                 if (pthread_create(&addonsMgrParams->addonsThreads[numThread], NULL, addonFile, (void*) addonParamsInfo))
                 {

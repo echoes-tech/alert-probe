@@ -28,6 +28,24 @@ AddonTypeParamsInfo* isAddonTypeParamsOnList(
     {
         switch(*idAddon)
         {
+        case 1:
+            switch(*idType)
+            {
+            case 6:
+            {
+                SearchInfoParams1_6 *searchInfoParams = (SearchInfoParams1_6*) params;
+                SearchInfoParams1_6 *searchInfoParamsTmp = (SearchInfoParams1_6*) addonTypeParamsInfo->params;
+                if (strcmp(searchInfoParams->path, searchInfoParamsTmp->path) == 0)
+                {
+                    return addonTypeParamsInfo;
+                }
+                break;
+            }
+            default:
+                g_warning("Warning: idType %d does'nt exist for the FileSystem addon.", *idType);
+                break;
+            }
+            break;
         case 2:
             switch(*idType)
             {
@@ -186,6 +204,11 @@ AddonParamsInfo* isAddonParamsOnList(
         {
             switch(*idAddon)
             {
+            case 1:
+            {
+                return addonParamsInfo;
+                break;
+            }
             case 2:
             {
                 SrcInfoParams2 *srcInfoParams = (SrcInfoParams2*) params;
