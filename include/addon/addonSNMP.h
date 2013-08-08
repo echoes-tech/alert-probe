@@ -32,31 +32,39 @@ extern "C" {
  * @return 
  */
 char* typeCut(const char* tmpValue);
-    
-/**
- * Thread - Addon SNMP Location.
- * @param *alfp Pointer of addon location SNMP parameters
- */
-int addonSNMPLocation(
-                      CollectQueue *collectQueue,
-                      const char *line,
-                      unsigned int lineNum,
-                      void *params,
-                      unsigned short lotNum,
-                      IDList *idList,
-                      time_t *now
-                      );
 
 /**
- * Thread - Addon SNMP Regex.
- * @param *arfp Pointer of addon regex SNMP parameters
+ * 
+ * @param collectQueue
+ * @param res
+ * @param lotNum
+ * @param idList
+ * @param now
+ * @return Exit status
+ */
+int addonSNMPAll(
+                 CollectQueue *collectQueue,
+                 const char *res,
+                 const unsigned short lotNum,
+                 IDList *idList,
+                 time_t *now
+                 );
+
+/**
+ * 
+ * @param collectQueue
+ * @param line
+ * @param params
+ * @param lotNum
+ * @param idList
+ * @param now
+ * @return Exit status
  */
 int addonSNMPRegex(
                    CollectQueue *collectQueue,
-                   const char *line,
-                   unsigned int lineNum,
+                   const char *res,
                    void *params,
-                   unsigned short lotNum,
+                   const unsigned short lotNum,
                    IDList *idList,
                    time_t *now
                    );

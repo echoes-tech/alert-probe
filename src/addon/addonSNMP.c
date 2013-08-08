@@ -24,8 +24,7 @@ char* typeCut(const char* tmpValue)
 int addonSNMPAll(
                  CollectQueue *collectQueue,
                  const char *res,
-                 unsigned int resNum,
-                 unsigned short lotNum,
+                 const unsigned short lotNum,
                  IDList *idList,
                  time_t *now
                  )
@@ -38,7 +37,7 @@ int addonSNMPAll(
                          collectQueue,
                          idList,
                          lotNum,
-                         resNum,
+                         1,
                          1,
                          values,
                          *now
@@ -51,9 +50,8 @@ int addonSNMPAll(
 int addonSNMPRegex(
                    CollectQueue *collectQueue,
                    const char *res,
-                   unsigned int resNum,
                    void *params,
-                   unsigned short lotNum,
+                   const unsigned short lotNum,
                    IDList *idList,
                    time_t *now
                    )
@@ -85,7 +83,7 @@ int addonSNMPRegex(
                              collectQueue,
                              idList,
                              lotNum,
-                             resNum,
+                             1,
                              (searchInfoParams->nmatch - 1),
                              values,
                              *now
@@ -130,7 +128,6 @@ void *addonSNMP(void *arg)
     int liberr = 0, syserr = 0;
     
     int status = STAT_ERROR;
-    unsigned int n = 1;
 
 #ifndef NDEBUG
     printf("Dans le thread addonSNMP.\n");
@@ -380,7 +377,6 @@ void *addonSNMP(void *arg)
                         addonSNMPRegex(
                                        addonParamsInfo->collectQueue,
                                        res,
-                                       n++,
                                        addonTypeParamsInfo->params,
                                        addonParamsInfo->lotNum,
                                        &addonTypeParamsInfo->IDList,
@@ -391,7 +387,6 @@ void *addonSNMP(void *arg)
                         addonSNMPAll(
                                      addonParamsInfo->collectQueue,
                                      res,
-                                     n++,
                                      addonParamsInfo->lotNum,
                                      &addonTypeParamsInfo->IDList,
                                      &now
