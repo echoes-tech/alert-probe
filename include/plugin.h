@@ -35,6 +35,13 @@
 /* Default period (second) */
 #define DEFAULT 60
 
+/* Search Informations Parameters for Addon FileSystem Type statvfs */
+typedef struct SearchInfoParams1_6 SearchInfoParams1_6;
+struct SearchInfoParams1_6
+{
+    gchar *path;
+};
+
 /* Search Informations Parameters for Addon Log Type Regex */
 typedef struct SearchInfoParams2_1 SearchInfoParams3_1;
 /* Search Informations Parameters for Addon File Type Regex */
