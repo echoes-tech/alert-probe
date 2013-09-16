@@ -13,7 +13,6 @@
 
 #include "addon/addonList.h"
 
-
 AddonTypeParamsInfo* isAddonTypeParamsOnList(
                                              const AddonTypeParamsList *addonTypeParamsList,
                                              const unsigned int *idAddon,
@@ -26,10 +25,10 @@ AddonTypeParamsInfo* isAddonTypeParamsOnList(
     /* Tant que l'on n'est pas au bout de la liste */
     while (addonTypeParamsInfo != NULL)
     {
-        switch(*idAddon)
+        switch (*idAddon)
         {
         case 1:
-            switch(*idType)
+            switch (*idType)
             {
             case 6:
             {
@@ -47,7 +46,7 @@ AddonTypeParamsInfo* isAddonTypeParamsOnList(
             }
             break;
         case 2:
-            switch(*idType)
+            switch (*idType)
             {
             case 1:
             {
@@ -79,7 +78,7 @@ AddonTypeParamsInfo* isAddonTypeParamsOnList(
             }
             break;
         case 3:
-            switch(*idType)
+            switch (*idType)
             {
             case 1:
             {
@@ -110,7 +109,7 @@ AddonTypeParamsInfo* isAddonTypeParamsOnList(
             }
             break;
         case 4:
-            switch(*idType)
+            switch (*idType)
             {
             case 3:
             {
@@ -128,7 +127,7 @@ AddonTypeParamsInfo* isAddonTypeParamsOnList(
             }
             break;
         case 5:
-            switch(*idType)
+            switch (*idType)
             {
             case 4:
             {
@@ -158,13 +157,31 @@ AddonTypeParamsInfo* isAddonTypeParamsOnList(
                 break;
             }
             break;
+        case 6:
+            switch (*idType)
+            {
+            case 3:
+            {
+                SearchInfoParams6_3 *searchInfoParams = (SearchInfoParams6_3*) params;
+                SearchInfoParams6_3 *searchInfoParamsTmp = (SearchInfoParams6_3*) addonTypeParamsInfo->params;
+                if (!strcmp((char*)searchInfoParams->query, (char*)searchInfoParamsTmp->query))
+                {
+                    return addonTypeParamsInfo;
+                }
+                break;
+            }
+            default:
+                g_warning("Warning: idType %d does'nt exist for the ODBC addon.", *idType);
+                break;
+            }
+            break;
         default:
             g_warning("Warning: idAddon %d does'nt exist.", *idAddon);
             break;
         }
-        
+
         /* On avance d'une case */
-        addonTypeParamsInfo = addonTypeParamsInfo->nxt;   
+        addonTypeParamsInfo = addonTypeParamsInfo->nxt;
     }
     return NULL;
 }
@@ -180,9 +197,9 @@ AddonTypeInfo* isAddonTypeOnList(const AddonTypeList *addonTypeList, const unsig
         {
             return addonTypeInfo;
         }
-        
+
         /* On avance d'une case */
-        addonTypeInfo = addonTypeInfo->nxt;   
+        addonTypeInfo = addonTypeInfo->nxt;
     }
     return NULL;
 }
@@ -202,7 +219,7 @@ AddonParamsInfo* isAddonParamsOnList(
     {
         if (*addonParamsInfo->period == *period && *addonParamsInfo->staticValues == *staticValues)
         {
-            switch(*idAddon)
+            switch (*idAddon)
             {
             case 1:
             {
@@ -253,18 +270,28 @@ AddonParamsInfo* isAddonParamsOnList(
                     strcmp(srcInfoParams->host, srcInfoParamsTmp->host) == 0 &&
                     strcmp(srcInfoParams->version, srcInfoParamsTmp->version) == 0 &&
                     (
-                     (
-                      strcmp(srcInfoParams->version, "3") == 0 &&
-                      strcmp(srcInfoParams->user, srcInfoParamsTmp->user) == 0 &&
-                      strcmp(srcInfoParams->authProto, srcInfoParamsTmp->authProto) == 0 &&
-                      strcmp(srcInfoParams->authPass, srcInfoParamsTmp->authPass) == 0 &&
-                      strcmp(srcInfoParams->privProto, srcInfoParamsTmp->privProto) == 0 &&
-                      strcmp(srcInfoParams->privPass, srcInfoParamsTmp->privPass) == 0
-                     )
-                     ||
-                     (strcmp(srcInfoParams->community, srcInfoParamsTmp->community) == 0)
+                    (
+                    strcmp(srcInfoParams->version, "3") == 0 &&
+                    strcmp(srcInfoParams->user, srcInfoParamsTmp->user) == 0 &&
+                    strcmp(srcInfoParams->authProto, srcInfoParamsTmp->authProto) == 0 &&
+                    strcmp(srcInfoParams->authPass, srcInfoParamsTmp->authPass) == 0 &&
+                    strcmp(srcInfoParams->privProto, srcInfoParamsTmp->privProto) == 0 &&
+                    strcmp(srcInfoParams->privPass, srcInfoParamsTmp->privPass) == 0
                     )
-                   )
+                    ||
+                    (strcmp(srcInfoParams->community, srcInfoParamsTmp->community) == 0)
+                    )
+                    )
+                {
+                    return addonParamsInfo;
+                }
+                break;
+            }
+            case 6:
+            {
+                SrcInfoParams6 *srcInfoParams = (SrcInfoParams6*) params;
+                SrcInfoParams6 *srcInfoParamsTmp = (SrcInfoParams6*) addonParamsInfo->params;
+                if (!strcmp((char*)srcInfoParams->connectionString, (char*)srcInfoParamsTmp->connectionString))
                 {
                     return addonParamsInfo;
                 }
@@ -275,9 +302,9 @@ AddonParamsInfo* isAddonParamsOnList(
                 break;
             }
         }
-        
+
         /* On avance d'une case */
-        addonParamsInfo = addonParamsInfo->nxt;   
+        addonParamsInfo = addonParamsInfo->nxt;
     }
     return NULL;
 }
@@ -293,12 +320,12 @@ AddonInfo* isAddonOnList(const AddonList *addonList, const unsigned int *idAddon
         {
             return addonInfo;
         }
-        
+
         /* On avance d'une case */
-        addonInfo = addonInfo->nxt;   
+        addonInfo = addonInfo->nxt;
     }
     return NULL;
-}                                                                                                             
+}
 
 int pushAddonList(
                   AddonList *addonList,
@@ -325,11 +352,12 @@ int pushAddonList(
     IDInfo *idInfo = NULL, *idInfoTmp = NULL;
 
     addonInfoTmp = isAddonOnList(addonList, idAddon);
-    if(addonList == NULL || addonInfoTmp == NULL){
+    if (addonList == NULL || addonInfoTmp == NULL)
+    {
         addonInfo = calloc(1, sizeof (AddonInfo));
 
         addonInfo->idAddon = idAddon;
-        
+
         /* Assign the address of the next element in the new element */
         addonInfo->nxt = *addonList;
 
@@ -382,7 +410,7 @@ int pushAddonList(
     }
 
     addonTypeParamsInfoTmp = isAddonTypeParamsOnList(&addonTypeInfo->addonTypeParamsList, idAddon, idType, searchParams);
-    if(addonTypeInfo->addonTypeParamsList == NULL || addonTypeParamsInfoTmp == NULL)
+    if (addonTypeInfo->addonTypeParamsList == NULL || addonTypeParamsInfoTmp == NULL)
     {
         addonTypeParamsInfo = calloc(1, sizeof (AddonTypeParamsInfo));
         addonTypeParamsInfo->params = searchParams;
@@ -410,13 +438,13 @@ int pushAddonList(
         idInfo->nxt = addonTypeParamsInfo->IDList;
 
         /* Update the pointer of linked list */
-        addonTypeParamsInfo->IDList = idInfo; 
+        addonTypeParamsInfo->IDList = idInfo;
     }
     else
     {
         idInfo = idInfoTmp;
     }
-    
+
     return EXIT_SUCCESS;
 }
 

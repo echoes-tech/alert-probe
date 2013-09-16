@@ -14,6 +14,7 @@
         <itemPath>include/addon/addonList.h</itemPath>
         <itemPath>include/addon/addonLog.h</itemPath>
         <itemPath>include/addon/addonMySQL.h</itemPath>
+        <itemPath>include/addon/addonODBC.h</itemPath>
         <itemPath>include/addon/addonSNMP.h</itemPath>
       </logicalFolder>
       <itemPath>include/conf.h</itemPath>
@@ -79,10 +80,12 @@
       <itemPath>packages/var-rpm.sh</itemPath>
     </logicalFolder>
     <logicalFolder name="plugins" displayName="Plugins" projectFiles="true">
+      <itemPath>plugins/Linux-FileSystem.json</itemPath>
       <itemPath>plugins/Linux-Syslog.json</itemPath>
       <itemPath>plugins/Linux-System.json</itemPath>
-      <itemPath>plugins/MySQL-ISPConfig-WebTraffic.json</itemPath>
       <itemPath>plugins/MySQL.json</itemPath>
+      <itemPath>plugins/ODBC_Oracle.json</itemPath>
+      <itemPath>plugins/ODBC_PostgreSQL.json</itemPath>
       <itemPath>plugins/SNMP.json</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -101,6 +104,7 @@
           <itemPath>src/addon/addonList.c</itemPath>
           <itemPath>src/addon/addonLog.c</itemPath>
           <itemPath>src/addon/addonMySQL.c</itemPath>
+          <itemPath>src/addon/addonODBC.c</itemPath>
           <itemPath>src/addon/addonSNMP.c</itemPath>
         </logicalFolder>
         <itemPath>src/conf.c</itemPath>
@@ -159,6 +163,7 @@
             <linkerLibLibItem>mysqlclient</linkerLibLibItem>
             <linkerLibLibItem>snmp</linkerLibLibItem>
             <linkerLibLibItem>pthread</linkerLibLibItem>
+            <linkerLibLibItem>odbc</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
@@ -175,6 +180,8 @@
       <item path="include/addon/addonLog.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/addon/addonMySQL.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/addon/addonODBC.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/addon/addonSNMP.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -281,16 +288,17 @@
       </item>
       <item path="packages/var-rpm.sh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="plugins/Linux-FileSystem.json" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="plugins/Linux-Syslog.json" ex="false" tool="3" flavor2="0">
       </item>
       <item path="plugins/Linux-System.json" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="plugins/MySQL-ISPConfig-WebTraffic.json"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
       <item path="plugins/MySQL.json" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="plugins/ODBC_Oracle.json" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="plugins/ODBC_PostgreSQL.json" ex="false" tool="3" flavor2="0">
       </item>
       <item path="plugins/SNMP.json" ex="false" tool="3" flavor2="0">
       </item>
@@ -305,6 +313,8 @@
       <item path="src/addon/addonLog.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="src/addon/addonMySQL.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="src/addon/addonODBC.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="src/addon/addonSNMP.c" ex="false" tool="0" flavor2="0">
       </item>
@@ -360,6 +370,8 @@
             <linkerOptionItem>`pkg-config --libs gobject-2.0 json-glib-1.0`</linkerOptionItem>
             <linkerLibLibItem>mysqlclient</linkerLibLibItem>
             <linkerLibLibItem>snmp</linkerLibLibItem>
+            <linkerLibLibItem>pthead</linkerLibLibItem>
+            <linkerLibLibItem>odbc</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
@@ -388,6 +400,8 @@
       <item path="include/addon/addonLog.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/addon/addonMySQL.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/addon/addonODBC.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/addon/addonSNMP.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -494,16 +508,17 @@
       </item>
       <item path="packages/var-rpm.sh" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="plugins/Linux-FileSystem.json" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="plugins/Linux-Syslog.json" ex="false" tool="3" flavor2="0">
       </item>
       <item path="plugins/Linux-System.json" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="plugins/MySQL-ISPConfig-WebTraffic.json"
-            ex="false"
-            tool="3"
-            flavor2="0">
-      </item>
       <item path="plugins/MySQL.json" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="plugins/ODBC_Oracle.json" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="plugins/ODBC_PostgreSQL.json" ex="false" tool="3" flavor2="0">
       </item>
       <item path="plugins/SNMP.json" ex="false" tool="3" flavor2="0">
       </item>
@@ -518,6 +533,8 @@
       <item path="src/addon/addonLog.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="src/addon/addonMySQL.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="src/addon/addonODBC.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="src/addon/addonSNMP.c" ex="false" tool="0" flavor2="0">
       </item>

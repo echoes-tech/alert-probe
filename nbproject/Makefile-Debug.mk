@@ -42,6 +42,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/addon/addonList.o \
 	${OBJECTDIR}/src/addon/addonLog.o \
 	${OBJECTDIR}/src/addon/addonMySQL.o \
+	${OBJECTDIR}/src/addon/addonODBC.o \
 	${OBJECTDIR}/src/addon/addonSNMP.o \
 	${OBJECTDIR}/src/conf.o \
 	${OBJECTDIR}/src/format.o \
@@ -65,7 +66,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-L/usr/lib64/mysql -L/usr/lib/mysql -L/usr/local/lib -Wl,-rpath,/opt/echoes-alert/probe/lib `pkg-config --libs gobject-2.0 json-glib-1.0` -lmysqlclient -lsnmp -lpthread  
+LDLIBSOPTIONS=-L/usr/lib64/mysql -L/usr/lib/mysql -L/usr/local/lib -Wl,-rpath,/opt/echoes-alert/probe/lib `pkg-config --libs gobject-2.0 json-glib-1.0` -lmysqlclient -lsnmp -lpthread -lodbc  
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
@@ -109,6 +110,11 @@ ${OBJECTDIR}/src/addon/addonMySQL.o: src/addon/addonMySQL.c
 	${MKDIR} -p ${OBJECTDIR}/src/addon
 	${RM} $@.d
 	$(COMPILE.c) -g -Wall -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -pedantic -Wextra -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonMySQL.o src/addon/addonMySQL.c
+
+${OBJECTDIR}/src/addon/addonODBC.o: src/addon/addonODBC.c 
+	${MKDIR} -p ${OBJECTDIR}/src/addon
+	${RM} $@.d
+	$(COMPILE.c) -g -Wall -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -pedantic -Wextra -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonODBC.o src/addon/addonODBC.c
 
 ${OBJECTDIR}/src/addon/addonSNMP.o: src/addon/addonSNMP.c 
 	${MKDIR} -p ${OBJECTDIR}/src/addon

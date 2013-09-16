@@ -2,7 +2,7 @@
  * Header of Plug-in Manager
  * @author ECHOES Technologies (FPO)
  * @date 19/02/2012
-  * 
+ * 
  * THIS PROGRAM IS CONFIDENTIAL AND PROPRIETARY TO ECHOES TECHNOLOGIES SAS
  * AND MAY NOT BE REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS
  * WITHOUT COMPANY AUTHORIZATION.
@@ -21,6 +21,7 @@
 #include <glib-object.h>
 #include <json-glib/json-glib.h>
 #include <regex.h>
+#include <sql.h>
 
 #include <dirent.h>
 #ifndef WIN32
@@ -37,8 +38,8 @@
 
 /* Search Informations Parameters for Addon FileSystem Type statvfs */
 typedef struct SearchInfoParams1_6 SearchInfoParams1_6;
-struct SearchInfoParams1_6
-{
+
+struct SearchInfoParams1_6 {
     gchar *path;
 };
 
@@ -46,8 +47,8 @@ struct SearchInfoParams1_6
 typedef struct SearchInfoParams2_1 SearchInfoParams3_1;
 /* Search Informations Parameters for Addon File Type Regex */
 typedef struct SearchInfoParams2_1 SearchInfoParams2_1;
-struct SearchInfoParams2_1
-{
+
+struct SearchInfoParams2_1 {
     gchar *regex;
     int err;
     regex_t preg;
@@ -57,29 +58,29 @@ struct SearchInfoParams2_1
 
 /* Search Informations Parameters for Addon File Type Localisation */
 typedef struct SearchInfoParams2_2 SearchInfoParams2_2;
-struct SearchInfoParams2_2
-{
+
+struct SearchInfoParams2_2 {
     unsigned int line, firstChar, length;
 };
 
 /* Search Informations Parameters for Addon Log Type Localisation */
 typedef struct SearchInfoParams3_2 SearchInfoParams3_2;
-struct SearchInfoParams3_2
-{
+
+struct SearchInfoParams3_2 {
     unsigned int firstChar, length;
 };
 
 /* Search Informations Parameters for Addon MySQL Type Query */
 typedef struct SearchInfoParams4_3 SearchInfoParams4_3;
-struct SearchInfoParams4_3
-{
+
+struct SearchInfoParams4_3 {
     gchar *query;
 };
 
 /* Search Informations Parameters for Addon SNMP Type Regex */
 typedef struct SearchInfoParams5_4 SearchInfoParams5_4;
-struct SearchInfoParams5_4
-{
+
+struct SearchInfoParams5_4 {
     gchar *oid, *regex;
     int err;
     regex_t preg;
@@ -89,15 +90,23 @@ struct SearchInfoParams5_4
 
 /* Search Informations Parameters for Addon SNMP Type All */
 typedef struct SearchInfoParams5_5 SearchInfoParams5_5;
-struct SearchInfoParams5_5
-{
+
+struct SearchInfoParams5_5 {
     gchar *oid;
+};
+
+
+/* Search Informations Parameters for Addon ODBC Type Query */
+typedef struct SearchInfoParams6_3 SearchInfoParams6_3;
+
+struct SearchInfoParams6_3 {
+    SQLCHAR *query;
 };
 
 /* Search Informations */
 typedef struct SearchInfo SearchInfo;
-struct SearchInfo
-{
+
+struct SearchInfo {
     unsigned int idSearch, idType, period, staticValues;
     void *params;
     SearchInfo *nxt;
@@ -107,38 +116,45 @@ typedef SearchInfo* SearchList;
 
 /* Source Informations Parameters for Addon File */
 typedef struct SrcInfoParams2 SrcInfoParams2;
-struct SrcInfoParams2
-{
+
+struct SrcInfoParams2 {
     gchar *path;
 };
 
 /* Source Informations Parameters for Addon Log */
 typedef struct SrcInfoParams3 SrcInfoParams3;
-struct SrcInfoParams3
-{
+
+struct SrcInfoParams3 {
     gchar *path;
     unsigned int nbLine, lastNLines;
 };
 
 /* Source Informations Parameters for Addon MySQL */
 typedef struct SrcInfoParams4 SrcInfoParams4;
-struct SrcInfoParams4
-{
+
+struct SrcInfoParams4 {
     gchar *host, *user, *passwd, *db;
     unsigned short port;
 };
 
 /* Source Informations Parameters for Addon SNMP */
 typedef struct SrcInfoParams5 SrcInfoParams5;
-struct SrcInfoParams5
-{
+
+struct SrcInfoParams5 {
     gchar *host, *version, *community, *user, *authProto, *authPass, *privProto, *privPass;
+};
+
+/* Source Informations Parameters for Addon ODBC */
+typedef struct SrcInfoParams6 SrcInfoParams6;
+
+struct SrcInfoParams6 {
+    SQLCHAR *connectionString;
 };
 
 /* Source Informations */
 typedef struct SrcInfo SrcInfo;
-struct SrcInfo
-{
+
+struct SrcInfo {
     unsigned int idSrc, idAddon;
     void *params;
     SearchList searchList;
@@ -149,8 +165,8 @@ typedef SrcInfo* SrcList;
 
 /* Plugin Informations */
 typedef struct PlgInfo PlgInfo;
-struct PlgInfo
-{
+
+struct PlgInfo {
     unsigned int idPlg, idAsset;
     SrcList srcList;
     PlgInfo *nxt;
@@ -191,13 +207,13 @@ int file2data(const char *plgPath, gchar *data);
  * @return Exit status
  */
 gushort getIntValue(
-                    JsonParser *parser,
-                    JsonReader *reader,
-                    const char *key,
-                    gint *value,
-                    const char *formatErrorMsg,
-                    ...
-                    );
+        JsonParser *parser,
+        JsonReader *reader,
+        const char *key,
+        gint *value,
+        const char *formatErrorMsg,
+        ...
+        );
 
 /**
  * Get an unsigned integer value on JsonReader
@@ -210,13 +226,13 @@ gushort getIntValue(
  * @return Exit status
  */
 gushort getUIntValue(
-                    JsonParser *parser,
-                    JsonReader *reader,
-                    const char *key,
-                    guint *value,
-                    const char *formatErrorMsg,
-                    ...
-                    );
+        JsonParser *parser,
+        JsonReader *reader,
+        const char *key,
+        guint *value,
+        const char *formatErrorMsg,
+        ...
+        );
 
 
 /**
@@ -230,13 +246,13 @@ gushort getUIntValue(
  * @return Exit status
  */
 gushort getUShortValue(
-                       JsonParser *parser,
-                       JsonReader *reader,
-                       const char *key,
-                       gushort *value,
-                       const char *formatErrorMsg,
-                       ...
-                       );
+        JsonParser *parser,
+        JsonReader *reader,
+        const char *key,
+        gushort *value,
+        const char *formatErrorMsg,
+        ...
+        );
 
 /**
  * Get a string value on JsonReader
@@ -249,13 +265,13 @@ gushort getUShortValue(
  * @return Exit status
  */
 gushort getStringValue(
-                       JsonParser *parser,
-                       JsonReader *reader,
-                       const char *key,
-                       gchar **value,
-                       const char *formatErrorMsg,
-                       ...
-                       );
+        JsonParser *parser,
+        JsonReader *reader,
+        const char *key,
+        gchar **value,
+        const char *formatErrorMsg,
+        ...
+        );
 
 /**
  * Load data to a linkedlist
@@ -267,12 +283,12 @@ gushort getStringValue(
  * @return Exit status
  */
 int data2llist(
-               PlgList *plgList,
-               AddonList *addonList,
-               unsigned int *nbThreads,
-               const char *plgPath,
-               const char *data
-               );
+        PlgList *plgList,
+        AddonList *addonList,
+        unsigned int *nbThreads,
+        const char *plgPath,
+        const char *data
+        );
 
 /**
  * List probe plugin
@@ -283,12 +299,12 @@ int data2llist(
  * @return Exit status
  */
 int listPlugins(
-                const char *plgDir,
-                gushort *nbPlg,
-                PlgList *plgList,
-                AddonList *addonList,
-                unsigned int *nbThreads
-                );
+        const char *plgDir,
+        gushort *nbPlg,
+        PlgList *plgList,
+        AddonList *addonList,
+        unsigned int *nbThreads
+        );
 
 /**
  * Main function of Plug-in Manager
@@ -299,11 +315,11 @@ int listPlugins(
  * @return Exit status
  */
 gushort plugin(
-               const char *plgDir,
-               PlgList *plgList,
-               AddonList *addonList,
-               unsigned int *nbThreads
-               );
+        const char *plgDir,
+        PlgList *plgList,
+        AddonList *addonList,
+        unsigned int *nbThreads
+        );
 
 #endif	/* PLUGIN_H */
 

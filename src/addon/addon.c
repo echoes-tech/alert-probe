@@ -184,6 +184,13 @@ void *addon(void *arg)
                     pthread_exit(NULL);
                 }
                 break;
+            case 6:
+                if (pthread_create(&addonsMgrParams->addonsThreads[numThread], NULL, addonODBC, (void*) addonParamsInfo))
+                {
+                    g_critical("Critical: %s: addonODBC: %u", strerror(errno), numThread);
+                    pthread_exit(NULL);
+                }
+                break;
             default:
                 g_critical("Critical: idAddon %d does'nt exist", *addonInfo->idAddon);
                 pthread_exit(NULL);
