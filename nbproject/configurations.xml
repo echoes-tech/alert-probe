@@ -170,7 +170,7 @@
     <conf name="Debug" type="1">
       <toolsSet>
         <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
-        <compilerSet>GNU|GNU</compilerSet>
+        <compilerSet>default</compilerSet>
         <dependencyChecking>true</dependencyChecking>
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
@@ -183,7 +183,6 @@
           <warningLevel>2</warningLevel>
         </cTool>
         <linkerTool>
-          <output>${TESTDIR}/TestFiles/f7</output>
           <linkerAddLib>
             <pElem>/usr/lib64/mysql</pElem>
             <pElem>/usr/lib/mysql</pElem>
@@ -440,7 +439,6 @@
           <developmentMode>5</developmentMode>
         </asmTool>
         <linkerTool>
-          <output>${TESTDIR}/TestFiles/f7</output>
           <linkerAddLib>
             <pElem>/usr/lib64/mysql</pElem>
             <pElem>/usr/lib/mysql</pElem>
@@ -455,6 +453,7 @@
             <linkerLibLibItem>mysqlclient</linkerLibLibItem>
             <linkerLibLibItem>snmp</linkerLibLibItem>
             <linkerLibLibItem>pthread</linkerLibLibItem>
+            <linkerLibLibItem>cunit</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
