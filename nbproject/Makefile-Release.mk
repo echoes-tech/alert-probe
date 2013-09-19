@@ -63,11 +63,11 @@ TESTFILES= \
 	${TESTDIR}/TestFiles/f5
 
 # C Compiler Flags
-CFLAGS=
+CFLAGS=-DNDEBUG
 
 # CC Compiler Flags
-CCFLAGS=`cppunit-config --cflags` 
-CXXFLAGS=`cppunit-config --cflags` 
+CCFLAGS=
+CXXFLAGS=
 
 # Fortran Compiler Flags
 FFLAGS=
@@ -76,7 +76,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-L/usr/lib64/mysql -L/usr/lib/mysql -L/usr/local/lib -Wl,-rpath,/opt/echoes-alert/probe/lib `pkg-config --libs gobject-2.0 json-glib-1.0` -lmysqlclient -lsnmp  
+LDLIBSOPTIONS=-L/usr/lib64/mysql -L/usr/lib/mysql -L/usr/local/lib -Wl,-rpath,/opt/echoes-alert/probe/lib `pkg-config --libs gobject-2.0 json-glib-1.0` -lmysqlclient -lsnmp -lpthread  
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
@@ -89,72 +89,72 @@ ${TESTDIR}/TestFiles/f7: ${OBJECTFILES}
 ${OBJECTDIR}/main.o: main.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`   -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.c
+	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.c
 
 ${OBJECTDIR}/src/addon/addon.o: src/addon/addon.c 
 	${MKDIR} -p ${OBJECTDIR}/src/addon
 	${RM} $@.d
-	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`   -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addon.o src/addon/addon.c
+	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addon.o src/addon/addon.c
 
 ${OBJECTDIR}/src/addon/addonFile.o: src/addon/addonFile.c 
 	${MKDIR} -p ${OBJECTDIR}/src/addon
 	${RM} $@.d
-	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`   -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonFile.o src/addon/addonFile.c
+	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonFile.o src/addon/addonFile.c
 
 ${OBJECTDIR}/src/addon/addonFileSystem.o: src/addon/addonFileSystem.c 
 	${MKDIR} -p ${OBJECTDIR}/src/addon
 	${RM} $@.d
-	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`   -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonFileSystem.o src/addon/addonFileSystem.c
+	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonFileSystem.o src/addon/addonFileSystem.c
 
 ${OBJECTDIR}/src/addon/addonList.o: src/addon/addonList.c 
 	${MKDIR} -p ${OBJECTDIR}/src/addon
 	${RM} $@.d
-	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`   -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonList.o src/addon/addonList.c
+	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonList.o src/addon/addonList.c
 
 ${OBJECTDIR}/src/addon/addonLog.o: src/addon/addonLog.c 
 	${MKDIR} -p ${OBJECTDIR}/src/addon
 	${RM} $@.d
-	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`   -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonLog.o src/addon/addonLog.c
+	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonLog.o src/addon/addonLog.c
 
 ${OBJECTDIR}/src/addon/addonMySQL.o: src/addon/addonMySQL.c 
 	${MKDIR} -p ${OBJECTDIR}/src/addon
 	${RM} $@.d
-	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`   -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonMySQL.o src/addon/addonMySQL.c
+	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonMySQL.o src/addon/addonMySQL.c
 
 ${OBJECTDIR}/src/addon/addonSNMP.o: src/addon/addonSNMP.c 
 	${MKDIR} -p ${OBJECTDIR}/src/addon
 	${RM} $@.d
-	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`   -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonSNMP.o src/addon/addonSNMP.c
+	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonSNMP.o src/addon/addonSNMP.c
 
 ${OBJECTDIR}/src/conf.o: src/conf.c 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`   -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/conf.o src/conf.c
+	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/conf.o src/conf.c
 
 ${OBJECTDIR}/src/format.o: src/format.c 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`   -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/format.o src/format.c
+	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/format.o src/format.c
 
 ${OBJECTDIR}/src/log.o: src/log.c 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`   -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/log.o src/log.c
+	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/log.o src/log.c
 
 ${OBJECTDIR}/src/plugin.o: src/plugin.c 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`   -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/plugin.o src/plugin.c
+	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/plugin.o src/plugin.c
 
 ${OBJECTDIR}/src/search.o: src/search.c 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`   -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/search.o src/search.c
+	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/search.o src/search.c
 
 ${OBJECTDIR}/src/sender.o: src/sender.c 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
-	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`   -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/sender.o src/sender.c
+	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/sender.o src/sender.c
 
 # Subprojects
 .build-subprojects:
@@ -189,37 +189,37 @@ ${TESTDIR}/TestFiles/f5: ${TESTDIR}/tests/searchcunittest.o ${OBJECTFILES:%.o=%_
 ${TESTDIR}/tests/addoncunittest.o: tests/addoncunittest.c 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} $@.d
-	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  `cppunit-config --cflags` -MMD -MP -MF $@.d -o ${TESTDIR}/tests/addoncunittest.o tests/addoncunittest.c
+	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG   `cppunit-config --cflags` -MMD -MP -MF $@.d -o ${TESTDIR}/tests/addoncunittest.o tests/addoncunittest.c
 
 
 ${TESTDIR}/tests/confcunittest.o: tests/confcunittest.c 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} $@.d
-	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  `cppunit-config --cflags` -MMD -MP -MF $@.d -o ${TESTDIR}/tests/confcunittest.o tests/confcunittest.c
+	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG   `cppunit-config --cflags` -MMD -MP -MF $@.d -o ${TESTDIR}/tests/confcunittest.o tests/confcunittest.c
 
 
 ${TESTDIR}/tests/formatcunittest.o: tests/formatcunittest.c 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} $@.d
-	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  `cppunit-config --cflags` -MMD -MP -MF $@.d -o ${TESTDIR}/tests/formatcunittest.o tests/formatcunittest.c
+	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG   `cppunit-config --cflags` -MMD -MP -MF $@.d -o ${TESTDIR}/tests/formatcunittest.o tests/formatcunittest.c
 
 
 ${TESTDIR}/tests/logcunittest.o: tests/logcunittest.c 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} $@.d
-	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  `cppunit-config --cflags` -MMD -MP -MF $@.d -o ${TESTDIR}/tests/logcunittest.o tests/logcunittest.c
+	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG   `cppunit-config --cflags` -MMD -MP -MF $@.d -o ${TESTDIR}/tests/logcunittest.o tests/logcunittest.c
 
 
 ${TESTDIR}/tests/plugincunittest.o: tests/plugincunittest.c 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} $@.d
-	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  `cppunit-config --cflags` -MMD -MP -MF $@.d -o ${TESTDIR}/tests/plugincunittest.o tests/plugincunittest.c
+	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG   `cppunit-config --cflags` -MMD -MP -MF $@.d -o ${TESTDIR}/tests/plugincunittest.o tests/plugincunittest.c
 
 
 ${TESTDIR}/tests/searchcunittest.o: tests/searchcunittest.c 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} $@.d
-	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  `cppunit-config --cflags` -MMD -MP -MF $@.d -o ${TESTDIR}/tests/searchcunittest.o tests/searchcunittest.c
+	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG   `cppunit-config --cflags` -MMD -MP -MF $@.d -o ${TESTDIR}/tests/searchcunittest.o tests/searchcunittest.c
 
 
 ${OBJECTDIR}/main_nomain.o: ${OBJECTDIR}/main.o main.c 
@@ -230,7 +230,7 @@ ${OBJECTDIR}/main_nomain.o: ${OBJECTDIR}/main.o main.c
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} $@.d;\
-	    $(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`   -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/main_nomain.o main.c;\
+	    $(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/main_nomain.o main.c;\
 	else  \
 	    ${CP} ${OBJECTDIR}/main.o ${OBJECTDIR}/main_nomain.o;\
 	fi
@@ -243,7 +243,7 @@ ${OBJECTDIR}/src/addon/addon_nomain.o: ${OBJECTDIR}/src/addon/addon.o src/addon/
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} $@.d;\
-	    $(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`   -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addon_nomain.o src/addon/addon.c;\
+	    $(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addon_nomain.o src/addon/addon.c;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/addon/addon.o ${OBJECTDIR}/src/addon/addon_nomain.o;\
 	fi
@@ -256,7 +256,7 @@ ${OBJECTDIR}/src/addon/addonFile_nomain.o: ${OBJECTDIR}/src/addon/addonFile.o sr
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} $@.d;\
-	    $(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`   -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonFile_nomain.o src/addon/addonFile.c;\
+	    $(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonFile_nomain.o src/addon/addonFile.c;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/addon/addonFile.o ${OBJECTDIR}/src/addon/addonFile_nomain.o;\
 	fi
@@ -269,7 +269,7 @@ ${OBJECTDIR}/src/addon/addonFileSystem_nomain.o: ${OBJECTDIR}/src/addon/addonFil
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} $@.d;\
-	    $(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`   -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonFileSystem_nomain.o src/addon/addonFileSystem.c;\
+	    $(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonFileSystem_nomain.o src/addon/addonFileSystem.c;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/addon/addonFileSystem.o ${OBJECTDIR}/src/addon/addonFileSystem_nomain.o;\
 	fi
@@ -282,7 +282,7 @@ ${OBJECTDIR}/src/addon/addonList_nomain.o: ${OBJECTDIR}/src/addon/addonList.o sr
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} $@.d;\
-	    $(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`   -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonList_nomain.o src/addon/addonList.c;\
+	    $(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonList_nomain.o src/addon/addonList.c;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/addon/addonList.o ${OBJECTDIR}/src/addon/addonList_nomain.o;\
 	fi
@@ -295,7 +295,7 @@ ${OBJECTDIR}/src/addon/addonLog_nomain.o: ${OBJECTDIR}/src/addon/addonLog.o src/
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} $@.d;\
-	    $(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`   -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonLog_nomain.o src/addon/addonLog.c;\
+	    $(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonLog_nomain.o src/addon/addonLog.c;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/addon/addonLog.o ${OBJECTDIR}/src/addon/addonLog_nomain.o;\
 	fi
@@ -308,7 +308,7 @@ ${OBJECTDIR}/src/addon/addonMySQL_nomain.o: ${OBJECTDIR}/src/addon/addonMySQL.o 
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} $@.d;\
-	    $(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`   -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonMySQL_nomain.o src/addon/addonMySQL.c;\
+	    $(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonMySQL_nomain.o src/addon/addonMySQL.c;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/addon/addonMySQL.o ${OBJECTDIR}/src/addon/addonMySQL_nomain.o;\
 	fi
@@ -321,7 +321,7 @@ ${OBJECTDIR}/src/addon/addonSNMP_nomain.o: ${OBJECTDIR}/src/addon/addonSNMP.o sr
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} $@.d;\
-	    $(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`   -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonSNMP_nomain.o src/addon/addonSNMP.c;\
+	    $(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon/addonSNMP_nomain.o src/addon/addonSNMP.c;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/addon/addonSNMP.o ${OBJECTDIR}/src/addon/addonSNMP_nomain.o;\
 	fi
@@ -334,7 +334,7 @@ ${OBJECTDIR}/src/conf_nomain.o: ${OBJECTDIR}/src/conf.o src/conf.c
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} $@.d;\
-	    $(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`   -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/conf_nomain.o src/conf.c;\
+	    $(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/conf_nomain.o src/conf.c;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/conf.o ${OBJECTDIR}/src/conf_nomain.o;\
 	fi
@@ -347,7 +347,7 @@ ${OBJECTDIR}/src/format_nomain.o: ${OBJECTDIR}/src/format.o src/format.c
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} $@.d;\
-	    $(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`   -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/format_nomain.o src/format.c;\
+	    $(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/format_nomain.o src/format.c;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/format.o ${OBJECTDIR}/src/format_nomain.o;\
 	fi
@@ -360,7 +360,7 @@ ${OBJECTDIR}/src/log_nomain.o: ${OBJECTDIR}/src/log.o src/log.c
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} $@.d;\
-	    $(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`   -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/log_nomain.o src/log.c;\
+	    $(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/log_nomain.o src/log.c;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/log.o ${OBJECTDIR}/src/log_nomain.o;\
 	fi
@@ -373,7 +373,7 @@ ${OBJECTDIR}/src/plugin_nomain.o: ${OBJECTDIR}/src/plugin.o src/plugin.c
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} $@.d;\
-	    $(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`   -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/plugin_nomain.o src/plugin.c;\
+	    $(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/plugin_nomain.o src/plugin.c;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/plugin.o ${OBJECTDIR}/src/plugin_nomain.o;\
 	fi
@@ -386,7 +386,7 @@ ${OBJECTDIR}/src/search_nomain.o: ${OBJECTDIR}/src/search.o src/search.c
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} $@.d;\
-	    $(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`   -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/search_nomain.o src/search.c;\
+	    $(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/search_nomain.o src/search.c;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/search.o ${OBJECTDIR}/src/search_nomain.o;\
 	fi
@@ -399,7 +399,7 @@ ${OBJECTDIR}/src/sender_nomain.o: ${OBJECTDIR}/src/sender.o src/sender.c
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} $@.d;\
-	    $(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`   -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/sender_nomain.o src/sender.c;\
+	    $(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/sender_nomain.o src/sender.c;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/sender.o ${OBJECTDIR}/src/sender_nomain.o;\
 	fi

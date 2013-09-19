@@ -1,5 +1,5 @@
 /* 
- * Test of search.c
+ * Tests of Search Functions
  * @author ECHOES Technologies (MLA)
  * @date 18/09/2013
  * 

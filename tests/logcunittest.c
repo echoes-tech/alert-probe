@@ -1,8 +1,14 @@
-/*
- * File:   logcunittest.c
- * Author: mla
- *
- * Created on 18 sept. 2013, 16:19:55
+/* 
+ * Tests of Logger
+ * @author ECHOES Technologies (MLA)
+ * @date 18/09/2013
+ * 
+ * THIS PROGRAM IS CONFIDENTIAL AND PROPRIETARY TO ECHOES TECHNOLOGIES SAS
+ * AND MAY NOT BE REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS
+ * WITHOUT COMPANY AUTHORIZATION.
+ * 
+ * COPYRIGHT 2012-2013 BY ECHOES TECHNOLGIES SAS
+ * 
  */
 
 #include <stdio.h>

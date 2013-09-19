@@ -1,5 +1,5 @@
 /* 
- * Test of format.c
+ * Tests of Format Module
  * @author ECHOES Technologies (MLA)
  * @date 17/09/2013
  * 

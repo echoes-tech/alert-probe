@@ -1,5 +1,5 @@
 /* 
- * Test of conf.c
+ * Tests of Configuration Loader
  * @author ECHOES Technologies (MLA)
  * @date 17/09/2013
  * 

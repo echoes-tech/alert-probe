@@ -1,8 +1,14 @@
-/*
- * File:   plugincunittest.c
- * Author: mla
- *
- * Created on 17 sept. 2013, 11:54:36
+/* 
+ * Tests of Plug-in Manager
+ * @author ECHOES Technologies (MLA)
+ * @date 17/09/2013
+ * 
+ * THIS PROGRAM IS CONFIDENTIAL AND PROPRIETARY TO ECHOES TECHNOLOGIES SAS
+ * AND MAY NOT BE REPRODUCED, PUBLISHED OR DISCLOSED TO OTHERS
+ * WITHOUT COMPANY AUTHORIZATION.
+ * 
+ * COPYRIGHT 2012-2013 BY ECHOES TECHNOLGIES SAS
+ * 
  */
 
 #include <stdio.h>

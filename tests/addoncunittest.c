@@ -1,5 +1,5 @@
 /* 
- * Test of addon.c
+ * Tests of Addons Manager
  * @author ECHOES Technologies (MLA)
  * @date 17/09/2013
  * 
