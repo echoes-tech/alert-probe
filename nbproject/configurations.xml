@@ -666,6 +666,7 @@
       <item path="src/sender.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="src/signals.c" ex="false" tool="0" flavor2="0">
+      </item>
       <item path="tests/addoncunittest.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="tests/confcunittest.c" ex="false" tool="0" flavor2="0">
