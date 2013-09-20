@@ -13,7 +13,11 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "CUnit/Basic.h"
+#ifndef NDEBUG
+    #include "CUnit/Basic.h"
+#else
+    #include "CUnit/Automated.h"
+#endif
 #include "plugin.h"
 #include "conf.h"
 #include "addon/addon.h"
@@ -96,9 +100,17 @@ int main()
         return CU_get_error();
     }
 
+#ifndef NDEBUG
     /* Run all tests using the CUnit Basic interface */
     CU_basic_set_mode(CU_BRM_VERBOSE);
     CU_basic_run_tests();
+#else
+    /* Run all tests using the CUnit Automated interface */
+    CU_set_output_filename("cunit-result/plugin");
+    CU_list_tests_to_file();
+    CU_automated_run_tests();
+#endif
+
     CU_cleanup_registry();
     return CU_get_error();
 }
