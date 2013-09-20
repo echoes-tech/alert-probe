@@ -54,7 +54,7 @@ int addonMySQLQuery(
                 /* Loop to retrieve each field */
                 for(i = 0; i < nbFields; i++)
                 {
-                        values[i] = strdup(row[i] ? row[i] : "");
+                    values[i] = strdup(row[i] ? row[i] : "");
                 }
                 if (pushCollectQueue(
                                      collectQueue,
@@ -82,7 +82,7 @@ int addonMySQLQuery(
             g_warning("Critical: Insufficient memory");
             return EXIT_FAILURE;
         }
-        
+
         /* Cleanup */
         mysql_free_result(result);
     }
@@ -103,7 +103,7 @@ void *addonMySQL(void *arg)
     printf("Dans le thread addonMyQSL.\n");
 #endif
 
-    while(TRUE)
+    while (*addonParamsInfo->signum == 0)
     {
         addonSleep(*addonParamsInfo->period);
 
@@ -172,11 +172,15 @@ void *addonMySQL(void *arg)
         {
             g_warning("Warning: %s", mysql_error(&mysql));
         }
-        
+
         /* Closing MySQL session */
         mysql_close(&mysql);
     }
-
+    
+#ifndef NDEBUG
+    printf("Fin du thread addonMyQSL.\n");
+#endif
+    
     pthread_exit(NULL);
 }
 

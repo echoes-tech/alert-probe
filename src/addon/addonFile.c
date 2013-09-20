@@ -128,10 +128,10 @@ void *addonFile(void *arg)
     printf("Dans le thread addonFile.\n");
 #endif
 
-    while(TRUE)
-    {
+    while(*addonParamsInfo->signum == 0)
+    {        
         addonSleep(*addonParamsInfo->period);
-
+        
         addonParamsInfo->lotNum = increaseLotNum(
                                                  addonParamsInfo->mutex,
                                                  addonParamsInfo->lotNumPtr
@@ -152,7 +152,7 @@ void *addonFile(void *arg)
             while (fgets(line, MAX_SIZE, file) != NULL)
             {
                 AddonTypeInfo *addonTypeInfo = addonParamsInfo->addonTypeList;
-                
+
                 /* Tant que l'on n'est pas au bout de la liste */
                 while (addonTypeInfo != NULL)
                 {
@@ -165,17 +165,6 @@ void *addonFile(void *arg)
                         {
                         case 1:
                             addonFileRegex(
-                                              addonParamsInfo->collectQueue,
-                                              line,
-                                              n,
-                                              addonTypeParamsInfo->params,
-                                              addonParamsInfo->lotNum,
-                                              &addonTypeParamsInfo->IDList,
-                                              &now
-                                              );
-                            break;
-                        case 2:
-                            addonFileLocation(
                                            addonParamsInfo->collectQueue,
                                            line,
                                            n,
@@ -184,6 +173,17 @@ void *addonFile(void *arg)
                                            &addonTypeParamsInfo->IDList,
                                            &now
                                            );
+                            break;
+                        case 2:
+                            addonFileLocation(
+                                              addonParamsInfo->collectQueue,
+                                              line,
+                                              n,
+                                              addonTypeParamsInfo->params,
+                                              addonParamsInfo->lotNum,
+                                              &addonTypeParamsInfo->IDList,
+                                              &now
+                                              );
                             break;
                         default:
                             g_warning("Warning: idType %d does'nt exist for the File addon.", *addonTypeInfo->idType);
@@ -197,10 +197,10 @@ void *addonFile(void *arg)
                     /* On avance d'une case */
                     addonTypeInfo = addonTypeInfo->nxt;
                 }
-            
+
                 ++n;
             }
-        
+
             /* Closing file */
             fclose(file);
         }
@@ -213,6 +213,10 @@ void *addonFile(void *arg)
                       );
         }
     }
+    
+#ifndef NDEBUG
+    printf("Fin du thread addonFile.\n");
+#endif
 
     pthread_exit(NULL);
 }

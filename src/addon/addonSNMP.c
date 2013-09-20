@@ -134,7 +134,7 @@ void *addonSNMP(void *arg)
 #endif
 
     while(TRUE)
-    {
+    {        
         AddonTypeInfo *addonTypeInfo = addonParamsInfo->addonTypeList;
 
         addonSleep(*addonParamsInfo->period);
@@ -435,7 +435,11 @@ void *addonSNMP(void *arg)
             snmp_free_pdu(response);
         snmp_sess_close(sessp);
     }
-
+    
+#ifndef NDEBUG
+    printf("Fin du thread addonSNMP.\n");
+#endif
+    
     pthread_exit(NULL);
 }
 

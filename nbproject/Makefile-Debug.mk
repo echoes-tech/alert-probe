@@ -48,7 +48,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/log.o \
 	${OBJECTDIR}/src/plugin.o \
 	${OBJECTDIR}/src/search.o \
-	${OBJECTDIR}/src/sender.o
+	${OBJECTDIR}/src/sender.o \
+	${OBJECTDIR}/src/signals.o
 
 
 # C Compiler Flags
@@ -144,6 +145,11 @@ ${OBJECTDIR}/src/sender.o: src/sender.c
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.c) -g -Wall -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -pedantic -Wextra -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/sender.o src/sender.c
+
+${OBJECTDIR}/src/signals.o: src/signals.c 
+	${MKDIR} -p ${OBJECTDIR}/src
+	${RM} $@.d
+	$(COMPILE.c) -g -Wall -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -pedantic -Wextra -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/signals.o src/signals.c
 
 # Subprojects
 .build-subprojects:

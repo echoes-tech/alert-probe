@@ -87,6 +87,7 @@ struct AddonParamsInfo
     CollectQueue *collectQueue;
     AddonTypeList addonTypeList;
     AddonParamsInfo *nxt;
+    int *signum;
 };
 /* AddonParams List */
 typedef AddonParamsInfo* AddonParamsList;

@@ -16,15 +16,22 @@
 void addonSleep(unsigned int period)
 {
     time_t now, temp;
-    
+
+
+    /* Enable thread cancellation */
+    pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, NULL);
+
     /* What time is it ? */
     time(&now);
-    
+
     /* Method to know when continue the collect */
     temp = ((int)(now / period) * period) + period;
 
     /* Diff between now and the start of the loop */
     SLEEP(difftime(temp, now));
+
+    /* Disable thread cancellation */
+    pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, NULL);
 }
 
 unsigned short increaseLotNum(
@@ -33,7 +40,7 @@ unsigned short increaseLotNum(
                               )
 {
     unsigned short res;
-    
+
     /* Start of protected area */
     pthread_mutex_lock(mutexPtr);
 
@@ -44,10 +51,10 @@ unsigned short increaseLotNum(
     {
         *lotNumPtr = 0;
     }
-    
+
     /* End of protected area */
     pthread_mutex_unlock(mutexPtr);
-    
+
     return res;
 }
 
@@ -119,10 +126,10 @@ int pushCollectQueue(
 void *addon(void *arg)
 {
     AddonsMgrParams *addonsMgrParams = (AddonsMgrParams*) arg;
-    
+
     /* Thread Counter + Position on the threads table */
     unsigned int i = 0, numThread = 0;
-    
+
     gboolean snmpInit = FALSE;
 
     AddonInfo *addonInfo = addonsMgrParams->addonsList;
@@ -137,6 +144,7 @@ void *addon(void *arg)
             addonParamsInfo->collectQueue = &addonsMgrParams->collectQueue;
             addonParamsInfo->lotNumPtr = &addonsMgrParams->lotNum;
             addonParamsInfo->mutex = &addonsMgrParams->mutex;
+            addonParamsInfo->signum = addonsMgrParams->signum;
 
             switch (*addonInfo->idAddon)
             {
@@ -177,7 +185,7 @@ void *addon(void *arg)
 
                     snmpInit = TRUE;
                 }
-                
+
                 if (pthread_create(&addonsMgrParams->addonsThreads[numThread], NULL, addonSNMP, (void*) addonParamsInfo))
                 {
                     g_critical("Critical: %s: addonSNMP: %u", strerror(errno), numThread);
@@ -189,13 +197,13 @@ void *addon(void *arg)
                 pthread_exit(NULL);
                 break;
             }
-            
+
             ++numThread;
 
             /* On avance d'une case */
-            addonParamsInfo = addonParamsInfo->nxt;   
+            addonParamsInfo = addonParamsInfo->nxt;
         }
-        
+
         /* On avance d'une case */
         addonInfo = addonInfo->nxt;
     }
@@ -203,7 +211,7 @@ void *addon(void *arg)
 #ifndef NDEBUG
     printf("Fin du chargement des addons\n");
 #endif
-    
+
     /* Attente de la fin des threads */
     for (i = 0; i < numThread; i++)
     {
@@ -214,8 +222,11 @@ void *addon(void *arg)
     {
         SOCK_CLEANUP;
     }
-    
-    pthread_exit(NULL);
 
+#ifndef NDEBUG
+    printf("Fin du thread addons manager\n");
+#endif
+    
+    pthread_exit(NULL);    
 }
 

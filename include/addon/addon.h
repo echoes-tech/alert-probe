@@ -51,9 +51,10 @@ struct AddonsMgrParams
     unsigned short lotNum;
     pthread_mutex_t mutex;
     CollectQueue collectQueue;
+    int *signum;
 };
 
-#define ADDON_PARAMS_INITIALIZER {NULL, NULL, 0, PTHREAD_MUTEX_INITIALIZER, COLLECT_QUEUE_INITIALIZER}
+#define ADDON_PARAMS_INITIALIZER {NULL, NULL, 0, PTHREAD_MUTEX_INITIALIZER, COLLECT_QUEUE_INITIALIZER, &signum}
 
 /**
  * Method to know when continue the collect

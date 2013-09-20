@@ -74,12 +74,12 @@ void *addonFileSystem(void *arg)
     printf("Dans le thread addonFileSystem.\n");
 #endif
 
-    while(TRUE)
-    {
+    while (*addonParamsInfo->signum == 0)
+    {        
         AddonTypeInfo *addonTypeInfo = addonParamsInfo->addonTypeList;
 
         addonSleep(*addonParamsInfo->period);
-
+                
         addonParamsInfo->lotNum = increaseLotNum(
                                                  addonParamsInfo->mutex,
                                                  addonParamsInfo->lotNumPtr
@@ -118,9 +118,12 @@ void *addonFileSystem(void *arg)
             /* On avance d'une case */
             addonTypeInfo = addonTypeInfo->nxt;
         }
-
     }
-
+    
+#ifndef NDEBUG
+    printf("Fin du thread addonFileSystem.\n");
+#endif
+    
     pthread_exit(NULL);
 }
 

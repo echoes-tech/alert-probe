@@ -28,14 +28,14 @@ int pushSDElementQueue(
         g_error("Error: Queue of SD-Element unavailable");
 
     new->time = time;
-            
+
     sprintf(
             new->beforeMsgID,
             "%s %s %d ID",
             sdElementQueue->hostname,
             sdElementQueue->appName,
             sdElementQueue->pID
-        );
+            );
 
     sprintf(
             new->afterMsgID,
@@ -43,13 +43,13 @@ int pushSDElementQueue(
             *sdElementQueue->transportMsgVersion,
             *sdElementQueue->probeID,
             sdElementQueue->token
-        );
-    
+            );
+
     new->afterOffset = strdup(afterOffset);
-    
+
     /* Debut de la zone protegee. */
     pthread_mutex_lock (& sdElementQueue->mutex);
-    
+
     if (sdElementQueue->first != NULL) /* La file n'est pas vide */
     {
         /* On se positionne à la fin de la file */
@@ -64,7 +64,7 @@ int pushSDElementQueue(
     {
         sdElementQueue->first = new;
     }
-    
+
     /* Fin de la zone protegee. */
     pthread_mutex_unlock (& sdElementQueue->mutex);
 
@@ -81,7 +81,7 @@ int popCollectQueue(CollectQueue *collectQueue, SDElementQueue *sdElementQueue)
 
     /* Debut de la zone protegee. */
     pthread_mutex_lock (& collectQueue->mutex);
-    
+
     /* On vérifie s'il y a quelque chose à défiler */
     if (collectQueue->first != NULL)
     {
@@ -105,19 +105,19 @@ int popCollectQueue(CollectQueue *collectQueue, SDElementQueue *sdElementQueue)
                     popedElement->lotNum,
                     popedElement->lineNum,
                     base64encoded
-                );
+                    );
 
             g_free(base64encoded);
             base64encoded = NULL;
 
             strcat(afterOffset, afterOffsetTmp);
-            
+
             free(popedElement->values[i]);
             popedElement->values[i] = NULL;
         }
         free(popedElement->values);
         popedElement->values = NULL;
-        
+
         pushSDElementQueue(
                            sdElementQueue,
                            afterOffset,
@@ -136,8 +136,8 @@ int popCollectQueue(CollectQueue *collectQueue, SDElementQueue *sdElementQueue)
 void *format(void *arg)
 {
     FormatParams *formatParams = (FormatParams*) arg;
-    
-    while (1)
+
+    while (*formatParams->signum == 0)
     {
         while (formatParams->collectQueue->first != NULL)
         {
@@ -145,6 +145,10 @@ void *format(void *arg)
         }
         SLEEP(1);
     }
+
+#ifndef NDEBUG
+    printf("Fin du thread de formatage\n");
+#endif
     
     pthread_exit(NULL);
 }

@@ -181,10 +181,10 @@ void *addonLog(void *arg)
     printf("Dans le thread addonLog.\n");
 #endif
 
-    while(TRUE)
-    {
+    while (*addonParamsInfo->signum == 0)
+    {        
         addonSleep(*addonParamsInfo->period);
-
+        
         addonParamsInfo->lotNum = increaseLotNum(
                                                  addonParamsInfo->mutex,
                                                  addonParamsInfo->lotNumPtr
@@ -315,9 +315,13 @@ void *addonLog(void *arg)
                       );
         }
         
-        srcInfoParams->nbLine = n;
+        srcInfoParams->nbLine = n;        
     }
-
+    
+#ifndef NDEBUG
+    printf("Fin du thread addonLog.\n");
+#endif
+    
     pthread_exit(NULL);
 }
 
