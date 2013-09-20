@@ -118,7 +118,44 @@
                    displayName="Test Files"
                    projectFiles="false"
                    kind="TEST_LOGICAL_FOLDER">
+      <logicalFolder name="f3"
+                     displayName="Addon CUnit Test"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/addoncunittest.c</itemPath>
       </logicalFolder>
+      <logicalFolder name="f1"
+                     displayName="Conf CUnit Test"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/confcunittest.c</itemPath>
+        <itemPath>tests/test.conf</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f4"
+                     displayName="Format CUnit Test"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/formatcunittest.c</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f6"
+                     displayName="Log CUnit Test"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/logcunittest.c</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f2"
+                     displayName="Plugin CUnit Test"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/plugincunittest.c</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f5"
+                     displayName="Search CUnit Test"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/searchcunittest.c</itemPath>
+      </logicalFolder>
+    </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
                    projectFiles="false"
@@ -135,7 +172,7 @@
     <conf name="Debug" type="1">
       <toolsSet>
         <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
-        <compilerSet>GNU|GNU</compilerSet>
+        <compilerSet>default</compilerSet>
         <dependencyChecking>true</dependencyChecking>
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
@@ -161,11 +198,51 @@
             <linkerLibLibItem>mysqlclient</linkerLibLibItem>
             <linkerLibLibItem>snmp</linkerLibLibItem>
             <linkerLibLibItem>pthread</linkerLibLibItem>
+            <linkerLibLibItem>cunit</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
       <item path="conf/probe.conf" ex="false" tool="3" flavor2="0">
       </item>
+      <folder path="TestFiles/f1">
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f1</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f2">
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f2</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f3">
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f3</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f4">
+        <cTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </cTool>
+        <ccTool>
+          <commandLine>`cppunit-config --cflags`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f4</output>
+          <linkerLibItems>
+            <linkerOptionItem>`cppunit-config --libs`</linkerOptionItem>
+          </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f5">
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f5</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f6">
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f6</output>
+        </linkerTool>
+      </folder>
       <item path="include/addon/addon.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/addon/addonFile.h" ex="false" tool="3" flavor2="0">
@@ -326,6 +403,20 @@
       </item>
       <item path="src/signals.c" ex="false" tool="0" flavor2="0">
       </item>      
+      <item path="tests/addoncunittest.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="tests/confcunittest.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="tests/formatcunittest.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="tests/logcunittest.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="tests/plugincunittest.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="tests/searchcunittest.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="tests/test.conf" ex="false" tool="3" flavor2="0">
+      </item>
     </conf>
     <conf name="Release" type="1">
       <toolsSet>
@@ -344,7 +435,8 @@
           <commandLine>-DNDEBUG</commandLine>
         </cTool>
         <ccTool>
-          <developmentMode>5</developmentMode>
+          <developmentMode>6</developmentMode>
+          <stripSymbols>true</stripSymbols>
         </ccTool>
         <fortranCompilerTool>
           <developmentMode>5</developmentMode>
@@ -366,6 +458,8 @@
             <linkerOptionItem>`pkg-config --libs gobject-2.0 json-glib-1.0`</linkerOptionItem>
             <linkerLibLibItem>mysqlclient</linkerLibLibItem>
             <linkerLibLibItem>snmp</linkerLibLibItem>
+            <linkerLibLibItem>pthread</linkerLibLibItem>
+            <linkerLibLibItem>cunit</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
@@ -383,6 +477,36 @@
       </packaging>
       <item path="conf/probe.conf" ex="false" tool="3" flavor2="0">
       </item>
+      <folder path="TestFiles/f1">
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f1</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f2">
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f2</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f3">
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f3</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f4">
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f4</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f5">
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f5</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f6">
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f6</output>
+        </linkerTool>
+      </folder>
       <item path="include/addon/addon.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/addon/addonFile.h" ex="false" tool="3" flavor2="0">
@@ -542,6 +666,19 @@
       <item path="src/sender.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="src/signals.c" ex="false" tool="0" flavor2="0">
+      <item path="tests/addoncunittest.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="tests/confcunittest.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="tests/formatcunittest.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="tests/logcunittest.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="tests/plugincunittest.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="tests/searchcunittest.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="tests/test.conf" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>
