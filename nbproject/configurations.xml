@@ -155,7 +155,6 @@
                      kind="TEST">
         <itemPath>tests/searchcunittest.c</itemPath>
       </logicalFolder>
-      </logicalFolder>
       <logicalFolder name="f7"
                      displayName="Signals CUnit Test"
                      projectFiles="true"
