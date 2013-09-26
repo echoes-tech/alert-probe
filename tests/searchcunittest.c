@@ -36,14 +36,43 @@ int clean_suite(void)
 
 void testSearchLocation()
 {
-    char** values = calloc(1, sizeof(char*));
-    const char* line = "0123456789ABCDEF";
-    const unsigned int length = 10;
-    const unsigned int firstChar = 5;
-    gushort result = searchLocation(values, line, &length, &firstChar);
+    char** values = calloc(1, sizeof(char*));    
+    char* line = NULL;
+    unsigned int length = 0, firstChar = 0;
+    gushort result = 0;
+    
+    /* Test recupere les 5 premiers caracteres */
+    line = "0123456789ABCDEF";
+    length = 5;
+    firstChar = 1;
+    result = searchLocation(values, line, &length, &firstChar);
     CU_ASSERT_EQUAL(result, EXIT_SUCCESS);
-    CU_ASSERT_STRING_EQUAL(values[0], "456789ABCD");
+    CU_ASSERT_STRING_EQUAL(values[0], "01234");
+    free(values[0]);    
+    
+    /* Test recupere les 5 derniers caracteres */
+    line = "0123456789ABCDEF";
+    length = 5;
+    firstChar = 12;
+    result = searchLocation(values, line, &length, &firstChar);
+    CU_ASSERT_EQUAL(result, EXIT_SUCCESS);
+    CU_ASSERT_STRING_EQUAL(values[0], "BCDEF");
     free(values[0]);
+    
+    /* Test firstChar < 1 */
+    line = "0123456789ABCDEF";
+    length = 5;
+    firstChar = 0;
+    result = searchLocation(values, line, &length, &firstChar);
+    CU_ASSERT_EQUAL(result, EXIT_FAILURE);
+    
+    /* Test depassement */
+    line = "0123456789ABCDEF";
+    length = 5;
+    firstChar = 13;
+    result = searchLocation(values, line, &length, &firstChar);
+    CU_ASSERT_EQUAL(result, EXIT_FAILURE);
+    
     free(values);
 }
 

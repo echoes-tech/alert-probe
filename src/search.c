@@ -45,8 +45,8 @@ gushort searchRegex(
                 int start = pmatch[i].rm_so;
                 int end = pmatch[i].rm_eo;
                 size_t size = end - start;
-                
-                res = malloc(sizeof (*res) * (size  + 1));
+
+                res = malloc(sizeof (*res) * (size + 1));
                 if (res)
                 {
                     strncpy(res, &line[start], size);
@@ -94,23 +94,31 @@ gushort searchLocation(
                        const unsigned int *length,
                        const unsigned int *firstChar
                        )
-{   
-    values[0] = calloc(*length + 1, sizeof (char));
-    if (values[0])
+{
+    if (*firstChar > 0 && (strlen(line) + 1) >= (*firstChar + *length))
     {
-        strncpy(
-                values[0],
-                &line[*firstChar - 1],
-                sizeof (char) * (*length)
-                );
-        values[0][*length] = '\0';
+        values[0] = calloc(*length + 1, sizeof (char));
+        if (values[0])
+        {
+            strncpy(
+                    values[0],
+                    &line[*firstChar - 1],
+                    sizeof (char) * (*length)
+                    );
+            values[0][*length] = '\0';
+        }
+        else
+        {
+            g_critical("Critical: %s", strerror(errno));
+            return EXIT_FAILURE;
+        }
     }
     else
     {
-        g_critical("Critical: %s", strerror(errno));
+        g_warning("Warning: line overflow");
         return EXIT_FAILURE;
     }
-    
+
     return EXIT_SUCCESS;
 }
 
