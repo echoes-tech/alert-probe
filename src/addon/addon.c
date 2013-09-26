@@ -84,8 +84,6 @@ int pushCollectQueue(
         for(i = 0; i < valuesLength; ++i)
         {
             new->values[i] = strdup(values[i]);
-            free(values[i]);
-            values[i] = NULL;
         }
         new->time = time;
 
@@ -113,6 +111,11 @@ int pushCollectQueue(
         /* On avance d'une case */
         idInfo = idInfo->nxt;
     }
+    for(i = 0; i < valuesLength; ++i)
+        {
+            free(values[i]);
+            values[i] = NULL;
+        }
     return EXIT_SUCCESS;
 }
 
