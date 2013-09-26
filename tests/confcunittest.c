@@ -37,62 +37,65 @@ int clean_suite(void)
 void testLoadConf()
 {
     Conf conf = CONF_INITIALIZER;
-    const char* confPath = "./tests/test.conf";
+    char* confPath = calloc(256, sizeof(char));
     int result = 0;
+    
+    /* Test le chargement d'un fichier de conf contenant toutes les infos */
+    confPath = "./tests/conf/complete.conf";
     result = loadConf(&conf, confPath);
     CU_ASSERT_EQUAL(result, EXIT_SUCCESS);
-    CU_ASSERT_EQUAL(conf.probeID, 0);
-    CU_ASSERT_EQUAL(conf.enginePort, 443);
-    CU_ASSERT_EQUAL(conf.transportProto, 0);
-    CU_ASSERT_EQUAL(conf.transportMsgVersion, 2);
+    CU_ASSERT_EQUAL(conf.probeID, 10);
+    CU_ASSERT_STRING_EQUAL(conf.token, "abcdefghijklmo0123456789");
+#ifdef NDEBUG
+    CU_ASSERT_STRING_EQUAL(conf.probePluginDir, "./test/");
+#else
+    CU_ASSERT_STRING_EQUAL(conf.probePluginDir, "./plugins/");
+#endif  
+    CU_ASSERT_EQUAL(conf.transportProto, 11);
+    CU_ASSERT_EQUAL(conf.transportMsgVersion, 12);
+    CU_ASSERT_STRING_EQUAL(conf.engineFQDN, "127.0.0.1");
+    CU_ASSERT_EQUAL(conf.enginePort, 13);
+    
+    
+    /* Test le chargement d'un fichier de conf contenant uniquement id_probe et token */
+    confPath = "./tests/conf/minimum.conf";
+    result = loadConf(&conf, confPath);
+    CU_ASSERT_EQUAL(result, EXIT_SUCCESS);
+    CU_ASSERT_EQUAL(conf.probeID, 10);
+    CU_ASSERT_STRING_EQUAL(conf.token, "abcdefghijklmo0123456789");
 #ifdef NDEBUG
     CU_ASSERT_STRING_EQUAL(conf.probePluginDir, "/opt/echoes-alert/probe/etc/plugins/");
 #else
     CU_ASSERT_STRING_EQUAL(conf.probePluginDir, "./plugins/");
 #endif  
+    CU_ASSERT_EQUAL(conf.transportProto, 0);
+    CU_ASSERT_EQUAL(conf.transportMsgVersion, 2);
     CU_ASSERT_STRING_EQUAL(conf.engineFQDN, "alert-engine.echoes-tech.com");
-    CU_ASSERT_STRING_EQUAL(conf.token, "abcdefghijklmo0123456789");
+    CU_ASSERT_EQUAL(conf.enginePort, 443);    
     
-    /* Ticket #358
-    char* confPath = "./tests/confcunittest.c";
-    result = loadConf(&conf, confPath);
-    CU_ASSERT_EQUAL(result, errno);
-    */
     
-    confPath = "azerty";
+    /* Test le chargement d'un fichier de conf ne contenant pas id_probe */
+    confPath = "./tests/conf/without_probe_id.conf";
     result = loadConf(&conf, confPath);
-    CU_ASSERT_EQUAL(result, errno);
-}
-
-void testParseLineConf()
-{
-    Conf conf = CONF_INITIALIZER;
-    char line[MAX_SIZE] = "";
-    strcpy(line, "probe_id=1\n");
-    parseLineConf(&conf, line);
-    CU_ASSERT_EQUAL(conf.probeID, 1); 
-    strcpy(line, "engine_port=443\n"); 
-    parseLineConf(&conf, line);   
-    CU_ASSERT_EQUAL(conf.enginePort, 443); 
-    strcpy(line, "transport_proto=5\n"); 
-    parseLineConf(&conf, line);   
-    CU_ASSERT_EQUAL(conf.transportProto, 5);  
-    strcpy(line, "transport_message_version=2\n");  
-    parseLineConf(&conf, line);
-    CU_ASSERT_EQUAL(conf.transportMsgVersion, 2);  
-    strcpy(line, "probe_plugin_dir=/opt/echoes-alert/probe/etc/plugins/\n");
-    parseLineConf(&conf, line);
-#ifdef NDEBUG
-    CU_ASSERT_STRING_EQUAL(conf.probePluginDir, "/opt/echoes-alert/probe/etc/plugins/");
-#else
-    CU_ASSERT_STRING_EQUAL(conf.probePluginDir, "./plugins/");
-#endif      
-    strcpy(line, "engine_fqdn=alert-engine.echoes-tech.com\n");
-    parseLineConf(&conf, line);
-    CU_ASSERT_STRING_EQUAL(conf.engineFQDN, "alert-engine.echoes-tech.com"); 
-    strcpy(line, "token=abcdefghijklmo0123456789\n");
-    parseLineConf(&conf, line);
-    CU_ASSERT_STRING_EQUAL(conf.token, "abcdefghijklmo0123456789");
+    CU_ASSERT_EQUAL(result, EXIT_FAILURE); 
+    
+    
+    /* Test le chargement d'un fichier de conf ne contenant pas token */
+    confPath = "./tests/conf/without_token.conf";
+    result = loadConf(&conf, confPath);
+    CU_ASSERT_EQUAL(result, EXIT_FAILURE);
+    
+    
+    /* Test le chargement d'un fichier invalide */
+    confPath = "./tests/confcunittest.c";
+    result = loadConf(&conf, confPath);
+    CU_ASSERT_EQUAL(result, EXIT_FAILURE);
+    
+    
+    /* Test le chargement d'un fichier n'existant pas */
+    confPath = "./tests/azerty";
+    result = loadConf(&conf, confPath);
+    CU_ASSERT_EQUAL(result, EXIT_FAILURE);
 }
 
 int main()
@@ -112,8 +115,7 @@ int main()
     }
 
     /* Add the tests to the suite */
-    if ((NULL == CU_add_test(pSuite, "testLoadConf", testLoadConf)) ||
-        (NULL == CU_add_test(pSuite, "testParseLineConf", testParseLineConf)))
+    if ((NULL == CU_add_test(pSuite, "testLoadConf", testLoadConf)))
     {
         CU_cleanup_registry();
         return CU_get_error();
