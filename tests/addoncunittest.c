@@ -14,9 +14,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #ifndef NDEBUG
-    #include "CUnit/Basic.h"
+#include "CUnit/Basic.h"
 #else
-    #include "CUnit/Automated.h"
+#include "CUnit/Automated.h"
 #endif
 #include "addon/addon.h"
 #include "addon/addonList.h"
@@ -37,10 +37,51 @@ int clean_suite(void)
 
 void testAddon()
 {
-    if (1 /*check result*/)
-    {
-        CU_ASSERT(0);
-    }
+    /* Creer 3 thread d'add-on File */
+    pthread_t identifier;
+    int signum = 0;
+    int i = 0;
+    
+    
+    AddonsMgrParams addonsMgrParams = ADDON_PARAMS_INITIALIZER;
+    AddonInfo *addonInfo1 = calloc(1, sizeof (AddonInfo));
+    AddonInfo *addonInfo2 = calloc(1, sizeof (AddonInfo));
+    AddonInfo *addonInfo3 = calloc(1, sizeof (AddonInfo));
+
+    unsigned int idAddon = 2;
+    unsigned int period = 60;
+
+    addonInfo1->idAddon = &idAddon;
+    addonInfo1->addonParamsList = calloc(1, sizeof (AddonParamsInfo));
+    addonInfo1->addonParamsList->period = &period;
+
+    addonInfo2->idAddon = &idAddon;
+    addonInfo2->nxt = addonInfo1;
+    addonInfo2->addonParamsList = calloc(1, sizeof (AddonParamsInfo));
+    addonInfo2->addonParamsList->period = &period;
+
+    addonInfo3->idAddon = &idAddon;
+    addonInfo3->nxt = addonInfo2;
+    addonInfo3->addonParamsList = calloc(1, sizeof (AddonParamsInfo));
+    addonInfo3->addonParamsList->period = &period;
+
+    addonsMgrParams.addonsList = addonInfo3;
+
+    addonsMgrParams.addonsThreads = calloc(1, sizeof (pthread_t));
+
+    CU_ASSERT_FALSE(pthread_create(&identifier, NULL, addon, (void*) &addonsMgrParams));
+
+    sleep(1);
+
+    /* Test que les threads sont actifs et les arrete */
+    CU_ASSERT_FALSE(pthread_cancel(addonsMgrParams.addonsThreads[0]));
+    CU_ASSERT_FALSE(pthread_cancel(addonsMgrParams.addonsThreads[1]));
+    CU_ASSERT_FALSE(pthread_cancel(addonsMgrParams.addonsThreads[2]));
+
+    sleep(1);
+
+    /* Verifie que le thread addonsMgrParams est termine */
+    CU_ASSERT(pthread_cancel(identifier));
 }
 
 void testAddonSleep()
@@ -58,15 +99,18 @@ void testAddonSleep()
 void testIncreaseLotNum()
 {
     pthread_mutex_t mutexPtr = PTHREAD_MUTEX_INITIALIZER;
-    unsigned short lotNumPtr = 0;
+    unsigned short lotNum = 0;
     unsigned short result = 0;
-    lotNumPtr = 1;
-    result = increaseLotNum(&mutexPtr, &lotNumPtr);
-    CU_ASSERT_EQUAL(lotNumPtr, 2);
+    lotNum = 1;
+    result = increaseLotNum(&mutexPtr, &lotNum);
+    /* Verifie que lotNum et result ont ete incrementes */
+    CU_ASSERT_EQUAL(lotNum, 2);
     CU_ASSERT_EQUAL(result, 2);
-    lotNumPtr = 65534;
-    result = increaseLotNum(&mutexPtr, &lotNumPtr);
-    CU_ASSERT_EQUAL(lotNumPtr, 0);
+    lotNum = 65534;
+    result = increaseLotNum(&mutexPtr, &lotNum);
+    /* Verifie que lotNum vaut 0 pour eviter depassement */
+    CU_ASSERT_EQUAL(lotNum, 0);
+    /* Verifie que result a ete incremente */
     CU_ASSERT_EQUAL(result, 65535);
 
 }
@@ -88,8 +132,17 @@ void testPushCollectQueue()
     values[1] = strdup("b");
     values[2] = strdup("c");
     values[3] = strdup("d");
+    char** values2 = calloc(valuesLength, sizeof (char*));
+    values2[0] = strdup("e");
+    values2[1] = strdup("f");
+    values2[2] = strdup("g");
+    values2[3] = strdup("h");
+    
+    /* Ajoute un element a la queue */
     result = pushCollectQueue(&collectQueue, &idList, lotNum, lineNum, valuesLength, values, time);
     CU_ASSERT_EQUAL(result, EXIT_SUCCESS);
+    
+    /* Verifie que l'element a correctement ete ajoute */
     collectQueueElement = collectQueue.first;
     CU_ASSERT_EQUAL(collectQueueElement->idPlg, 1);
     CU_ASSERT_EQUAL(collectQueueElement->idAsset, 2);
@@ -103,7 +156,35 @@ void testPushCollectQueue()
     CU_ASSERT_STRING_EQUAL(collectQueueElement->values[1], "b");
     CU_ASSERT_STRING_EQUAL(collectQueueElement->values[2], "c");
     CU_ASSERT_STRING_EQUAL(collectQueueElement->values[3], "d");
-    CU_ASSERT_EQUAL(collectQueueElement->next, NULL);
+    
+    /* Ajoute un deuxieme element a la queue */
+    result = pushCollectQueue(&collectQueue, &idList, lotNum, lineNum, valuesLength, values2, time);
+    CU_ASSERT_EQUAL(result, EXIT_SUCCESS);
+    
+    /* Verifie que l'element a correctement ete ajoute */
+    collectQueueElement = collectQueue.first;
+    CU_ASSERT_STRING_EQUAL(collectQueueElement->values[0], "a");
+    CU_ASSERT_STRING_EQUAL(collectQueueElement->values[1], "b");
+    CU_ASSERT_STRING_EQUAL(collectQueueElement->values[2], "c");
+    CU_ASSERT_STRING_EQUAL(collectQueueElement->values[3], "d");
+    CU_ASSERT_NOT_EQUAL(collectQueueElement->next, NULL);
+    
+    collectQueueElement = collectQueueElement->next;
+    CU_ASSERT_EQUAL(collectQueueElement->idPlg, 1);
+    CU_ASSERT_EQUAL(collectQueueElement->idAsset, 2);
+    CU_ASSERT_EQUAL(collectQueueElement->idSrc, 3);
+    CU_ASSERT_EQUAL(collectQueueElement->idSearch, 4);
+    CU_ASSERT_EQUAL(collectQueueElement->lotNum, 9);
+    CU_ASSERT_EQUAL(collectQueueElement->lineNum, 10);
+    CU_ASSERT_EQUAL(collectQueueElement->valuesLength, 4);
+    CU_ASSERT_EQUAL(collectQueueElement->time, 12);
+    CU_ASSERT_STRING_EQUAL(collectQueueElement->values[0], "e");
+    CU_ASSERT_STRING_EQUAL(collectQueueElement->values[1], "f");
+    CU_ASSERT_STRING_EQUAL(collectQueueElement->values[2], "g");
+    CU_ASSERT_STRING_EQUAL(collectQueueElement->values[3], "h");
+    
+    free(collectQueueElement);
+    free(collectQueue.first);    
 }
 
 int main()
@@ -123,7 +204,7 @@ int main()
     }
 
     /* Add the tests to the suite */
-    if ( /*(NULL == CU_add_test(pSuite, "testAddon", testAddon)) ||*/
+    if ((NULL == CU_add_test(pSuite, "testAddon", testAddon)) ||
         (NULL == CU_add_test(pSuite, "testAddonSleep", testAddonSleep)) ||
         (NULL == CU_add_test(pSuite, "testIncreaseLotNum", testIncreaseLotNum)) ||
         (NULL == CU_add_test(pSuite, "testPushCollectQueue", testPushCollectQueue)))
