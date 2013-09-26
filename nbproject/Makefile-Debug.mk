@@ -49,7 +49,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/plugin.o \
 	${OBJECTDIR}/src/search.o \
 	${OBJECTDIR}/src/sender.o \
-	${OBJECTDIR}/src/signals.o
+	${OBJECTDIR}/src/signals.o \
 
 # Test Directory
 TESTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tests
@@ -61,7 +61,9 @@ TESTFILES= \
 	${TESTDIR}/TestFiles/f4 \
 	${TESTDIR}/TestFiles/f6 \
 	${TESTDIR}/TestFiles/f2 \
-	${TESTDIR}/TestFiles/f5
+	${TESTDIR}/TestFiles/f5 \
+	${TESTDIR}/TestFiles/f8 \
+	${TESTDIR}/TestFiles/f7
 
 # C Compiler Flags
 CFLAGS=-pedantic -Wextra
@@ -162,6 +164,11 @@ ${OBJECTDIR}/src/signals.o: src/signals.c
 	${RM} $@.d
 	$(COMPILE.c) -g -Wall -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -pedantic -Wextra -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/signals.o src/signals.c
 
+${OBJECTDIR}/tests/utilUnitTest.o: tests/utilUnitTest.c 
+	${MKDIR} -p ${OBJECTDIR}/tests
+	${RM} $@.d
+	$(COMPILE.c) -g -Wall -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -pedantic -Wextra -MMD -MP -MF $@.d -o ${OBJECTDIR}/tests/utilUnitTest.o tests/utilUnitTest.c
+
 # Subprojects
 .build-subprojects:
 
@@ -190,6 +197,14 @@ ${TESTDIR}/TestFiles/f2: ${TESTDIR}/tests/plugincunittest.o ${OBJECTFILES:%.o=%_
 ${TESTDIR}/TestFiles/f5: ${TESTDIR}/tests/searchcunittest.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.c}   -o ${TESTDIR}/TestFiles/f5 $^ ${LDLIBSOPTIONS} 
+
+${TESTDIR}/TestFiles/f8: ${TESTDIR}/tests/sendercunittest.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.c}   -o ${TESTDIR}/TestFiles/f8 $^ ${LDLIBSOPTIONS}
+
+${TESTDIR}/TestFiles/f7: ${TESTDIR}/tests/signalscunittest.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.c}   -o ${TESTDIR}/TestFiles/f7 $^ ${LDLIBSOPTIONS}  
 
 
 ${TESTDIR}/tests/addoncunittest.o: tests/addoncunittest.c 
@@ -226,6 +241,18 @@ ${TESTDIR}/tests/searchcunittest.o: tests/searchcunittest.c
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} $@.d
 	$(COMPILE.c) -g -Wall -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -pedantic -Wextra -MMD -MP -MF $@.d -o ${TESTDIR}/tests/searchcunittest.o tests/searchcunittest.c
+
+
+${TESTDIR}/tests/sendercunittest.o: tests/sendercunittest.c 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} $@.d
+	$(COMPILE.c) -g -Wall -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -pedantic -Wextra -MMD -MP -MF $@.d -o ${TESTDIR}/tests/sendercunittest.o tests/sendercunittest.c
+
+
+${TESTDIR}/tests/signalscunittest.o: tests/signalscunittest.c 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} $@.d
+	$(COMPILE.c) -g -Wall -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -pedantic -Wextra -MMD -MP -MF $@.d -o ${TESTDIR}/tests/signalscunittest.o tests/signalscunittest.c
 
 
 ${OBJECTDIR}/main_nomain.o: ${OBJECTDIR}/main.o main.c 
@@ -433,6 +460,8 @@ ${OBJECTDIR}/src/signals_nomain.o: ${OBJECTDIR}/src/signals.o src/signals.c
 	    ${TESTDIR}/TestFiles/f6 || true; \
 	    ${TESTDIR}/TestFiles/f2 || true; \
 	    ${TESTDIR}/TestFiles/f5 || true; \
+	    ${TESTDIR}/TestFiles/f8 || true; \
+	    ${TESTDIR}/TestFiles/f7 || true; \
 	else  \
 	    ./${TEST} || true; \
 	fi

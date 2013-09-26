@@ -47,7 +47,7 @@ int waitForShutdown()
     return *signum;
 }
 
-void restart(char **argv, char **envp)
+int restart(char **argv, char **envp)
 {
     int i = 0;
     char *path = realpath(argv[0], NULL);
@@ -57,5 +57,8 @@ void restart(char **argv, char **envp)
         int result = execve(path, argv, envp);
         if (result != 0)
             sleep(1);
+        else
+            return EXIT_SUCCESS;
     }
+    return EXIT_FAILURE;
 }

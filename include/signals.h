@@ -35,8 +35,8 @@ struct ThreadIdentifiers
 
 /**
  * Define signals handlers
- * @param _signum        Pointer of signal identifier from main
- * @param _threadIdentifiers        Pointer of struct thread identifiers
+ * @param _signum               Pointer of signal identifier from main
+ * @param _threadIdentifiers    Pointer of struct thread identifiers
  */
 void signalsHandler(int *_signum, ThreadIdentifiers *_threadIdentifiers);
 
@@ -48,16 +48,17 @@ void signalHandling(int _signum);
 
 /**
  * Wait end of threads to shutdown
- * @return      Signal identifier
+ * @return              Signal identifier
  */
 int waitForShutdown();
 
 /**
  * Restart probe
- * @param argv Array of arguments passed to the program
- * @param envp Array of environment variables passed to the program
+ * @param argv          Array of arguments passed to the program
+ * @param envp          Array of environment variables passed to the program
+ * @return              Exit status
  */
-void restart(char **argv, char **envp);
+int restart(char **argv, char **envp);
 
 
 #endif	/* SIGNAL_H */
