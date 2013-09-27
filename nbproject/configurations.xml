@@ -7,20 +7,12 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <logicalFolder name="addon" displayName="addon" projectFiles="true">
-        <itemPath>include/addon/addon.h</itemPath>
-        <itemPath>include/addon/addonFile.h</itemPath>
-        <itemPath>include/addon/addonFileSystem.h</itemPath>
-        <itemPath>include/addon/addonList.h</itemPath>
-        <itemPath>include/addon/addonLog.h</itemPath>
-        <itemPath>include/addon/addonMySQL.h</itemPath>
-        <itemPath>include/addon/addonSNMP.h</itemPath>
-      </logicalFolder>
+      <itemPath>include/addon.h</itemPath>
+      <itemPath>include/addonList.h</itemPath>
       <itemPath>include/conf.h</itemPath>
       <itemPath>include/format.h</itemPath>
       <itemPath>include/log.h</itemPath>
       <itemPath>include/plugin.h</itemPath>
-      <itemPath>include/search.h</itemPath>
       <itemPath>include/sender.h</itemPath>
     </logicalFolder>
     <logicalFolder name="packages" displayName="Packages" projectFiles="true">
@@ -94,20 +86,12 @@
                    displayName="Source Files"
                    projectFiles="true">
       <logicalFolder name="f1" displayName="src" projectFiles="true">
-        <logicalFolder name="addon" displayName="addon" projectFiles="true">
-          <itemPath>src/addon/addon.c</itemPath>
-          <itemPath>src/addon/addonFile.c</itemPath>
-          <itemPath>src/addon/addonFileSystem.c</itemPath>
-          <itemPath>src/addon/addonList.c</itemPath>
-          <itemPath>src/addon/addonLog.c</itemPath>
-          <itemPath>src/addon/addonMySQL.c</itemPath>
-          <itemPath>src/addon/addonSNMP.c</itemPath>
-        </logicalFolder>
+        <itemPath>src/addon.c</itemPath>
+        <itemPath>src/addonList.c</itemPath>
         <itemPath>src/conf.c</itemPath>
         <itemPath>src/format.c</itemPath>
         <itemPath>src/log.c</itemPath>
         <itemPath>src/plugin.c</itemPath>
-        <itemPath>src/search.c</itemPath>
         <itemPath>src/sender.c</itemPath>
       </logicalFolder>
       <itemPath>main.c</itemPath>
@@ -178,6 +162,7 @@
         <cTool>
           <incDir>
             <pElem>include</pElem>
+            <pElem>../addon/include</pElem>
           </incDir>
           <commandLine>-pedantic -Wextra</commandLine>
           <warningLevel>2</warningLevel>
@@ -187,6 +172,7 @@
             <pElem>/usr/lib64/mysql</pElem>
             <pElem>/usr/lib/mysql</pElem>
             <pElem>/usr/local/lib</pElem>
+            <pElem>../addon/dist/Debug/GNU-Linux-x86</pElem>
           </linkerAddLib>
           <linkerDynSerch>
             <pElem>/opt/echoes-alert/probe/lib</pElem>
@@ -197,6 +183,7 @@
             <linkerLibLibItem>snmp</linkerLibLibItem>
             <linkerLibLibItem>pthread</linkerLibLibItem>
             <linkerLibLibItem>cunit</linkerLibLibItem>
+            <linkerLibLibItem>dl</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
@@ -241,19 +228,9 @@
           <output>${TESTDIR}/TestFiles/f6</output>
         </linkerTool>
       </folder>
-      <item path="include/addon/addon.h" ex="false" tool="3" flavor2="0">
+      <item path="include/addon.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="include/addon/addonFile.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="include/addon/addonFileSystem.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="include/addon/addonList.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="include/addon/addonLog.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="include/addon/addonMySQL.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="include/addon/addonSNMP.h" ex="false" tool="3" flavor2="0">
+      <item path="include/addonList.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/conf.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -262,8 +239,6 @@
       <item path="include/log.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/plugin.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="include/search.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/sender.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -371,19 +346,9 @@
       </item>
       <item path="plugins/SNMP.json" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="src/addon/addon.c" ex="false" tool="0" flavor2="0">
+      <item path="src/addon.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="src/addon/addonFile.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="src/addon/addonFileSystem.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="src/addon/addonList.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="src/addon/addonLog.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="src/addon/addonMySQL.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="src/addon/addonSNMP.c" ex="false" tool="0" flavor2="0">
+      <item path="src/addonList.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="src/conf.c" ex="false" tool="0" flavor2="0">
       </item>
@@ -392,8 +357,6 @@
       <item path="src/log.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="src/plugin.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="src/search.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="src/sender.c" ex="false" tool="0" flavor2="0">
       </item>
@@ -501,19 +464,9 @@
           <output>${TESTDIR}/TestFiles/f6</output>
         </linkerTool>
       </folder>
-      <item path="include/addon/addon.h" ex="false" tool="3" flavor2="0">
+      <item path="include/addon.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="include/addon/addonFile.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="include/addon/addonFileSystem.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="include/addon/addonList.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="include/addon/addonLog.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="include/addon/addonMySQL.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="include/addon/addonSNMP.h" ex="false" tool="3" flavor2="0">
+      <item path="include/addonList.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/conf.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -522,8 +475,6 @@
       <item path="include/log.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/plugin.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="include/search.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/sender.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -631,19 +582,9 @@
       </item>
       <item path="plugins/SNMP.json" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="src/addon/addon.c" ex="false" tool="0" flavor2="0">
+      <item path="src/addon.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="src/addon/addonFile.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="src/addon/addonFileSystem.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="src/addon/addonList.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="src/addon/addonLog.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="src/addon/addonMySQL.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="src/addon/addonSNMP.c" ex="false" tool="0" flavor2="0">
+      <item path="src/addonList.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="src/conf.c" ex="false" tool="0" flavor2="0">
       </item>
@@ -652,8 +593,6 @@
       <item path="src/log.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="src/plugin.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="src/search.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="src/sender.c" ex="false" tool="0" flavor2="0">
       </item>

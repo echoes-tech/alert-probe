@@ -14,7 +14,7 @@
 #ifndef FORMAT_H
 #define	FORMAT_H
 
-#include "addon/addon.h"
+#include "addon.h"
 
 /* Element of SD-Element queue */
 typedef struct SDElementQueueElement SDElementQueueElement;

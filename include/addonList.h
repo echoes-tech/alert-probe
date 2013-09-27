@@ -21,75 +21,9 @@ extern "C" {
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
-
-/* Element of collected data queue */
-typedef struct CollectQueueElement CollectQueueElement;
-struct CollectQueueElement
-{
-    unsigned int idPlg, idAsset, idSrc, idSearch, lineNum, valuesLength;
-    unsigned short lotNum;
-    char **values;
-    time_t time;
-    CollectQueueElement *next;
-};
-/* Collected data queue */
-typedef struct CollectQueue CollectQueue;
-struct CollectQueue
-{
-    pthread_mutex_t mutex;
-    CollectQueueElement *first;
-};
+#include <addonLib.h>
 
 #define COLLECT_QUEUE_INITIALIZER {PTHREAD_MUTEX_INITIALIZER, NULL}
-
-/* ID Informations */
-typedef struct IDInfo IDInfo;
-struct IDInfo
-{
-    unsigned int *idPlg, *idAsset, *idSrc, *idSearch;
-    IDInfo *nxt;
-};
-/* IDs List */
-typedef IDInfo* IDList;
-
-/* AddonTypeParams Informations */
-typedef struct AddonTypeParamsInfo AddonTypeParamsInfo;
-struct AddonTypeParamsInfo
-{
-    void *params;
-    IDList IDList;
-    AddonTypeParamsInfo *nxt;
-};
-/* AddonTypeParams List */
-typedef AddonTypeParamsInfo* AddonTypeParamsList;
-
-/* AddonType Informations */
-typedef struct AddonTypeInfo AddonTypeInfo;
-struct AddonTypeInfo
-{
-    unsigned int *idType;
-    AddonTypeParamsList addonTypeParamsList;
-    AddonTypeInfo *nxt;
-};
-/* AddonType List */
-typedef AddonTypeInfo* AddonTypeList;
-
-/* AddonParams Informations */
-typedef struct AddonParamsInfo AddonParamsInfo;
-struct AddonParamsInfo
-{
-    void *params;
-    unsigned int *period, *staticValues;
-    /* lotNumPtr correspond au pointeur sur AddonsMgrParams */
-    /* lotNum stocke le lotNum pour le tour du thread en cours */
-    unsigned short *lotNumPtr, lotNum;
-    pthread_mutex_t *mutex;
-    CollectQueue *collectQueue;
-    AddonTypeList addonTypeList;
-    AddonParamsInfo *nxt;
-};
-/* AddonParams List */
-typedef AddonParamsInfo* AddonParamsList;
 
 /* Addon Informations */
 typedef struct AddonInfo AddonInfo;

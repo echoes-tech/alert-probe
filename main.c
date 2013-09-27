@@ -22,7 +22,7 @@
 /* To init struct PlgList */
 #include "plugin.h"
 /* To init struct AddonsMgrParams */
-#include "addon/addon.h"
+#include "addon.h"
 /* To init struct FormatParams */
 #include "format.h"
 /* To init struct SenderParams */
@@ -72,7 +72,7 @@ int main(int argc, char** argv)
 
     /* Addons Manager thread params initialisation */
     AddonsMgrParams addonsMgrParams = ADDON_PARAMS_INITIALIZER;
-
+    
     /* Queues initialisation */
     SDElementQueue sdElementQueue = {
         PTHREAD_MUTEX_INITIALIZER,

@@ -27,72 +27,10 @@
 #include <sys/types.h>
 #endif
 
-#include "addon/addonList.h"
-
-/* Max size of file conf lines in caracters */
-#define MAX_SIZE 300
+#include "addonList.h"
 
 /* Default period (second) */
 #define DEFAULT 60
-
-/* Search Informations Parameters for Addon FileSystem Type statvfs */
-typedef struct SearchInfoParams1_6 SearchInfoParams1_6;
-struct SearchInfoParams1_6
-{
-    gchar *path;
-};
-
-/* Search Informations Parameters for Addon Log Type Regex */
-typedef struct SearchInfoParams2_1 SearchInfoParams3_1;
-/* Search Informations Parameters for Addon File Type Regex */
-typedef struct SearchInfoParams2_1 SearchInfoParams2_1;
-struct SearchInfoParams2_1
-{
-    gchar *regex;
-    int err;
-    regex_t preg;
-    size_t nmatch;
-    regmatch_t *pmatch;
-};
-
-/* Search Informations Parameters for Addon File Type Localisation */
-typedef struct SearchInfoParams2_2 SearchInfoParams2_2;
-struct SearchInfoParams2_2
-{
-    unsigned int line, firstChar, length;
-};
-
-/* Search Informations Parameters for Addon Log Type Localisation */
-typedef struct SearchInfoParams3_2 SearchInfoParams3_2;
-struct SearchInfoParams3_2
-{
-    unsigned int firstChar, length;
-};
-
-/* Search Informations Parameters for Addon MySQL Type Query */
-typedef struct SearchInfoParams4_3 SearchInfoParams4_3;
-struct SearchInfoParams4_3
-{
-    gchar *query;
-};
-
-/* Search Informations Parameters for Addon SNMP Type Regex */
-typedef struct SearchInfoParams5_4 SearchInfoParams5_4;
-struct SearchInfoParams5_4
-{
-    gchar *oid, *regex;
-    int err;
-    regex_t preg;
-    size_t nmatch;
-    regmatch_t *pmatch;
-};
-
-/* Search Informations Parameters for Addon SNMP Type All */
-typedef struct SearchInfoParams5_5 SearchInfoParams5_5;
-struct SearchInfoParams5_5
-{
-    gchar *oid;
-};
 
 /* Search Informations */
 typedef struct SearchInfo SearchInfo;
@@ -104,36 +42,6 @@ struct SearchInfo
 };
 /* Search List */
 typedef SearchInfo* SearchList;
-
-/* Source Informations Parameters for Addon File */
-typedef struct SrcInfoParams2 SrcInfoParams2;
-struct SrcInfoParams2
-{
-    gchar *path;
-};
-
-/* Source Informations Parameters for Addon Log */
-typedef struct SrcInfoParams3 SrcInfoParams3;
-struct SrcInfoParams3
-{
-    gchar *path;
-    unsigned int nbLine, lastNLines;
-};
-
-/* Source Informations Parameters for Addon MySQL */
-typedef struct SrcInfoParams4 SrcInfoParams4;
-struct SrcInfoParams4
-{
-    gchar *host, *user, *passwd, *db;
-    unsigned short port;
-};
-
-/* Source Informations Parameters for Addon SNMP */
-typedef struct SrcInfoParams5 SrcInfoParams5;
-struct SrcInfoParams5
-{
-    gchar *host, *version, *community, *user, *authProto, *authPass, *privProto, *privPass;
-};
 
 /* Source Informations */
 typedef struct SrcInfo SrcInfo;

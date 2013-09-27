@@ -11,7 +11,7 @@
  * 
  */
 
-#include "addon/addonList.h"
+#include "addonList.h"
 
 
 AddonTypeParamsInfo* isAddonTypeParamsOnList(
