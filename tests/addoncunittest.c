@@ -18,8 +18,8 @@
 #else
 #include "CUnit/Automated.h"
 #endif
-#include "addon/addon.h"
-#include "addon/addonList.h"
+#include "addon.h"
+#include "addonList.h"
 
 /*
  * CUnit Test Suite
@@ -37,7 +37,7 @@ int clean_suite(void)
 
 void testAddon()
 {
-    /* Creer 3 thread d'add-on File */
+    /* Creer 3 threads AddonFile */
     pthread_t identifier;
     int signum = 0;
     int i = 0;
@@ -73,7 +73,7 @@ void testAddon()
 
     sleep(1);
 
-    /* Test que les threads sont actifs et les arrete */
+    /* Verifie que les threads sont actifs et les arrete */
     CU_ASSERT_FALSE(pthread_cancel(addonsMgrParams.addonsThreads[0]));
     CU_ASSERT_FALSE(pthread_cancel(addonsMgrParams.addonsThreads[1]));
     CU_ASSERT_FALSE(pthread_cancel(addonsMgrParams.addonsThreads[2]));
@@ -82,109 +82,6 @@ void testAddon()
 
     /* Verifie que le thread addonsMgrParams est termine */
     CU_ASSERT(pthread_cancel(identifier));
-}
-
-void testAddonSleep()
-{
-    unsigned int period;
-    time_t t1, t2;
-    period = 3;
-    time(&t1);
-    addonSleep(period);
-    time(&t2);
-    CU_ASSERT((t2 - t1) <= period);
-    CU_ASSERT(((int) (t2 / period) * period) == t2);
-}
-
-void testIncreaseLotNum()
-{
-    pthread_mutex_t mutexPtr = PTHREAD_MUTEX_INITIALIZER;
-    unsigned short lotNum = 0;
-    unsigned short result = 0;
-    lotNum = 1;
-    result = increaseLotNum(&mutexPtr, &lotNum);
-    /* Verifie que lotNum et result ont ete incrementes */
-    CU_ASSERT_EQUAL(lotNum, 2);
-    CU_ASSERT_EQUAL(result, 2);
-    lotNum = 65534;
-    result = increaseLotNum(&mutexPtr, &lotNum);
-    /* Verifie que lotNum vaut 0 pour eviter depassement */
-    CU_ASSERT_EQUAL(lotNum, 0);
-    /* Verifie que result a ete incremente */
-    CU_ASSERT_EQUAL(result, 65535);
-
-}
-
-void testPushCollectQueue()
-{
-    CollectQueue collectQueue = COLLECT_QUEUE_INITIALIZER;
-    CollectQueueElement *collectQueueElement = NULL;
-    unsigned int idPlg = 1, idAsset = 2, idSrc = 3, idSearch = 4;
-    IDInfo idInfo = {&idPlg, &idAsset, &idSrc, &idSearch, NULL};
-    IDList idList = &idInfo;
-    const unsigned short lotNum = 9;
-    const unsigned int lineNum = 10;
-    const unsigned int valuesLength = 4;
-    time_t time = 12;
-    int result = 0;
-    char** values = calloc(valuesLength, sizeof (char*));
-    values[0] = strdup("a");
-    values[1] = strdup("b");
-    values[2] = strdup("c");
-    values[3] = strdup("d");
-    char** values2 = calloc(valuesLength, sizeof (char*));
-    values2[0] = strdup("e");
-    values2[1] = strdup("f");
-    values2[2] = strdup("g");
-    values2[3] = strdup("h");
-    
-    /* Ajoute un element a la queue */
-    result = pushCollectQueue(&collectQueue, &idList, lotNum, lineNum, valuesLength, values, time);
-    CU_ASSERT_EQUAL(result, EXIT_SUCCESS);
-    
-    /* Verifie que l'element a correctement ete ajoute */
-    collectQueueElement = collectQueue.first;
-    CU_ASSERT_EQUAL(collectQueueElement->idPlg, 1);
-    CU_ASSERT_EQUAL(collectQueueElement->idAsset, 2);
-    CU_ASSERT_EQUAL(collectQueueElement->idSrc, 3);
-    CU_ASSERT_EQUAL(collectQueueElement->idSearch, 4);
-    CU_ASSERT_EQUAL(collectQueueElement->lotNum, 9);
-    CU_ASSERT_EQUAL(collectQueueElement->lineNum, 10);
-    CU_ASSERT_EQUAL(collectQueueElement->valuesLength, 4);
-    CU_ASSERT_EQUAL(collectQueueElement->time, 12);
-    CU_ASSERT_STRING_EQUAL(collectQueueElement->values[0], "a");
-    CU_ASSERT_STRING_EQUAL(collectQueueElement->values[1], "b");
-    CU_ASSERT_STRING_EQUAL(collectQueueElement->values[2], "c");
-    CU_ASSERT_STRING_EQUAL(collectQueueElement->values[3], "d");
-    
-    /* Ajoute un deuxieme element a la queue */
-    result = pushCollectQueue(&collectQueue, &idList, lotNum, lineNum, valuesLength, values2, time);
-    CU_ASSERT_EQUAL(result, EXIT_SUCCESS);
-    
-    /* Verifie que l'element a correctement ete ajoute */
-    collectQueueElement = collectQueue.first;
-    CU_ASSERT_STRING_EQUAL(collectQueueElement->values[0], "a");
-    CU_ASSERT_STRING_EQUAL(collectQueueElement->values[1], "b");
-    CU_ASSERT_STRING_EQUAL(collectQueueElement->values[2], "c");
-    CU_ASSERT_STRING_EQUAL(collectQueueElement->values[3], "d");
-    CU_ASSERT_NOT_EQUAL(collectQueueElement->next, NULL);
-    
-    collectQueueElement = collectQueueElement->next;
-    CU_ASSERT_EQUAL(collectQueueElement->idPlg, 1);
-    CU_ASSERT_EQUAL(collectQueueElement->idAsset, 2);
-    CU_ASSERT_EQUAL(collectQueueElement->idSrc, 3);
-    CU_ASSERT_EQUAL(collectQueueElement->idSearch, 4);
-    CU_ASSERT_EQUAL(collectQueueElement->lotNum, 9);
-    CU_ASSERT_EQUAL(collectQueueElement->lineNum, 10);
-    CU_ASSERT_EQUAL(collectQueueElement->valuesLength, 4);
-    CU_ASSERT_EQUAL(collectQueueElement->time, 12);
-    CU_ASSERT_STRING_EQUAL(collectQueueElement->values[0], "e");
-    CU_ASSERT_STRING_EQUAL(collectQueueElement->values[1], "f");
-    CU_ASSERT_STRING_EQUAL(collectQueueElement->values[2], "g");
-    CU_ASSERT_STRING_EQUAL(collectQueueElement->values[3], "h");
-    
-    free(collectQueueElement);
-    free(collectQueue.first);    
 }
 
 int main()
@@ -204,10 +101,7 @@ int main()
     }
 
     /* Add the tests to the suite */
-    if ((NULL == CU_add_test(pSuite, "testAddon", testAddon)) ||
-        (NULL == CU_add_test(pSuite, "testAddonSleep", testAddonSleep)) ||
-        (NULL == CU_add_test(pSuite, "testIncreaseLotNum", testIncreaseLotNum)) ||
-        (NULL == CU_add_test(pSuite, "testPushCollectQueue", testPushCollectQueue)))
+    if ((NULL == CU_add_test(pSuite, "testAddon", testAddon)))
     {
         CU_cleanup_registry();
         return CU_get_error();

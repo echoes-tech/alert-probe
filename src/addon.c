@@ -53,10 +53,6 @@ void *addon(void *arg)
                 /* addonLog */
                 libPath = strdup("../addonlog/dist/Debug/GNU-Linux-x86/libaddonlog.so");
                 break;
-            case 4:
-                /* addonMySQL */
-                libPath = strdup("");
-                break;
             case 5:
                 /* addonSNMP */
                 libPath = strdup("../addonsnmp/dist/Debug/GNU-Linux-x86/libaddonsnmp.so");
@@ -72,9 +68,7 @@ void *addon(void *arg)
             default:
                 g_critical("Critical: idAddon %d does'nt exist", *addonInfo->idAddon);
                 pthread_exit(NULL);
-                continue;
             }
-
 
             libHandle = dlopen(libPath, RTLD_NOW);
             if (libHandle)
@@ -92,6 +86,7 @@ void *addon(void *arg)
                 {
                     g_critical("Critical: Cannot load function: %s", dlerror());
                 }
+                free(libPath);
             }
             else
             {
@@ -116,7 +111,7 @@ void *addon(void *arg)
     for (i = 0; i < numThread; i++)
     {
         pthread_join(addonsMgrParams->addonsThreads[i], NULL);
-    }    
+    }
 
     if (snmpInit == TRUE)
     {

@@ -20,7 +20,7 @@
 #endif
 #include "plugin.h"
 #include "conf.h"
-#include "addon/addon.h"
+#include "addon.h"
 
 /*
  * CUnit Test Suite
