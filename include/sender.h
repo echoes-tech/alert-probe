@@ -60,6 +60,7 @@ struct SenderParams
     const char *address;
     unsigned short *port, msgID;
     unsigned char *protocol;
+    int *signum;
 };
 
 /* TODO: changer de nom et dégager "static" */

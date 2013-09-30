@@ -106,7 +106,7 @@ int sendMessage(
                 const char *afterOffset
                 )
 {
-    
+
     SOCKADDR_IN sin = {0}; /* Emission info */
     SOCKET sock; /* Socket */
 
@@ -137,7 +137,7 @@ int sendMessage(
 #ifndef NDEBUG
     printf("%s", completMsg);
 #endif
-    
+
     /* TCP/TLS or UDP */
     if (*protocol == 0)
     {
@@ -190,7 +190,7 @@ int sendMessage(
 
         g_object_unref(connection);
         g_object_unref(client);
-        
+
         /* don't forget to check for errors */
         if (error)
         {
@@ -245,7 +245,7 @@ int popSDElementQueue(
 
     /* Debut de la zone protegee. */
     pthread_mutex_lock (& sdElementQueue->mutex);
-    
+
     /* On vérifie s'il y a quelque chose à défiler */
     if (sdElementQueue->first != NULL)
     {
@@ -278,7 +278,7 @@ void *sender(void *arg)
 {
     SenderParams *senderParams = (SenderParams*) arg;
 
-    while (1)
+    while (*senderParams->signum == 0)
     {
         while (senderParams->sdElementQueue->first != NULL)
         {

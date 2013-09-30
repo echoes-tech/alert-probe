@@ -14,11 +14,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #ifndef NDEBUG
-    #include "CUnit/Basic.h"
+#include "CUnit/Basic.h"
 #else
-    #include "CUnit/Automated.h"
+#include "CUnit/Automated.h"
 #endif
 #include "log.h"
+#include "utilUnitTest.h"
+
+#define FILE_PATH "sortie.txt"
 
 /*
  * CUnit Test Suite
@@ -37,6 +40,7 @@ int clean_suite(void)
 void testLog2Console()
 {
     const gchar* message = "abcd";
+    const char* regex = "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\+[0-9]{4} 127.0.0.1 ea-probe 5 - abcd\n$";
     LogParams logParams = {
         "127.0.0.1",
         "ea-probe",
@@ -44,60 +48,62 @@ void testLog2Console()
         ""
     };
     gpointer user_data = (gpointer) & logParams;
+
+    readStdout_init();
+
     log2Console(NULL, 0, message, user_data);
+
+    /* Test forme de la sortie */
+    CU_ASSERT_TRUE(outputFile_compare(regex));
+
+    readStdout_end();
 }
 
 void testLog2File()
 {
-    FILE *logFile = NULL;
-    char line[256] = "", string[256] = "";
-    GDateTime *dateTime = NULL;
-    gchar *dateTimeFormat = NULL;
     const gchar* message = "abcd";
+    const char* regex = "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\+[0-9]{4} 127.0.0.1 ea-probe 5 - abcd\n$";
     LogParams logParams = {
         "127.0.0.1",
         "ea-probe",
         5,
-        "probe.log"
+        getOuputFilePath()
     };
     gpointer user_data = (gpointer) & logParams;
-    remove(logParams.logFilePath);
+
+    outputFile_remove();
+
     log2File(NULL, 0, message, user_data);
-    logFile = fopen(logParams.logFilePath, "r");
-    if (logFile != NULL)
-    {
-        if (fgets(line, 256, logFile) != NULL)
-        {
-            dateTime = g_date_time_new_now_local();
-            dateTimeFormat = g_date_time_format(dateTime, "%FT%T%z");
+    
+    /* Test forme de la sortie */
+    CU_ASSERT_TRUE(outputFile_compare(regex));
 
-            strcpy(string, dateTimeFormat);
-            strcat(string, " 127.0.0.1 ea-probe 5 - abcd\n");
-            CU_ASSERT_STRING_EQUAL(line, string);
-
-            g_date_time_unref(dateTime);
-            dateTime = NULL;
-            free(dateTimeFormat);
-            dateTimeFormat = NULL;
-        }
-        else
-            CU_ASSERT(0);
-        fclose(logFile);
-        remove(logParams.logFilePath);
-    }
-    else
-        CU_ASSERT(0);
+    outputFile_remove();
 }
 
 void testLogStopProbe()
 {
-    const char* probeName;
-    const char* probeVersion;
+    const char* probeName = "test_probe";
+    const char* probeVersion = "1.0";
+    const char* regex = "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\+[0-9]{4} 127.0.0.1 ea-probe 5 - \\[origin enterpriseId=\"40311\" software=\"test_probe\" swVersion=\"1.0\"\\] stop\n$";
+        
+    LogParams logParams = {
+        "127.0.0.1",
+        "ea-probe",
+        5,
+        getOuputFilePath()
+    };
+    
+    g_message_defineHandler(&logParams);
+    
+    readStdout_init();
+
     logStopProbe(probeName, probeVersion);
-    if (1 /*check result*/)
-    {
-        CU_ASSERT(0);
-    }
+
+    /* Test forme de la sortie */
+    CU_ASSERT_TRUE(outputFile_compare(regex));
+
+    readStdout_end();
 }
 
 int main()
@@ -117,8 +123,8 @@ int main()
     }
     /* Add the tests to the suite */
     if ((NULL == CU_add_test(pSuite, "testLog2Console", testLog2Console)) ||
-        (NULL == CU_add_test(pSuite, "testLog2File", testLog2File))/* ||
-        (NULL == CU_add_test(pSuite, "testLogStopProbe", testLogStopProbe))*/)
+        (NULL == CU_add_test(pSuite, "testLog2File", testLog2File)) ||
+        (NULL == CU_add_test(pSuite, "testLogStopProbe", testLogStopProbe)))
     {
         CU_cleanup_registry();
         return CU_get_error();

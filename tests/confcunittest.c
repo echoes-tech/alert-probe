@@ -39,6 +39,8 @@ void testLoadConf()
     Conf conf = CONF_INITIALIZER;
     const char* confPath = "./tests/test.conf";
     int result = 0;
+    
+    /* Test le chargement d'un fichier de conf valide */
     result = loadConf(&conf, confPath);
     CU_ASSERT_EQUAL(result, EXIT_SUCCESS);
     CU_ASSERT_EQUAL(conf.probeID, 0);
@@ -59,6 +61,7 @@ void testLoadConf()
     CU_ASSERT_EQUAL(result, errno);
     */
     
+    /* Test un fichier de conf n'existant pas */
     confPath = "azerty";
     result = loadConf(&conf, confPath);
     CU_ASSERT_EQUAL(result, errno);

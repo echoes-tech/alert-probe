@@ -42,6 +42,7 @@ struct FormatParams
 {
     CollectQueue *collectQueue;
     SDElementQueue *sdElementQueue;
+    int *signum;
 };
 
 /**

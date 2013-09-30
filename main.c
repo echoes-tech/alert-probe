@@ -27,6 +27,8 @@
 #include "format.h"
 /* To init struct SenderParams */
 #include "sender.h"
+/* To init struct SenderParams */
+#include "signals.h"
 
 /* Probe Names */
 #define PRODUCT_NAME "ECHOES Alert - Probe"
@@ -35,20 +37,23 @@
 #define VERSION "0.1.0"
 /* Conf Repository */
 #ifdef NDEBUG
-    #define CONF_DIR "/opt/echoes-alert/probe/etc/probe.conf"
+#define CONF_DIR "/opt/echoes-alert/probe/etc/probe.conf"
 #else
-    #define CONF_DIR "./conf/probe.conf"
+#define CONF_DIR "./conf/probe.conf"
 #endif
 
 /**
  * Main function
+ * @param argc Number of arguments passed to the program
+ * @param argv Array of arguments passed to the program
+ * @param envp Array of environment variables passed to the program
  * @return Exit status
  */
-int main(int argc, char** argv)
+int main(int argc, char** argv, char **envp)
 {
     /*
      *Initialization
-     */ 
+     */
 
     /* Probe Configuration initialisation */
     Conf conf = CONF_INITIALIZER;
@@ -64,11 +69,12 @@ int main(int argc, char** argv)
 
     /* Plugins List initialisation */
     PlgList plgList = NULL;
-    /* Plugins counter initialisation */
-    unsigned int nbThreads = 0;
 
-    /* Addons Manager, Format Module and Sender Module threads initialisations */
-    pthread_t addonsMgrThread = 0, formatThread = 0, senderThread = 0;
+    /* Signal number */
+    int signum = 0;
+
+    /* Thread identifiers initialisation */
+    ThreadIdentifiers threadIdentifiers = THREAD_IDENTIFIERS_INITIALIZER;
 
     /* Addons Manager thread params initialisation */
     AddonsMgrParams addonsMgrParams = ADDON_PARAMS_INITIALIZER;
@@ -88,7 +94,8 @@ int main(int argc, char** argv)
     /* Format thread initilisation */
     FormatParams formatParams = {
         &addonsMgrParams.collectQueue,
-        &sdElementQueue
+        &sdElementQueue,
+        &signum
     };
 
     /* Sender thread initilisation */
@@ -97,7 +104,8 @@ int main(int argc, char** argv)
         conf.engineFQDN,
         &conf.enginePort,
         0,
-        &conf.transportProto
+        &conf.transportProto,
+        &signum
     };
 
     /* Help message and version */
@@ -138,7 +146,7 @@ int main(int argc, char** argv)
                       (gpointer) &logParams
                       );
 #endif
-    
+
     /* Daemonization */
 #ifdef NDEBUG
     if(chdir("/") != 0)
@@ -172,7 +180,7 @@ int main(int argc, char** argv)
 
     printf("Début du chargement des plugins\n");
 #endif
-    if (plugin(conf.probePluginDir, &plgList, &addonsMgrParams.addonsList, &nbThreads))
+    if (plugin(conf.probePluginDir, &plgList, &addonsMgrParams.addonsList, &threadIdentifiers.nbAddonsThreads))
     {
         logStopProbe(PRODUCT_NAME, VERSION);
         return EXIT_FAILURE;
@@ -182,29 +190,30 @@ int main(int argc, char** argv)
 #endif
 
     /* Table addonsThreads creation */
-    addonsMgrParams.addonsThreads = calloc(nbThreads, sizeof (pthread_t));
-    if (addonsMgrParams.addonsThreads == NULL)
+    threadIdentifiers.addonsThreads = calloc(threadIdentifiers.nbAddonsThreads, sizeof (pthread_t));
+    if (threadIdentifiers.addonsThreads == NULL)
     {
-        g_critical("Critical: %s: addonsMgrParams.addonsThreads", strerror(errno));
+        g_critical("Critical: %s: threadIdentifiers.addonsThreads", strerror(errno));
         logStopProbe(PRODUCT_NAME, VERSION);
         return EXIT_FAILURE;
     }
-
+    addonsMgrParams.addonsThreads = threadIdentifiers.addonsThreads;
+    
 #ifndef NDEBUG
     printf("Début du chargement des addons\n");
 #endif
-    if (pthread_create(&addonsMgrThread, NULL, addon, (void*) &addonsMgrParams))
+    if (pthread_create(&threadIdentifiers.addonsMgrThread, NULL, addon, (void*) &addonsMgrParams))
     {
         g_critical("Critical: %s: addonsMgrThread", strerror(errno));
         free(addonsMgrParams.addonsThreads);
         logStopProbe(PRODUCT_NAME, VERSION);
         return EXIT_FAILURE;
     }
-
+    
 #ifndef NDEBUG
     printf("Début du chargement du module Format\n");
 #endif
-    if (pthread_create(&formatThread, NULL, format, (void*) &formatParams))
+    if (pthread_create(&threadIdentifiers.formatThread, NULL, format, (void*) &formatParams))
     {
         g_critical("Critical: %s: formatThread", strerror(errno));
         free(addonsMgrParams.addonsThreads);
@@ -215,7 +224,7 @@ int main(int argc, char** argv)
 #ifndef NDEBUG
     printf("Début de l'envoi des messages\n");
 #endif
-    if (pthread_create(&senderThread, NULL, sender, (void*) &senderParams))
+    if (pthread_create(&threadIdentifiers.senderThread, NULL, sender, (void*) &senderParams))
     {
         g_critical("Critical: %s: senderThread", strerror(errno));
         free(addonsMgrParams.addonsThreads);
@@ -223,13 +232,14 @@ int main(int argc, char** argv)
         return EXIT_FAILURE;
     }
 
-    pthread_join(addonsMgrThread, NULL);
-    pthread_join(formatThread, NULL);
-    pthread_join(senderThread, NULL);/* Attente de la fin des threads */
+    /* Define signals handlers */
+    signalsHandler(&signum, &threadIdentifiers);
+
+    signum = waitForShutdown();
 
     /* TODO: Vérifier tous les calloc et faire un fonction de cleanup
        avec entre autres les plgInfo et srcInfo etc. */
-    
+
     /* Cleanup */
     free(addonsMgrParams.addonsThreads);
 
@@ -238,6 +248,9 @@ int main(int argc, char** argv)
               PRODUCT_NAME,
               VERSION
               );
+
+    if (signum == SIGHUP)
+        restart(argv, envp);
 
     return EXIT_SUCCESS;
 }

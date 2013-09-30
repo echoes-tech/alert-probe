@@ -14,6 +14,7 @@
       <itemPath>include/log.h</itemPath>
       <itemPath>include/plugin.h</itemPath>
       <itemPath>include/sender.h</itemPath>
+      <itemPath>include/signals.h</itemPath>
     </logicalFolder>
     <logicalFolder name="packages" displayName="Packages" projectFiles="true">
       <logicalFolder name="CentOS" displayName="CentOS" projectFiles="true">
@@ -93,6 +94,7 @@
         <itemPath>src/log.c</itemPath>
         <itemPath>src/plugin.c</itemPath>
         <itemPath>src/sender.c</itemPath>
+        <itemPath>src/signals.c</itemPath>
       </logicalFolder>
       <itemPath>main.c</itemPath>
     </logicalFolder>
@@ -136,6 +138,12 @@
                      projectFiles="true"
                      kind="TEST">
         <itemPath>tests/searchcunittest.c</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f7"
+                     displayName="Signals CUnit Test"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/signalscunittest.c</itemPath>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
@@ -228,9 +236,20 @@
           <output>${TESTDIR}/TestFiles/f6</output>
         </linkerTool>
       </folder>
+      <item path="include/addonList.h" ex="false" tool="3" flavor2="0">
+      </item> 
       <item path="include/addon.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="include/addonList.h" ex="false" tool="3" flavor2="0">
+      <folder path="TestFiles/f7">
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f7</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f8">
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f8</output>
+        </linkerTool>
+      </folder>
       </item>
       <item path="include/conf.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -241,6 +260,8 @@
       <item path="include/plugin.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/sender.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/signals.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="install.sh" ex="false" tool="3" flavor2="0">
       </item>
@@ -360,6 +381,8 @@
       </item>
       <item path="src/sender.c" ex="false" tool="0" flavor2="0">
       </item>
+      <item path="src/signals.c" ex="false" tool="0" flavor2="0">
+      </item>
       <item path="tests/addoncunittest.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="tests/confcunittest.c" ex="false" tool="0" flavor2="0">
@@ -371,6 +394,8 @@
       <item path="tests/plugincunittest.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="tests/searchcunittest.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="tests/signalscunittest.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="tests/test.conf" ex="false" tool="3" flavor2="0">
       </item>
@@ -466,8 +491,18 @@
       </folder>
       <item path="include/addon.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="include/addonList.h" ex="false" tool="3" flavor2="0">
+      <item path="include/addonList.h" ex="false" tool="3" flavor2="0">                                                                                                                 
       </item>
+      <folder path="TestFiles/f7">
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f7</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f8">
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f8</output>
+        </linkerTool>
+      </folder>
       <item path="include/conf.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/format.h" ex="false" tool="3" flavor2="0">
@@ -477,6 +512,8 @@
       <item path="include/plugin.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/sender.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/signals.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="install.sh" ex="false" tool="3" flavor2="0">
       </item>
@@ -596,6 +633,8 @@
       </item>
       <item path="src/sender.c" ex="false" tool="0" flavor2="0">
       </item>
+      <item path="src/signals.c" ex="false" tool="0" flavor2="0">
+      </item>
       <item path="tests/addoncunittest.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="tests/confcunittest.c" ex="false" tool="0" flavor2="0">
@@ -607,6 +646,8 @@
       <item path="tests/plugincunittest.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="tests/searchcunittest.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="tests/signalscunittest.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="tests/test.conf" ex="false" tool="3" flavor2="0">
       </item>
