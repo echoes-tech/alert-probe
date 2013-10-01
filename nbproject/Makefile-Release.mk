@@ -131,7 +131,7 @@ ${OBJECTDIR}/src/signals.o: src/signals.c
 ${OBJECTDIR}/tests/utilUnitTest.o: tests/utilUnitTest.c 
 	${MKDIR} -p ${OBJECTDIR}/tests
 	${RM} $@.d
-	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  `cppunit-config --cflags` -MMD -MP -MF $@.d -o ${OBJECTDIR}/tests/utilUnitTest.o tests/utilUnitTest.c
+	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${OBJECTDIR}/tests/utilUnitTest.o tests/utilUnitTest.c
 
 # Subprojects
 .build-subprojects:
@@ -160,11 +160,12 @@ ${TESTDIR}/TestFiles/f2: ${TESTDIR}/tests/plugincunittest.o ${OBJECTFILES:%.o=%_
 
 ${TESTDIR}/TestFiles/f5: ${TESTDIR}/tests/sendercunittest.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.c}   -o ${TESTDIR}/TestFiles/f5 $^ ${LDLIBSOPTIONS}
+	${LINK.c}   -o ${TESTDIR}/TestFiles/f5 $^ ${LDLIBSOPTIONS} 
 
 ${TESTDIR}/TestFiles/f7: ${TESTDIR}/tests/signalscunittest.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.c}   -o ${TESTDIR}/TestFiles/f7 $^ ${LDLIBSOPTIONS} 
+
 
 ${TESTDIR}/tests/addoncunittest.o: tests/addoncunittest.c 
 	${MKDIR} -p ${TESTDIR}/tests
@@ -196,10 +197,10 @@ ${TESTDIR}/tests/plugincunittest.o: tests/plugincunittest.c
 	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${TESTDIR}/tests/plugincunittest.o tests/plugincunittest.c
 
 
-${TESTDIR}/tests/searchcunittest.o: tests/searchcunittest.c 
+${TESTDIR}/tests/sendercunittest.o: tests/sendercunittest.c 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} $@.d
-	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${TESTDIR}/tests/searchcunittest.o tests/searchcunittest.c
+	$(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${TESTDIR}/tests/sendercunittest.o tests/sendercunittest.c
 
 
 ${TESTDIR}/tests/signalscunittest.o: tests/signalscunittest.c 
@@ -333,7 +334,7 @@ ${OBJECTDIR}/tests/utilUnitTest_nomain.o: ${OBJECTDIR}/tests/utilUnitTest.o test
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} $@.d;\
-	    $(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  `cppunit-config --cflags` -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/tests/utilUnitTest_nomain.o tests/utilUnitTest.c;\
+	    $(COMPILE.c) -O3 -s -Iinclude `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/tests/utilUnitTest_nomain.o tests/utilUnitTest.c;\
 	else  \
 	    ${CP} ${OBJECTDIR}/tests/utilUnitTest.o ${OBJECTDIR}/tests/utilUnitTest_nomain.o;\
 	fi

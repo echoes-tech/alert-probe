@@ -32,10 +32,13 @@ void signalsHandler(int *_signum, ThreadIdentifiers *_threadIdentifiers)
 void signalHandling(int _signum)
 {
     unsigned int i = 0;
-    *signum = _signum;
-    for (i = 0; i < threadIdentifiers->nbAddonsThreads; i++)
+    if (*signum == 0)
     {
-        pthread_cancel(threadIdentifiers->addonsThreads[i]);
+        *signum = _signum;
+        for (i = 0; i < threadIdentifiers->nbAddonsThreads; i++)
+        {
+            pthread_cancel(threadIdentifiers->addonsThreads[i]);
+        }
     }
 }
 

@@ -38,6 +38,7 @@ void *addon(void *arg)
             addonParamsInfo->collectQueue = &addonsMgrParams->collectQueue;
             addonParamsInfo->lotNumPtr = &addonsMgrParams->lotNum;
             addonParamsInfo->mutex = &addonsMgrParams->mutex;
+            addonParamsInfo->signum = addonsMgrParams->signum;
 
             switch (*addonInfo->idAddon)
             {
