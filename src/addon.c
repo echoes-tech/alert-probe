@@ -68,33 +68,37 @@ void *addon(void *arg)
                 break;
             default:
                 g_critical("Critical: idAddon %d does'nt exist", *addonInfo->idAddon);
-                pthread_exit(NULL);
             }
 
-            libHandle = dlopen(libPath, RTLD_NOW);
-            if (libHandle)
+            if (libPath)
             {
-                addon = dlsym(libHandle, "addon");
-                if (addon)
+                libHandle = dlopen(libPath, RTLD_NOW);
+                if (libHandle)
                 {
-                    if (pthread_create(&addonsMgrParams->addonsThreads[numThread], NULL, addon, (void*) addonParamsInfo))
+                    addon = dlsym(libHandle, "addon");
+                    if (addon)
                     {
-                        g_critical("Critical: %s: addon: %u", strerror(errno), numThread);
-                        pthread_exit(NULL);
+                        if (!pthread_create(&addonsMgrParams->addonsThreads[numThread], NULL, addon, (void*) addonParamsInfo))
+                        {                            
+                            ++numThread;
+                        }
+                        else
+                        {
+                            g_critical("Critical: %s: addon: %u", strerror(errno), numThread);
+                        }
+                    }
+                    else
+                    {
+                        g_critical("Critical: Cannot load function: %s", dlerror());
                     }
                 }
                 else
                 {
-                    g_critical("Critical: Cannot load function: %s", dlerror());
+                    g_critical("Critical: Cannot load library: %s", dlerror());
                 }
                 free(libPath);
+                libPath = NULL;
             }
-            else
-            {
-                g_critical("Critical: Cannot load library: %s", dlerror());
-            }
-
-            ++numThread;
 
             /* On avance d'une case */
             addonParamsInfo = addonParamsInfo->nxt;
