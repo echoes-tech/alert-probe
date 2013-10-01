@@ -66,11 +66,18 @@ void testSignalsHandler()
 
     kill(getpid(), SIGHUP);
     CU_ASSERT_EQUAL(signum, SIGHUP);
+    signum = 0;
     kill(getpid(), SIGTERM);
     CU_ASSERT_EQUAL(signum, SIGTERM);
+    signum = 0;
     kill(getpid(), SIGQUIT);
     CU_ASSERT_EQUAL(signum, SIGQUIT);
+    signum = 0;
     kill(getpid(), SIGSYS);
+    CU_ASSERT_EQUAL(signum, SIGSYS);
+    
+    /* signum != 0 le signal est ignore*/
+    kill(getpid(), SIGTERM);
     CU_ASSERT_EQUAL(signum, SIGSYS);
 }
 
