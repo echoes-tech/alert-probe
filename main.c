@@ -78,7 +78,7 @@ int main(int argc, char** argv, char **envp)
 
     /* Addons Manager thread params initialisation */
     AddonsMgrParams addonsMgrParams = ADDON_PARAMS_INITIALIZER;
-    
+
     /* Queues initialisation */
     SDElementQueue sdElementQueue = {
         PTHREAD_MUTEX_INITIALIZER,
@@ -136,28 +136,28 @@ int main(int argc, char** argv, char **envp)
                       G_LOG_DOMAIN,
                       G_LOG_LEVEL_MASK,
                       log2File,
-                      (gpointer) &logParams
+                      (gpointer) & logParams
                       );
 #else
     g_log_set_handler(
                       G_LOG_DOMAIN,
                       G_LOG_LEVEL_MASK,
                       log2Console,
-                      (gpointer) &logParams
+                      (gpointer) & logParams
                       );
 #endif
 
     /* Daemonization */
 #ifdef NDEBUG
-    if(chdir("/") != 0)
+    if (chdir("/") != 0)
     {
         g_critical("%s", strerror(errno));
         return EXIT_FAILURE;
     }
-    if(fork() != 0)
+    if (fork() != 0)
         exit(EXIT_SUCCESS);
     setsid();
-    if(fork() != 0)
+    if (fork() != 0)
         exit(EXIT_SUCCESS);
 #endif
 
@@ -166,6 +166,22 @@ int main(int argc, char** argv, char **envp)
               PRODUCT_NAME,
               VERSION
               );
+
+    /* Create file that contains pid use by start-stop-daemon */
+#ifdef NDEBUG
+    FILE* daemonPidFile = NULL;
+    char *daemonPidFilePath = "/var/run/ea-probe.pid";
+    daemonPidFile = fopen(daemonPidFilePath, "w");
+    if (daemonPidFile != NULL)
+    {
+        fprintf(daemonPidFile, "%d", getpid());
+        fclose(daemonPidFile);
+    }
+    else
+    {
+        g_critical("Critical: %s: %s", strerror(errno), daemonPidFilePath);
+    }
+#endif   
 
 #ifndef NDEBUG
     printf("Début du chargement des conf\n");
@@ -198,7 +214,7 @@ int main(int argc, char** argv, char **envp)
         return EXIT_FAILURE;
     }
     addonsMgrParams.addonsThreads = threadIdentifiers.addonsThreads;
-    
+
 #ifndef NDEBUG
     printf("Début du chargement des addons\n");
 #endif
@@ -209,7 +225,7 @@ int main(int argc, char** argv, char **envp)
         logStopProbe(PRODUCT_NAME, VERSION);
         return EXIT_FAILURE;
     }
-    
+
 #ifndef NDEBUG
     printf("Début du chargement du module Format\n");
 #endif
@@ -242,6 +258,11 @@ int main(int argc, char** argv, char **envp)
 
     /* Cleanup */
     free(addonsMgrParams.addonsThreads);
+    
+    /* Delete file that contains pid use by start-stop-daemon */
+#ifdef NDEBUG
+    remove(daemonPidFilePath); 
+#endif  
 
     g_message(
               "[origin enterpriseId=\"40311\" software=\"%s\" swVersion=\"%s\"] stop",
