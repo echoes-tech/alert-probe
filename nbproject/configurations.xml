@@ -18,9 +18,8 @@
     </logicalFolder>
     <logicalFolder name="packages" displayName="Packages" projectFiles="true">
       <logicalFolder name="CentOS" displayName="CentOS" projectFiles="true">
-        <itemPath>packages/CentOS/5.sh</itemPath>
-        <itemPath>packages/CentOS/6.sh</itemPath>
-        <itemPath>packages/CentOS/centos.sh</itemPath>
+        <itemPath>packages/CentOS/5-require.sh</itemPath>
+        <itemPath>packages/CentOS/6-require.sh</itemPath>
       </logicalFolder>
       <logicalFolder name="deb" displayName="deb" projectFiles="true">
         <logicalFolder name="squeeze" displayName="squeeze" projectFiles="true">
@@ -38,9 +37,8 @@
         <itemPath>packages/deb/prerm</itemPath>
       </logicalFolder>
       <logicalFolder name="Debian" displayName="Debian" projectFiles="true">
-        <itemPath>packages/Debian/6.sh</itemPath>
-        <itemPath>packages/Debian/7.sh</itemPath>
-        <itemPath>packages/Debian/debian.sh</itemPath>
+        <itemPath>packages/Debian/6-require.sh</itemPath>
+        <itemPath>packages/Debian/7-require.sh</itemPath>
       </logicalFolder>
       <logicalFolder name="doc" displayName="doc" projectFiles="true">
         <logicalFolder name="libglib2.0" displayName="libglib2.0" projectFiles="true">
@@ -62,14 +60,12 @@
         <itemPath>packages/rpm/echoes-alert-probe.sysconfig</itemPath>
       </logicalFolder>
       <logicalFolder name="Ubuntu" displayName="Ubuntu" projectFiles="true">
-        <itemPath>packages/Ubuntu/12.04.sh</itemPath>
-        <itemPath>packages/Ubuntu/ubuntu.sh</itemPath>
+        <itemPath>packages/Ubuntu/12.04-require.sh</itemPath>
       </logicalFolder>
-      <itemPath>packages/deb.sh</itemPath>
-      <itemPath>packages/pkg.sh</itemPath>
-      <itemPath>packages/rpm.sh</itemPath>
-      <itemPath>packages/var-deb.sh</itemPath>
-      <itemPath>packages/var-rpm.sh</itemPath>
+      <itemPath>packages/pkg-specific-macro.sh</itemPath>
+      <itemPath>packages/pkg-specific-variable.sh</itemPath>
+      <itemPath>packages/var-deb-specific.sh</itemPath>
+      <itemPath>packages/var-rpm-specific.sh</itemPath>
     </logicalFolder>
     <logicalFolder name="plugins" displayName="Plugins" projectFiles="true">
       <itemPath>plugins/Linux-Syslog.json</itemPath>
@@ -265,23 +261,15 @@
       </item>
       <item path="main.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="packages/CentOS/5.sh" ex="false" tool="3" flavor2="0">
+      <item path="packages/CentOS/5-require.sh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="packages/CentOS/6.sh" ex="false" tool="3" flavor2="0">
+      <item path="packages/CentOS/6-require.sh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="packages/CentOS/centos.sh" ex="false" tool="3" flavor2="0">
+      <item path="packages/Debian/6-require.sh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="packages/Debian/6.sh" ex="false" tool="3" flavor2="0">
+      <item path="packages/Debian/7-require.sh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="packages/Debian/7.sh" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="packages/Debian/debian.sh" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="packages/Ubuntu/12.04.sh" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="packages/Ubuntu/ubuntu.sh" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="packages/deb.sh" ex="false" tool="3" flavor2="0">
+      <item path="packages/Ubuntu/12.04-require.sh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="packages/deb/README.Debian" ex="false" tool="3" flavor2="0">
       </item>
@@ -334,9 +322,9 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="packages/pkg.sh" ex="false" tool="3" flavor2="0">
+      <item path="packages/pkg-specific-macro.sh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="packages/rpm.sh" ex="false" tool="3" flavor2="0">
+      <item path="packages/pkg-specific-variable.sh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="packages/rpm/echoes-alert-probe.init"
             ex="false"
@@ -348,9 +336,9 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="packages/var-deb.sh" ex="false" tool="3" flavor2="0">
+      <item path="packages/var-deb-specific.sh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="packages/var-rpm.sh" ex="false" tool="3" flavor2="0">
+      <item path="packages/var-rpm-specific.sh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="plugins/Linux-Syslog.json" ex="false" tool="3" flavor2="0">
       </item>
@@ -415,6 +403,7 @@
           <stripSymbols>true</stripSymbols>
           <incDir>
             <pElem>include</pElem>
+            <pElem>../addon/include</pElem>
           </incDir>
           <commandLine>-DNDEBUG</commandLine>
         </cTool>
@@ -435,6 +424,7 @@
             <pElem>/usr/local/lib</pElem>
           </linkerAddLib>
           <linkerDynSerch>
+            <pElem>/opt/echoes-alert/probe/lib/addons</pElem>
             <pElem>/opt/echoes-alert/probe/lib</pElem>
           </linkerDynSerch>
           <stripSymbols>true</stripSymbols>
@@ -444,6 +434,7 @@
             <linkerLibLibItem>snmp</linkerLibLibItem>
             <linkerLibLibItem>pthread</linkerLibLibItem>
             <linkerLibLibItem>cunit</linkerLibLibItem>
+            <linkerLibLibItem>dl</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
@@ -516,23 +507,15 @@
       </item>
       <item path="main.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="packages/CentOS/5.sh" ex="false" tool="3" flavor2="0">
+      <item path="packages/CentOS/5-require.sh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="packages/CentOS/6.sh" ex="false" tool="3" flavor2="0">
+      <item path="packages/CentOS/6-require.sh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="packages/CentOS/centos.sh" ex="false" tool="3" flavor2="0">
+      <item path="packages/Debian/6-require.sh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="packages/Debian/6.sh" ex="false" tool="3" flavor2="0">
+      <item path="packages/Debian/7-require.sh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="packages/Debian/7.sh" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="packages/Debian/debian.sh" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="packages/Ubuntu/12.04.sh" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="packages/Ubuntu/ubuntu.sh" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="packages/deb.sh" ex="false" tool="3" flavor2="0">
+      <item path="packages/Ubuntu/12.04-require.sh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="packages/deb/README.Debian" ex="false" tool="3" flavor2="0">
       </item>
@@ -585,9 +568,9 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="packages/pkg.sh" ex="false" tool="3" flavor2="0">
+      <item path="packages/pkg-specific-macro.sh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="packages/rpm.sh" ex="false" tool="3" flavor2="0">
+      <item path="packages/pkg-specific-variable.sh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="packages/rpm/echoes-alert-probe.init"
             ex="false"
@@ -599,9 +582,9 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="packages/var-deb.sh" ex="false" tool="3" flavor2="0">
+      <item path="packages/var-deb-specific.sh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="packages/var-rpm.sh" ex="false" tool="3" flavor2="0">
+      <item path="packages/var-rpm-specific.sh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="plugins/Linux-Syslog.json" ex="false" tool="3" flavor2="0">
       </item>

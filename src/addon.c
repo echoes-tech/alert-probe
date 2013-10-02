@@ -42,6 +42,32 @@ void *addon(void *arg)
 
             switch (*addonInfo->idAddon)
             {
+#ifdef NDEBUG
+                case 1:
+                /* addonFileSystem */
+                libPath = strdup("libaddonfilesystem.so");
+                break;
+            case 2:
+                /* addonFile */
+                libPath = strdup("libaddonfile.so");
+                break;
+            case 3:
+                /* addonLog */
+                libPath = strdup("libaddonlog.so");
+                break;
+            case 5:
+                /* addonSNMP */
+                libPath = strdup("libaddonsnmp.so");
+                if (snmpInit == FALSE)
+                {
+                    /* Initialize the SNMP library */
+                    init_snmp("addonSNMP");
+                    SOCK_STARTUP;
+
+                    snmpInit = TRUE;
+                }
+                break;
+#else
             case 1:
                 /* addonFileSystem */
                 libPath = strdup("../addonfilesystem/dist/Debug/GNU-Linux-x86/libaddonfilesystem.so");
@@ -66,6 +92,7 @@ void *addon(void *arg)
                     snmpInit = TRUE;
                 }
                 break;
+#endif
             default:
                 g_critical("Critical: idAddon %d does'nt exist", *addonInfo->idAddon);
                 pthread_exit(NULL);

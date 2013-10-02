@@ -53,7 +53,6 @@ char* outputFile_getText()
 {
     FILE *logFile = NULL;
     char text[1024] = "", line[1024] = "";
-    int match = 0;
     logFile = fopen(OUTPUT_FILE_PATH, "r");
     if (logFile != NULL)
     {
@@ -62,7 +61,7 @@ char* outputFile_getText()
             strcat(text, line);
         }
         fclose(logFile);
-        return text;
+        return strdup(text);
     }
     return NULL;
 }
