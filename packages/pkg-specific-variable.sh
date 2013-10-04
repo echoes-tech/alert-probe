@@ -20,7 +20,7 @@ createVarFile "conf" "conf/probe.conf" "$etc_dir/probe.conf" $default_file_right
 # Sbin
 createVarDir "sbin" "${NBTMPDIR}/${PACKAGE_TOP_DIR}/sbin" $default_dir_right
 
-createVarFile "bin" "${OUTPUT_PATH}" "$sbin_dir/${BIN_NAME}" $default_dir_right
+createVarFile "bin" "${OUTPUT_PATH}" "$sbin_dir/${bin_name}" $default_dir_right
 
 # Init
 createVarDir "init" "${NBTMPDIR}/etc/init.d" 0755
