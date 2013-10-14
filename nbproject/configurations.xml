@@ -403,7 +403,7 @@
           <stripSymbols>true</stripSymbols>
           <incDir>
             <pElem>include</pElem>
-            <pElem>../addon/include</pElem>
+            <pElem>addon/include</pElem>
           </incDir>
           <commandLine>-DNDEBUG</commandLine>
         </cTool>
