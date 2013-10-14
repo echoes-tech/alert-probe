@@ -73,7 +73,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-L/usr/lib64/mysql -L/usr/lib/mysql -L/usr/local/lib -L../addon/dist/Debug/GNU-Linux-x86 -Wl,-rpath,/opt/echoes-alert/probe/lib `pkg-config --libs gobject-2.0 json-glib-1.0` -lmysqlclient -lsnmp -lpthread -lcunit -ldl  
+LDLIBSOPTIONS=-L/usr/lib64/mysql -L/usr/lib/mysql -L/usr/local/lib -L../addon/dist/Debug/GNU-Linux-x86 -Wl,-rpath,/opt/echoes-alert/probe/lib `pkg-config --libs gobject-2.0 json-glib-1.0` -lmysqlclient -lpthread -lcunit -ldl  
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}

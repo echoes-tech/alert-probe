@@ -23,9 +23,6 @@ extern "C" {
 #include <pthread.h>
 #include <dlfcn.h>
 
-#include <net-snmp/net-snmp-config.h>
-#include <net-snmp/net-snmp-includes.h>
-
 #include "plugin.h"
 
 /* Portable sleep */

@@ -39,6 +39,7 @@ void *addon(void *arg)
             addonParamsInfo->lotNumPtr = &addonsMgrParams->lotNum;
             addonParamsInfo->mutex = &addonsMgrParams->mutex;
             addonParamsInfo->signum = addonsMgrParams->signum;
+            addonParamsInfo->snmpInit = &snmpInit;
 
             switch (*addonInfo->idAddon)
             {
@@ -58,14 +59,6 @@ void *addon(void *arg)
             case 5:
                 /* addonSNMP */
                 libPath = strdup("libaddonsnmp.so");
-                if (snmpInit == FALSE)
-                {
-                    /* Initialize the SNMP library */
-                    init_snmp("addonSNMP");
-                    SOCK_STARTUP;
-
-                    snmpInit = TRUE;
-                }
                 break;
 #else
             case 1:
@@ -83,14 +76,6 @@ void *addon(void *arg)
             case 5:
                 /* addonSNMP */
                 libPath = strdup("../addonsnmp/dist/Debug/GNU-Linux-x86/libaddonsnmp.so");
-                if (snmpInit == FALSE)
-                {
-                    /* Initialize the SNMP library */
-                    init_snmp("addonSNMP");
-                    SOCK_STARTUP;
-
-                    snmpInit = TRUE;
-                }
                 break;
 #endif
             default:
@@ -120,7 +105,7 @@ void *addon(void *arg)
             {
                 g_critical("Critical: Cannot load library: %s", dlerror());
             }
-
+            
             ++numThread;
 
             /* On avance d'une case */
@@ -139,11 +124,6 @@ void *addon(void *arg)
     for (i = 0; i < numThread; i++)
     {
         pthread_join(addonsMgrParams->addonsThreads[i], NULL);
-    }
-
-    if (snmpInit == TRUE)
-    {
-        SOCK_CLEANUP;
     }
 
     pthread_exit(NULL);
