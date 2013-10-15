@@ -421,8 +421,8 @@
           <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/probe</output>
           <linkerAddLib>
             <pElem>/usr/local/lib</pElem>
-            <pElem>../addon/dist/Release/GNU-Linux-x86</pElem>
-            <pElem>../lib/addons</pElem>
+            <pElem>addon/dist/Release/GNU-Linux-x86</pElem>
+            <pElem>lib/addons</pElem>
           </linkerAddLib>
           <linkerDynSerch>
             <pElem>/opt/echoes-alert/probe/lib/addons</pElem>

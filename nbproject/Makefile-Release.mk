@@ -73,7 +73,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-L/usr/local/lib -L../addon/dist/Release/GNU-Linux-x86 -L../lib/addons -Wl,-rpath,/opt/echoes-alert/probe/lib/addons -Wl,-rpath,/opt/echoes-alert/probe/lib `pkg-config --libs gobject-2.0 json-glib-1.0` -lpthread -ldl -laddon  
+LDLIBSOPTIONS=-L/usr/local/lib -Laddon/dist/Release/GNU-Linux-x86 -Llib/addons -Wl,-rpath,/opt/echoes-alert/probe/lib/addons -Wl,-rpath,/opt/echoes-alert/probe/lib `pkg-config --libs gobject-2.0 json-glib-1.0` -lpthread -ldl -laddon  
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
