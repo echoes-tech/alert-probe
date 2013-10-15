@@ -99,11 +99,14 @@ void *addon(void *arg)
                 {
                     g_critical("Critical: Cannot load function: %s", dlerror());
                 }
-                free(libPath);
             }
             else
             {
                 g_critical("Critical: Cannot load library: %s", dlerror());
+            }
+            if (libPath != NULL) {          
+                free(libPath);
+                libPath = NULL;
             }
             
             ++numThread;
