@@ -422,11 +422,11 @@
           <linkerAddLib>
             <pElem>/usr/local/lib</pElem>
             <pElem>addon/dist/Release/GNU-Linux-x86</pElem>
-            <pElem>lib/addons</pElem>
           </linkerAddLib>
           <linkerDynSerch>
             <pElem>/opt/echoes-alert/probe/lib/addons</pElem>
             <pElem>/opt/echoes-alert/probe/lib</pElem>
+            <pElem>lib/addons</pElem>
           </linkerDynSerch>
           <stripSymbols>true</stripSymbols>
           <linkerLibItems>
