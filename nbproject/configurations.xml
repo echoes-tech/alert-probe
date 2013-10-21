@@ -7,7 +7,6 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>include/addon.h</itemPath>
       <itemPath>include/addonList.h</itemPath>
       <itemPath>include/conf.h</itemPath>
       <itemPath>include/format.h</itemPath>
@@ -60,10 +59,10 @@
       <logicalFolder name="Ubuntu" displayName="Ubuntu" projectFiles="true">
         <itemPath>packages/Ubuntu/12.04-require.sh</itemPath>
       </logicalFolder>
-      <itemPath>packages/pkg-specific-macro.sh</itemPath>
-      <itemPath>packages/pkg-specific-variable.sh</itemPath>
-      <itemPath>packages/var-deb-specific.sh</itemPath>
-      <itemPath>packages/var-rpm-specific.sh</itemPath>
+      <itemPath>packages/file-tree.sh</itemPath>
+      <itemPath>packages/package-conf.sh</itemPath>
+      <itemPath>packages/var-deb.sh</itemPath>
+      <itemPath>packages/var-rpm.sh</itemPath>
     </logicalFolder>
     <logicalFolder name="plugins" displayName="Plugins" projectFiles="true">
       <itemPath>plugins/Linux-Syslog.json</itemPath>
@@ -81,7 +80,6 @@
                    displayName="Source Files"
                    projectFiles="true">
       <logicalFolder name="f1" displayName="src" projectFiles="true">
-        <itemPath>src/addon.c</itemPath>
         <itemPath>src/addonList.c</itemPath>
         <itemPath>src/conf.c</itemPath>
         <itemPath>src/format.c</itemPath>
@@ -178,17 +176,17 @@
         </cTool>
         <linkerTool>
           <linkerAddLib>
-            <pElem>/usr/local/lib</pElem>
             <pElem>../addon/dist/Debug/${CND_PLATFORM}</pElem>
+            <pElem>/usr/local/lib</pElem>
           </linkerAddLib>
           <linkerDynSerch>
             <pElem>/opt/echoes-alert/probe/lib</pElem>
+            <pElem>../addon/dist/Debug/${CND_PLATFORM}</pElem>
           </linkerDynSerch>
           <linkerLibItems>
             <linkerOptionItem>`pkg-config --libs gobject-2.0 json-glib-1.0`</linkerOptionItem>
             <linkerLibLibItem>pthread</linkerLibLibItem>
             <linkerLibLibItem>cunit</linkerLibLibItem>
-            <linkerLibLibItem>dl</linkerLibLibItem>
             <linkerLibLibItem>addon</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
@@ -239,8 +237,6 @@
           <output>${TESTDIR}/TestFiles/f7</output>
         </linkerTool>
       </folder>
-      <item path="include/addon.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="include/addonList.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/conf.h" ex="false" tool="3" flavor2="0">
@@ -320,9 +316,9 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="packages/pkg-specific-macro.sh" ex="false" tool="3" flavor2="0">
+      <item path="packages/file-tree.sh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="packages/pkg-specific-variable.sh" ex="false" tool="3" flavor2="0">
+      <item path="packages/package-conf.sh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="packages/rpm/echoes-alert-probe.init"
             ex="false"
@@ -334,9 +330,9 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="packages/var-deb-specific.sh" ex="false" tool="3" flavor2="0">
+      <item path="packages/var-deb.sh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="packages/var-rpm-specific.sh" ex="false" tool="3" flavor2="0">
+      <item path="packages/var-rpm.sh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="plugins/Linux-Syslog.json" ex="false" tool="3" flavor2="0">
       </item>
@@ -350,8 +346,6 @@
       <item path="plugins/MySQL.json" ex="false" tool="3" flavor2="0">
       </item>
       <item path="plugins/SNMP.json" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="src/addon.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="src/addonList.c" ex="false" tool="0" flavor2="0">
       </item>
@@ -419,7 +413,6 @@
           <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/probe</output>
           <linkerAddLib>
             <pElem>/usr/local/lib</pElem>
-            <pElem>addon/dist/Release/${CND_PLATFORM}</pElem>
           </linkerAddLib>
           <linkerDynSerch>
             <pElem>/opt/echoes-alert/probe/lib/addons</pElem>
@@ -430,7 +423,6 @@
           <linkerLibItems>
             <linkerOptionItem>`pkg-config --libs gobject-2.0 json-glib-1.0`</linkerOptionItem>
             <linkerLibLibItem>pthread</linkerLibLibItem>
-            <linkerLibLibItem>dl</linkerLibLibItem>
             <linkerLibLibItem>addon</linkerLibLibItem>
             <linkerLibLibItem>cunit</linkerLibLibItem>
           </linkerLibItems>
@@ -485,8 +477,6 @@
           <output>${TESTDIR}/TestFiles/f7</output>
         </linkerTool>
       </folder>
-      <item path="include/addon.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="include/addonList.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/conf.h" ex="false" tool="3" flavor2="0">
@@ -566,9 +556,9 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="packages/pkg-specific-macro.sh" ex="false" tool="3" flavor2="0">
+      <item path="packages/file-tree.sh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="packages/pkg-specific-variable.sh" ex="false" tool="3" flavor2="0">
+      <item path="packages/package-conf.sh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="packages/rpm/echoes-alert-probe.init"
             ex="false"
@@ -580,9 +570,9 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="packages/var-deb-specific.sh" ex="false" tool="3" flavor2="0">
+      <item path="packages/var-deb.sh" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="packages/var-rpm-specific.sh" ex="false" tool="3" flavor2="0">
+      <item path="packages/var-rpm.sh" ex="false" tool="3" flavor2="0">
       </item>
       <item path="plugins/Linux-Syslog.json" ex="false" tool="3" flavor2="0">
       </item>
@@ -596,8 +586,6 @@
       <item path="plugins/MySQL.json" ex="false" tool="3" flavor2="0">
       </item>
       <item path="plugins/SNMP.json" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="src/addon.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="src/addonList.c" ex="false" tool="0" flavor2="0">
       </item>

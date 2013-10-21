@@ -21,8 +21,6 @@
 #include "conf.h"
 /* To init struct PlgList */
 #include "plugin.h"
-/* To init struct AddonsMgrParams */
-#include "addon.h"
 /* To init struct FormatParams */
 #include "format.h"
 /* To init struct SenderParams */
@@ -200,9 +198,9 @@ int main(int argc, char** argv, char **envp)
     addonsMgrParams.addonsThreads = threadIdentifiers.addonsThreads;
     
 #ifndef NDEBUG
-    printf("Début du chargement des addons\n");
+    printf("Chargement des addons\n");
 #endif
-    if (pthread_create(&threadIdentifiers.addonsMgrThread, NULL, addon, (void*) &addonsMgrParams))
+    if (addon(&addonsMgrParams))
     {
         g_critical("Critical: %s: addonsMgrThread", strerror(errno));
         free(addonsMgrParams.addonsThreads);

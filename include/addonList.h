@@ -25,17 +25,6 @@ extern "C" {
 
 #define COLLECT_QUEUE_INITIALIZER {PTHREAD_MUTEX_INITIALIZER, NULL}
 
-/* Addon Informations */
-typedef struct AddonInfo AddonInfo;
-struct AddonInfo
-{
-    unsigned int *idAddon;
-    AddonParamsList addonParamsList;
-    AddonInfo *nxt;
-};
-/* Addons List */
-typedef AddonInfo* AddonList;
-
 /**
  * @param addonParamsList
  * @param idAddon

@@ -36,7 +36,6 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/main.o \
-	${OBJECTDIR}/src/addon.o \
 	${OBJECTDIR}/src/addonList.o \
 	${OBJECTDIR}/src/conf.o \
 	${OBJECTDIR}/src/format.o \
@@ -73,7 +72,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-L/usr/local/lib -Laddon/dist/Release/${CND_PLATFORM} -Wl,-rpath,/opt/echoes-alert/probe/lib/addons -Wl,-rpath,/opt/echoes-alert/probe/lib -Wl,-rpath,lib/addons `pkg-config --libs gobject-2.0 json-glib-1.0` -lpthread -ldl -laddon -lcunit  
+LDLIBSOPTIONS=-L/usr/local/lib -Wl,-rpath,/opt/echoes-alert/probe/lib/addons -Wl,-rpath,/opt/echoes-alert/probe/lib -Wl,-rpath,lib/addons `pkg-config --libs gobject-2.0 json-glib-1.0` -lpthread -laddon -lcunit  
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
@@ -87,11 +86,6 @@ ${OBJECTDIR}/main.o: main.c
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.c) -O3 -s -Iinclude -Iaddon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.c
-
-${OBJECTDIR}/src/addon.o: src/addon.c 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.c) -O3 -s -Iinclude -Iaddon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon.o src/addon.c
 
 ${OBJECTDIR}/src/addonList.o: src/addonList.c 
 	${MKDIR} -p ${OBJECTDIR}/src
@@ -220,19 +214,6 @@ ${OBJECTDIR}/main_nomain.o: ${OBJECTDIR}/main.o main.c
 	    $(COMPILE.c) -O3 -s -Iinclude -Iaddon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/main_nomain.o main.c;\
 	else  \
 	    ${CP} ${OBJECTDIR}/main.o ${OBJECTDIR}/main_nomain.o;\
-	fi
-
-${OBJECTDIR}/src/addon_nomain.o: ${OBJECTDIR}/src/addon.o src/addon.c 
-	${MKDIR} -p ${OBJECTDIR}/src
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/addon.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} $@.d;\
-	    $(COMPILE.c) -O3 -s -Iinclude -Iaddon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addon_nomain.o src/addon.c;\
-	else  \
-	    ${CP} ${OBJECTDIR}/src/addon.o ${OBJECTDIR}/src/addon_nomain.o;\
 	fi
 
 ${OBJECTDIR}/src/addonList_nomain.o: ${OBJECTDIR}/src/addonList.o src/addonList.c 
