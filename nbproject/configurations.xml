@@ -181,7 +181,6 @@
           </linkerAddLib>
           <linkerDynSerch>
             <pElem>/opt/echoes-alert/probe/lib</pElem>
-            <pElem>../addon/dist/Debug/${CND_PLATFORM}</pElem>
           </linkerDynSerch>
           <linkerLibItems>
             <linkerOptionItem>`pkg-config --libs gobject-2.0 json-glib-1.0`</linkerOptionItem>
@@ -412,6 +411,7 @@
         <linkerTool>
           <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/probe</output>
           <linkerAddLib>
+            <pElem>addon/dist/Release/${CND_PLATFORM}</pElem>
             <pElem>/usr/local/lib</pElem>
           </linkerAddLib>
           <linkerDynSerch>

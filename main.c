@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <addonLib.h>
 
 /* To init Log */
 #include "log.h"
@@ -27,6 +28,8 @@
 #include "sender.h"
 /* To init struct SenderParams */
 #include "signals.h"
+
+
 
 /* Probe Names */
 #define PRODUCT_NAME "ECHOES Alert - Probe"

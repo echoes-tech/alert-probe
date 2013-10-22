@@ -72,7 +72,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-L../addon/dist/Debug/${CND_PLATFORM} -L/usr/local/lib -Wl,-rpath,/opt/echoes-alert/probe/lib -Wl,-rpath,../addon/dist/Debug/${CND_PLATFORM} `pkg-config --libs gobject-2.0 json-glib-1.0` -lpthread -lcunit -laddon  
+LDLIBSOPTIONS=-L../addon/dist/Debug/${CND_PLATFORM} -L/usr/local/lib -Wl,-rpath,/opt/echoes-alert/probe/lib `pkg-config --libs gobject-2.0 json-glib-1.0` -lpthread -lcunit -laddon  
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
