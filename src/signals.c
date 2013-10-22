@@ -44,7 +44,6 @@ void signalHandling(int _signum)
 
 int waitForShutdown()
 {
-    pthread_join(threadIdentifiers->addonsMgrThread, NULL);
     pthread_join(threadIdentifiers->formatThread, NULL);
     pthread_join(threadIdentifiers->senderThread, NULL);
     return *signum;

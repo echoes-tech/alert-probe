@@ -1,8 +1,8 @@
 #!/bin/bash -x
 
-########
-# Macros
-########
+#######################
+# Configuration - Probe
+#######################
 
 # Executable path generate by compilation
 OUTPUT_PATH=${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/probe
@@ -22,6 +22,5 @@ package="probe"
 version="0.1.0"
 pkg_version="1"
 
-# Complete when updating package (update from jenkins environnement = true)
-version_old="0.1.0"
-pkg_version_old="1"
+# Minimum common requirement version
+minimun_version="0.1.0"
