@@ -203,7 +203,7 @@ int main(int argc, char** argv, char **envp)
 #ifndef NDEBUG
     printf("Chargement des addons\n");
 #endif
-    if (addon(&addonsMgrParams))
+    if (addonManager(&addonsMgrParams))
     {
         g_critical("Critical: %s: addonsMgrThread", strerror(errno));
         free(addonsMgrParams.addonsThreads);
