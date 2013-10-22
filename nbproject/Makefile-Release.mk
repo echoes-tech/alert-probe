@@ -50,7 +50,6 @@ TESTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tests
 
 # Test Files
 TESTFILES= \
-	${TESTDIR}/TestFiles/f3 \
 	${TESTDIR}/TestFiles/f1 \
 	${TESTDIR}/TestFiles/f4 \
 	${TESTDIR}/TestFiles/f6 \
@@ -132,10 +131,6 @@ ${OBJECTDIR}/tests/utilUnitTest.o: tests/utilUnitTest.c
 
 # Build Test Targets
 .build-tests-conf: .build-conf ${TESTFILES}
-${TESTDIR}/TestFiles/f3: ${TESTDIR}/tests/addoncunittest.o ${OBJECTFILES:%.o=%_nomain.o}
-	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.c}   -o ${TESTDIR}/TestFiles/f3 $^ ${LDLIBSOPTIONS} 
-
 ${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/confcunittest.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.c}   -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} 
@@ -159,12 +154,6 @@ ${TESTDIR}/TestFiles/f5: ${TESTDIR}/tests/sendercunittest.o ${OBJECTFILES:%.o=%_
 ${TESTDIR}/TestFiles/f7: ${TESTDIR}/tests/signalscunittest.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.c}   -o ${TESTDIR}/TestFiles/f7 $^ ${LDLIBSOPTIONS} 
-
-
-${TESTDIR}/tests/addoncunittest.o: tests/addoncunittest.c 
-	${MKDIR} -p ${TESTDIR}/tests
-	${RM} $@.d
-	$(COMPILE.c) -O3 -s -Iinclude -Iaddon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${TESTDIR}/tests/addoncunittest.o tests/addoncunittest.c
 
 
 ${TESTDIR}/tests/confcunittest.o: tests/confcunittest.c 
@@ -324,7 +313,6 @@ ${OBJECTDIR}/tests/utilUnitTest_nomain.o: ${OBJECTDIR}/tests/utilUnitTest.o test
 .test-conf:
 	@if [ "${TEST}" = "" ]; \
 	then  \
-	    ${TESTDIR}/TestFiles/f3 || true; \
 	    ${TESTDIR}/TestFiles/f1 || true; \
 	    ${TESTDIR}/TestFiles/f4 || true; \
 	    ${TESTDIR}/TestFiles/f6 || true; \

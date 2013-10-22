@@ -13,6 +13,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <addonLib.h>
 #ifndef NDEBUG
     #include "CUnit/Basic.h"
 #else
@@ -20,7 +21,6 @@
 #endif
 #include "plugin.h"
 #include "conf.h"
-#include "addon.h"
 
 /*
  * CUnit Test Suite

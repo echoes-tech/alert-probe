@@ -98,12 +98,6 @@
                    displayName="Test Files"
                    projectFiles="false"
                    kind="TEST_LOGICAL_FOLDER">
-      <logicalFolder name="f3"
-                     displayName="Addon CUnit Test"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests/addoncunittest.c</itemPath>
-      </logicalFolder>
       <logicalFolder name="f1"
                      displayName="Conf CUnit Test"
                      projectFiles="true"
@@ -180,6 +174,7 @@
             <pElem>/usr/local/lib</pElem>
           </linkerAddLib>
           <linkerDynSerch>
+            <pElem>../addon/dist/Debug/${CND_PLATFORM}</pElem>
             <pElem>/opt/echoes-alert/probe/lib</pElem>
           </linkerDynSerch>
           <linkerLibItems>
@@ -359,8 +354,6 @@
       <item path="src/sender.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="src/signals.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="tests/addoncunittest.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="tests/confcunittest.c" ex="false" tool="0" flavor2="0">
       </item>
@@ -600,8 +593,6 @@
       <item path="src/sender.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="src/signals.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="tests/addoncunittest.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="tests/confcunittest.c" ex="false" tool="0" flavor2="0">
       </item>
