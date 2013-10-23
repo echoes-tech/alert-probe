@@ -169,6 +169,7 @@
           <warningLevel>2</warningLevel>
         </cTool>
         <linkerTool>
+          <output>${TESTDIR}/TestFiles/f3</output>
           <linkerAddLib>
             <pElem>../addon/dist/Debug/${CND_PLATFORM}</pElem>
             <pElem>/usr/local/lib</pElem>
@@ -195,11 +196,6 @@
       <folder path="TestFiles/f2">
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f2</output>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f3">
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f3</output>
         </linkerTool>
       </folder>
       <folder path="TestFiles/f4">
@@ -387,7 +383,8 @@
           <stripSymbols>true</stripSymbols>
           <incDir>
             <pElem>include</pElem>
-            <pElem>addon/include</pElem>
+            <pElem>/var/lib/jenkins/jobs/ea-probe_addon_common-${target}/workspace/default/include</pElem>
+            <pElem>../addon/include</pElem>
           </incDir>
           <commandLine>-DNDEBUG</commandLine>
         </cTool>
@@ -402,15 +399,17 @@
           <developmentMode>5</developmentMode>
         </asmTool>
         <linkerTool>
-          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/probe</output>
+          <output>${TESTDIR}/TestFiles/f3</output>
           <linkerAddLib>
-            <pElem>addon/dist/Release/${CND_PLATFORM}</pElem>
             <pElem>/usr/local/lib</pElem>
+            <pElem>/var/lib/jenkins/jobs/ea-probe_addon_common-${target}/workspace/default/dist/Release/${CND_PLATFORM}</pElem>
+            <pElem>../addon/dist/Release/${CND_PLATFORM}</pElem>
           </linkerAddLib>
           <linkerDynSerch>
             <pElem>/opt/echoes-alert/probe/lib/addons</pElem>
             <pElem>/opt/echoes-alert/probe/lib</pElem>
-            <pElem>lib/addons</pElem>
+            <pElem>/var/lib/jenkins/jobs/ea-probe_addon_common-${target}/workspace/default/dist/Release/${CND_PLATFORM}</pElem>
+            <pElem>../addon/dist/Release/${CND_PLATFORM}</pElem>
           </linkerDynSerch>
           <stripSymbols>true</stripSymbols>
           <linkerLibItems>
@@ -443,11 +442,6 @@
       <folder path="TestFiles/f2">
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f2</output>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f3">
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f3</output>
         </linkerTool>
       </folder>
       <folder path="TestFiles/f4">
