@@ -1,0 +1,303 @@
+set timeout 1
+
+###############
+###  TESTS  ###
+###############	
+
+# Test expected output using $regex
+proc test_expect {test_name regex} {
+	if { [catch {
+		expect {
+			-re $regex {
+	    			pass "$test_name"
+	    		}
+	    		default {
+	    			fail_ "$test_name" "regex doesn't match\nCurrent output:$expect_out(buffer)" 
+			}
+		}  
+	} caught_error ] } {
+		fail_ "$test_name" "caught error: $caught_error"
+	}  	
+}
+
+# Test if $file_path exists
+proc test_file_exist {test_name file_path} {
+	if { [file exist $file_path] } {
+    		pass "$test_name"
+    	} else {
+    		fail_ "$test_name" "file '$file_path' does not exist" 
+    	}    	
+}
+
+# Test return code of last spawn
+# Process need to be finished
+proc test_return_code {test_name process_id code} {
+	if { [is_process_running $process_id] } {	
+    		fail_ "$test_name" "spawn process still alive" 
+		return
+	}
+	set actual_code [lindex [wait] 3]
+	if { $actual_code == $code } {
+    		pass "$test_name"
+    	} else {
+    		fail_ "$test_name" "actual return code: $actual_code" 
+    	}  
+}
+
+# Test if $package_name is installed
+proc test_package_installed {test_name package_name} {
+	if { [catch {
+		exec puppet resource package $package_name
+	} ] } {
+		fail_ "$test_name" "package '$package_name' is not installed"
+	} else {
+		pass "$test_name"
+	}
+}
+
+# Test if $string1 and $string2 are equal
+proc test_string_equal {test_name string1 string2} {
+	if { [string equal $string1 $string2 ] } {
+		pass "$test_name"
+	} else {
+		fail_ "$test_name" "'$string1' and '$string2' are not equal"
+	}
+}
+
+# Test if $regex match with $string1
+proc test_string_regexp {test_name regex string1} {
+	if { [regexp $regex $string1] } {
+		pass "$test_name"
+	} else {
+	    	fail_ "$test_name" "regex '$regex' doesn't match with '$string1'" 
+	}
+}
+
+# Test if $string1 and $string2 are not equal
+proc test_string_not_equal {test_name string1 string2} {
+	if { ! [string equal $string1 $string2 ] } {
+		pass "$test_name"
+	} else {
+		fail_ "$test_name" "'$string1' and '$string2' are equal"
+	}
+}
+
+# Test if $arg1 is an integer
+proc test_is_digit {test_name arg1} {
+	if { [string is digit $arg1] } {
+		pass "$test_name"
+	} else {
+		fail_ "$test_name" "'$arg1' is not an integer"
+	}
+}
+
+# Test if $arg1 is greater than $arg2
+proc test_is_greater {test_name arg1 arg2} {
+	if { $arg1 > $arg2 } {
+		pass "$test_name"
+	} else {
+		fail_ "$test_name" "'$arg1' is not greater than '$arg2'"
+	}
+}
+
+# Test if $service_name is running
+proc test_is_service_running {test_name service_name} {
+	if { [is_service_running $service_name] } {
+		pass "$test_name"
+	} else {
+		fail_ "$test_name" "service '$service_name' is not running"
+	}
+}
+
+# Test if $service_name is stopped
+proc test_is_service_stopped {test_name service_name} {
+	if { [is_service_running $service_name] } {
+		fail_ "$test_name" "service '$service_name' is not stopped"
+	} else {
+		pass "$test_name"
+	}
+}
+
+###############
+###  UTILS  ###
+###############
+
+# Return value corresponding to $key from $file_path
+# Form: $key=value or $key="value" or $key='value'
+# Return -1 if $file_path or $key doesn't exist
+proc get_value_in_file {key file_path} {
+	if { [catch {
+		set input_file [open [lindex $file_path 0] r]
+	} caught_error] } {
+		perror "caught error: $caught_error"
+		return -1
+	}
+	set key_exist 0
+	while { [gets $input_file line] >= 0 } {
+		if { [regexp "^$key=" $line] } {
+			set value [lindex [split $line "="] 1]
+			set key_exist 1
+		}
+	}
+	if { ! $key_exist } {
+		perror "Key '$key' does not exist in file '$file_path'"
+		return -1
+	}	
+        close $input_file
+	# if $value first and last char are " or ' remove it
+	if { 
+		[string equal [string index $value 0] "\""] && [string equal [string index $value [expr [string length $value] - 1]] "\""]
+		|| [string equal [string index $value 0] "'"] && [string equal [string index $value [expr [string length $value] - 1]] "'"]
+	} then {
+		set value [string range $value 1 end]
+		set value [string range $value 0 [expr [string length $value] - 2]]
+	}
+	return $value
+}
+
+# Set value corresponding to $key in $file_path
+# Return -1 if $file_path or $key doesn't exist
+proc set_value_in_file {key file_path value} {
+	if { [catch {
+		set input_file [open [lindex $file_path 0] r]
+	} caught_error] } {
+		perror "caught error: $caught_error"
+		return -1
+	}
+	set output_file [open [lindex "${file_path}_tmp" 0] w]
+	set key_exist 0
+	while { [gets $input_file line] >= 0 } {
+		if { [regexp "^$key=" $line] } {
+			set line "$key=$value"
+			set key_exist 1
+		}
+		puts $output_file $line
+	}
+        close $input_file
+        close $output_file
+	if { ! $key_exist } {
+		file delete "${file_path}_tmp"
+		perror "Key '$key' does not exist in file '$file_path'"
+		return -1
+	}
+	file rename -force "${file_path}_tmp" $file_path
+}
+
+#
+# Return -1 if file doesn't exist
+proc get_file_content {file_path} {
+	if { [catch {
+		set file [open [lindex $file_path 0] r]
+	} caught_error] } {
+		perror "caught error: $caught_error" 0
+		return -1
+	}
+	set content [read $file]
+	close $file
+	return $content
+}
+
+# Return 1 if $service_name is running
+# Else return 0
+proc is_service_running {service_name} {
+	foreach line [split [exec puppet resource service $service_name] "\n"] {
+		if { [regexp "ensure.*=>.*running" $line] } {
+			return 1
+		}
+	}
+	return 0
+}
+
+# Return 1 if $pid is running
+# Else return 0
+# Get process_id using: set process_id [spawn ...]
+proc is_process_running {process_id} {
+	foreach line [split [eval exec [exec facter ps]] "\n"] {
+		if { [regexp $process_id $line] && ! [regexp "defunct" $line] } {
+			return 1
+		}
+	}
+	return 0
+}
+
+# Wait end of $spawn_id
+# Stop when time out: return -1
+# Get process_id using: set process_id [spawn ...]
+proc wait_spawn_end {spawn_pid} {
+	global timeout
+	set time [clock seconds]
+	while { [is_process_running $spawn_pid] } {
+		if { [expr [expr $time + $timeout] <= [clock seconds]] } {
+        		warning "\[[info level [expr [info level]]]\]: timeout"
+			return -1
+		}
+		after 100
+	}
+	wait
+}
+
+# Return $file_path lines count
+# Return -1 if file doesn't exist
+proc linecount {file_path} {
+	if { [catch {
+		set input_file [open [lindex $file_path 0] r]
+	} caught_error] } {
+		perror "caught error: $caught_error"
+		return -1
+	}
+        set count 0
+        while {[gets $input_file line] > -1} {
+        	incr count
+        }
+        close $input_file
+        return $count
+}
+
+# Return line from $file_path corresponding to $line_number
+# Wait for $line_number be written
+# Stop when time out: return -1
+# Return -1 if file doesn't exist
+proc get_logfile_line {file_path line_number} {	
+	global timeout
+	if { [catch {
+		set input_file [open [lindex $file_path 0] r]
+	} caught_error] } {
+		perror "caught error: $caught_error"
+		return -1
+	}
+	set time [clock seconds]
+        set count 0
+	while { ! [expr [expr $time + $timeout] <= [clock seconds]] } {
+		while {[gets $input_file line] > -1} {
+			incr count
+			if { [expr $count == $line_number] } {
+        			close $input_file				
+				return $line
+			}
+		}
+		after 100
+        }
+        warning "\[[info level [expr [info level]]]\]: timeout"
+        close $input_file
+	return -1
+}
+
+
+###############
+###  LOCAL  ###
+###############
+
+# Override fail {test_name}
+# Set proc + $test_name + $message in output field in xml file
+proc fail_ {test_name message} {
+    	set message "\[[lindex [info level [expr [info level] - 1]] 0] $test_name\]: $message"
+	
+	upvar 2 expect_out(buffer) error_buffer
+	set error_buffer "\n[string map {"\n" "\\n"} $message]"
+	    	
+	fail "$test_name"	
+	
+	puts $message
+	
+	set error_buffer ""
+}

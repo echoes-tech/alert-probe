@@ -48,8 +48,8 @@ static gboolean incoming_callback(GSocketService *service,
 {
     GError * error = NULL;
     GTlsCertificate *tlscert = NULL;
-    const char *tls_cert_file = "./tests/ssl/servunittest.crt";
-    const char *tls_cert_key = "./tests/ssl/servunittest.key";
+    const char *tls_cert_file = "./tests_unit/ssl/servunittest.crt";
+    const char *tls_cert_key = "./tests_unit/ssl/servunittest.key";
     GIOStream *tls_conn;
     GInputStream * istream = NULL;
     gchar *message = calloc(1024, sizeof (char));

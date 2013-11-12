@@ -37,7 +37,7 @@ int clean_suite(void)
 void testLoadConf()
 {
     Conf conf = CONF_INITIALIZER;
-    const char* confPath = "./tests/test.conf";
+    const char* confPath = "./tests_unit/test.conf";
     int result = 0;
     
     /* Test le chargement d'un fichier de conf valide */

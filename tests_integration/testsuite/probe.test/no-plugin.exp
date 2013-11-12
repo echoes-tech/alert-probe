@@ -1,0 +1,56 @@
+# Test probe when have no plugins
+# Expect '0 plugins loaded' message in log file
+# Probe must stop
+
+
+###############
+## VARIABLES ##
+###############
+
+set timeout 10
+
+# Log file path
+set log "/var/log/echoes-alert/probe.log"
+
+###########
+# BEFORE ##
+###########
+
+# Delete all plugins
+file delete -force /opt/echoes-alert/probe/etc/plugins
+file mkdir /opt/echoes-alert/probe/etc/plugins
+
+# If a probe is running stop it
+if { [is_service_running "ea-probe"] } {
+	set spawn_pid [spawn service ea-probe stop]
+	wait_spawn_end $spawn_pid
+}
+
+
+###########
+## TESTS ##
+###########
+
+set line_number [expr [linecount $log] + 2]
+
+set spawn_pid [spawn service ea-probe start]
+wait_spawn_end $spawn_pid
+
+test_string_regexp "no-plugin_load" "^.* - 0 plugins loaded$" [get_logfile_line $log $line_number]
+
+sleep 2
+
+test_is_service_stopped "no-plugin_stopped" "ea-probe"
+
+
+###########
+## AFTER ##
+###########
+
+# If a probe is running stop it
+if { [is_service_running "ea-probe"] } {
+	set spawn_pid [spawn service ea-probe stop]
+	wait_spawn_end $spawn_pid
+}
+
+

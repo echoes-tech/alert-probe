@@ -1,0 +1,22 @@
+# When user runs install script as no root user
+# Script displays message and exits with 1
+
+###############
+## VARIABLES ##
+###############
+
+set timeout 1
+
+# Install script path
+set install_script "install.sh"
+
+
+###########
+## TESTS ##
+###########
+
+set process_id [spawn su mla -c "sh $install_script"]
+
+test_expect "root_message" "^ECHOES Alert Probe requires root privileges to install\..\nPlease re-run this script as root or use '.*' if your user is in /etc/sudoers\..\n$"
+
+test_return_code "root_exit" $process_id 1

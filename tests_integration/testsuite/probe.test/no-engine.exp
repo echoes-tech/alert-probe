@@ -1,0 +1,57 @@
+# Test probe when engine not responding
+# Expect 'connection refused' message in log file
+
+
+###############
+## VARIABLES ##
+###############
+
+set timeout 10
+
+# Test plugins directory path
+set plugin "testsuite/probe.test/plugins/no-engine"
+
+# Log file path
+set log "/var/log/echoes-alert/probe.log"
+
+
+############
+## BEFORE ##
+############
+
+# Update probe.conf
+set_value_in_file "engine_fqdn" "/opt/echoes-alert/probe/etc/probe.conf" "127.0.0.1"
+set_value_in_file "engine_port" "/opt/echoes-alert/probe/etc/probe.conf" "1700"
+
+# Delete all plugins
+file delete -force /opt/echoes-alert/probe/etc/plugins
+
+# Add test plugins
+file copy $plugin "/opt/echoes-alert/probe/etc/plugins"
+
+# If a probe is running stop it
+if { [is_service_running "ea-probe"] } {
+	set spawn_pid [spawn service ea-probe stop]
+	wait_spawn_end $spawn_pid
+}
+
+
+###########
+## TESTS ##
+###########
+
+set line_number [expr [linecount $log] + 4]
+
+set spawn_pid [spawn service ea-probe start]
+wait_spawn_end $spawn_pid
+
+test_string_regexp "no-engine_connection-refused" "^.* - Could not connect to 127.0.0.1: Connection refused: 127.0.0.1:1700$" [get_logfile_line $log $line_number]
+
+
+###########
+## AFTER ##
+###########
+
+# Stop probe 
+set spawn_pid [spawn service ea-probe stop]
+wait_spawn_end $spawn_pid
