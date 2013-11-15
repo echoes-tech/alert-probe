@@ -95,6 +95,46 @@
       <itemPath>tests_unit/utilUnitTest.c</itemPath>
       <itemPath>tests_unit/utilUnitTest.h</itemPath>
     </logicalFolder>
+    <logicalFolder name="tests_integration"
+                   displayName="tests_integration"
+                   projectFiles="true">
+      <logicalFolder name="testsuite" displayName="testsuite" projectFiles="true">
+        <logicalFolder name="config" displayName="config" projectFiles="true">
+          <itemPath>tests_integration/testsuite/config/unix.exp</itemPath>
+        </logicalFolder>
+        <logicalFolder name="install.test"
+                       displayName="install.test"
+                       projectFiles="true">
+          <itemPath>tests_integration/testsuite/install.test/install.exp</itemPath>
+          <itemPath>tests_integration/testsuite/install.test/root.exp</itemPath>
+        </logicalFolder>
+        <logicalFolder name="probe.test" displayName="probe.test" projectFiles="true">
+          <logicalFolder name="plugins" displayName="plugins" projectFiles="true">
+            <logicalFolder name="no-engine" displayName="no-engine" projectFiles="true">
+              <itemPath>tests_integration/testsuite/probe.test/plugins/no-engine/FileSystem.json</itemPath>
+            </logicalFolder>
+          </logicalFolder>
+          <itemPath>tests_integration/testsuite/probe.test/no-engine.exp</itemPath>
+          <itemPath>tests_integration/testsuite/probe.test/no-plugin.exp</itemPath>
+        </logicalFolder>
+        <logicalFolder name="server" displayName="server" projectFiles="true">
+          <logicalFolder name="ssl" displayName="ssl" projectFiles="true">
+            <itemPath>tests_integration/testsuite/server/ssl/ca.crt</itemPath>
+            <itemPath>tests_integration/testsuite/server/ssl/ca.key</itemPath>
+            <itemPath>tests_integration/testsuite/server/ssl/ca.srl</itemPath>
+            <itemPath>tests_integration/testsuite/server/ssl/servunittest.crt</itemPath>
+            <itemPath>tests_integration/testsuite/server/ssl/servunittest.csr</itemPath>
+            <itemPath>tests_integration/testsuite/server/ssl/servunittest.key</itemPath>
+          </logicalFolder>
+          <itemPath>tests_integration/testsuite/server/compil.sh</itemPath>
+          <itemPath>tests_integration/testsuite/server/main.c</itemPath>
+          <itemPath>tests_integration/testsuite/server/server</itemPath>
+          <itemPath>tests_integration/testsuite/server/server.log</itemPath>
+          <itemPath>tests_integration/testsuite/server/server.result</itemPath>
+        </logicalFolder>
+      </logicalFolder>
+      <itemPath>tests_integration/site.exp</itemPath>
+    </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
                    projectFiles="false"
@@ -355,6 +395,93 @@
       </item>
       <item path="src/signals.c" ex="false" tool="0" flavor2="0">
       </item>
+      <item path="tests_integration/site.exp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/config/unix.exp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/install.test/install.exp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/install.test/root.exp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/probe.test/no-engine.exp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/probe.test/no-plugin.exp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/probe.test/plugins/no-engine/FileSystem.json"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/server/compil.sh"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/server/main.c"
+            ex="false"
+            tool="0"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/server/server"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/server/server.log"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/server/server.result"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/server/ssl/ca.crt"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/server/ssl/ca.key"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/server/ssl/ca.srl"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/server/ssl/servunittest.crt"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/server/ssl/servunittest.csr"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/server/ssl/servunittest.key"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="tests_unit/confcunittest.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="tests_unit/formatcunittest.c" ex="false" tool="0" flavor2="0">
@@ -387,7 +514,7 @@
           <stripSymbols>true</stripSymbols>
           <incDir>
             <pElem>include</pElem>
-            <pElem>/var/lib/jenkins/workspace/ea-probe_addon_common-${target}/label/${NODE_NAME}/include</pElem>
+            <pElem>/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/include</pElem>
             <pElem>../addon/include</pElem>
           </incDir>
           <commandLine>-DNDEBUG</commandLine>
@@ -406,14 +533,14 @@
           <output>${TESTDIR}/TestFiles/f3</output>
           <linkerAddLib>
             <pElem>/usr/local/lib</pElem>
-            <pElem>/var/lib/jenkins/workspace/ea-probe_addon_common-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM}</pElem>
+            <pElem>/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM}</pElem>
             <pElem>../addon/dist/Release/${CND_PLATFORM}</pElem>
             <pElem>../addon/dist/Release/${CND_PLATFORM}</pElem>
           </linkerAddLib>
           <linkerDynSerch>
             <pElem>/opt/echoes-alert/probe/lib/addons</pElem>
             <pElem>/opt/echoes-alert/probe/lib</pElem>
-            <pElem>/var/lib/jenkins/workspace/ea-probe_addon_common-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM};../addon/dist/Release/${CND_PLATFORM}</pElem>
+            <pElem>/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM}</pElem>
             <pElem>../addon/dist/Release/${CND_PLATFORM}</pElem>
           </linkerDynSerch>
           <stripSymbols>true</stripSymbols>
@@ -594,6 +721,93 @@
       <item path="src/sender.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="src/signals.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="tests_integration/site.exp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/config/unix.exp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/install.test/install.exp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/install.test/root.exp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/probe.test/no-engine.exp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/probe.test/no-plugin.exp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/probe.test/plugins/no-engine/FileSystem.json"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/server/compil.sh"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/server/main.c"
+            ex="false"
+            tool="0"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/server/server"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/server/server.log"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/server/server.result"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/server/ssl/ca.crt"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/server/ssl/ca.key"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/server/ssl/ca.srl"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/server/ssl/servunittest.crt"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/server/ssl/servunittest.csr"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/server/ssl/servunittest.key"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="tests_unit/confcunittest.c" ex="false" tool="0" flavor2="0">
       </item>

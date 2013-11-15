@@ -121,6 +121,11 @@ ${OBJECTDIR}/src/signals.o: src/signals.c
 	${RM} $@.d
 	$(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -pedantic -Wextra -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/signals.o src/signals.c
 
+${OBJECTDIR}/tests_integration/testsuite/server/main.o: tests_integration/testsuite/server/main.c 
+	${MKDIR} -p ${OBJECTDIR}/tests_integration/testsuite/server
+	${RM} $@.d
+	$(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -pedantic -Wextra -MMD -MP -MF $@.d -o ${OBJECTDIR}/tests_integration/testsuite/server/main.o tests_integration/testsuite/server/main.c
+
 ${OBJECTDIR}/tests_unit/utilUnitTest.o: tests_unit/utilUnitTest.c 
 	${MKDIR} -p ${OBJECTDIR}/tests_unit
 	${RM} $@.d
@@ -294,6 +299,19 @@ ${OBJECTDIR}/src/signals_nomain.o: ${OBJECTDIR}/src/signals.o src/signals.c
 	    $(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -pedantic -Wextra -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/signals_nomain.o src/signals.c;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/signals.o ${OBJECTDIR}/src/signals_nomain.o;\
+	fi
+
+${OBJECTDIR}/tests_integration/testsuite/server/main_nomain.o: ${OBJECTDIR}/tests_integration/testsuite/server/main.o tests_integration/testsuite/server/main.c 
+	${MKDIR} -p ${OBJECTDIR}/tests_integration/testsuite/server
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/tests_integration/testsuite/server/main.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} $@.d;\
+	    $(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -pedantic -Wextra -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/tests_integration/testsuite/server/main_nomain.o tests_integration/testsuite/server/main.c;\
+	else  \
+	    ${CP} ${OBJECTDIR}/tests_integration/testsuite/server/main.o ${OBJECTDIR}/tests_integration/testsuite/server/main_nomain.o;\
 	fi
 
 ${OBJECTDIR}/tests_unit/utilUnitTest_nomain.o: ${OBJECTDIR}/tests_unit/utilUnitTest.o tests_unit/utilUnitTest.c 
