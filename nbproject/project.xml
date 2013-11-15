@@ -11,6 +11,7 @@
             <make-dep-projects/>
             <sourceRootList>
                 <sourceRootElem>packages</sourceRootElem>
+                <sourceRootElem>tests_integration</sourceRootElem>
             </sourceRootList>
             <confList>
                 <confElem>

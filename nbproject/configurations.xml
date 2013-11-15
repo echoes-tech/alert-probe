@@ -70,6 +70,7 @@
       <itemPath>plugins/MySQL-ISPConfig-WebTraffic.json</itemPath>
       <itemPath>plugins/MySQL.json</itemPath>
       <itemPath>plugins/SNMP.json</itemPath>
+      <itemPath>plugins/log.json</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -149,6 +150,7 @@
   </logicalFolder>
   <sourceRootList>
     <Elem>packages</Elem>
+    <Elem>tests_integration</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -337,6 +339,8 @@
       </item>
       <item path="plugins/SNMP.json" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="plugins/log.json" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="src/addonList.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="src/conf.c" ex="false" tool="0" flavor2="0">
@@ -383,7 +387,7 @@
           <stripSymbols>true</stripSymbols>
           <incDir>
             <pElem>include</pElem>
-            <pElem>/var/lib/jenkins/jobs/ea-probe_addon_common-${target}/workspace/default/include</pElem>
+            <pElem>/var/lib/jenkins/workspace/ea-probe_addon_common-${target}/label/${NODE_NAME}/include</pElem>
             <pElem>../addon/include</pElem>
           </incDir>
           <commandLine>-DNDEBUG</commandLine>
@@ -402,13 +406,14 @@
           <output>${TESTDIR}/TestFiles/f3</output>
           <linkerAddLib>
             <pElem>/usr/local/lib</pElem>
-            <pElem>/var/lib/jenkins/jobs/ea-probe_addon_common-${target}/workspace/default/dist/Release/${CND_PLATFORM}</pElem>
+            <pElem>/var/lib/jenkins/workspace/ea-probe_addon_common-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM}</pElem>
+            <pElem>../addon/dist/Release/${CND_PLATFORM}</pElem>
             <pElem>../addon/dist/Release/${CND_PLATFORM}</pElem>
           </linkerAddLib>
           <linkerDynSerch>
             <pElem>/opt/echoes-alert/probe/lib/addons</pElem>
             <pElem>/opt/echoes-alert/probe/lib</pElem>
-            <pElem>/var/lib/jenkins/jobs/ea-probe_addon_common-${target}/workspace/default/dist/Release/${CND_PLATFORM}</pElem>
+            <pElem>/var/lib/jenkins/workspace/ea-probe_addon_common-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM};../addon/dist/Release/${CND_PLATFORM}</pElem>
             <pElem>../addon/dist/Release/${CND_PLATFORM}</pElem>
           </linkerDynSerch>
           <stripSymbols>true</stripSymbols>
@@ -573,6 +578,8 @@
       <item path="plugins/MySQL.json" ex="false" tool="3" flavor2="0">
       </item>
       <item path="plugins/SNMP.json" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="plugins/log.json" ex="false" tool="3" flavor2="0">
       </item>
       <item path="src/addonList.c" ex="false" tool="0" flavor2="0">
       </item>
