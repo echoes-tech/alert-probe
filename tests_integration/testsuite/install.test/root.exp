@@ -15,7 +15,7 @@ set install_script "install.sh"
 ## TESTS ##
 ###########
 
-set process_id [spawn su mla -c "sh $install_script"]
+set process_id [spawn sh $install_script]
 
 test_expect "root_message" "^ECHOES Alert Probe requires root privileges to install\..\nPlease re-run this script as root or use '.*' if your user is in /etc/sudoers\..\n$"
 
