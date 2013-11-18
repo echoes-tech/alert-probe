@@ -15,6 +15,9 @@ BIN_NAME=ea-probe
 # Package name
 PKG_NAME=ea-probe
 
+# Libraries path
+LIB_PATH=lib/probe
+
 # Package type
 package="probe"
 
