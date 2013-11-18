@@ -24,7 +24,7 @@ set install_script "install.sh"
 
 # Script running
 set process_id [spawn su root -c "sh $install_script"]
-expect -re "Mot de passe : $"
+expect -re ": $"
 send "root\n";
 
 
