@@ -190,7 +190,6 @@
   </logicalFolder>
   <sourceRootList>
     <Elem>packages</Elem>
-    <Elem>tests_integration</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -432,11 +431,6 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="tests_integration/testsuite/server/main.c"
-            ex="false"
-            tool="0"
-            flavor2="0">
-      </item>
       <item path="tests_integration/testsuite/server/server"
             ex="false"
             tool="3"
@@ -538,8 +532,8 @@
             <pElem>../addon/dist/Release/${CND_PLATFORM}</pElem>
           </linkerAddLib>
           <linkerDynSerch>
-            <pElem>/opt/echoes-alert/probe/lib/addons</pElem>
-            <pElem>/opt/echoes-alert/probe/lib</pElem>
+            <pElem>/opt/echoes-alert/probe/addons</pElem>
+            <pElem>"/opt/echoes-alert/probe/lib/*"</pElem>
             <pElem>/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM}</pElem>
             <pElem>../addon/dist/Release/${CND_PLATFORM}</pElem>
           </linkerDynSerch>
@@ -757,11 +751,6 @@
       <item path="tests_integration/testsuite/server/compil.sh"
             ex="false"
             tool="3"
-            flavor2="0">
-      </item>
-      <item path="tests_integration/testsuite/server/main.c"
-            ex="false"
-            tool="0"
             flavor2="0">
       </item>
       <item path="tests_integration/testsuite/server/server"

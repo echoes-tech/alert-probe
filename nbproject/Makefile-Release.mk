@@ -71,7 +71,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-L/usr/local/lib -L/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM} -L../addon/dist/Release/${CND_PLATFORM} -L../addon/dist/Release/${CND_PLATFORM} -Wl,-rpath,/opt/echoes-alert/probe/lib/addons -Wl,-rpath,/opt/echoes-alert/probe/lib -Wl,-rpath,/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM} -Wl,-rpath,../addon/dist/Release/${CND_PLATFORM} `pkg-config --libs gobject-2.0 json-glib-1.0` -lpthread -laddon -lcunit  
+LDLIBSOPTIONS=-L/usr/local/lib -L/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM} -L../addon/dist/Release/${CND_PLATFORM} -L../addon/dist/Release/${CND_PLATFORM} -Wl,-rpath,/opt/echoes-alert/probe/addons -Wl,-rpath,\"/opt/echoes-alert/probe/lib/\*\" -Wl,-rpath,/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM} -Wl,-rpath,../addon/dist/Release/${CND_PLATFORM} `pkg-config --libs gobject-2.0 json-glib-1.0` -lpthread -laddon -lcunit  
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
@@ -120,11 +120,6 @@ ${OBJECTDIR}/src/signals.o: src/signals.c
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.c) -O3 -s -Iinclude -I/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/include -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/signals.o src/signals.c
-
-${OBJECTDIR}/tests_integration/testsuite/server/main.o: tests_integration/testsuite/server/main.c 
-	${MKDIR} -p ${OBJECTDIR}/tests_integration/testsuite/server
-	${RM} $@.d
-	$(COMPILE.c) -O3 -s -Iinclude -I/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/include -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${OBJECTDIR}/tests_integration/testsuite/server/main.o tests_integration/testsuite/server/main.c
 
 ${OBJECTDIR}/tests_unit/utilUnitTest.o: tests_unit/utilUnitTest.c 
 	${MKDIR} -p ${OBJECTDIR}/tests_unit
@@ -299,19 +294,6 @@ ${OBJECTDIR}/src/signals_nomain.o: ${OBJECTDIR}/src/signals.o src/signals.c
 	    $(COMPILE.c) -O3 -s -Iinclude -I/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/include -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/signals_nomain.o src/signals.c;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/signals.o ${OBJECTDIR}/src/signals_nomain.o;\
-	fi
-
-${OBJECTDIR}/tests_integration/testsuite/server/main_nomain.o: ${OBJECTDIR}/tests_integration/testsuite/server/main.o tests_integration/testsuite/server/main.c 
-	${MKDIR} -p ${OBJECTDIR}/tests_integration/testsuite/server
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/tests_integration/testsuite/server/main.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} $@.d;\
-	    $(COMPILE.c) -O3 -s -Iinclude -I/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/include -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/tests_integration/testsuite/server/main_nomain.o tests_integration/testsuite/server/main.c;\
-	else  \
-	    ${CP} ${OBJECTDIR}/tests_integration/testsuite/server/main.o ${OBJECTDIR}/tests_integration/testsuite/server/main_nomain.o;\
 	fi
 
 ${OBJECTDIR}/tests_unit/utilUnitTest_nomain.o: ${OBJECTDIR}/tests_unit/utilUnitTest.o tests_unit/utilUnitTest.c 
