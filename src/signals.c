@@ -18,13 +18,16 @@ ThreadIdentifiers *threadIdentifiers = NULL;
 
 void signalsHandler(int *_signum, ThreadIdentifiers *_threadIdentifiers)
 {
-    unsigned int i = 0;
-    for (i = 1; i < SIGWINCH; i++)
+    unsigned int i = 0, j = 0;
+    int ignored [] = {SIGCHLD, SIGCLD, SIGIO, SIGPOLL, SIGSTOP, SIGTSTP, SIGCONT, SIGTTIN, SIGTTOU, SIGURG, SIGWINCH};
+    int ignored_length = 11;
+    for (i = 1; i < SIGSYS; i++)
     {
+        for (j = 0; j < ignored_length; j ++)
+            if (i == ignored[j])
+                continue;
         signal(i, signalHandling);
     }
-    signal(SIGPWR, signalHandling);
-    signal(SIGSYS, signalHandling);
     signum = _signum;
     threadIdentifiers = _threadIdentifiers;
 }
@@ -32,16 +35,27 @@ void signalsHandler(int *_signum, ThreadIdentifiers *_threadIdentifiers)
 void signalHandling(int _signum)
 {
     unsigned int i = 0;
-    *signum = _signum;
-    for (i = 0; i < threadIdentifiers->nbAddonsThreads; i++)
+    if (i == SIGPIPE)
     {
-        pthread_cancel(threadIdentifiers->addonsThreads[i]);
+        g_error("Error: Signal: %d", i);
+        return;
+    }
+    if (i == SIGTERM || i == SIGHUP || i == SIGALRM || i == SIGVTALRM || i == SIGPROF)
+        g_message("Signal: %d", i);    
+    else
+        g_critical("Critical: Signal: %d", i);
+    if (*signum == 0)
+    {
+        *signum = _signum;
+        for (i = 0; i < threadIdentifiers->nbAddonsThreads; i++)
+        {
+            pthread_cancel(threadIdentifiers->addonsThreads[i]);
+        }
     }
 }
 
 int waitForShutdown()
 {
-    pthread_join(threadIdentifiers->addonsMgrThread, NULL);
     pthread_join(threadIdentifiers->formatThread, NULL);
     pthread_join(threadIdentifiers->senderThread, NULL);
     return *signum;

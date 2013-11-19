@@ -19,6 +19,7 @@
 #include <unistd.h>
 #include <pthread.h>
 #include <signal.h>
+#include <glib.h>
 
 /* Thread identifiers */
 typedef struct ThreadIdentifiers ThreadIdentifiers;
