@@ -23,7 +23,7 @@ int pushSDElementQueue(
                        time_t time
                        )
 {
-    SDElementQueueElement *new = calloc(1, sizeof(SDElementQueueElement));
+    SDElementQueueElement *new = calloc(1, sizeof (SDElementQueueElement));
     if (sdElementQueue == NULL || new == NULL)
         g_error("Error: Queue of SD-Element unavailable");
 
@@ -48,7 +48,7 @@ int pushSDElementQueue(
     new->afterOffset = strdup(afterOffset);
 
     /* Debut de la zone protegee. */
-    pthread_mutex_lock (& sdElementQueue->mutex);
+    pthread_mutex_lock(& sdElementQueue->mutex);
 
     if (sdElementQueue->first != NULL) /* La file n'est pas vide */
     {
@@ -66,55 +66,43 @@ int pushSDElementQueue(
     }
 
     /* Fin de la zone protegee. */
-    pthread_mutex_unlock (& sdElementQueue->mutex);
+    pthread_mutex_unlock(& sdElementQueue->mutex);
 
     return EXIT_SUCCESS;
 }
 
 int popCollectQueue(CollectQueue *collectQueue, SDElementQueue *sdElementQueue)
 {
-    char afterOffset[10000] = "", afterOffsetTmp[10000] = "";
-    unsigned short i = 0;
+    char afterOffset[10000] = "";
 
     if (collectQueue == NULL)
         g_error("Error: Queue of collected data unavailable");
 
     /* Debut de la zone protegee. */
-    pthread_mutex_lock (& collectQueue->mutex);
+    pthread_mutex_lock(& collectQueue->mutex);
 
     /* On vérifie s'il y a quelque chose à défiler */
     if (collectQueue->first != NULL)
     {
         CollectQueueElement *popedElement = collectQueue->first;
 
-        for(i = 0; i < popedElement->valuesLength; i++)
-        {
-            gchar *base64encoded = g_base64_encode(
-                                                   (guchar *) popedElement->values[i],
-                                                   strlen(popedElement->values[i])
-                                                   );
+        char *base64encoded = g_base64_encode(
+                                              (guchar *) popedElement->values,
+                                              strlen(popedElement->values)
+                                              );
 
-            sprintf(
-                    afterOffsetTmp,
-                    " %d-%d-%d-%d-%d-%d-%d=\"%s\"",
-                    popedElement->idPlg,
-                    popedElement->idAsset,
-                    popedElement->idSrc,
-                    popedElement->idSearch,
-                    (i + 1),
-                    popedElement->lotNum,
-                    popedElement->lineNum,
-                    base64encoded
-                    );
+        sprintf(
+                afterOffset,
+                " lotNum=%d lineNum=%d %d=\"%s\"",
+                popedElement->lotNum,
+                popedElement->lineNum,
+                popedElement->idIDA,
+                base64encoded
+                );
 
-            g_free(base64encoded);
-            base64encoded = NULL;
+        g_free(base64encoded);
+        base64encoded = NULL;
 
-            strcat(afterOffset, afterOffsetTmp);
-
-            free(popedElement->values[i]);
-            popedElement->values[i] = NULL;
-        }
         free(popedElement->values);
         popedElement->values = NULL;
 
@@ -128,7 +116,7 @@ int popCollectQueue(CollectQueue *collectQueue, SDElementQueue *sdElementQueue)
     }
 
     /* Fin de la zone protegee. */
-    pthread_mutex_unlock (& collectQueue->mutex);
+    pthread_mutex_unlock(& collectQueue->mutex);
 
     return EXIT_SUCCESS;
 }
@@ -149,7 +137,7 @@ void *format(void *arg)
 #ifndef NDEBUG
     printf("Fin du thread de formatage\n");
 #endif
-    
+
     pthread_exit(NULL);
 }
 

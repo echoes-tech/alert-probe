@@ -14,14 +14,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
-#include <addonLib.h>
+#include <addonLibManager.h>
+#include <addonLibMemory.h>
 
 /* To init Log */
 #include "log.h"
 /* To init struct Conf */
 #include "conf.h"
-/* To init struct PlgList */
-#include "plugin.h"
 /* To init struct FormatParams */
 #include "format.h"
 /* To init struct SenderParams */
@@ -68,9 +67,6 @@ int main(int argc, char** argv, char **envp)
         "/var/log/echoes-alert/probe.log"
     };
 
-    /* Plugins List initialisation */
-    PlgList plgList = NULL;
-
     /* Signal number */
     int signum = 0;
 
@@ -79,7 +75,7 @@ int main(int argc, char** argv, char **envp)
 
     /* Addons Manager thread params initialisation */
     AddonsMgrParams addonsMgrParams = ADDON_PARAMS_INITIALIZER;
-    
+
     /* Queues initialisation */
     SDElementQueue sdElementQueue = {
         PTHREAD_MUTEX_INITIALIZER,
@@ -109,6 +105,8 @@ int main(int argc, char** argv, char **envp)
         &signum
     };
 
+    ListOfAllPointersToFree listOfAllPointersToFree;
+
     /* Help message and version */
     if (argc > 1)
     {
@@ -137,28 +135,28 @@ int main(int argc, char** argv, char **envp)
                       G_LOG_DOMAIN,
                       G_LOG_LEVEL_MASK,
                       log2File,
-                      (gpointer) &logParams
+                      (gpointer) & logParams
                       );
 #else
     g_log_set_handler(
                       G_LOG_DOMAIN,
                       G_LOG_LEVEL_MASK,
                       log2Console,
-                      (gpointer) &logParams
+                      (gpointer) & logParams
                       );
 #endif
 
     /* Daemonization */
 #ifdef NDEBUG
-    if(chdir("/") != 0)
+    if (chdir("/") != 0)
     {
         g_critical("%s", strerror(errno));
         return EXIT_FAILURE;
     }
-    if(fork() != 0)
+    if (fork() != 0)
         exit(EXIT_SUCCESS);
     setsid();
-    if(fork() != 0)
+    if (fork() != 0)
         exit(EXIT_SUCCESS);
 #endif
 
@@ -179,45 +177,25 @@ int main(int argc, char** argv, char **envp)
 #ifndef NDEBUG
     printf("Fin du chargement des conf\n");
 
-    printf("Début du chargement des plugins\n");
-#endif
-    if (plugin(conf.probePluginDir, &plgList, &addonsMgrParams.addonsList, &threadIdentifiers.nbAddonsThreads))
-    {
-        logStopProbe(PRODUCT_NAME, VERSION);
-        return EXIT_FAILURE;
-    }
-#ifndef NDEBUG
-    printf("Fin du chargement des plugins\n");
-#endif
-
-    /* Table addonsThreads creation */
-    threadIdentifiers.addonsThreads = calloc(threadIdentifiers.nbAddonsThreads, sizeof (pthread_t));
-    if (threadIdentifiers.addonsThreads == NULL)
-    {
-        g_critical("Critical: %s: threadIdentifiers.addonsThreads", strerror(errno));
-        logStopProbe(PRODUCT_NAME, VERSION);
-        return EXIT_FAILURE;
-    }
-    addonsMgrParams.addonsThreads = threadIdentifiers.addonsThreads;
-    
-#ifndef NDEBUG
     printf("Chargement des addons\n");
 #endif
-    if (addonManager(&addonsMgrParams))
+    if (addonManager(&addonsMgrParams, &listOfAllPointersToFree))
     {
         g_critical("Critical: %s: addonsMgrThread", strerror(errno));
-        free(addonsMgrParams.addonsThreads);
+        if (addonsMgrParams.threadIdentifiers->addonsThreads != NULL)
+            free(addonsMgrParams.threadIdentifiers->addonsThreads);
         logStopProbe(PRODUCT_NAME, VERSION);
         return EXIT_FAILURE;
     }
-    
+
 #ifndef NDEBUG
     printf("Début du chargement du module Format\n");
 #endif
     if (pthread_create(&threadIdentifiers.formatThread, NULL, format, (void*) &formatParams))
     {
         g_critical("Critical: %s: formatThread", strerror(errno));
-        free(addonsMgrParams.addonsThreads);
+        if (addonsMgrParams.threadIdentifiers->addonsThreads != NULL)
+            free(addonsMgrParams.threadIdentifiers->addonsThreads);
         logStopProbe(PRODUCT_NAME, VERSION);
         return EXIT_FAILURE;
     }
@@ -228,7 +206,8 @@ int main(int argc, char** argv, char **envp)
     if (pthread_create(&threadIdentifiers.senderThread, NULL, sender, (void*) &senderParams))
     {
         g_critical("Critical: %s: senderThread", strerror(errno));
-        free(addonsMgrParams.addonsThreads);
+        if (addonsMgrParams.threadIdentifiers->addonsThreads != NULL)
+            free(addonsMgrParams.threadIdentifiers->addonsThreads);
         logStopProbe(PRODUCT_NAME, VERSION);
         return EXIT_FAILURE;
     }
@@ -242,7 +221,8 @@ int main(int argc, char** argv, char **envp)
        avec entre autres les plgInfo et srcInfo etc. */
 
     /* Cleanup */
-    free(addonsMgrParams.addonsThreads);
+    free(addonsMgrParams.threadIdentifiers->addonsThreads);
+    listOfAllPointersToFree_free(&listOfAllPointersToFree);
 
     g_message(
               "[origin enterpriseId=\"40311\" software=\"%s\" swVersion=\"%s\"] stop",

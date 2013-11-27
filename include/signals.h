@@ -20,17 +20,7 @@
 #include <pthread.h>
 #include <signal.h>
 
-/* Thread identifiers */
-typedef struct ThreadIdentifiers ThreadIdentifiers;
-struct ThreadIdentifiers
-{
-    pthread_t *addonsThreads;
-    unsigned int nbAddonsThreads;
-    pthread_t formatThread;
-    pthread_t senderThread;
-};
-
-#define THREAD_IDENTIFIERS_INITIALIZER {NULL, 0, 0, 0}
+#include "addonLib.h"
 
 /**
  * Define signals handlers

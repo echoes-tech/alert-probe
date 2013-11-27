@@ -36,11 +36,9 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/main.o \
-	${OBJECTDIR}/src/addonList.o \
 	${OBJECTDIR}/src/conf.o \
 	${OBJECTDIR}/src/format.o \
 	${OBJECTDIR}/src/log.o \
-	${OBJECTDIR}/src/plugin.o \
 	${OBJECTDIR}/src/sender.o \
 	${OBJECTDIR}/src/signals.o \
 	${OBJECTDIR}/tests_unit/utilUnitTest.o
@@ -86,11 +84,6 @@ ${OBJECTDIR}/main.o: main.c
 	${RM} $@.d
 	$(COMPILE.c) -O3 -s -Iinclude -I/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/include -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.c
 
-${OBJECTDIR}/src/addonList.o: src/addonList.c 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.c) -O3 -s -Iinclude -I/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/include -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addonList.o src/addonList.c
-
 ${OBJECTDIR}/src/conf.o: src/conf.c 
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
@@ -105,11 +98,6 @@ ${OBJECTDIR}/src/log.o: src/log.c
 	${MKDIR} -p ${OBJECTDIR}/src
 	${RM} $@.d
 	$(COMPILE.c) -O3 -s -Iinclude -I/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/include -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/log.o src/log.c
-
-${OBJECTDIR}/src/plugin.o: src/plugin.c 
-	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.c) -O3 -s -Iinclude -I/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/include -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/plugin.o src/plugin.c
 
 ${OBJECTDIR}/src/sender.o: src/sender.c 
 	${MKDIR} -p ${OBJECTDIR}/src
@@ -205,19 +193,6 @@ ${OBJECTDIR}/main_nomain.o: ${OBJECTDIR}/main.o main.c
 	    ${CP} ${OBJECTDIR}/main.o ${OBJECTDIR}/main_nomain.o;\
 	fi
 
-${OBJECTDIR}/src/addonList_nomain.o: ${OBJECTDIR}/src/addonList.o src/addonList.c 
-	${MKDIR} -p ${OBJECTDIR}/src
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/addonList.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} $@.d;\
-	    $(COMPILE.c) -O3 -s -Iinclude -I/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/include -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/addonList_nomain.o src/addonList.c;\
-	else  \
-	    ${CP} ${OBJECTDIR}/src/addonList.o ${OBJECTDIR}/src/addonList_nomain.o;\
-	fi
-
 ${OBJECTDIR}/src/conf_nomain.o: ${OBJECTDIR}/src/conf.o src/conf.c 
 	${MKDIR} -p ${OBJECTDIR}/src
 	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/conf.o`; \
@@ -255,19 +230,6 @@ ${OBJECTDIR}/src/log_nomain.o: ${OBJECTDIR}/src/log.o src/log.c
 	    $(COMPILE.c) -O3 -s -Iinclude -I/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/include -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/log_nomain.o src/log.c;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/log.o ${OBJECTDIR}/src/log_nomain.o;\
-	fi
-
-${OBJECTDIR}/src/plugin_nomain.o: ${OBJECTDIR}/src/plugin.o src/plugin.c 
-	${MKDIR} -p ${OBJECTDIR}/src
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/src/plugin.o`; \
-	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
-	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
-	then  \
-	    ${RM} $@.d;\
-	    $(COMPILE.c) -O3 -s -Iinclude -I/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/include -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/plugin_nomain.o src/plugin.c;\
-	else  \
-	    ${CP} ${OBJECTDIR}/src/plugin.o ${OBJECTDIR}/src/plugin_nomain.o;\
 	fi
 
 ${OBJECTDIR}/src/sender_nomain.o: ${OBJECTDIR}/src/sender.o src/sender.c 
