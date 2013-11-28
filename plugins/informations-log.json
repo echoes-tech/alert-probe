@@ -8,24 +8,24 @@
 
 [
 {
-	"id": 2, /* Addon File */
+	"id": 3, /* Log */
         "sources": 
-        [	
+        [
         {
             	"id": 1, /* Champ à ignorer */
             	"searches": 
             	[
              	{
                 	"id": 1, /* Champ à ignorer */
-                	"idType": 2, /* Path + line */
+                	"idType": 4, /* Path + lastNlines */
                 	"params": 
                 	{
             			"path": "/proc/meminfo",
-            			"line": 2
+            			"lastNlines" : 10
                  	},
                 	"period": 5,
                 	"filters": 
-                	[   
+                	[
 		        	{
 		            		"id": 1,
 		            		"idType": 1, /* All */

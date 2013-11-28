@@ -38,7 +38,7 @@
 		        	{
 		            		"id": 1,
 		            		"idType": 1, /* All */
-		            		"idsIDA": [ 0 ]
+		            		"idsIDA": [ 1 ]
 		        	},                	
 		        	{
 		            		"id": 2,
@@ -47,7 +47,7 @@
 		            		{
 		                		"regex": "^(.)(.)"
 		            		},
-		            		"idsIDA": [ 1, 2 ]
+		            		"idsIDA": [ 2, 3 ]
 		        	},                	
 		        	{
 		            		"id": 3,
@@ -57,7 +57,7 @@
 						"firstChar": 1,
 						"length": 10
 		            		},
-		            		"idsIDA": [ 3 ]
+		            		"idsIDA": [ 4 ]
 		        	}
                 	]
            	}

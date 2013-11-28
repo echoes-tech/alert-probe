@@ -181,7 +181,6 @@ int main(int argc, char** argv, char **envp)
 #endif
     if (addonManager(&addonsMgrParams, &listOfAllPointersToFree))
     {
-        g_critical("Critical: %s: addonsMgrThread", strerror(errno));
         if (addonsMgrParams.threadIdentifiers->addonsThreads != NULL)
             free(addonsMgrParams.threadIdentifiers->addonsThreads);
         logStopProbe(PRODUCT_NAME, VERSION);
@@ -194,8 +193,7 @@ int main(int argc, char** argv, char **envp)
     if (pthread_create(&threadIdentifiers.formatThread, NULL, format, (void*) &formatParams))
     {
         g_critical("Critical: %s: formatThread", strerror(errno));
-        if (addonsMgrParams.threadIdentifiers->addonsThreads != NULL)
-            free(addonsMgrParams.threadIdentifiers->addonsThreads);
+        free(addonsMgrParams.threadIdentifiers->addonsThreads);
         logStopProbe(PRODUCT_NAME, VERSION);
         return EXIT_FAILURE;
     }
@@ -206,8 +204,7 @@ int main(int argc, char** argv, char **envp)
     if (pthread_create(&threadIdentifiers.senderThread, NULL, sender, (void*) &senderParams))
     {
         g_critical("Critical: %s: senderThread", strerror(errno));
-        if (addonsMgrParams.threadIdentifiers->addonsThreads != NULL)
-            free(addonsMgrParams.threadIdentifiers->addonsThreads);
+        free(addonsMgrParams.threadIdentifiers->addonsThreads);
         logStopProbe(PRODUCT_NAME, VERSION);
         return EXIT_FAILURE;
     }
