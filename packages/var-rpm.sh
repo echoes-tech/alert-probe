@@ -31,17 +31,17 @@ fi
 chkconfig $bin_name off
 "
 
-rpm_files="\"/${PACKAGE_TOP_DIR}sbin/ea-probe\"
-\"/${PACKAGE_TOP_DIR}etc/probe.conf\"
+rpm_files="\"/${PACKAGE_TOP_DIR}/sbin/ea-probe\"
+\"/${PACKAGE_TOP_DIR}/etc/probe.conf\"
 \"//var/log/echoes-alert/probe.log\"
 \"//etc/init.d/ea-probe\"
 \"//etc/sysconfig/ea-probe\"
-\"/${PACKAGE_TOP_DIR}doc/AUTHORS\"
-\"/${PACKAGE_TOP_DIR}doc/README\"
-\"/${PACKAGE_TOP_DIR}doc/COPYRIGHT\""
+\"/${PACKAGE_TOP_DIR}/doc/AUTHORS\"
+\"/${PACKAGE_TOP_DIR}/doc/README\"
+\"/${PACKAGE_TOP_DIR}/doc/COPYRIGHT\""
 
 rpm_dir="\"//var/log/echoes-alert/\"
-\"/${PACKAGE_TOP_DIR}etc/plugins\""
+\"/${PACKAGE_TOP_DIR}/etc/plugins\""
 
 # Sysconfig
 createVarDir "rpm_sysconfig" "${NBTMPDIR}/etc/sysconfig/" 0755
