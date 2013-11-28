@@ -105,7 +105,7 @@ int main(int argc, char** argv, char **envp)
         &signum
     };
 
-    ListOfAllPointersToFree listOfAllPointersToFree;
+    ListOfAllPointersToFree listOfAllPointersToFree = NULL;
 
     /* Help message and version */
     if (argc > 1)

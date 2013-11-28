@@ -73,7 +73,8 @@ int pushSDElementQueue(
 
 int popCollectQueue(CollectQueue *collectQueue, SDElementQueue *sdElementQueue)
 {
-    char afterOffset[10000] = "";
+    char afterOffset[10000] = "", afterOffsetTmp[10000] = "";
+    unsigned short i = 0;
 
     if (collectQueue == NULL)
         g_error("Error: Queue of collected data unavailable");
@@ -81,31 +82,43 @@ int popCollectQueue(CollectQueue *collectQueue, SDElementQueue *sdElementQueue)
     /* Debut de la zone protegee. */
     pthread_mutex_lock(& collectQueue->mutex);
 
-    /* On vérifie s'il y a quelque chose à défiler */
+    /* On vérifie s'il y a quelque chose à défiler */    
     if (collectQueue->first != NULL)
     {
         CollectQueueElement *popedElement = collectQueue->first;
 
-        char *base64encoded = g_base64_encode(
-                                              (guchar *) popedElement->values,
-                                              strlen(popedElement->values)
-                                              );
-
         sprintf(
                 afterOffset,
-                " lotNum=%d lineNum=%d %d=\"%s\"",
+                " lotNum=%d lineNum=%d",
                 popedElement->lotNum,
-                popedElement->lineNum,
-                popedElement->idIDA,
+                popedElement->lineNum
+                );
+        
+        for(i = 0; i < popedElement->valuesLength; i++)
+        {
+            gchar *base64encoded = g_base64_encode(
+                                                   (guchar *) popedElement->values[i],
+                                                   strlen(popedElement->values[i])
+                                                   );
+
+            sprintf(
+                afterOffsetTmp,
+                " %d=\"%s\"",
+                popedElement->idsIDA[i],
                 base64encoded
                 );
 
-        g_free(base64encoded);
-        base64encoded = NULL;
+            g_free(base64encoded);
+            base64encoded = NULL;
 
+            strcat(afterOffset, afterOffsetTmp);
+            
+            free(popedElement->values[i]);
+            popedElement->values[i] = NULL;
+        }
         free(popedElement->values);
         popedElement->values = NULL;
-
+        
         pushSDElementQueue(
                            sdElementQueue,
                            afterOffset,
