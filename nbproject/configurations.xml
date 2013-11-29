@@ -195,6 +195,7 @@
           <incDir>
             <pElem>include</pElem>
             <pElem>../addon/include</pElem>
+            <pElem>/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/include</pElem>
           </incDir>
           <commandLine>-pedantic -Wextra</commandLine>
           <warningLevel>2</warningLevel>
