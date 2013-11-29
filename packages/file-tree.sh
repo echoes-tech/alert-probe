@@ -13,7 +13,6 @@ createVarFile "readme" "README" "$doc_dir/README" $default_file_right
 
 # Etc
 createVarDir "etc" "${NBTMPDIR}/${PACKAGE_TOP_DIR}/etc" $default_dir_right
-createVarDir "plugins" "$etc_dir/plugins" $default_dir_right
 
 createVarFile "conf" "conf/probe.conf" "$etc_dir/probe.conf" $default_file_right
 
