@@ -68,7 +68,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-L../addon/dist/Debug/${CND_PLATFORM} -L/usr/local/lib -Wl,-rpath,../addon/dist/Debug/${CND_PLATFORM} -Wl,-rpath,/opt/echoes-alert/probe/lib `pkg-config --libs glib-2.0 gobject-2.0 gio-2.0` -lpthread -lcunit -laddon  
+LDLIBSOPTIONS=-L../addon/dist/Debug/${CND_PLATFORM} -L/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM} -L/usr/local/lib -Wl,-rpath,../addon/dist/Debug/${CND_PLATFORM} -Wl,-rpath,/opt/echoes-alert/probe/lib `pkg-config --libs glib-2.0 gobject-2.0 gio-2.0` -lpthread -lcunit -laddon  
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}

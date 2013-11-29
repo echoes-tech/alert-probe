@@ -68,7 +68,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-L/usr/local/lib -L/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM} -L../addon/dist/Release/${CND_PLATFORM} -L../addon/dist/Release/${CND_PLATFORM} -Wl,-rpath,/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM} -Wl,-rpath,../addon/dist/Release/${CND_PLATFORM} -Wl,-rpath,/opt/echoes-alert/probe/lib/probe -Wl,-rpath,/opt/echoes-alert/probe/addons `pkg-config --libs glib-2.0 gobject-2.0 gio-2.0` -lpthread -laddon  
+LDLIBSOPTIONS=-L/usr/local/lib -L/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM} -L../addon/dist/Release/${CND_PLATFORM} -Wl,-rpath,/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM} -Wl,-rpath,../addon/dist/Release/${CND_PLATFORM} -Wl,-rpath,/opt/echoes-alert/probe/lib/probe -Wl,-rpath,/opt/echoes-alert/probe/addons `pkg-config --libs glib-2.0 gobject-2.0 gio-2.0` -lpthread -laddon  
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
