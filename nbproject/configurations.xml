@@ -154,12 +154,6 @@
                      kind="TEST">
         <itemPath>tests_unit/logcunittest.c</itemPath>
       </logicalFolder>
-      <logicalFolder name="f2"
-                     displayName="Plugin CUnit Test"
-                     projectFiles="true"
-                     kind="TEST">
-        <itemPath>tests_unit/plugincunittest.c</itemPath>
-      </logicalFolder>
       <logicalFolder name="f5"
                      displayName="Sender CUnit Test"
                      projectFiles="true"
@@ -470,8 +464,6 @@
       </item>
       <item path="tests_unit/logcunittest.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="tests_unit/plugincunittest.c" ex="false" tool="0" flavor2="0">
-      </item>
       <item path="tests_unit/sendercunittest.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="tests_unit/signalscunittest.c" ex="false" tool="0" flavor2="0">
@@ -530,7 +522,6 @@
             <linkerOptionItem>`pkg-config --libs  glib-2.0 gobject-2.0  gio-2.0`</linkerOptionItem>
             <linkerLibLibItem>pthread</linkerLibLibItem>
             <linkerLibLibItem>addon</linkerLibLibItem>
-            <linkerLibLibItem>cunit</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
@@ -783,8 +774,6 @@
       <item path="tests_unit/formatcunittest.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="tests_unit/logcunittest.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="tests_unit/plugincunittest.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="tests_unit/sendercunittest.c" ex="false" tool="0" flavor2="0">
       </item>

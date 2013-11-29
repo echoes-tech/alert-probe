@@ -47,13 +47,14 @@ void testSignalHandling()
 {
     int signum = 0;
     ThreadIdentifiers threadIdentifiers = THREAD_IDENTIFIERS_INITIALIZER;
-    threadIdentifiers.addonsThreads = calloc(threadIdentifiers.nbAddonsThreads, sizeof (pthread_t));
+    threadIdentifiers.addonsThreads = calloc(1, sizeof (pthread_t));
 
     pthread_create(&threadIdentifiers.addonsThreads[0], NULL, boucleInfinie, NULL);
-    threadIdentifiers.nbAddonsThreads = 1;
+    
     signalsHandler(&signum, &threadIdentifiers);
 
     signalHandling(SIGTERM);
+    
     CU_ASSERT_EQUAL(signum, SIGTERM);
     CU_ASSERT(pthread_cancel(&threadIdentifiers.addonsThreads[0]));
 }

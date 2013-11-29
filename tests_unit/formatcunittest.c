@@ -52,13 +52,16 @@ void testFormat()
     };
     
     CollectQueue collectQueue = COLLECT_QUEUE_INITIALIZER;
+    gint idsIDA[] = {1};
     char** values = calloc(1, sizeof (char*));
     CollectQueueElement* collectQueueElement = calloc(1, sizeof (CollectQueueElement));
+    
+    char** values2 = calloc(1, sizeof (char*));
+    gint idsIDA2[] = {2};
+    CollectQueueElement* collectQueueElement2 = calloc(1, sizeof (CollectQueueElement));
+    
     values[0] = strdup("a");
-    collectQueueElement->idPlg = 1;
-    collectQueueElement->idAsset = 2;
-    collectQueueElement->idSrc = 3;
-    collectQueueElement->idSearch = 4;
+    collectQueueElement->idsIDA = idsIDA;
     collectQueueElement->lineNum = 5;
     collectQueueElement->valuesLength = 1;
     collectQueueElement->lotNum = 6;
@@ -66,13 +69,9 @@ void testFormat()
     collectQueueElement->time = 7;
     collectQueueElement->next = NULL;
     collectQueue.first = collectQueueElement;
-    char** values2 = calloc(1, sizeof (char*));
-    CollectQueueElement* collectQueueElement2 = calloc(1, sizeof (CollectQueueElement));
+    
     values2[0] = strdup("b");
-    collectQueueElement2->idPlg = 8;
-    collectQueueElement2->idAsset = 9;
-    collectQueueElement2->idSrc = 10;
-    collectQueueElement2->idSearch = 11;
+    collectQueueElement2->idsIDA = idsIDA2;
     collectQueueElement2->lineNum = 12;
     collectQueueElement2->valuesLength = 1;
     collectQueueElement2->lotNum = 13;
@@ -131,19 +130,19 @@ void testPopCollectQueue()
     
     /* Creer une queue de collecte contenant deux elements */
     CollectQueue collectQueue = COLLECT_QUEUE_INITIALIZER;
-    int valuesLength = 4;
+    
+    int valuesLength = 1;
     CollectQueueElement* collectQueueElement = calloc(1, sizeof (CollectQueueElement));
+    gint idsIDA[] = {1};
     char** values = calloc(valuesLength, sizeof (char*));
+    
+    int valuesLength2 = 3;
     CollectQueueElement* collectQueueElement2 = calloc(1, sizeof (CollectQueueElement));
-    char** values2 = calloc(valuesLength, sizeof (char*));
+    gint idsIDA2[] = {2, 3, 4};
+    char** values2 = calloc(valuesLength2, sizeof (char*));
+    
     values[0] = strdup("a");
-    values[1] = strdup("b");
-    values[2] = strdup("c");
-    values[3] = strdup("d");
-    collectQueueElement->idPlg = 5;
-    collectQueueElement->idAsset = 6;
-    collectQueueElement->idSrc = 7;
-    collectQueueElement->idSearch = 8;
+    collectQueueElement->idsIDA = idsIDA;
     collectQueueElement->lineNum = 9;
     collectQueueElement->valuesLength = valuesLength;
     collectQueueElement->lotNum = 10;
@@ -151,17 +150,14 @@ void testPopCollectQueue()
     collectQueueElement->time = 11;
     collectQueueElement->next = NULL;
     collectQueue.first = collectQueueElement;
+    
     values2[0] = strdup("e");
     values2[1] = strdup("f");
     values2[2] = strdup("g");
-    values2[3] = strdup("h");
-    collectQueueElement2->idPlg = 5;
-    collectQueueElement2->idAsset = 6;
-    collectQueueElement2->idSrc = 7;
-    collectQueueElement2->idSearch = 8;
-    collectQueueElement2->lineNum = 9;
-    collectQueueElement2->valuesLength = valuesLength;
-    collectQueueElement2->lotNum = 10;
+    collectQueueElement2->idsIDA = idsIDA2;
+    collectQueueElement2->lineNum = 6;
+    collectQueueElement2->valuesLength = valuesLength2;
+    collectQueueElement2->lotNum = 7;
     collectQueueElement2->values = values2;
     collectQueueElement2->time = 11;
     collectQueueElement2->next = NULL;
@@ -171,25 +167,25 @@ void testPopCollectQueue()
     result = popCollectQueue(&collectQueue, &sdElementQueue);
     CU_ASSERT_EQUAL(result, EXIT_SUCCESS);
     sdElementQueueElement = sdElementQueue.first;
-    CU_ASSERT_STRING_EQUAL(sdElementQueueElement->afterOffset, " 5-6-7-8-1-10-9=\"YQ==\" 5-6-7-8-2-10-9=\"Yg==\" 5-6-7-8-3-10-9=\"Yw==\" 5-6-7-8-4-10-9=\"ZA==\"");
+    CU_ASSERT_STRING_EQUAL(sdElementQueueElement->afterOffset, " lotNum=10 lineNum=9 1=\"YQ==\"");
     CU_ASSERT_NOT_EQUAL(collectQueue.first, NULL);
     
     /* Test depile second element de la queue de collecte */
     result = popCollectQueue(&collectQueue, &sdElementQueue);
     CU_ASSERT_EQUAL(result, EXIT_SUCCESS);
     sdElementQueueElement = sdElementQueue.first;
-    CU_ASSERT_STRING_EQUAL(sdElementQueueElement->afterOffset, " 5-6-7-8-1-10-9=\"YQ==\" 5-6-7-8-2-10-9=\"Yg==\" 5-6-7-8-3-10-9=\"Yw==\" 5-6-7-8-4-10-9=\"ZA==\"");
+    CU_ASSERT_STRING_EQUAL(sdElementQueueElement->afterOffset, " lotNum=10 lineNum=9 1=\"YQ==\"");
     sdElementQueueElement = sdElementQueueElement->next;
-    CU_ASSERT_STRING_EQUAL(sdElementQueueElement->afterOffset, " 5-6-7-8-1-10-9=\"ZQ==\" 5-6-7-8-2-10-9=\"Zg==\" 5-6-7-8-3-10-9=\"Zw==\" 5-6-7-8-4-10-9=\"aA==\"");
+    CU_ASSERT_STRING_EQUAL(sdElementQueueElement->afterOffset, " lotNum=7 lineNum=6 2=\"ZQ==\" 3=\"Zg==\" 4=\"Zw==\"");
     CU_ASSERT_EQUAL(collectQueue.first, NULL);
     
     /* Test depile alors que la queue de collecte est vide */ 
     result = popCollectQueue(&collectQueue, &sdElementQueue);
     CU_ASSERT_EQUAL(result, EXIT_SUCCESS);
     sdElementQueueElement = sdElementQueue.first;
-    CU_ASSERT_STRING_EQUAL(sdElementQueueElement->afterOffset, " 5-6-7-8-1-10-9=\"YQ==\" 5-6-7-8-2-10-9=\"Yg==\" 5-6-7-8-3-10-9=\"Yw==\" 5-6-7-8-4-10-9=\"ZA==\"");
+    CU_ASSERT_STRING_EQUAL(sdElementQueueElement->afterOffset, " lotNum=10 lineNum=9 1=\"YQ==\"");
     sdElementQueueElement = sdElementQueueElement->next;
-    CU_ASSERT_STRING_EQUAL(sdElementQueueElement->afterOffset, " 5-6-7-8-1-10-9=\"ZQ==\" 5-6-7-8-2-10-9=\"Zg==\" 5-6-7-8-3-10-9=\"Zw==\" 5-6-7-8-4-10-9=\"aA==\"");
+    CU_ASSERT_STRING_EQUAL(sdElementQueueElement->afterOffset, " lotNum=7 lineNum=6 2=\"ZQ==\" 3=\"Zg==\" 4=\"Zw==\"");
     CU_ASSERT_EQUAL(collectQueue.first, NULL);
     
     free(sdElementQueue.first);
