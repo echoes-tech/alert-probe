@@ -5,7 +5,7 @@
 #######################
 
 # Executable path generate by compilation
-OUTPUT_PATH=${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/probe
+OUTPUT_PATH=dist/Release/*/probe
 
 PKG_DESCRIPTION="The ECHOES Alert Probe"
 
