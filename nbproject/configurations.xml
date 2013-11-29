@@ -216,7 +216,7 @@
             <pElem>/opt/echoes-alert/probe/lib</pElem>
           </linkerDynSerch>
           <linkerLibItems>
-            <linkerOptionItem>`pkg-config --libs gobject-2.0 json-glib-1.0`</linkerOptionItem>
+            <linkerOptionItem>`pkg-config --libs  glib-2.0 gobject-2.0  gio-2.0`</linkerOptionItem>
             <linkerLibLibItem>pthread</linkerLibLibItem>
             <linkerLibLibItem>cunit</linkerLibLibItem>
             <linkerLibLibItem>addon</linkerLibLibItem>
@@ -527,7 +527,7 @@
           </linkerDynSerch>
           <stripSymbols>true</stripSymbols>
           <linkerLibItems>
-            <linkerOptionItem>`pkg-config --libs gobject-2.0 json-glib-1.0`</linkerOptionItem>
+            <linkerOptionItem>`pkg-config --libs  glib-2.0 gobject-2.0  gio-2.0`</linkerOptionItem>
             <linkerLibLibItem>pthread</linkerLibLibItem>
             <linkerLibLibItem>addon</linkerLibLibItem>
             <linkerLibLibItem>cunit</linkerLibLibItem>
