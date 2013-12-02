@@ -109,7 +109,7 @@ static void *server(void *data)
     GSocketService *service = g_socket_service_new();
 
     /* connect to the port */
-    g_socket_listener_add_inet_port((GSocketListener*) service, paramAndReturn->port, NULL, &error);
+    paramAndReturn->port = g_socket_listener_add_any_inet_port((GSocketListener*) service, NULL, &error);
     if (error != NULL)
     {
         g_printerr("Error during add inet port: %s\n", error->message);
@@ -142,7 +142,7 @@ void testPopSDElementQueue()
     char* regex2 = "^<118>1 [0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{6}Z JKL123 MNO[0-9]+PQR\\]\n$";
 
     int result = 0;
-    ParamAndReturn paramAndReturn = {calloc(2, sizeof (char*)), g_main_loop_new(NULL, FALSE), 1900, 1, 0};
+    ParamAndReturn paramAndReturn = {calloc(2, sizeof (char*)), g_main_loop_new(NULL, FALSE), 0, 1, 0};
 
     /* Creer une queue d'envoi contenant deux elements */
     unsigned int probeID = 1;
@@ -172,6 +172,8 @@ void testPopSDElementQueue()
 
     /* lance le serveur qui va attendre un premier message */
     pthread_create(&identifier, NULL, server, &paramAndReturn);
+    
+    sleep(1);
 
     /* depile le premier element */
     result = popSDElementQueue(address, &paramAndReturn.port, &protocol, &sdElementQueue, &msgID);
@@ -190,6 +192,8 @@ void testPopSDElementQueue()
     /* lance le serveur qui va attendre un second message */
     paramAndReturn.lenght = 2;
     pthread_create(&identifier, NULL, server, &paramAndReturn);
+    
+    sleep(1);
 
     /* depile le second element */
     result = popSDElementQueue(address, &paramAndReturn.port, &protocol, &sdElementQueue, &msgID);
@@ -222,7 +226,7 @@ void testSendMessage_Success()
     char* regex = "^<118>1 [0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{6}Z ABC123 DEF[0-9]+GHI\\]\n$";
 
     int result = 0;
-    ParamAndReturn paramAndReturn = {calloc(1, sizeof (char*)), g_main_loop_new(NULL, FALSE), 1900, 1, 0};
+    ParamAndReturn paramAndReturn = {calloc(1, sizeof (char*)), g_main_loop_new(NULL, FALSE), 0, 1, 0};
 
     /* lance le serveur qui va attendre un message */
     pthread_create(&identifier, NULL, server, &paramAndReturn);
@@ -290,7 +294,7 @@ void testSender()
     char* regex = "^<118>1 [0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{6}Z ABC1 DEF[0-9]+GHI\\]\n$";
     char* regex2 = "^<118>1 [0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{6}Z JKL2 MNO[0-9]+PQR\\]\n$";
 
-    ParamAndReturn paramAndReturn = {calloc(2, sizeof (char*)), g_main_loop_new(NULL, FALSE), 1900, 2, 0};
+    ParamAndReturn paramAndReturn = {calloc(2, sizeof (char*)), g_main_loop_new(NULL, FALSE), 0, 2, 0};
 
     /* Creer une queue d'envoi vide */
     unsigned int probeID = 1;
