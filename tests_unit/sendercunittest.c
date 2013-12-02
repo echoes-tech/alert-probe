@@ -10,9 +10,9 @@
 #include <glib.h>
 #include <gio/gio.h>
 #ifndef NDEBUG
-    #include "CUnit/Basic.h"
+#include "CUnit/Basic.h"
 #else
-    #include "CUnit/Automated.h"
+#include "CUnit/Automated.h"
 #endif
 #include "sender.h"
 #include "utilUnitTest.h"
@@ -142,7 +142,7 @@ void testPopSDElementQueue()
     char* regex2 = "^<118>1 [0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{6}Z JKL123 MNO[0-9]+PQR\\]\n$";
 
     int result = 0;
-    ParamAndReturn paramAndReturn = {calloc(2, sizeof(char*)), g_main_loop_new(NULL, FALSE), 1900, 1, 0};
+    ParamAndReturn paramAndReturn = {calloc(2, sizeof (char*)), g_main_loop_new(NULL, FALSE), 1900, 1, 0};
 
     /* Creer une queue d'envoi contenant deux elements */
     unsigned int probeID = 1;
@@ -185,7 +185,7 @@ void testPopSDElementQueue()
     /* Verifie que la queue n'est pas vide */
     CU_ASSERT_NOT_EQUAL(sdElementQueue.first, NULL);
 
-    
+
 
     /* lance le serveur qui va attendre un second message */
     paramAndReturn.lenght = 2;
@@ -222,13 +222,13 @@ void testSendMessage_Success()
     char* regex = "^<118>1 [0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{6}Z ABC123 DEF[0-9]+GHI\\]\n$";
 
     int result = 0;
-    ParamAndReturn paramAndReturn = {calloc(1, sizeof(char*)), g_main_loop_new(NULL, FALSE), 1900, 1, 0};
+    ParamAndReturn paramAndReturn = {calloc(1, sizeof (char*)), g_main_loop_new(NULL, FALSE), 1900, 1, 0};
 
     /* lance le serveur qui va attendre un message */
     pthread_create(&identifier, NULL, server, &paramAndReturn);
 
     sleep(1);
-    
+
     /* envoi un message */
     result = sendMessage(address, &paramAndReturn.port, &protocol, beforeMsgID, &msgID, afterMsgID, collectTime, afterOffset);
 
@@ -290,7 +290,7 @@ void testSender()
     char* regex = "^<118>1 [0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{6}Z ABC1 DEF[0-9]+GHI\\]\n$";
     char* regex2 = "^<118>1 [0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\.[0-9]{6}Z JKL2 MNO[0-9]+PQR\\]\n$";
 
-    ParamAndReturn paramAndReturn = {calloc(2, sizeof(char*)), g_main_loop_new(NULL, FALSE), 1900, 2, 0};
+    ParamAndReturn paramAndReturn = {calloc(2, sizeof (char*)), g_main_loop_new(NULL, FALSE), 1900, 2, 0};
 
     /* Creer une queue d'envoi vide */
     unsigned int probeID = 1;
@@ -304,7 +304,7 @@ void testSender()
         &transportMsgVersion,
         3,
         NULL
-    };    
+    };
     SenderParams senderParams = {
         &sdElementQueue,
         address,
@@ -312,26 +312,26 @@ void testSender()
         0,
         &protocol,
         &signum
-    };    
+    };
     SDElementQueueElement* sdElementQueueElement = calloc(1, sizeof (SDElementQueueElement));
     SDElementQueueElement* sdElementQueueElement2 = calloc(1, sizeof (SDElementQueueElement));
     strcpy(sdElementQueueElement->beforeMsgID, "ABC");
     strcpy(sdElementQueueElement->afterMsgID, "DEF");
     sdElementQueueElement->afterOffset = strdup("GHI");
     sdElementQueueElement->time = 1000;
-    sdElementQueue.first = sdElementQueueElement;    
+    sdElementQueue.first = sdElementQueueElement;
     strcpy(sdElementQueueElement2->beforeMsgID, "JKL");
     strcpy(sdElementQueueElement2->afterMsgID, "MNO");
     sdElementQueueElement2->afterOffset = strdup("PQR");
     sdElementQueueElement2->time = 1000;
-    sdElementQueueElement->next = sdElementQueueElement2;  
+    sdElementQueueElement->next = sdElementQueueElement2;
 
 
     /* lance le serveur qui va attendre la reception de deux messages */
     pthread_create(&server_identifier, NULL, server, &paramAndReturn);
 
     sleep(1);
-    
+
     /* lance sender qui va depiler et envoyer les deux elements */
     CU_ASSERT_FALSE(pthread_create(&sender_identifier, NULL, sender, (void*) &senderParams));
 
@@ -343,14 +343,14 @@ void testSender()
 
     /* Test la forme du message envoye par sendMessage()*/
     CU_ASSERT(regex_compare(regex2, paramAndReturn.value[1]));
-    
+
     /* Verifie que la queue est vide */
     CU_ASSERT_EQUAL(sdElementQueue.first, NULL);
 
     free(paramAndReturn.value[0]);
     free(paramAndReturn.value[1]);
     free(paramAndReturn.value);
-    
+
     signum = SIGTERM;
     sleep(1);
     /* Test arret du thread apres reception d'un signal */
@@ -360,6 +360,8 @@ void testSender()
 int main()
 {
     CU_pSuite pSuite = NULL;
+
+    g_type_init();
 
     /* Initialize the CUnit test registry */
     if (CUE_SUCCESS != CU_initialize_registry())
@@ -393,7 +395,7 @@ int main()
     CU_list_tests_to_file();
     CU_automated_run_tests();
 #endif
-    
+
     CU_cleanup_registry();
     return CU_get_error();
 }
