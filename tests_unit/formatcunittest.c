@@ -60,6 +60,15 @@ void testFormat()
     gint idsIDA2[] = {2};
     CollectQueueElement* collectQueueElement2 = calloc(1, sizeof (CollectQueueElement));
     
+    int signum = 0;
+    
+    FormatParams formatParams = {
+        &collectQueue,
+        &sdElementQueue,
+        &signum
+    };
+    pthread_t identifier;
+    
     values[0] = strdup("a");
     collectQueueElement->idsIDA = idsIDA;
     collectQueueElement->lineNum = 5;
@@ -79,13 +88,6 @@ void testFormat()
     collectQueueElement2->time = 14;
     collectQueueElement2->next = NULL;
     collectQueueElement->next = collectQueueElement2;
-    int signum = 0;
-    FormatParams formatParams = {
-        &collectQueue,
-        &sdElementQueue,
-        &signum
-    };
-    pthread_t identifier;
     
     CU_ASSERT_FALSE(pthread_create(&identifier, NULL, format, (void*) &formatParams));
     sleep(1);

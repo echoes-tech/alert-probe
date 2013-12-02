@@ -40,7 +40,7 @@ int clean_suite(void)
 void testLog2Console()
 {
     const gchar* message = "abcd";
-    const char* regex = "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\+[0-9]{4} 127.0.0.1 ea-probe 5 - abcd\n$";
+    char* regex = "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\+[0-9]{4} 127.0.0.1 ea-probe 5 - abcd\n$";
     LogParams logParams = {
         "127.0.0.1",
         "ea-probe",
@@ -62,7 +62,7 @@ void testLog2Console()
 void testLog2File()
 {
     const gchar* message = "abcd";
-    const char* regex = "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\+[0-9]{4} 127.0.0.1 ea-probe 5 - abcd\n$";
+    char* regex = "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\+[0-9]{4} 127.0.0.1 ea-probe 5 - abcd\n$";
     LogParams logParams = {
         "127.0.0.1",
         "ea-probe",
@@ -85,7 +85,7 @@ void testLogStopProbe()
 {
     const char* probeName = "test_probe";
     const char* probeVersion = "1.0";
-    const char* regex = "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\+[0-9]{4} 127.0.0.1 ea-probe 5 - \\[origin enterpriseId=\"40311\" software=\"test_probe\" swVersion=\"1.0\"\\] stop\n$";
+    char* regex = "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\\+[0-9]{4} 127.0.0.1 ea-probe 5 - \\[origin enterpriseId=\"40311\" software=\"test_probe\" swVersion=\"1.0\"\\] stop\n$";
         
     LogParams logParams = {
         "127.0.0.1",
