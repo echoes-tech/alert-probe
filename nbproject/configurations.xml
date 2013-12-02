@@ -201,16 +201,16 @@
           <warningLevel>2</warningLevel>
         </cTool>
         <linkerTool>
-          <output>${TESTDIR}/TestFiles/f2</output>
+          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/probe</output>
           <linkerAddLib>
             <pElem>../addon/dist/Debug/${CND_PLATFORM}</pElem>
-            <pElem>/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM}</pElem>
             <pElem>/usr/local/lib</pElem>
+            <pElem>/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM}</pElem>
           </linkerAddLib>
           <linkerDynSerch>
-            <pElem>/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM}</pElem>
-            <pElem>/opt/echoes-alert/probe/lib</pElem>
             <pElem>../addon/dist/Debug/${CND_PLATFORM}</pElem>
+            <pElem>/opt/echoes-alert/probe/lib</pElem>
+            <pElem>/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM}</pElem>
           </linkerDynSerch>
           <linkerLibItems>
             <linkerOptionItem>`pkg-config --libs  glib-2.0 gobject-2.0  gio-2.0`</linkerOptionItem>
@@ -502,23 +502,22 @@
           <developmentMode>5</developmentMode>
         </asmTool>
         <linkerTool>
-          <output>${TESTDIR}/TestFiles/f2</output>
+          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/probe</output>
           <linkerAddLib>
-            <pElem>/usr/local/lib</pElem>
-            <pElem>/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM}</pElem>
             <pElem>../addon/dist/Release/${CND_PLATFORM}</pElem>
+            <pElem>/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM}</pElem>
+            <pElem>/usr/local/lib</pElem>
           </linkerAddLib>
           <linkerDynSerch>
-            <pElem>/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM}</pElem>
             <pElem>../addon/dist/Release/${CND_PLATFORM}</pElem>
-            <pElem>/opt/echoes-alert/probe/lib/probe</pElem>
+            <pElem>/opt/echoes-alert/probe/lib</pElem>
             <pElem>/opt/echoes-alert/probe/addons</pElem>
           </linkerDynSerch>
           <stripSymbols>true</stripSymbols>
           <linkerLibItems>
             <linkerOptionItem>`pkg-config --libs  glib-2.0 gobject-2.0  gio-2.0`</linkerOptionItem>
             <linkerLibLibItem>pthread</linkerLibLibItem>
-            <linkerLibLibItem>cunit</linkerLibLibItem>
+            <linkerLibLibItem>addon</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>

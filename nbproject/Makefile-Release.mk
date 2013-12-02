@@ -68,15 +68,15 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-L/usr/local/lib -L/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM} -L../addon/dist/Release/${CND_PLATFORM} -Wl,-rpath,/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM} -Wl,-rpath,../addon/dist/Release/${CND_PLATFORM} -Wl,-rpath,/opt/echoes-alert/probe/lib/probe -Wl,-rpath,/opt/echoes-alert/probe/addons `pkg-config --libs glib-2.0 gobject-2.0 gio-2.0` -lpthread -lcunit  
+LDLIBSOPTIONS=-L../addon/dist/Release/${CND_PLATFORM} -L/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM} -L/usr/local/lib -Wl,-rpath,../addon/dist/Release/${CND_PLATFORM} -Wl,-rpath,/opt/echoes-alert/probe/lib -Wl,-rpath,/opt/echoes-alert/probe/addons `pkg-config --libs glib-2.0 gobject-2.0 gio-2.0` -lpthread -laddon  
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${TESTDIR}/TestFiles/f2
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/probe
 
-${TESTDIR}/TestFiles/f2: ${OBJECTFILES}
-	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.c} -o ${TESTDIR}/TestFiles/f2 ${OBJECTFILES} ${LDLIBSOPTIONS} -s
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/probe: ${OBJECTFILES}
+	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
+	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/probe ${OBJECTFILES} ${LDLIBSOPTIONS} -s
 
 ${OBJECTDIR}/main.o: main.c 
 	${MKDIR} -p ${OBJECTDIR}
@@ -276,7 +276,7 @@ ${OBJECTDIR}/tests_unit/utilUnitTest_nomain.o: ${OBJECTDIR}/tests_unit/utilUnitT
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ${TESTDIR}/TestFiles/f2
+	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/probe
 
 # Subprojects
 .clean-subprojects:
