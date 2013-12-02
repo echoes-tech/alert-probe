@@ -22,6 +22,14 @@ CND_ARTIFACT_PATH_Release=dist/Release/GNU-Linux-x86/probe
 CND_PACKAGE_DIR_Release=dist/Release/GNU-Linux-x86/package
 CND_PACKAGE_NAME_Release=probe.tar
 CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux-x86/package/probe.tar
+# Test configuration
+CND_PLATFORM_Test=GNU-Linux-x86
+CND_ARTIFACT_DIR_Test=dist/Test/GNU-Linux-x86
+CND_ARTIFACT_NAME_Test=probe
+CND_ARTIFACT_PATH_Test=dist/Test/GNU-Linux-x86/probe
+CND_PACKAGE_DIR_Test=dist/Test/GNU-Linux-x86/package
+CND_PACKAGE_NAME_Test=probe.tar
+CND_PACKAGE_PATH_Test=dist/Test/GNU-Linux-x86/package/probe.tar
 #
 # include compiler specific variables
 #

@@ -15,9 +15,9 @@
 #include <stdlib.h>
 #include <signal.h>
 #ifndef NDEBUG
-#include "CUnit/Basic.h"
+    #include "CUnit/Basic.h"
 #else
-#include "CUnit/Automated.h"
+    #include "CUnit/Automated.h"
 #endif
 #include "format.h"
 
@@ -50,25 +50,25 @@ void testFormat()
         3,
         NULL
     };
-    
+
     CollectQueue collectQueue = COLLECT_QUEUE_INITIALIZER;
     gint idsIDA[] = {1};
     char** values = calloc(1, sizeof (char*));
     CollectQueueElement* collectQueueElement = calloc(1, sizeof (CollectQueueElement));
-    
+
     char** values2 = calloc(1, sizeof (char*));
     gint idsIDA2[] = {2};
     CollectQueueElement* collectQueueElement2 = calloc(1, sizeof (CollectQueueElement));
-    
+
     int signum = 0;
-    
+
     FormatParams formatParams = {
         &collectQueue,
         &sdElementQueue,
         &signum
     };
     pthread_t identifier;
-    
+
     values[0] = strdup("a");
     collectQueueElement->idsIDA = idsIDA;
     collectQueueElement->lineNum = 5;
@@ -78,7 +78,7 @@ void testFormat()
     collectQueueElement->time = 7;
     collectQueueElement->next = NULL;
     collectQueue.first = collectQueueElement;
-    
+
     values2[0] = strdup("b");
     collectQueueElement2->idsIDA = idsIDA2;
     collectQueueElement2->lineNum = 12;
@@ -88,34 +88,34 @@ void testFormat()
     collectQueueElement2->time = 14;
     collectQueueElement2->next = NULL;
     collectQueueElement->next = collectQueueElement2;
-    
+
     CU_ASSERT_FALSE(pthread_create(&identifier, NULL, format, (void*) &formatParams));
     sleep(1);
     signum = SIGTERM;
     sleep(1);
     /* Test arret du thread apres reception d'un signal */
     CU_ASSERT_EQUAL(pthread_cancel(identifier), ESRCH);
-    
+
     /* Test formatage des deux elements */
     sdElementQueueElement = sdElementQueue.first;
     CU_ASSERT_EQUAL(sdElementQueueElement->time, 7);
     CU_ASSERT_STRING_EQUAL(sdElementQueueElement->beforeMsgID, "127.0.0.1 ea-probe 3 ID");
     CU_ASSERT_STRING_EQUAL(sdElementQueueElement->afterMsgID, "[prop@40311 ver=2 probe=1 token=\"abcd1234\"][res1@40311 offset=");
-    CU_ASSERT_STRING_EQUAL(sdElementQueueElement->afterOffset, " 1-2-3-4-1-6-5=\"YQ==\"");
+    CU_ASSERT_STRING_EQUAL(sdElementQueueElement->afterOffset, "  lotNum=6 lineNum=5 1=\"YQ==\"");
     CU_ASSERT_NOT_EQUAL(sdElementQueueElement->next, NULL);
     sdElementQueueElement = sdElementQueueElement->next;
     CU_ASSERT_EQUAL(sdElementQueueElement->time, 14);
     CU_ASSERT_STRING_EQUAL(sdElementQueueElement->beforeMsgID, "127.0.0.1 ea-probe 3 ID");
     CU_ASSERT_STRING_EQUAL(sdElementQueueElement->afterMsgID, "[prop@40311 ver=2 probe=1 token=\"abcd1234\"][res1@40311 offset=");
-    CU_ASSERT_STRING_EQUAL(sdElementQueueElement->afterOffset, " 8-9-10-11-1-13-12=\"Yg==\"");
-    CU_ASSERT_EQUAL(sdElementQueueElement->next, NULL);    
+    CU_ASSERT_STRING_EQUAL(sdElementQueueElement->afterOffset, "  lotNum=13 lineNum=12 2=\"Yg==\"");
+    CU_ASSERT_EQUAL(sdElementQueueElement->next, NULL);
 }
 
 void testPopCollectQueue()
 {
     SDElementQueueElement* sdElementQueueElement = NULL;
     int result = 0;
-    
+
     /* Creer une queue d'envoi vide */
     int probeID = 1;
     char transportMsgVersion = 2;
@@ -129,20 +129,20 @@ void testPopCollectQueue()
         3,
         NULL
     };
-    
+
     /* Creer une queue de collecte contenant deux elements */
     CollectQueue collectQueue = COLLECT_QUEUE_INITIALIZER;
-    
+
     int valuesLength = 1;
     CollectQueueElement* collectQueueElement = calloc(1, sizeof (CollectQueueElement));
     gint idsIDA[] = {1};
     char** values = calloc(valuesLength, sizeof (char*));
-    
+
     int valuesLength2 = 3;
     CollectQueueElement* collectQueueElement2 = calloc(1, sizeof (CollectQueueElement));
     gint idsIDA2[] = {2, 3, 4};
     char** values2 = calloc(valuesLength2, sizeof (char*));
-    
+
     values[0] = strdup("a");
     collectQueueElement->idsIDA = idsIDA;
     collectQueueElement->lineNum = 9;
@@ -152,7 +152,7 @@ void testPopCollectQueue()
     collectQueueElement->time = 11;
     collectQueueElement->next = NULL;
     collectQueue.first = collectQueueElement;
-    
+
     values2[0] = strdup("e");
     values2[1] = strdup("f");
     values2[2] = strdup("g");
@@ -171,7 +171,7 @@ void testPopCollectQueue()
     sdElementQueueElement = sdElementQueue.first;
     CU_ASSERT_STRING_EQUAL(sdElementQueueElement->afterOffset, " lotNum=10 lineNum=9 1=\"YQ==\"");
     CU_ASSERT_NOT_EQUAL(collectQueue.first, NULL);
-    
+
     /* Test depile second element de la queue de collecte */
     result = popCollectQueue(&collectQueue, &sdElementQueue);
     CU_ASSERT_EQUAL(result, EXIT_SUCCESS);
@@ -180,8 +180,8 @@ void testPopCollectQueue()
     sdElementQueueElement = sdElementQueueElement->next;
     CU_ASSERT_STRING_EQUAL(sdElementQueueElement->afterOffset, " lotNum=7 lineNum=6 2=\"ZQ==\" 3=\"Zg==\" 4=\"Zw==\"");
     CU_ASSERT_EQUAL(collectQueue.first, NULL);
-    
-    /* Test depile alors que la queue de collecte est vide */ 
+
+    /* Test depile alors que la queue de collecte est vide */
     result = popCollectQueue(&collectQueue, &sdElementQueue);
     CU_ASSERT_EQUAL(result, EXIT_SUCCESS);
     sdElementQueueElement = sdElementQueue.first;
@@ -189,7 +189,7 @@ void testPopCollectQueue()
     sdElementQueueElement = sdElementQueueElement->next;
     CU_ASSERT_STRING_EQUAL(sdElementQueueElement->afterOffset, " lotNum=7 lineNum=6 2=\"ZQ==\" 3=\"Zg==\" 4=\"Zw==\"");
     CU_ASSERT_EQUAL(collectQueue.first, NULL);
-    
+
     free(sdElementQueue.first);
     free(sdElementQueueElement);
 }
@@ -209,7 +209,7 @@ void testPushSDElementQueue()
         NULL
     };
     SDElementQueueElement* sdElementQueueElement = NULL;
-    
+
     /* Test ajoute un element dans la queue*/
     int result = pushSDElementQueue(&sdElementQueue, "value=1", 5);
     CU_ASSERT_EQUAL(result, EXIT_SUCCESS);
@@ -219,7 +219,7 @@ void testPushSDElementQueue()
     CU_ASSERT_STRING_EQUAL(sdElementQueueElement->afterMsgID, "[prop@40311 ver=2 probe=1 token=\"abcd1234\"][res1@40311 offset=");
     CU_ASSERT_STRING_EQUAL(sdElementQueueElement->afterOffset, "value=1");
     CU_ASSERT_EQUAL(sdElementQueueElement->next, NULL);
-    
+
     /* Test ajoute un deuxieme element dans la queue*/
     result = pushSDElementQueue(&sdElementQueue, "value=2", 6);
     CU_ASSERT_EQUAL(result, EXIT_SUCCESS);
@@ -268,7 +268,7 @@ int main()
     CU_basic_run_tests();
 #else
     /* Run all tests using the CUnit Automated interface */
-    CU_set_output_filename("cunit-result/format");
+    CU_set_output_filename("cunit-result/conf");
     CU_list_tests_to_file();
     CU_automated_run_tests();
 #endif

@@ -777,5 +777,310 @@
       <item path="tests_unit/utilUnitTest.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
+    <conf name="Test" type="1">
+      <toolsSet>
+        <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>6</developmentMode>
+          <stripSymbols>true</stripSymbols>
+          <incDir>
+            <pElem>include</pElem>
+            <pElem>/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/include</pElem>
+            <pElem>../addon/include</pElem>
+          </incDir>
+          <commandLine>-DNDEBUG</commandLine>
+        </cTool>
+        <ccTool>
+          <developmentMode>6</developmentMode>
+          <stripSymbols>true</stripSymbols>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+        <linkerTool>
+          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/probe</output>
+          <linkerAddLib>
+            <pElem>../addon/dist/Release/${CND_PLATFORM}</pElem>
+            <pElem>/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM}</pElem>
+            <pElem>/usr/local/lib</pElem>
+          </linkerAddLib>
+          <linkerDynSerch>
+            <pElem>../addon/dist/Release/${CND_PLATFORM}</pElem>
+            <pElem>/opt/echoes-alert/probe/lib</pElem>
+            <pElem>/opt/echoes-alert/probe/addons</pElem>
+          </linkerDynSerch>
+          <stripSymbols>true</stripSymbols>
+          <linkerLibItems>
+            <linkerOptionItem>`pkg-config --libs  glib-2.0 gobject-2.0  gio-2.0`</linkerOptionItem>
+            <linkerLibLibItem>pthread</linkerLibLibItem>
+            <linkerLibLibItem>addon</linkerLibLibItem>
+            <linkerLibLibItem>cunit</linkerLibLibItem>
+          </linkerLibItems>
+        </linkerTool>
+      </compileType>
+      <packaging>
+        <packType>Tar</packType>
+        <packTopDir>probe</packTopDir>
+        <packFileList>
+          <packFileListElem type="File"
+                            to="${PACKAGE_TOP_DIR}sbin/ea-probe"
+                            from="${OUTPUT_PATH}"
+                            perm="750"
+                            owner="root"
+                            group="root"/>
+        </packFileList>
+      </packaging>
+      <item path="conf/probe.conf" ex="false" tool="3" flavor2="0">
+      </item>
+      <folder path="TestFiles/f1">
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f1</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f4">
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f4</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f5">
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f5</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f6">
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f6</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f7">
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f7</output>
+        </linkerTool>
+      </folder>
+      <item path="include/conf.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/format.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/log.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/sender.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/signals.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="install.sh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="main.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="packages/CentOS/5-require.sh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="packages/CentOS/6-require.sh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="packages/CentOS/addLib-specific.sh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="packages/Debian/6-require.sh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="packages/Debian/7-require.sh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="packages/Ubuntu/12.04-require.sh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="packages/deb/README.Debian" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="packages/deb/changelog" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="packages/deb/conffiles" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="packages/deb/copyright" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="packages/deb/echoes-alert-probe.default"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="packages/deb/echoes-alert-probe.init"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="packages/deb/postinst" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="packages/deb/postrm" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="packages/deb/preinst.ex" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="packages/deb/prerm" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="packages/doc/libglib2.0/AUTHORS" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="packages/doc/libglib2.0/NEWS.gz" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="packages/doc/libglib2.0/README.gz" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="packages/doc/libglib2.0/copyright" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="packages/doc/libjson-glib-1.0/NEWS.gz"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="packages/doc/libjson-glib-1.0/README"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="packages/doc/libjson-glib-1.0/copyright"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="packages/file-tree.sh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="packages/package-conf.sh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="packages/rpm/echoes-alert-probe.init"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="packages/rpm/echoes-alert-probe.sysconfig"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="packages/var-deb.sh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="packages/var-rpm.sh" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="plugins/Linux-Syslog.json" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="plugins/Linux-System.json" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="plugins/MySQL-ISPConfig-WebTraffic.json"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="plugins/MySQL.json" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="plugins/SNMP.json" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="plugins/log.json" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="src/conf.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="src/format.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="src/log.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="src/sender.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="src/signals.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="tests_integration/site.exp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/config/unix.exp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/install.test/install.exp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/install.test/root.exp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/probe.test/no-engine.exp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/probe.test/no-plugin.exp"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/probe.test/plugins/no-engine/FileSystem.json"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/server/compil.sh"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/server/server"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/server/server.log"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/server/server.result"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/server/ssl/ca.crt"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/server/ssl/ca.key"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/server/ssl/ca.srl"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/server/ssl/servunittest.crt"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/server/ssl/servunittest.csr"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_integration/testsuite/server/ssl/servunittest.key"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="tests_unit/confcunittest.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="tests_unit/formatcunittest.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="tests_unit/logcunittest.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="tests_unit/sendercunittest.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="tests_unit/signalscunittest.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="tests_unit/test.conf" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests_unit/utilUnitTest.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="tests_unit/utilUnitTest.h" ex="false" tool="3" flavor2="0">
+      </item>
+    </conf>
   </confs>
 </configurationDescriptor>

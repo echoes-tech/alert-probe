@@ -9,7 +9,11 @@
 #include <stdlib.h>
 #include <glib.h>
 #include <gio/gio.h>
-#include "CUnit/Basic.h"
+#ifndef NDEBUG
+    #include "CUnit/Basic.h"
+#else
+    #include "CUnit/Automated.h"
+#endif
 #include "sender.h"
 #include "utilUnitTest.h"
 
@@ -223,6 +227,8 @@ void testSendMessage_Success()
     /* lance le serveur qui va attendre un message */
     pthread_create(&identifier, NULL, server, &paramAndReturn);
 
+    sleep(1);
+    
     /* envoi un message */
     result = sendMessage(address, &paramAndReturn.port, &protocol, beforeMsgID, &msgID, afterMsgID, collectTime, afterOffset);
 
@@ -324,6 +330,8 @@ void testSender()
     /* lance le serveur qui va attendre la reception de deux messages */
     pthread_create(&server_identifier, NULL, server, &paramAndReturn);
 
+    sleep(1);
+    
     /* lance sender qui va depiler et envoyer les deux elements */
     CU_ASSERT_FALSE(pthread_create(&sender_identifier, NULL, sender, (void*) &senderParams));
 
@@ -375,9 +383,17 @@ int main()
         return CU_get_error();
     }
 
+#ifndef NDEBUG
     /* Run all tests using the CUnit Basic interface */
     CU_basic_set_mode(CU_BRM_VERBOSE);
     CU_basic_run_tests();
+#else
+    /* Run all tests using the CUnit Automated interface */
+    CU_set_output_filename("cunit-result/conf");
+    CU_list_tests_to_file();
+    CU_automated_run_tests();
+#endif
+    
     CU_cleanup_registry();
     return CU_get_error();
 }
