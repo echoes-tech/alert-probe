@@ -24,12 +24,15 @@ int clean_suite(void)
     return 0;
 }
 
-void* boucleInfinie()
+void* boucleInfinie(void* arg)
 {
-    while (1)
+    int t = 0;
+    while (arg == NULL || t < *(int*)arg)
     {
         sleep(1);
+        t++;
     }
+    return 0;
 }
 
 void testRestart()
@@ -82,12 +85,14 @@ void testSignalsHandler()
 void testWaitForShutdown()
 {
     int signum = 5;
+    int t = 2;
+    int* tptr = &t;
     ThreadIdentifiers threadIdentifiers = THREAD_IDENTIFIERS_INITIALIZER;
     signalsHandler(&signum, &threadIdentifiers);
-    printf("wait\n");
-    printf("%d, %d\n", threadIdentifiers.formatThread, threadIdentifiers.senderThread);
+    
+    pthread_create(&threadIdentifiers.formatThread, NULL, boucleInfinie, tptr);
+    pthread_create(&threadIdentifiers.senderThread, NULL, boucleInfinie, tptr);
     CU_ASSERT_EQUAL(waitForShutdown(), 5);
-    printf("wait\n");
 }
 
 int main()

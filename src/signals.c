@@ -44,11 +44,8 @@ void signalHandling(int _signum)
 
 int waitForShutdown()
 {
-    printf("wait\n");
     pthread_join(threadIdentifiers->formatThread, NULL);
-    printf("wait\n");
     pthread_join(threadIdentifiers->senderThread, NULL);
-    printf("wait\n");
     return *signum;
 }
 
