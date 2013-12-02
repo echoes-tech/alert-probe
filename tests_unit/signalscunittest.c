@@ -59,32 +59,53 @@ void testSignalHandling()
 void testSignalsHandler()
 {
     int signum = 0;
+    printf("handler\n");
     ThreadIdentifiers threadIdentifiers = THREAD_IDENTIFIERS_INITIALIZER;
+    printf("handler\n");
     signalsHandler(&signum, &threadIdentifiers);
+    printf("handler\n");
 
     kill(getpid(), SIGHUP);
+    printf("handler\n");
     CU_ASSERT_EQUAL(signum, SIGHUP);
+    printf("handler\n");
     signum = 0;
+    printf("handler\n");
     kill(getpid(), SIGTERM);
+    printf("handler\n");
     CU_ASSERT_EQUAL(signum, SIGTERM);
+    printf("handler\n");
     signum = 0;
+    printf("handler\n");
     kill(getpid(), SIGQUIT);
+    printf("handler\n");
     CU_ASSERT_EQUAL(signum, SIGQUIT);
+    printf("handler\n");
     signum = 0;
+    printf("handler\n");
     kill(getpid(), SIGSYS);
+    printf("handler\n");
     CU_ASSERT_EQUAL(signum, SIGSYS);
+    printf("handler\n");
     
     /* signum != 0 le signal est ignore*/
     kill(getpid(), SIGTERM);
+    printf("handler\n");
     CU_ASSERT_EQUAL(signum, SIGSYS);
+    printf("handler\n");
 }
 
 void testWaitForShutdown()
 {
+    printf("wait\n");
     int signum = 5;
+    printf("wait\n");
     ThreadIdentifiers threadIdentifiers = THREAD_IDENTIFIERS_INITIALIZER;
+    printf("wait\n");
     signalsHandler(&signum, &threadIdentifiers);
+    printf("wait\n");
     CU_ASSERT_EQUAL(waitForShutdown(), 5);
+    printf("wait\n");
 }
 
 int main()
