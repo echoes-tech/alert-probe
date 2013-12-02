@@ -165,6 +165,8 @@ int main(int argc, char** argv, char **envp)
               PRODUCT_NAME,
               VERSION
               );
+     
+    g_type_init();
 
 #ifndef NDEBUG
     printf("Début du chargement des conf\n");
