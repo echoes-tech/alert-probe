@@ -201,15 +201,16 @@
           <warningLevel>2</warningLevel>
         </cTool>
         <linkerTool>
-          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/probe</output>
+          <output>${TESTDIR}/TestFiles/f2</output>
           <linkerAddLib>
             <pElem>../addon/dist/Debug/${CND_PLATFORM}</pElem>
             <pElem>/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM}</pElem>
             <pElem>/usr/local/lib</pElem>
           </linkerAddLib>
           <linkerDynSerch>
-            <pElem>../addon/dist/Debug/${CND_PLATFORM}</pElem>
+            <pElem>/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM}</pElem>
             <pElem>/opt/echoes-alert/probe/lib</pElem>
+            <pElem>../addon/dist/Debug/${CND_PLATFORM}</pElem>
           </linkerDynSerch>
           <linkerLibItems>
             <linkerOptionItem>`pkg-config --libs  glib-2.0 gobject-2.0  gio-2.0`</linkerOptionItem>
@@ -224,11 +225,6 @@
       <folder path="TestFiles/f1">
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f1</output>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f2">
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f2</output>
         </linkerTool>
       </folder>
       <folder path="TestFiles/f4">
@@ -506,7 +502,7 @@
           <developmentMode>5</developmentMode>
         </asmTool>
         <linkerTool>
-          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/probe</output>
+          <output>${TESTDIR}/TestFiles/f2</output>
           <linkerAddLib>
             <pElem>/usr/local/lib</pElem>
             <pElem>/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM}</pElem>
@@ -522,7 +518,7 @@
           <linkerLibItems>
             <linkerOptionItem>`pkg-config --libs  glib-2.0 gobject-2.0  gio-2.0`</linkerOptionItem>
             <linkerLibLibItem>pthread</linkerLibLibItem>
-            <linkerLibLibItem>addon</linkerLibLibItem>
+            <linkerLibLibItem>cunit</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
@@ -543,11 +539,6 @@
       <folder path="TestFiles/f1">
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f1</output>
-        </linkerTool>
-      </folder>
-      <folder path="TestFiles/f2">
-        <linkerTool>
-          <output>${TESTDIR}/TestFiles/f2</output>
         </linkerTool>
       </folder>
       <folder path="TestFiles/f4">
