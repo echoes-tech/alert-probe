@@ -3,3 +3,5 @@
 /dist/
 /nbproject/private/
 .dep.inc
+install/install.sh
+plugins/informations.json

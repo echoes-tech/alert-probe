@@ -10,37 +10,13 @@
 # ID : name : version
 mock_probe=":probe:0.1.0"
 mock_common=":common:0.1.0"
-mock_addons="1:filesystem:0.1.1 2:file:0.1.0 3:log:0.1.0 5:snmp:0.1.0"
-mock_plugins="1:filesystem.json 2:file.json 3:log.json 4:snmp.json"
+mock_addons="1:filesystem:0.1.1 2:file:0.1.0 3:log:0.1.0 5:snmp:0.1.0 6:odbc:0.1.0"
 
 mock_pwd=$(pwd)
 
 get() {
-	## Assets
-	if mock_testURL $1 /assets/ID/plugins
-	then
-		echo "["  > $3		
-		for mock_plugin in $mock_plugins
-		do
-			mock_last_plugin_id=$(echo $mock_plugin | cut -d ':' -f 1)
-		done
-		for mock_plugin in $mock_plugins
-		do
-			echo "	{" >> $3
-			echo "		\"id\": $(echo $mock_plugin | cut -d ':' -f 1)," >> $3
-			echo "		\"name\": \"$(echo $mock_plugin | cut -d ':' -f 2)\"" >> $3
-			echo -n "	}" >> $3
-			if [ $mock_last_plugin_id -ne $(echo $mock_plugin | cut -d ':' -f 1) ]
-			then
-				echo "," >> $3
-			else
-				echo "" >> $3
-			fi
-		done			
-		echo "]" >> $3
-		mock_return 200
 	## Probes
-	elif mock_testURL $1 /probes/ID/addons
+	if mock_testURL $1 /probes/ID/addons
 	then
 		echo "["  > $3		
 		for mock_addon in $mock_addons
@@ -84,17 +60,9 @@ get() {
 		mock_json_content $3 $mock_package $mock_addon_info
 		echo "}" >> $3
 		mock_return 200
-	## Plugins
-	elif mock_testURL $1 /plugins/ID
+	elif mock_testURL $1 /probes/ID/informations
 	then
-		for mock_plugin in $mock_plugins
-		do
-			if [ $(echo $1 | cut -d '/' -f 3) -eq $(echo $mock_plugin | cut -d ':' -f 1) ]
-			then
-				mock_plugin_name=$(echo $mock_plugin | cut -d ':' -f 2)
-			fi
-		done
-		cp $mock_pwd/install/mock/plugins/$mock_plugin_name $3
+		cp $mock_pwd/install/mock/informations/informations.json $3
 		mock_return 200
 	else
 		mock_json_bad_request $3

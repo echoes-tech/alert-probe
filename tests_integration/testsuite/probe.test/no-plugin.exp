@@ -1,5 +1,5 @@
-# Test probe when have no plugins
-# Expect '0 plugins loaded' message in log file
+# Test probe when have no informationss
+# Expect '0 informationss loaded' message in log file
 # Probe must stop
 
 
@@ -16,9 +16,8 @@ set log "/var/log/echoes-alert/probe.log"
 # BEFORE ##
 ###########
 
-# Delete all plugins
-file delete -force /opt/echoes-alert/probe/etc/plugins
-file mkdir /opt/echoes-alert/probe/etc/plugins
+# Delete informations
+file delete -force /opt/echoes-alert/probe/etc/informations.json
 
 # If a probe is running stop it
 if { [is_service_running "ea-probe"] } {
@@ -36,11 +35,11 @@ set line_number [expr [linecount $log] + 2]
 set spawn_pid [spawn service ea-probe start]
 wait_spawn_end $spawn_pid
 
-test_string_regexp "no-plugin_load" "^.* - 0 plugins loaded$" [get_logfile_line $log $line_number]
+test_string_regexp "no-informations_load" "^.* - Critical: No such file or directory: file: /opt/echoes-alert/probe/etc/informations.json$" [get_logfile_line $log $line_number]
 
 sleep 2
 
-test_is_service_stopped "no-plugin_stopped" "ea-probe"
+test_is_service_stopped "no-informations_stopped" "ea-probe"
 
 
 ###########

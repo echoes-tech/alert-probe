@@ -124,43 +124,12 @@ do
   fi
 done < addons_list_res
 
-# Get and copy plugins
-get "/assets/$ASSET_ID/plugins" "login=$LOGIN_ENC&password=$PASSWORD_ENC" plugins_list_res
+# Get and copy informations file
+get "/probes/$PROBE_ID/informations" "login=$LOGIN_ENC&password=$PASSWORD_ENC" informations.json
 
-mkdir plugins
-cd plugins
+cp informations.json $INSTALL_DIR/etc/
 
-plugin_id=""
-plugin_name=""
-
-check_plugin_id=true
-
-while read line
-do
-  if $check_plugin_id
-  then
-    plugin_id=$(echo $line | grep \"id\" | sed -e 's/ //g' | cut -d':' -f 2 | cut -d',' -f 1)
-  fi
-
-  if [ $plugin_id ]
-  then
-    check_plugin_id=false
-    plugin_name=$(echo $line | grep \"name\" | sed -e 's/ //g' | cut -d':' -f 2 | cut -d',' -f 1 | sed -e 's/\"//g')
-    if [ $plugin_name ]
-    then
-      check_plugin_id=true
-      get "/plugins/$plugin_id" "login=$LOGIN_ENC&password=$PASSWORD_ENC" "$plugin_name"
-      sed -i -e "s/\(\"idAsset\": \).*/\1$ASSET_ID,/" "$plugin_name"
-      plugin_id=""
-      plugin_name=""
-    fi
-  fi
-done < ../plugins_list_res
-
-rm -f *_header *_tmp
-cp * $INSTALL_DIR/etc/plugins/
-
-echo "ECHOES Alert plugins downloaded."
+echo "ECHOES Alert informations downloaded."
 
 cd "$CURRENT_DIR"
 rm -rf "$TMP_DIR"

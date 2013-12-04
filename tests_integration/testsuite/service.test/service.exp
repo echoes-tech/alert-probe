@@ -1,0 +1,63 @@
+# Test service functions : start, stop and restart
+
+
+###############
+## VARIABLES ##
+###############
+
+set timeout 10
+
+# Test informations directory path
+set informations "testsuite/probe.test/no-engine-informations.json"
+
+############
+## BEFORE ##
+############
+
+# If a probe is running stop it
+if { [is_service_running "ea-probe"] } {
+	set spawn_pid [spawn service ea-probe stop]
+	wait_spawn_end $spawn_pid
+}
+
+# Add test informations (without probe stops immediately)
+file copy $informations "/opt/echoes-alert/probe/etc/informations.json"
+
+
+###########
+## TESTS ##
+###########
+
+# Start
+set spawn_pid [spawn service ea-probe start]
+wait_spawn_end $spawn_pid
+
+test_is_service_running "service_start_running" "ea-probe"
+
+set spawn_pid [spawn service ea-probe status]
+wait_spawn_end $spawn_pid
+test_return_code "service_start_status" $spawn_pid 0
+
+set probe_pid [get_file_content "/var/run/ea-probe.pid"]
+
+# Restart
+set spawn_pid [spawn service ea-probe restart]
+wait_spawn_end $spawn_pid
+
+test_is_service_running "service_restart_running" "ea-probe"
+
+set spawn_pid [spawn service ea-probe status]
+wait_spawn_end $spawn_pid
+test_return_code "service_restart_status" $spawn_pid 0
+
+test_string_not_equal "service_restart_new-pid" $probe_pid [get_file_content "/var/run/ea-probe.pid"]
+
+# Stop
+set spawn_pid [spawn service ea-probe stop]
+wait_spawn_end $spawn_pid
+
+test_is_service_stopped "service_stop_stopped" "ea-probe"
+
+set spawn_pid [spawn service ea-probe status]
+wait_spawn_end $spawn_pid
+test_return_code "service_stop_status" $spawn_pid 3
