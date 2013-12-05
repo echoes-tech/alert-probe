@@ -8,8 +8,8 @@
 
 set timeout 10
 
-# Test informations directory path
-set informations "testsuite/probe.test/no-engine-informations.json"
+# Test plugin directory path
+set plugin "testsuite/probe.test/no-engine-informations.json"
 
 # Log file path
 set log "/var/log/echoes-alert/probe.log"
@@ -23,11 +23,8 @@ set log "/var/log/echoes-alert/probe.log"
 set_value_in_file "engine_fqdn" "/opt/echoes-alert/probe/etc/probe.conf" "127.0.0.1"
 set_value_in_file "engine_port" "/opt/echoes-alert/probe/etc/probe.conf" "1700"
 
-# Delete informations
-file delete -force /opt/echoes-alert/probe/etc/informations.json
-
-# Add test informations
-file copy $informations "/opt/echoes-alert/probe/etc/informations.json"
+# Add test plugin
+file copy -force $plugin "/opt/echoes-alert/probe/etc/informations.json"
 
 # If a probe is running stop it
 if { [is_service_running "ea-probe"] } {

@@ -8,32 +8,27 @@
 
 [
 {
-	"id": 2, /* Addon File */
+	"id": 1, /* FileSystem */
         "sources": 
-        [	
+        [
         {
             	"id": 1, /* Champ à ignorer */
             	"searches": 
             	[
              	{
                 	"id": 1, /* Champ à ignorer */
-                	"idType": 2, /* Path + line */
+                	"idType": 3, /* Path */
                 	"params": 
                 	{
-            			"path": "/proc/meminfo",
-            			"line": 1
+                		"path": "/"
                  	},
                 	"period": 1,
                 	"filters": 
-                	[                	
+                	[
 		        	{
-		            		"id": 2,
-		            		"idType": 2, /* Regex */
-		            		"params":
-		            		{
-		                		"regex": "([0-9]{4})([0-9]{4})"
-		            		},
-		            		"idsIDA": [ 2, 3 ]
+		            		"id": 1,
+		            		"idType": 1, /* All */
+		            		"idsIDA": [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
 		        	}
                 	]
            	}

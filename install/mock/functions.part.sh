@@ -10,7 +10,7 @@
 # ID : name : version
 mock_probe=":probe:0.1.0"
 mock_common=":common:0.1.0"
-mock_addons="1:filesystem:0.1.1 2:file:0.1.0 3:log:0.1.0 5:snmp:0.1.0 6:odbc:0.1.0"
+mock_addons="1:filesystem:0.1.0 2:file:0.1.0 3:log:0.1.0 5:snmp:0.1.0 6:odbc:0.1.0"
 
 mock_pwd=$(pwd)
 
@@ -134,19 +134,38 @@ mock_get_architecture_name() {
 }
 
 mock_get_package() {
+	mock_addon_name=""
 	if [ $1 = addons ]
 	then
 		for mock_addon in $mock_addons
 		do
 			if [ $2 -eq $(echo $mock_addon | cut -d ':' -f 1) ]
 			then				
-				addon_name=$(echo $mock_addon | cut -d ':' -f 2)
+				mock_addon_name=$(echo $mock_addon | cut -d ':' -f 2)
+				mock_VERSION=$(echo $mock_addon | cut -d ':' -f 3)
 			fi
 		done
-	else
-		addon_name=""
+	elif [ $1 = probe ]
+	then
+		mock_VERSION=$(echo $mock_probe | cut -d ':' -f 3)
+	elif [ $1 = common ]
+	then
+		mock_VERSION=$(echo $mock_common | cut -d ':' -f 3)
 	fi
-	ls $mock_pwd/install/mock/packages/$1/ea-probe*$addon_name*$mock_VERSION*$HOST_DISTRIB*$(mock_get_release_name)*$(mock_get_architecture_name)*
+
+	ls $mock_pwd/install/mock/packages/$1/ | \
+	awk '{
+		match($0, /ea-probe.*'$mock_addon_name'.'$mock_VERSION'.([0-9]*).*$/, a);
+		realease=substr($0, a[1, "start"], a[1, "length"])+0;
+		if(realease>realease_max)
+		{
+			realease_max=realease;
+			package=$0
+		}
+	}
+	END {
+		print "'$mock_pwd/install/mock/packages/$1/'"package;
+	}'
 }
 
 mock_testURL() {
@@ -175,3 +194,5 @@ mock_json_content() {
 	echo "		\"version\": \"1\"" >> $1
 	echo "	}" >> $1
 }
+
+mock_get_package addons 1

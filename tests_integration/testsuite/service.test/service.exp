@@ -7,8 +7,8 @@
 
 set timeout 10
 
-# Test informations directory path
-set informations "testsuite/probe.test/no-engine-informations.json"
+# Test informations path
+set informations "testsuite/service.test/service-informations.json"
 
 ############
 ## BEFORE ##
@@ -21,7 +21,7 @@ if { [is_service_running "ea-probe"] } {
 }
 
 # Add test informations (without probe stops immediately)
-file copy $informations "/opt/echoes-alert/probe/etc/informations.json"
+file copy -force $informations "/opt/echoes-alert/probe/etc/informations.json"
 
 
 ###########
