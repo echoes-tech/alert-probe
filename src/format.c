@@ -82,7 +82,7 @@ int popCollectQueue(CollectQueue *collectQueue, SDElementQueue *sdElementQueue)
     /* Debut de la zone protegee. */
     pthread_mutex_lock(& collectQueue->mutex);
 
-    /* On vérifie s'il y a quelque chose à défiler */    
+    /* On vérifie s'il y a quelque chose à défiler */
     if (collectQueue->first != NULL)
     {
         CollectQueueElement *popedElement = collectQueue->first;
@@ -93,32 +93,34 @@ int popCollectQueue(CollectQueue *collectQueue, SDElementQueue *sdElementQueue)
                 popedElement->lotNum,
                 popedElement->lineNum
                 );
-        
-        for(i = 0; i < popedElement->valuesLength; i++)
+
+        for (i = 0; i < popedElement->valuesLength; i++)
         {
-            gchar *base64encoded = g_base64_encode(
-                                                   (guchar *) popedElement->values[i],
-                                                   strlen(popedElement->values[i])
-                                                   );
+            gchar *url_encoded = g_uri_escape_string(
+                                                     popedElement->values[i],
+                                                     "",
+                                                     TRUE
+                                                     );
+
 
             sprintf(
-                afterOffsetTmp,
-                " %d=\"%s\"",
-                popedElement->idsIDA[i],
-                base64encoded
-                );
+                    afterOffsetTmp,
+                    " %d=\"%s\"",
+                    popedElement->idsIDA[i],
+                    url_encoded
+                    );
 
-            g_free(base64encoded);
-            base64encoded = NULL;
+            g_free(url_encoded);
+            url_encoded = NULL;
 
             strcat(afterOffset, afterOffsetTmp);
-            
+
             free(popedElement->values[i]);
             popedElement->values[i] = NULL;
         }
         free(popedElement->values);
         popedElement->values = NULL;
-        
+
         pushSDElementQueue(
                            sdElementQueue,
                            afterOffset,

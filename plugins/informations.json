@@ -8,7 +8,7 @@
 
 [
 {
-	"id": 2, /* Addon File */
+	"id": 3, /* Addon Log */
         "sources": 
         [	
         {
@@ -17,23 +17,23 @@
             	[
              	{
                 	"id": 1, /* Champ à ignorer */
-                	"idType": 2, /* Path + line */
+                	"idType": 4, /* Path + line */
                 	"params": 
                 	{
-            			"path": "/proc/meminfo",
-            			"line": 1
+            			"path": "/tmp/addon3log.txt",
+            			"lastNlines": 4
                  	},
                 	"period": 1,
                 	"filters": 
-                	[                	
+                	[            	
 		        	{
-		            		"id": 2,
+		            		"id": 1,
 		            		"idType": 2, /* Regex */
 		            		"params":
 		            		{
-		                		"regex": "([0-9]{4})([0-9]{4})"
+                				"regex": "^MemTotal:\s+([0-9]{2})([0-9]{2})\skB"
 		            		},
-		            		"idsIDA": [ 2, 3 ]
+		            		"idsIDA": [ 1, 2 ]
 		        	}
                 	]
            	}

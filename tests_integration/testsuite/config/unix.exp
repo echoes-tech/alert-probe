@@ -183,6 +183,19 @@ proc set_value_in_file {key file_path value} {
 	file rename -force "${file_path}_tmp" $file_path
 }
 
+# append $line to $file_path
+# Return -1 if $file_path doesn't exist
+proc add_line {file_path line} {
+	if { [catch {
+		set my_file [open [lindex $file_path 0] a]
+	} caught_error] } {
+		perror "caught error: $caught_error"
+		return -1
+	}
+	puts $my_file $line
+        close $my_file
+}
+
 #
 # Return -1 if file doesn't exist
 proc get_file_content {file_path} {
@@ -254,26 +267,36 @@ proc linecount {file_path} {
 }
 
 # Return line from $file_path corresponding to $line_number
-# Wait for $line_number be written
-# Stop when time out: return -1
-# Return -1 if file doesn't exist
-proc get_logfile_line {file_path line_number} {	
-	global timeout
+# Return -1 if file doesn't exist or out ranged $line_number
+proc get_file_line {file_path line_number} {	
 	if { [catch {
 		set input_file [open [lindex $file_path 0] r]
 	} caught_error] } {
 		perror "caught error: $caught_error"
 		return -1
 	}
-	set time [clock seconds]
         set count 0
+	while {[gets $input_file line] > -1} {
+		incr count
+		if { [expr $count == $line_number] } {
+        		close $input_file				
+			return $line
+		}
+	}
+        close $input_file
+	return -1
+}
+
+# Return line from $file_path corresponding to $line_number
+# Wait for $line_number be written
+# Stop when time out: return -1
+# Return -1 if file doesn't exist
+proc get_logfile_line {file_path line_number} {	
+	global timeout
+	set time [clock seconds]
 	while { ! [expr [expr $time + $timeout] <= [clock seconds]] } {
-		while {[gets $input_file line] > -1} {
-			incr count
-			if { [expr $count == $line_number] } {
-        			close $input_file				
-				return $line
-			}
+		if { [linecount $file_path] >= $line_number } {
+			return [get_file_line $file_path $line_number]
 		}
 		after 100
         }

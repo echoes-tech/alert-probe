@@ -37,7 +37,7 @@ if { [is_service_running "ea-probe"] } {
 ## TESTS ##
 ###########
 
-set line_number [expr [linecount $log] + 4]
+set line_number [expr [linecount $log] + 3]
 
 set spawn_pid [spawn service ea-probe start]
 wait_spawn_end $spawn_pid
