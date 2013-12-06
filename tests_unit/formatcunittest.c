@@ -101,13 +101,13 @@ void testFormat()
     CU_ASSERT_EQUAL(sdElementQueueElement->time, 7);
     CU_ASSERT_STRING_EQUAL(sdElementQueueElement->beforeMsgID, "127.0.0.1 ea-probe 3 ID");
     CU_ASSERT_STRING_EQUAL(sdElementQueueElement->afterMsgID, "[prop@40311 ver=2 probe=1 token=\"abcd1234\"][res1@40311 offset=");
-    CU_ASSERT_STRING_EQUAL(sdElementQueueElement->afterOffset, "  lotNum=6 lineNum=5 1=\"YQ==\"");
+    CU_ASSERT_STRING_EQUAL(sdElementQueueElement->afterOffset, " lotNum=6 lineNum=5 1=\"a\"");
     CU_ASSERT_NOT_EQUAL(sdElementQueueElement->next, NULL);
     sdElementQueueElement = sdElementQueueElement->next;
     CU_ASSERT_EQUAL(sdElementQueueElement->time, 14);
     CU_ASSERT_STRING_EQUAL(sdElementQueueElement->beforeMsgID, "127.0.0.1 ea-probe 3 ID");
     CU_ASSERT_STRING_EQUAL(sdElementQueueElement->afterMsgID, "[prop@40311 ver=2 probe=1 token=\"abcd1234\"][res1@40311 offset=");
-    CU_ASSERT_STRING_EQUAL(sdElementQueueElement->afterOffset, "  lotNum=13 lineNum=12 2=\"Yg==\"");
+    CU_ASSERT_STRING_EQUAL(sdElementQueueElement->afterOffset, " lotNum=13 lineNum=12 2=\"b\"");
     CU_ASSERT_EQUAL(sdElementQueueElement->next, NULL);
 }
 
@@ -169,25 +169,25 @@ void testPopCollectQueue()
     result = popCollectQueue(&collectQueue, &sdElementQueue);
     CU_ASSERT_EQUAL(result, EXIT_SUCCESS);
     sdElementQueueElement = sdElementQueue.first;
-    CU_ASSERT_STRING_EQUAL(sdElementQueueElement->afterOffset, " lotNum=10 lineNum=9 1=\"YQ==\"");
+    CU_ASSERT_STRING_EQUAL(sdElementQueueElement->afterOffset, " lotNum=10 lineNum=9 1=\"a\"");
     CU_ASSERT_NOT_EQUAL(collectQueue.first, NULL);
 
     /* Test depile second element de la queue de collecte */
     result = popCollectQueue(&collectQueue, &sdElementQueue);
     CU_ASSERT_EQUAL(result, EXIT_SUCCESS);
     sdElementQueueElement = sdElementQueue.first;
-    CU_ASSERT_STRING_EQUAL(sdElementQueueElement->afterOffset, " lotNum=10 lineNum=9 1=\"YQ==\"");
+    CU_ASSERT_STRING_EQUAL(sdElementQueueElement->afterOffset, " lotNum=10 lineNum=9 1=\"a\"");
     sdElementQueueElement = sdElementQueueElement->next;
-    CU_ASSERT_STRING_EQUAL(sdElementQueueElement->afterOffset, " lotNum=7 lineNum=6 2=\"ZQ==\" 3=\"Zg==\" 4=\"Zw==\"");
+    CU_ASSERT_STRING_EQUAL(sdElementQueueElement->afterOffset, " lotNum=7 lineNum=6 2=\"e\" 3=\"f\" 4=\"g\"");
     CU_ASSERT_EQUAL(collectQueue.first, NULL);
 
     /* Test depile alors que la queue de collecte est vide */
     result = popCollectQueue(&collectQueue, &sdElementQueue);
     CU_ASSERT_EQUAL(result, EXIT_SUCCESS);
     sdElementQueueElement = sdElementQueue.first;
-    CU_ASSERT_STRING_EQUAL(sdElementQueueElement->afterOffset, " lotNum=10 lineNum=9 1=\"YQ==\"");
+    CU_ASSERT_STRING_EQUAL(sdElementQueueElement->afterOffset, " lotNum=10 lineNum=9 1=\"a\"");
     sdElementQueueElement = sdElementQueueElement->next;
-    CU_ASSERT_STRING_EQUAL(sdElementQueueElement->afterOffset, " lotNum=7 lineNum=6 2=\"ZQ==\" 3=\"Zg==\" 4=\"Zw==\"");
+    CU_ASSERT_STRING_EQUAL(sdElementQueueElement->afterOffset, " lotNum=7 lineNum=6 2=\"e\" 3=\"f\" 4=\"g\"");
     CU_ASSERT_EQUAL(collectQueue.first, NULL);
 
     free(sdElementQueue.first);
