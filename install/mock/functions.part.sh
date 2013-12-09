@@ -100,22 +100,22 @@ put() {
 mock_get_release_name() {
 	if [ $HOST_DISTRIB = CentOS ]
 	then	
-		if [ $DISTRIB_RELEASE = 5.* ]
+		if mock_testRegex $DISTRIB_RELEASE "5.*"
 		then
 			echo 5
-		elif [ $DISTRIB_RELEASE = 6.* ]
+		elif mock_testRegex $DISTRIB_RELEASE "6.*"
 		then
 			echo 6
 		fi
 	elif [ $HOST_DISTRIB = Debian ]
 	then
-		if [ $DISTRIB_RELEASE = 6.0.* ]
+		if mock_testRegex $DISTRIB_RELEASE "6.0.*"
 		then
 			echo Squeeze
 		fi
 	elif [ $HOST_DISTRIB = Ubuntu ]
 	then
-		if [ $DISTRIB_RELEASE = 12.04 ] || [ $DISTRIB_RELEASE = 12.04.* ]
+		if mock_testRegex $DISTRIB_RELEASE "12.04" || mock_testRegex $DISTRIB_RELEASE "12.04.*"
 		then
 			echo Precise
 		fi
@@ -125,12 +125,17 @@ mock_get_release_name() {
 
 mock_get_architecture_name() {
 	if [ $HOST_ARCH = i*86 ]
-	then
-		echo i386
-	elif [ $HOST_ARCH = x86_64 ]
-	then
-		echo amd64
-	fi
+        then
+                echo i386
+        elif [ $HOST_ARCH = x86_64 ]
+        then
+                if [ $HOST_DISTRIB = CentOS ]
+                then
+                        echo $HOST_ARCH
+                else
+                        echo amd64
+                fi
+        fi
 }
 
 mock_get_package() {
@@ -154,8 +159,8 @@ mock_get_package() {
 	fi
 
 	ls $mock_pwd/install/mock/packages/$1/ | \
-	awk '{
-		match($0, /ea-probe.*'$mock_addon_name'.'$mock_VERSION'.([0-9]*).*$/, a);
+	awk '{ 
+		match($0, /ea-probe.*'$mock_addon_name'.'$mock_VERSION'.([0-9]*).'$HOST_DISTRIB'.'$(mock_get_release_name)'.'$(mock_get_architecture_name)'.*$/, a);
 		realease=substr($0, a[1, "start"], a[1, "length"])+0;
 		if(realease>realease_max)
 		{
@@ -171,6 +176,10 @@ mock_get_package() {
 mock_testURL() {
 	mock_testURL_regex=$(echo $2 | sed -r "s/\//\\\\\//g" | sed -r "s/ID/(([1-9])|([0-9]{2,}))/g")
 	[ -z $(echo $1 | sed -r "s/$mock_testURL_regex//") ]
+}
+
+mock_testRegex() {
+	[ -z $(echo $1 | sed -r "s/$2//") ]
 }
 
 mock_return() {
@@ -194,5 +203,3 @@ mock_json_content() {
 	echo "		\"version\": \"1\"" >> $1
 	echo "	}" >> $1
 }
-
-mock_get_package addons 1

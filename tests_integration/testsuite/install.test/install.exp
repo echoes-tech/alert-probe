@@ -19,12 +19,12 @@ set install_script "install.sh"
 ## TESTS ##
 ###########
 
-## Script running
-#set process_id [spawn su root -c "sh $install_script"]
-#expect -re ": $"
-#send "root\n";
+# Script running
+set process_id [spawn su root -c "sh $install_script"]
+expect -re ": $"
+send "root\n";
 
-set process_id [spawn sh $install_script]
+#set process_id [spawn sh $install_script]
 
 # Password invite
 test_expect "install_password_invite" "To download ECHOES Alert Probe, you have to enter your password\..\n*Note: login is .*\nPassword: $"

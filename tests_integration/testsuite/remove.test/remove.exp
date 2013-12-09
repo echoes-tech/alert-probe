@@ -1,0 +1,28 @@
+# Remove all packages
+
+
+###############
+## VARIABLES ##
+###############
+
+set timeout 1
+
+# List of expected addons
+set addons_list "filesystem file log snmp odbc"
+
+
+###########
+## TESTS ##
+###########
+
+foreach addon $addons_list {
+
+	catch { exec puppet resource package ea-probe-addon${addon} ensure=purged }
+	test_package_purged "install_addon${addon}_purged" "ea-probe-addon${addon}"
+}
+
+catch { exec puppet resource package ea-probe ensure=purged }
+test_package_purged "install_probe_installed" "ea-probe"
+
+catch { exec puppet resource package ea-probe-addon ensure=purged }
+test_package_purged "install_common_installed" "ea-probe-addon"

@@ -78,6 +78,7 @@ get "/probes/$ASSET_ID/addons" "login=$LOGIN_ENC&password=$PASSWORD_ENC" addons_
 
 addon_id=""
 addon_name=""
+list_addons=""
 
 check_addon_id=true
 
@@ -96,33 +97,38 @@ do
     then
       check_addon_id=true
       
-      ERR_INSTALL_MSG="Unable to install ECHOES Alert addon $addon_name"
-      
-      get "/probes/$ASSET_ID/addons/$addon_id" "login=$LOGIN_ENC&password=$PASSWORD_ENC" "$addon_name"
-      
-      PKG=$(grep '"filename"' $addon_name | sed -e 's/ //g' | cut -d':' -f 2 | cut -d',' -f 1 | sed -e 's/"//g')
-      PKG_TYPE=$(echo $PKG | sed 's/.*\.\(.*\)$/\1/g')
-
-      PKG_CONTENT_B64=$(cat $addon_name | tr -d '\r\n' | sed 's/.*content": "\(.*\)\",\s\+"version.*/\1/g')
-      if [ -z $PKG_CONTENT_B64 ]
-      then
-        echo "$ERR_INSTALL_MSG: this release of your Linux distribution is not yet supported."
-        echo "Please open a ticket on https://forge.echoes-tech.com/projects/echoes-alert/issues"
-      else
-	      echo $PKG_CONTENT_B64 | /usr/bin/base64 -d > $PKG
-
-	      echo "ECHOES Alert add-on $addon_name library downloaded."
-
-	      package_installation
-
-	      echo "ECHOES Alert add-on $addon_name library installed."
-      fi
+      list_addons="$list_addons $addon_id:$addon_id"      
       
       addon_id=""
       addon_name=""      
     fi
   fi
 done < addons_list_res
+
+for current_addon in $list_addons
+do
+	addon_name=$(echo $current_addon | cut -d ':' -f 2)
+	addon_id=$(echo $current_addon | cut -d ':' -f 1)
+
+	ERR_INSTALL_MSG="Unable to install ECHOES Alert addon $addon_name"
+    
+      	get "/probes/$ASSET_ID/addons/$addon_id" "login=$LOGIN_ENC&password=$PASSWORD_ENC" "$addon_name"
+	      
+      	PKG=$(grep '"filename"' $addon_name | sed -e 's/ //g' | cut -d':' -f 2 | cut -d',' -f 1 | sed -e 's/"//g')
+      	PKG_TYPE=$(echo $PKG | sed 's/.*\.\(.*\)$/\1/g')
+
+      	PKG_CONTENT_B64=$(cat $addon_name | tr -d '\r\n' | sed 's/.*content": "\(.*\)\",\s\+"version.*/\1/g')
+      	if [ -z $PKG_CONTENT_B64 ]
+      	then
+		echo "$ERR_INSTALL_MSG: this release of your Linux distribution is not yet supported."
+		echo "Please open a ticket on https://forge.echoes-tech.com/projects/echoes-alert/issues"
+      	else
+	      	echo $PKG_CONTENT_B64 | /usr/bin/base64 -d > $PKG
+	      	echo "ECHOES Alert add-on $addon_name library downloaded."
+	      	package_installation
+	      	echo "ECHOES Alert add-on $addon_name library installed."
+      	fi
+done		
 
 # Get and copy informations file
 get "/probes/$PROBE_ID/informations" "login=$LOGIN_ENC&password=$PASSWORD_ENC" informations.json

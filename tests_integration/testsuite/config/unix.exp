@@ -55,6 +55,17 @@ proc test_package_installed {test_name package_name} {
 	}
 }
 
+# Test if $package_name is installed
+proc test_package_purged {test_name package_name} {
+	if { [catch {
+		exec puppet resource package $package_name
+	} ] } {
+		pass "$test_name"
+	} else {
+		fail_ "$test_name" "package '$package_name' is not purged"
+	}
+}
+
 # Test if $string1 and $string2 are equal
 proc test_string_equal {test_name string1 string2} {
 	if { [string equal $string1 $string2 ] } {
