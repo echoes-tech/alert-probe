@@ -243,6 +243,7 @@ int main(int argc, char** argv, char **envp)
     g_message("remove PID file");
     remove(daemonPidFilePath); 
 #endif  
+    g_message("remove PID file");
 
     g_message(
               "[origin enterpriseId=\"40311\" software=\"%s\" swVersion=\"%s\"] stop",
