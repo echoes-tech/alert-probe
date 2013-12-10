@@ -18,14 +18,17 @@ ThreadIdentifiers *threadIdentifiers = NULL;
 
 void signalsHandler(int *_signum, ThreadIdentifiers *_threadIdentifiers)
 {
-    unsigned int i = 0, j = 0;
-    int ignored [] = {SIGCHLD, SIGCLD, SIGIO, SIGPOLL, SIGSTOP, SIGTSTP, SIGCONT, SIGTTIN, SIGTTOU, SIGURG, SIGWINCH};
-    int ignored_length = 11;
+    int i = 0, j = 0;
+    int ignored [] = {SIGSTOP, SIGKILL, SIGCHLD, SIGCLD, SIGIO, SIGPOLL, SIGSTOP, SIGTSTP, SIGCONT, SIGTTIN, SIGTTOU, SIGURG, SIGWINCH};
+    int ignored_length = 13;
     for (i = 1; i < SIGSYS; i++)
     {
+        gboolean cont = FALSE;
         for (j = 0; j < ignored_length; j ++)
             if (i == ignored[j])
-                continue;
+                cont = TRUE;    
+        if(cont)
+            continue;
         signal(i, signalHandling);
     }
     signum = _signum;
@@ -35,15 +38,15 @@ void signalsHandler(int *_signum, ThreadIdentifiers *_threadIdentifiers)
 void signalHandling(int _signum)
 {
     unsigned int i = 0;
-    if (i == SIGPIPE)
+    if (_signum == SIGPIPE)
     {
-        g_error("Error: Signal: %d", i);
+        g_error("Error: Signal: %d", _signum);
         return;
     }
-    if (i == SIGTERM || i == SIGHUP || i == SIGALRM || i == SIGVTALRM || i == SIGPROF)
-        g_message("Signal: %d", i);    
+    if (_signum == SIGTERM || _signum == SIGHUP || _signum == SIGALRM || _signum == SIGVTALRM || _signum == SIGPROF)
+        g_message("Signal: %d", _signum);    
     else
-        g_critical("Critical: Signal: %d", i);
+        g_critical("Critical: Signal: %d", _signum);
     if (*signum == 0)
     {
         *signum = _signum;

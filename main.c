@@ -240,6 +240,7 @@ int main(int argc, char** argv, char **envp)
     
     /* Delete file that contains pid use by start-stop-daemon */
 #ifdef NDEBUG
+    g_message("remove PID file");
     remove(daemonPidFilePath); 
 #endif  
 
