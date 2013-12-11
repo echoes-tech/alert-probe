@@ -237,11 +237,6 @@ int main(int argc, char** argv, char **envp)
     /* Cleanup */
     free(addonsMgrParams.threadIdentifiers->addonsThreads);
     listOfAllPointersToFree_free(&listOfAllPointersToFree);
-    
-    /* Delete file that contains pid use by start-stop-daemon */
-#ifdef NDEBUG
-    remove(daemonPidFilePath); 
-#endif  
 
     g_message(
               "[origin enterpriseId=\"40311\" software=\"%s\" swVersion=\"%s\"] stop",
