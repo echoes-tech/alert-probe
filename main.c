@@ -146,6 +146,20 @@ int main(int argc, char** argv, char **envp)
                       );
 #endif
 
+    /* Daemonization */
+#ifdef NDEBUG
+    if (chdir("/") != 0)
+    {
+        g_critical("%s", strerror(errno));
+        return EXIT_FAILURE;
+    }
+    if (fork() != 0)
+        exit(EXIT_SUCCESS);
+    setsid();
+    if (fork() != 0)
+        exit(EXIT_SUCCESS);
+#endif
+
     g_message(
               "[origin enterpriseId=\"40311\" software=\"%s\" swVersion=\"%s\"] (re)start",
               PRODUCT_NAME,

@@ -43,13 +43,13 @@ LOCKFILE=/var/lock/subsys/$NAME
 # Source function library & LSB routines
 . /etc/rc.d/init.d/functions
 log_success_msg () {
-    success; echo; echo "$*"
+    echo -n $*; success "$*"; echo
 }
 log_failure_msg () {
-    failure; echo; echo "$*"
+    echo -n $*; failure "$*"; echo
 }
 log_warning_msg () {
-    warning; echo; echo "$*"
+    echo -n $*; warning "$*"; echo
 }
 
 # Read configuration
@@ -73,16 +73,16 @@ start() {
 
 stop() {
 	echo -n $"Shutting down $DESC ($NAME): "
-    if [ ! -f $PIDFILE ]
+    if [ ! -f $PDIFILE ]
     then
-	log_failure_msg "$NAME is already stopped"        
+        log_success_msg
         return 0
     fi
     killproc -p $PIDFILE $NAME -TERM
 	RETVAL=$?
 	[ $RETVAL -eq 0 ] && success || failure
 	echo
-	[ $RETVAL -eq 0 ] && rm -f $LOCKFILE && rm -f $PIDFILE
+	[ $RETVAL -eq 0 ] && rm -f $LOCKFILE && rm -f $PDIFILE
 	return $RETVAL
 }
 
