@@ -172,6 +172,7 @@ int main(int argc, char** argv, char **envp)
 #ifdef NDEBUG
     FILE* daemonPidFile = NULL;
     char *daemonPidFilePath = "/var/run/ea-probe.pid";
+    remove(daemonPidFile);
     daemonPidFile = fopen(daemonPidFilePath, "w");
     if (daemonPidFile != NULL)
     {
