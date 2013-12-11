@@ -168,7 +168,22 @@ int main(int argc, char** argv, char **envp)
      
     g_type_init();
 
-    
+    /* Create file that contains pid use by start-stop-daemon */
+#ifdef NDEBUG
+    FILE* daemonPidFile = NULL;
+    char *daemonPidFilePath = "/var/run/ea-probe.pid";
+    daemonPidFile = fopen(daemonPidFilePath, "w");
+    if (daemonPidFile != NULL)
+    {
+        fprintf(daemonPidFile, "%d", getpid());
+        fclose(daemonPidFile);
+    }
+    else
+    {
+        g_critical("Critical: %s: %s", strerror(errno), daemonPidFilePath);
+    }
+#endif   
+
 #ifndef NDEBUG
     printf("Début du chargement des conf\n");
 #endif
@@ -222,7 +237,12 @@ int main(int argc, char** argv, char **envp)
     /* Cleanup */
     free(addonsMgrParams.threadIdentifiers->addonsThreads);
     listOfAllPointersToFree_free(&listOfAllPointersToFree);
-       
+    
+    /* Delete file that contains pid use by start-stop-daemon */
+#ifdef NDEBUG
+    remove(daemonPidFilePath); 
+#endif  
+
     g_message(
               "[origin enterpriseId=\"40311\" software=\"%s\" swVersion=\"%s\"] stop",
               PRODUCT_NAME,
