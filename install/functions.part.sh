@@ -45,3 +45,32 @@ put() {
 
   test_http_return $1 ${4}_header
 }
+
+package_installation() {
+  if [ $PKG_TYPE = 'deb' ]
+  then
+    if [ -x '/usr/bin/dpkg' ]
+    then
+      if [ -x '/usr/bin/apt-get' ]
+      then
+        /usr/bin/dpkg -i $PKG
+        /usr/bin/apt-get update
+        /usr/bin/apt-get -f install
+      else
+        clean_and_exit "can't find apt-get conmmand."
+      fi
+    else
+      clean_and_exit "can't find dpkg conmmand."
+    fi
+  elif [ $PKG_TYPE = 'rpm' ]
+  then
+    if [ -x '/usr/bin/yum' ]
+    then
+      /usr/bin/yum install --nogpgcheck $PKG
+    else
+      clean_and_exit "can't find yum conmmand."
+    fi
+  else
+    clean_and_exit "bad packet type."
+  fi
+}
