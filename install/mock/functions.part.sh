@@ -100,22 +100,22 @@ put() {
 mock_get_release_name() {
 	if [ $HOST_DISTRIB = CentOS ]
 	then	
-		if mock_testRegex $DISTRIB_RELEASE "5.*"
+		if mock_testRegex $DISTRIB_RELEASE "5\.[0-9]+"
 		then
 			echo 5
-		elif mock_testRegex $DISTRIB_RELEASE "6.*"
+		elif mock_testRegex $DISTRIB_RELEASE "6\.[0-9]+"
 		then
 			echo 6
 		fi
 	elif [ $HOST_DISTRIB = Debian ]
 	then
-		if mock_testRegex $DISTRIB_RELEASE "6.0.*"
+		if mock_testRegex $DISTRIB_RELEASE "6\.0\.[0-9]+"
 		then
 			echo Squeeze
 		fi
 	elif [ $HOST_DISTRIB = Ubuntu ]
 	then
-		if mock_testRegex $DISTRIB_RELEASE "12.04" || mock_testRegex $DISTRIB_RELEASE "12.04.*"
+		if mock_testRegex $DISTRIB_RELEASE "12\.04" || mock_testRegex $DISTRIB_RELEASE "12\.04\.[0-9]+"
 		then
 			echo Precise
 		fi
@@ -124,7 +124,7 @@ mock_get_release_name() {
 }
 
 mock_get_architecture_name() {
-	if [ $HOST_ARCH = i*86 ]
+	if mock_testRegex $HOST_ARCH "i.86"
         then
                 echo i386
         elif [ $HOST_ARCH = x86_64 ]
@@ -158,19 +158,7 @@ mock_get_package() {
 		mock_VERSION=$(echo $mock_common | cut -d ':' -f 3)
 	fi
 
-	ls $mock_pwd/install/mock/packages/$1/ | \
-	awk '{ 
-		match($0, /ea-probe.*'$mock_addon_name'.'$mock_VERSION'.([0-9]*).'$HOST_DISTRIB'.'$(mock_get_release_name)'.'$(mock_get_architecture_name)'.*$/, a);
-		realease=substr($0, a[1, "start"], a[1, "length"])+0;
-		if(realease>realease_max)
-		{
-			realease_max=realease;
-			package=$0
-		}
-	}
-	END {
-		print "'$mock_pwd/install/mock/packages/$1/'"package;
-	}'
+	ls $mock_pwd/install/mock/packages/$1/ea-probe*$mock_addon_name?$mock_VERSION*$HOST_DISTRIB?$(mock_get_release_name)?$(mock_get_architecture_name)* | head -n 1
 }
 
 mock_testURL() {

@@ -83,6 +83,8 @@ int main(int argc, char **argv)
     
     /* create the new socketservice */
     GSocketService * service = g_socket_service_new();
+    
+    g_type_init();
 
     /* handler for gmessage */
     g_log_set_handler(G_LOG_DOMAIN, G_LOG_LEVEL_MASK, log2file, (gpointer) errorLogFile);
