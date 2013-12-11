@@ -18,7 +18,7 @@ then
     fi
 fi'
 
-pm_preun="service $bin_name stop
+rpm_preun="service $bin_name stop
 cd ${PACKAGE_TOP_DIR}
 if [ -d lib ]
 then
