@@ -13,8 +13,7 @@ TMP_DIR=$(mktemp -d -t ea-probe-install-XXXXXXXXXX)
 cd $TMP_DIR
 
 # Update Asset
-put "/assets/$ASSET_ID" "login=$LOGIN_ENC&password=$PASSWORD_ENC" "{\"architecture\":\"$HOST_ARCH\",\"distribution\":{\"name\":\"$HOST_DISTRIB\",\"release\":\"$DISTRIB_RELEASE\"}}" asset_update_res
-
+put "/assets/$ASSET_ID" "login=$LOGIN_ENC&password=$PASSWORD_ENC" "{\"architecture\":\"$HOST_ARCH\",\"distribution\":\"$HOST_DISTRIB\",\"release\":\"$DISTRIB_RELEASE\"}" asset_update_res
 
 # Get all packages
 get "/probes/$PROBE_ID/packages" "login=$LOGIN_ENC&password=$PASSWORD_ENC" json_packages
@@ -42,10 +41,10 @@ do
 	
 	if [ $count = 0 ]
 	then
-		PKG=$(grep '"filename"' addon_common_res | sed -e 's/ //g' | cut -d':' -f 2 | cut -d',' -f 1 | sed -e 's/"//g')
+		PKG=$(grep '"filename"' json_package | sed -e 's/ //g' | cut -d':' -f 2 | cut -d',' -f 1 | sed -e 's/"//g')
 		PKG_TYPE=$(echo $PKG | sed 's/.*\.\(.*\)$/\1/g')
 
-		PKG_CONTENT_B64=$(cat addon_common_res | tr -d '\r\n' | sed 's/.*content": "\(.*\)\",\s\+"version.*/\1/g')
+		PKG_CONTENT_B64=$(grep '"content"' json_package | sed -e 's/ //g' | cut -d':' -f 2 | cut -d',' -f 1 | sed -e 's/"//g')
 		if [ -z $PKG_CONTENT_B64 ]
 		then
 		  echo "$ERR_INSTALL_MSG: this release of your Linux distribution is not yet supported."
