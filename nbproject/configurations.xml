@@ -542,7 +542,6 @@
             <linkerOptionItem>`pkg-config --libs gobject-2.0 json-glib-1.0`</linkerOptionItem>
             <linkerLibLibItem>pthread</linkerLibLibItem>
             <linkerLibLibItem>addon</linkerLibLibItem>
-            <linkerLibLibItem>cunit</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
