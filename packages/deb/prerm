@@ -22,6 +22,10 @@ case "$1" in
         update-rc.d -f ea-probe remove
 
         cd /opt/echoes-alert/probe
+        if [ -d etc ]
+        then
+            rm -rf etc
+        fi
         if [ -d lib ]
         then
             rm -rf lib
