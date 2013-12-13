@@ -534,7 +534,7 @@
           <linkerDynSerch>
             <pElem>/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM}</pElem>
             <pElem>../addon/dist/Release/${CND_PLATFORM}</pElem>
-            <pElem>/opt/echoes-alert/probe/lib/probe</pElem>
+            <pElem>/opt/echoes-alert/probe/lib</pElem>
             <pElem>/opt/echoes-alert/probe/addons</pElem>
           </linkerDynSerch>
           <stripSymbols>true</stripSymbols>
