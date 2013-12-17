@@ -7,9 +7,11 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>include/addonList.h</itemPath>
       <itemPath>include/conf.h</itemPath>
       <itemPath>include/format.h</itemPath>
       <itemPath>include/log.h</itemPath>
+      <itemPath>include/plugin.h</itemPath>
       <itemPath>include/sender.h</itemPath>
       <itemPath>include/signals.h</itemPath>
     </logicalFolder>
@@ -154,6 +156,12 @@
                      kind="TEST">
         <itemPath>tests_unit/logcunittest.c</itemPath>
       </logicalFolder>
+      <logicalFolder name="f2"
+                     displayName="Plugin CUnit Test"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests_unit/plugincunittest.c</itemPath>
+      </logicalFolder>
       <logicalFolder name="f5"
                      displayName="Sender CUnit Test"
                      projectFiles="true"
@@ -203,14 +211,12 @@
           <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/probe</output>
           <linkerAddLib>
             <pElem>../addon/dist/Debug/${CND_PLATFORM}</pElem>
-            <pElem>/usr/local/lib</pElem>
           </linkerAddLib>
           <linkerDynSerch>
             <pElem>../addon/dist/Debug/${CND_PLATFORM}</pElem>
-            <pElem>/opt/echoes-alert/probe/lib</pElem>
           </linkerDynSerch>
           <linkerLibItems>
-            <linkerOptionItem>`pkg-config --libs  glib-2.0 gobject-2.0  gio-2.0`</linkerOptionItem>
+            <linkerOptionItem>`pkg-config --libs gobject-2.0 json-glib-1.0`</linkerOptionItem>
             <linkerLibLibItem>pthread</linkerLibLibItem>
             <linkerLibLibItem>cunit</linkerLibLibItem>
             <linkerLibLibItem>addon</linkerLibLibItem>
@@ -222,6 +228,11 @@
       <folder path="TestFiles/f1">
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f1</output>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f2">
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f2</output>
         </linkerTool>
       </folder>
       <folder path="TestFiles/f4">
@@ -253,11 +264,15 @@
           <output>${TESTDIR}/TestFiles/f7</output>
         </linkerTool>
       </folder>
+      <item path="include/addonList.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/conf.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/format.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/log.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/plugin.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/sender.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -458,6 +473,8 @@
       <item path="tests_unit/formatcunittest.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="tests_unit/logcunittest.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="tests_unit/plugincunittest.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="tests_unit/sendercunittest.c" ex="false" tool="0" flavor2="0">
       </item>
@@ -484,6 +501,7 @@
           <incDir>
             <pElem>include</pElem>
             <pElem>/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/include</pElem>
+            <pElem>../addon/include</pElem>
           </incDir>
           <commandLine>-DNDEBUG</commandLine>
         </cTool>
@@ -501,7 +519,7 @@
           <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/probe</output>
           <linkerAddLib>
             <pElem>/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM}</pElem>
-            <pElem>/usr/local/lib</pElem>
+            <pElem>/opt/echoes-alert/probe/lib</pElem>
           </linkerAddLib>
           <linkerDynSerch>
             <pElem>/opt/echoes-alert/probe/lib</pElem>
@@ -509,7 +527,7 @@
           </linkerDynSerch>
           <stripSymbols>true</stripSymbols>
           <linkerLibItems>
-            <linkerOptionItem>`pkg-config --libs  glib-2.0 gobject-2.0  gio-2.0`</linkerOptionItem>
+            <linkerOptionItem>`pkg-config --libs gobject-2.0 json-glib-1.0`</linkerOptionItem>
             <linkerLibLibItem>pthread</linkerLibLibItem>
             <linkerLibLibItem>addon</linkerLibLibItem>
           </linkerLibItems>
@@ -534,6 +552,11 @@
           <output>${TESTDIR}/TestFiles/f1</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f2">
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f2</output>
+        </linkerTool>
+      </folder>
       <folder path="TestFiles/f4">
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f4</output>
@@ -554,11 +577,15 @@
           <output>${TESTDIR}/TestFiles/f7</output>
         </linkerTool>
       </folder>
+      <item path="include/addonList.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/conf.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/format.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/log.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/plugin.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/sender.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -759,6 +786,8 @@
       <item path="tests_unit/formatcunittest.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="tests_unit/logcunittest.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="tests_unit/plugincunittest.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="tests_unit/sendercunittest.c" ex="false" tool="0" flavor2="0">
       </item>
@@ -785,6 +814,7 @@
           <incDir>
             <pElem>include</pElem>
             <pElem>/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/include</pElem>
+            <pElem>../addon/include</pElem>
           </incDir>
           <commandLine>-DNDEBUG</commandLine>
         </cTool>
@@ -802,15 +832,16 @@
           <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/probe</output>
           <linkerAddLib>
             <pElem>/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM}</pElem>
-            <pElem>/usr/local/lib</pElem>
+            <pElem>/opt/echoes-alert/probe/lib</pElem>
           </linkerAddLib>
           <linkerDynSerch>
-            <pElem>/opt/echoes-alert/probe/lib</pElem>
             <pElem>/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM}</pElem>
+            <pElem>/opt/echoes-alert/probe/addons</pElem>
+            <pElem>/opt/echoes-alert/probe/lib</pElem>
           </linkerDynSerch>
           <stripSymbols>true</stripSymbols>
           <linkerLibItems>
-            <linkerOptionItem>`pkg-config --libs  glib-2.0 gobject-2.0  gio-2.0`</linkerOptionItem>
+            <linkerOptionItem>`pkg-config --libs gobject-2.0 json-glib-1.0`</linkerOptionItem>
             <linkerLibLibItem>pthread</linkerLibLibItem>
             <linkerLibLibItem>addon</linkerLibLibItem>
             <linkerLibLibItem>cunit</linkerLibLibItem>
@@ -836,6 +867,11 @@
           <output>${TESTDIR}/TestFiles/f1</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f2">
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f2</output>
+        </linkerTool>
+      </folder>
       <folder path="TestFiles/f4">
         <linkerTool>
           <output>${TESTDIR}/TestFiles/f4</output>
@@ -856,11 +892,15 @@
           <output>${TESTDIR}/TestFiles/f7</output>
         </linkerTool>
       </folder>
+      <item path="include/addonList.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/conf.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/format.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/log.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/plugin.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/sender.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -1061,6 +1101,8 @@
       <item path="tests_unit/formatcunittest.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="tests_unit/logcunittest.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="tests_unit/plugincunittest.c" ex="false" tool="0" flavor2="0">
       </item>
       <item path="tests_unit/sendercunittest.c" ex="false" tool="0" flavor2="0">
       </item>

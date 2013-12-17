@@ -7,22 +7,25 @@
 
 set timeout 1
 
-# List of expected addons
-set addons_list "filesystem file log snmp odbc"
+# Uninstall script path
+set uninstall_script "/opt/echoes-alert/probe/sbin/uninstall.sh"
 
 
 ###########
 ## TESTS ##
 ###########
 
-foreach addon $addons_list {
+#exec sh $uninstall_script
 
-	catch { exec puppet resource package ea-probe-addon${addon} ensure=purged }
-	test_package_purged "install_addon${addon}_purged" "ea-probe-addon${addon}"
+test_package_purged "remove_probe" "ea-probe"
+
+test_package_purged "remove_common" "ea-probe-addon"
+
+foreach addon $addons_list {
+	test_package_purged "remove_addon${addon}" "ea-probe-addon${addon}"
 }
 
-catch { exec puppet resource package ea-probe ensure=purged }
-test_package_purged "install_probe_installed" "ea-probe"
+test_file_removed "remove_clear_folder" "/opt/echoes-alert"
 
-catch { exec puppet resource package ea-probe-addon ensure=purged }
-test_package_purged "install_common_installed" "ea-probe-addon"
+
+

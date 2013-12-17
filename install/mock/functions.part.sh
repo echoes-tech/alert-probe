@@ -16,72 +16,38 @@ mock_pwd=$(pwd)
 
 get() {
 	## Probes
-	if mock_testURL $1 /probes/ID/addons
-	then
-		echo "["  > $3		
+	if mock_testURL $1 /probes/ID/packages	
+	then	
+		echo "[" > $3
+		
+		mock_package=$(mock_get_package common)
+		echo "{" >> $3
+		mock_json_content $3 $mock_package $mock_common
+		echo "}," >> $3
+		
+		mock_package=$(mock_get_package probe)
+		echo "{" >> $3
+		echo "	\"id\": $ASSET_ID," >> $3
+		mock_json_content $3 $mock_package $mock_probe
+		echo "}," >> $3
+		
 		for mock_addon in $mock_addons
 		do
-			mock_last_addon_id=$(echo $mock_addon | cut -d ':' -f 1)
+			mock_package=$(mock_get_package addons $(echo $mock_addon | cut -d ':' -f 1))
+			echo "{" >> $3
+			echo "	\"id\": $(echo $mock_addon | cut -d ':' -f 1)," >> $3
+			mock_json_content $3 $mock_package $mock_addon
+			echo "}" >> $3			
 		done
-		for mock_addon in $mock_addons
-		do
-			echo "	{" >> $3
-			echo "		\"id\": $(echo $mock_addon | cut -d ':' -f 1)," >> $3
-			echo "		\"name\": \"$(echo $mock_addon | cut -d ':' -f 2)\"" >> $3
-			echo -n "	}" >> $3
-			if [ $mock_last_addon_id -ne $(echo $mock_addon | cut -d ':' -f 1) ]
-			then
-				echo "," >> $3
-			else
-				echo "" >> $3
-			fi
-		done			
+		
 		echo "]" >> $3
 		mock_return 200	
-	elif mock_testURL $1 /probes/ID/addons/common
-	then
-		mock_package=$(mock_get_package common)
-		echo "{" > $3
-		mock_json_content $3 $mock_package $mock_common
-		echo "}" >> $3
-		mock_return 200	
-	elif mock_testURL $1 /probes/ID/addons/ID
-	then
-		for mock_addon in $mock_addons
-		do
-			if [ $(echo $1 | cut -d '/' -f 5) -eq $(echo $mock_addon | cut -d ':' -f 1) ]
-			then
-				mock_addon_info=$mock_addon
-			fi
-		done
-		mock_package=$(mock_get_package addons $(echo $1 | cut -d '/' -f 5))
-		echo "{" > $3
-		echo "	\"id\": $(echo $mock_addon | cut -d ':' -f 1)," >> $3
-		mock_json_content $3 $mock_package $mock_addon_info
-		echo "}" >> $3
-		mock_return 200
-	elif mock_testURL $1 /probes/ID/informations
+	elif mock_testURL $1 /probes/ID/json
 	then
 		cp $mock_pwd/install/mock/informations/informations.json $3
 		mock_return 200
 	else
 		mock_json_bad_request $3
-		mock_return 400	
-	fi
-}
-
-post() {	
-	## Assets
-	if mock_testURL $1 /assets/ID/probes
-	then
-		mock_package=$(mock_get_package probe)
-		echo "{" > $4
-		echo "	\"id\": $ASSET_ID," >> $4
-		mock_json_content $4 $mock_package $mock_probe
-		echo "}" >> $4
-		mock_return 200
-	else
-		mock_json_bad_request $4
 		mock_return 400	
 	fi
 }
@@ -216,7 +182,7 @@ mock_json_content() {
 	echo "	\"version\": \"$(echo $3 | cut -d ':' -f 3)\"," >> $1
 	echo "	\"package\": {" >> $1
 	echo "		\"filename\": \"$(echo $2 | awk -F/ '{print $NF}')\"," >> $1
-	echo "		\"content\": \"$(cat $(echo $2) | base64 )\"," >> $1
+	echo "		\"content\": \"$(cat $(echo $2) | base64 -w 0)\"," >> $1
 	echo "		\"version\": \"1\"" >> $1
 	echo "	}" >> $1
 }

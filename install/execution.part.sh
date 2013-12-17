@@ -63,6 +63,9 @@ done
 
 echo "ECHOES Alert Probe installed."
 
+sed -i -e "s/\(probe_id=\).*/\1$PROBE_ID/" -e "s/\(token=\).*/\1$TOKEN/" $INSTALL_DIR/etc/probe.conf
+echo "ECHOES Alert Probe configured."
+
 # Get and copy informations file
 get "/probes/$PROBE_ID/json" "login=$LOGIN_ENC&password=$PASSWORD_ENC" informations.json
 

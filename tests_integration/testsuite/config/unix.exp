@@ -1,5 +1,12 @@
 set timeout 1
 
+###################
+###  VARIABLES  ###
+###################	
+
+set addons_list "filesystem file log snmp odbc"
+
+
 ###############
 ###  TESTS  ###
 ###############	
@@ -26,6 +33,15 @@ proc test_file_exist {test_name file_path} {
     		pass "$test_name"
     	} else {
     		fail_ "$test_name" "file '$file_path' does not exist" 
+    	}    	
+}
+
+# Test if $file_path doesn't exists
+proc test_file_removed {test_name file_path} {
+	if { [file exist $file_path] } {
+    		fail_ "$test_name" "file '$file_path' exists" 
+    	} else {
+    		pass "$test_name"
     	}    	
 }
 
