@@ -6,6 +6,7 @@ PROBE_ID=0
 
 API_HOST='127.0.0.1'
 API_PORT=8081
+API_HTTPS=false
 
 CURRENT_DIR=$(pwd)
 INSTALL_DIR='/opt/echoes-alert/probe'
