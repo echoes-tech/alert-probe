@@ -27,38 +27,38 @@ count=0
 
 while read line 0<&3
 do
-	occur_open=$(echo $line | grep -o '\[' | wc -l)	
-	occur_close=$(echo $line | grep -o '\]' | wc -l)
-	if [ $count = 0 ] && [ $((occur_open+occur_close)) != 0 ]
-	then
-		continue
-	fi
-	
-	echo $line >> json_package
-	occur_open=$(echo $line | grep -o '{' | wc -l)	
-	occur_close=$(echo $line | grep -o '}' | wc -l)
-	count=$((count+occur_open-occur_close))
-	
-	if [ $count = 0 ]
-	then
-		PKG=$(grep '"filename"' json_package | sed -e 's/ //g' | cut -d':' -f 2 | cut -d',' -f 1 | sed -e 's/"//g')
-		PKG_TYPE=$(echo $PKG | sed 's/.*\.\(.*\)$/\1/g')
+  occur_open=$(echo $line | grep -o '\[' | wc -l)
+  occur_close=$(echo $line | grep -o '\]' | wc -l)
+  if [ $count = 0 ] && [ $((occur_open+occur_close)) != 0 ]
+  then
+    continue
+  fi
 
-		PKG_CONTENT_B64=$(grep '"content"' json_package | sed -e 's/ //g' | cut -d':' -f 2 | cut -d',' -f 1 | sed -e 's/"//g')
-		if [ -z $PKG_CONTENT_B64 ]
-		then
-		  echo "$ERR_INSTALL_MSG: this release of your Linux distribution is not yet supported."
-		  echo "Please open a ticket on https://forge.echoes-tech.com/projects/echoes-alert/issues"
-		  cd "$CURRENT_DIR"
-		  rm -rf "$TMP_DIR"
-		  exit 1
-		fi
-		echo $PKG_CONTENT_B64 | /usr/bin/base64 -d > $PKG
+  echo $line >> json_package
+  occur_open=$(echo $line | grep -o '{' | wc -l)
+  occur_close=$(echo $line | grep -o '}' | wc -l)
+  count=$((count+occur_open-occur_close))
 
-		package_installation
-	
-		echo > json_package
-	fi
+  if [ $count = 0 ]
+  then
+    PKG=$(grep '"filename"' json_package | sed -e 's/ //g' | cut -d':' -f 2 | cut -d',' -f 1 | sed -e 's/"//g')
+    PKG_TYPE=$(echo $PKG | sed 's/.*\.\(.*\)$/\1/g')
+
+    PKG_CONTENT_B64=$(grep '"content"' json_package | sed -e 's/ //g' | cut -d':' -f 2 | cut -d',' -f 1 | sed -e 's/"//g')
+    if [ -z $PKG_CONTENT_B64 ]
+    then
+      echo "$ERR_INSTALL_MSG: this release of your Linux distribution is not yet supported."
+      echo "Please open a ticket on https://forge.echoes-tech.com/projects/echoes-alert/issues"
+      cd "$CURRENT_DIR"
+      rm -rf "$TMP_DIR"
+      exit 1
+    fi
+    echo $PKG_CONTENT_B64 | /usr/bin/base64 -d > $PKG
+
+    package_installation
+
+    echo > json_package
+  fi
 done
 
 echo "ECHOES Alert Probe installed."
@@ -69,9 +69,14 @@ echo "ECHOES Alert Probe configured."
 # Get and copy informations file
 get "/probes/$PROBE_ID/json" "login=$LOGIN_ENC&password=$PASSWORD_ENC" informations.json
 
+# Unescape Json
+sed -i -e 's:\\\\:\\:g' -e 's:\\/:/:g' informations.json
+
 cp informations.json $INSTALL_DIR/etc/
 
 echo "ECHOES Alert informations downloaded."
+
+unset LOGIN_ENC PASSWORD_ENC
 
 cd "$CURRENT_DIR"
 rm -rf "$TMP_DIR"
