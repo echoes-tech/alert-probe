@@ -41,7 +41,7 @@ void testLoadConf()
     int result = 0;
     
     /* Test le chargement d'un fichier de conf contenant toutes les infos */
-    confPath = "./tests/conf/complete.conf";
+    confPath = "./unit_tests/conf/complete.conf";
     result = loadConf(&conf, confPath);
     CU_ASSERT_EQUAL(result, EXIT_SUCCESS);
     CU_ASSERT_EQUAL(conf.probeID, 10);
@@ -58,7 +58,7 @@ void testLoadConf()
     
     
     /* Test le chargement d'un fichier de conf contenant uniquement id_probe et token */
-    confPath = "./tests/conf/minimum.conf";
+    confPath = "./unit_tests/conf/minimum.conf";
     result = loadConf(&conf, confPath);
     CU_ASSERT_EQUAL(result, EXIT_SUCCESS);
     CU_ASSERT_EQUAL(conf.probeID, 10);
@@ -75,25 +75,25 @@ void testLoadConf()
     
     
     /* Test le chargement d'un fichier de conf ne contenant pas id_probe */
-    confPath = "./tests/conf/without_probe_id.conf";
+    confPath = "./unit_tests/conf/without_probe_id.conf";
     result = loadConf(&conf, confPath);
     CU_ASSERT_EQUAL(result, EXIT_FAILURE); 
     
     
     /* Test le chargement d'un fichier de conf ne contenant pas token */
-    confPath = "./tests/conf/without_token.conf";
+    confPath = "./unit_tests/conf/without_token.conf";
     result = loadConf(&conf, confPath);
     CU_ASSERT_EQUAL(result, EXIT_FAILURE);
     
     
     /* Test le chargement d'un fichier invalide */
-    confPath = "./tests/confcunittest.c";
+    confPath = "./unit_tests/confcunittest.c";
     result = loadConf(&conf, confPath);
     CU_ASSERT_EQUAL(result, EXIT_FAILURE);
     
     
     /* Test le chargement d'un fichier n'existant pas */
-    confPath = "./tests/azerty";
+    confPath = "./unit_tests/azerty";
     result = loadConf(&conf, confPath);
     CU_ASSERT_EQUAL(result, EXIT_FAILURE);
 }

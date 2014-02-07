@@ -41,7 +41,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/src/log.o \
 	${OBJECTDIR}/src/sender.o \
 	${OBJECTDIR}/src/signals.o \
-	${OBJECTDIR}/tests_unit/utilUnitTest.o
+	${OBJECTDIR}/unit_tests/utilUnitTest.o
 
 # Test Directory
 TESTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tests
@@ -108,65 +108,65 @@ ${OBJECTDIR}/src/signals.o: src/signals.c
 	${RM} $@.d
 	$(COMPILE.c) -O3 -s -Iinclude -I/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/include -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/signals.o src/signals.c
 
-${OBJECTDIR}/tests_unit/utilUnitTest.o: tests_unit/utilUnitTest.c 
-	${MKDIR} -p ${OBJECTDIR}/tests_unit
+${OBJECTDIR}/unit_tests/utilUnitTest.o: unit_tests/utilUnitTest.c 
+	${MKDIR} -p ${OBJECTDIR}/unit_tests
 	${RM} $@.d
-	$(COMPILE.c) -O3 -s -Iinclude -I/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/include -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${OBJECTDIR}/tests_unit/utilUnitTest.o tests_unit/utilUnitTest.c
+	$(COMPILE.c) -O3 -s -Iinclude -I/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/include -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${OBJECTDIR}/unit_tests/utilUnitTest.o unit_tests/utilUnitTest.c
 
 # Subprojects
 .build-subprojects:
 
 # Build Test Targets
 .build-tests-conf: .build-conf ${TESTFILES}
-${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests_unit/confcunittest.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f1: ${TESTDIR}/unit_tests/confcunittest.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.c}   -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} 
 
-${TESTDIR}/TestFiles/f4: ${TESTDIR}/tests_unit/formatcunittest.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f4: ${TESTDIR}/unit_tests/formatcunittest.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.c}   -o ${TESTDIR}/TestFiles/f4 $^ ${LDLIBSOPTIONS} 
 
-${TESTDIR}/TestFiles/f6: ${TESTDIR}/tests_unit/logcunittest.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f6: ${TESTDIR}/unit_tests/logcunittest.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.c}   -o ${TESTDIR}/TestFiles/f6 $^ ${LDLIBSOPTIONS} 
 
-${TESTDIR}/TestFiles/f5: ${TESTDIR}/tests_unit/sendercunittest.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f5: ${TESTDIR}/unit_tests/sendercunittest.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.c}   -o ${TESTDIR}/TestFiles/f5 $^ ${LDLIBSOPTIONS} 
 
-${TESTDIR}/TestFiles/f7: ${TESTDIR}/tests_unit/signalscunittest.o ${OBJECTFILES:%.o=%_nomain.o}
+${TESTDIR}/TestFiles/f7: ${TESTDIR}/unit_tests/signalscunittest.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.c}   -o ${TESTDIR}/TestFiles/f7 $^ ${LDLIBSOPTIONS} 
 
 
-${TESTDIR}/tests_unit/confcunittest.o: tests_unit/confcunittest.c 
-	${MKDIR} -p ${TESTDIR}/tests_unit
+${TESTDIR}/unit_tests/confcunittest.o: unit_tests/confcunittest.c 
+	${MKDIR} -p ${TESTDIR}/unit_tests
 	${RM} $@.d
-	$(COMPILE.c) -O3 -s -Iinclude -I/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/include -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${TESTDIR}/tests_unit/confcunittest.o tests_unit/confcunittest.c
+	$(COMPILE.c) -O3 -s -Iinclude -I/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/include -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${TESTDIR}/unit_tests/confcunittest.o unit_tests/confcunittest.c
 
 
-${TESTDIR}/tests_unit/formatcunittest.o: tests_unit/formatcunittest.c 
-	${MKDIR} -p ${TESTDIR}/tests_unit
+${TESTDIR}/unit_tests/formatcunittest.o: unit_tests/formatcunittest.c 
+	${MKDIR} -p ${TESTDIR}/unit_tests
 	${RM} $@.d
-	$(COMPILE.c) -O3 -s -Iinclude -I/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/include -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${TESTDIR}/tests_unit/formatcunittest.o tests_unit/formatcunittest.c
+	$(COMPILE.c) -O3 -s -Iinclude -I/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/include -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${TESTDIR}/unit_tests/formatcunittest.o unit_tests/formatcunittest.c
 
 
-${TESTDIR}/tests_unit/logcunittest.o: tests_unit/logcunittest.c 
-	${MKDIR} -p ${TESTDIR}/tests_unit
+${TESTDIR}/unit_tests/logcunittest.o: unit_tests/logcunittest.c 
+	${MKDIR} -p ${TESTDIR}/unit_tests
 	${RM} $@.d
-	$(COMPILE.c) -O3 -s -Iinclude -I/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/include -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${TESTDIR}/tests_unit/logcunittest.o tests_unit/logcunittest.c
+	$(COMPILE.c) -O3 -s -Iinclude -I/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/include -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${TESTDIR}/unit_tests/logcunittest.o unit_tests/logcunittest.c
 
 
-${TESTDIR}/tests_unit/sendercunittest.o: tests_unit/sendercunittest.c 
-	${MKDIR} -p ${TESTDIR}/tests_unit
+${TESTDIR}/unit_tests/sendercunittest.o: unit_tests/sendercunittest.c 
+	${MKDIR} -p ${TESTDIR}/unit_tests
 	${RM} $@.d
-	$(COMPILE.c) -O3 -s -Iinclude -I/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/include -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${TESTDIR}/tests_unit/sendercunittest.o tests_unit/sendercunittest.c
+	$(COMPILE.c) -O3 -s -Iinclude -I/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/include -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${TESTDIR}/unit_tests/sendercunittest.o unit_tests/sendercunittest.c
 
 
-${TESTDIR}/tests_unit/signalscunittest.o: tests_unit/signalscunittest.c 
-	${MKDIR} -p ${TESTDIR}/tests_unit
+${TESTDIR}/unit_tests/signalscunittest.o: unit_tests/signalscunittest.c 
+	${MKDIR} -p ${TESTDIR}/unit_tests
 	${RM} $@.d
-	$(COMPILE.c) -O3 -s -Iinclude -I/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/include -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${TESTDIR}/tests_unit/signalscunittest.o tests_unit/signalscunittest.c
+	$(COMPILE.c) -O3 -s -Iinclude -I/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/include -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -MMD -MP -MF $@.d -o ${TESTDIR}/unit_tests/signalscunittest.o unit_tests/signalscunittest.c
 
 
 ${OBJECTDIR}/main_nomain.o: ${OBJECTDIR}/main.o main.c 
@@ -247,17 +247,17 @@ ${OBJECTDIR}/src/signals_nomain.o: ${OBJECTDIR}/src/signals.o src/signals.c
 	    ${CP} ${OBJECTDIR}/src/signals.o ${OBJECTDIR}/src/signals_nomain.o;\
 	fi
 
-${OBJECTDIR}/tests_unit/utilUnitTest_nomain.o: ${OBJECTDIR}/tests_unit/utilUnitTest.o tests_unit/utilUnitTest.c 
-	${MKDIR} -p ${OBJECTDIR}/tests_unit
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/tests_unit/utilUnitTest.o`; \
+${OBJECTDIR}/unit_tests/utilUnitTest_nomain.o: ${OBJECTDIR}/unit_tests/utilUnitTest.o unit_tests/utilUnitTest.c 
+	${MKDIR} -p ${OBJECTDIR}/unit_tests
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/unit_tests/utilUnitTest.o`; \
 	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
 	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} $@.d;\
-	    $(COMPILE.c) -O3 -s -Iinclude -I/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/include -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/tests_unit/utilUnitTest_nomain.o tests_unit/utilUnitTest.c;\
+	    $(COMPILE.c) -O3 -s -Iinclude -I/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/include -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -DNDEBUG -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/unit_tests/utilUnitTest_nomain.o unit_tests/utilUnitTest.c;\
 	else  \
-	    ${CP} ${OBJECTDIR}/tests_unit/utilUnitTest.o ${OBJECTDIR}/tests_unit/utilUnitTest_nomain.o;\
+	    ${CP} ${OBJECTDIR}/unit_tests/utilUnitTest.o ${OBJECTDIR}/unit_tests/utilUnitTest_nomain.o;\
 	fi
 
 # Run Test Targets

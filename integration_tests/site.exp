@@ -1,0 +1,4 @@
+set srcdir ./testsuite
+set outdir dejagnu-result/
+set xml 1
+set all_flag 1

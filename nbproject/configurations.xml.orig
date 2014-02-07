@@ -7,9 +7,11 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>include/addonList.h</itemPath>
       <itemPath>include/conf.h</itemPath>
       <itemPath>include/format.h</itemPath>
       <itemPath>include/log.h</itemPath>
+      <itemPath>include/plugin.h</itemPath>
       <itemPath>include/sender.h</itemPath>
       <itemPath>include/signals.h</itemPath>
     </logicalFolder>
@@ -87,6 +89,10 @@
       </logicalFolder>
       <itemPath>main.c</itemPath>
     </logicalFolder>
+    <logicalFolder name="f1" displayName="Test includes" projectFiles="true">
+      <itemPath>tests_unit/utilUnitTest.c</itemPath>
+      <itemPath>tests_unit/utilUnitTest.h</itemPath>
+    </logicalFolder>
     <logicalFolder name="tests_integration"
                    displayName="Test Integration Files"
                    projectFiles="true">
@@ -127,10 +133,6 @@
       </logicalFolder>
       <itemPath>tests_integration/site.exp</itemPath>
     </logicalFolder>
-    <logicalFolder name="f1" displayName="Test Utils" projectFiles="true">
-      <itemPath>unit_tests/utilUnitTest.c</itemPath>
-      <itemPath>unit_tests/utilUnitTest.h</itemPath>
-    </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
                    projectFiles="false"
@@ -139,35 +141,40 @@
                      displayName="Conf CUnit Test"
                      projectFiles="true"
                      kind="TEST">
-        <itemPath>unit_tests/conf/complete.conf</itemPath>
-        <itemPath>unit_tests/confcunittest.c</itemPath>
-        <itemPath>unit_tests/conf/minimum.conf</itemPath>
-        <itemPath>unit_tests/conf/without_probe_id.conf</itemPath>
-        <itemPath>unit_tests/conf/without_token.conf</itemPath>
+<<<<<<< HEAD
+        <itemPath>tests_unit/confcunittest.c</itemPath>
+        <itemPath>tests_unit/test.conf</itemPath>
+=======
+        <itemPath>tests/conf/complete.conf</itemPath>
+        <itemPath>tests/confcunittest.c</itemPath>
+        <itemPath>tests/conf/minimum.conf</itemPath>
+        <itemPath>tests/conf/without_probe_id.conf</itemPath>
+        <itemPath>tests/conf/without_token.conf</itemPath>
+>>>>>>> 961d460e6fff2ee972018169a7659e3cc79a882b
       </logicalFolder>
       <logicalFolder name="f4"
                      displayName="Format CUnit Test"
                      projectFiles="true"
                      kind="TEST">
-        <itemPath>unit_tests/formatcunittest.c</itemPath>
+        <itemPath>tests_unit/formatcunittest.c</itemPath>
       </logicalFolder>
       <logicalFolder name="f6"
                      displayName="Log CUnit Test"
                      projectFiles="true"
                      kind="TEST">
-        <itemPath>unit_tests/logcunittest.c</itemPath>
+        <itemPath>tests_unit/logcunittest.c</itemPath>
       </logicalFolder>
       <logicalFolder name="f5"
                      displayName="Sender CUnit Test"
                      projectFiles="true"
                      kind="TEST">
-        <itemPath>unit_tests/sendercunittest.c</itemPath>
+        <itemPath>tests_unit/sendercunittest.c</itemPath>
       </logicalFolder>
       <logicalFolder name="f7"
                      displayName="Signals CUnit Test"
                      projectFiles="true"
                      kind="TEST">
-        <itemPath>unit_tests/signalscunittest.c</itemPath>
+        <itemPath>tests_unit/signalscunittest.c</itemPath>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
@@ -254,11 +261,15 @@
           <output>${TESTDIR}/TestFiles/f7</output>
         </linkerTool>
       </folder>
+      <item path="include/addonList.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/conf.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/format.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/log.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/plugin.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/sender.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -454,31 +465,39 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="unit_tests/conf/complete.conf" ex="false" tool="3" flavor2="0">
+      <item path="tests_unit/confcunittest.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="unit_tests/conf/minimum.conf" ex="false" tool="3" flavor2="0">
+<<<<<<< HEAD
+      <item path="tests_unit/formatcunittest.c" ex="false" tool="0" flavor2="0">
+=======
+      <item path="tests/conf/complete.conf" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="unit_tests/conf/without_probe_id.conf"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="tests/conf/minimum.conf" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="unit_tests/conf/without_token.conf" ex="false" tool="3" flavor2="0">
+      <item path="tests/conf/without_probe_id.conf" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="unit_tests/confcunittest.c" ex="false" tool="0" flavor2="0">
+      <item path="tests/conf/without_token.conf" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="unit_tests/formatcunittest.c" ex="false" tool="0" flavor2="0">
+      <item path="tests/confcunittest..c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="unit_tests/logcunittest.c" ex="false" tool="0" flavor2="0">
+      <item path="tests/confcunittest.c" ex="false" tool="0" flavor2="0">
+>>>>>>> 961d460e6fff2ee972018169a7659e3cc79a882b
       </item>
-      <item path="unit_tests/sendercunittest.c" ex="false" tool="0" flavor2="0">
+      <item path="tests_unit/logcunittest.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="unit_tests/signalscunittest.c" ex="false" tool="0" flavor2="0">
+      <item path="tests_unit/sendercunittest.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="unit_tests/utilUnitTest.c" ex="false" tool="0" flavor2="0">
+      <item path="tests_unit/signalscunittest.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="unit_tests/utilUnitTest.h" ex="false" tool="3" flavor2="0">
+      <item path="tests_unit/test.conf" ex="false" tool="3" flavor2="0">
       </item>
+<<<<<<< HEAD
+      <item path="tests_unit/utilUnitTest.c" ex="false" tool="0" flavor2="0">
+      </item>
+      <item path="tests_unit/utilUnitTest.h" ex="false" tool="3" flavor2="0">
+      </item>
+=======
+>>>>>>> 961d460e6fff2ee972018169a7659e3cc79a882b
     </conf>
     <conf name="Release" type="1">
       <toolsSet>
@@ -565,11 +584,15 @@
           <output>${TESTDIR}/TestFiles/f7</output>
         </linkerTool>
       </folder>
+      <item path="include/addonList.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/conf.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/format.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/log.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/plugin.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/sender.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -765,30 +788,21 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="unit_tests/conf/complete.conf" ex="false" tool="3" flavor2="0">
+      <item path="tests_unit/confcunittest.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="unit_tests/conf/minimum.conf" ex="false" tool="3" flavor2="0">
+      <item path="tests_unit/formatcunittest.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="unit_tests/conf/without_probe_id.conf"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="tests_unit/logcunittest.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="unit_tests/conf/without_token.conf" ex="false" tool="3" flavor2="0">
+      <item path="tests_unit/sendercunittest.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="unit_tests/confcunittest.c" ex="false" tool="0" flavor2="0">
+      <item path="tests_unit/signalscunittest.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="unit_tests/formatcunittest.c" ex="false" tool="0" flavor2="0">
+      <item path="tests_unit/test.conf" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="unit_tests/logcunittest.c" ex="false" tool="0" flavor2="0">
+      <item path="tests_unit/utilUnitTest.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="unit_tests/sendercunittest.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="unit_tests/signalscunittest.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="unit_tests/utilUnitTest.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="unit_tests/utilUnitTest.h" ex="false" tool="3" flavor2="0">
+      <item path="tests_unit/utilUnitTest.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="Test" type="1">
@@ -803,12 +817,11 @@
           <developmentMode>6</developmentMode>
           <stripSymbols>true</stripSymbols>
           <incDir>
-            <pElem>unit_tests</pElem>
+            <pElem>include</pElem>
             <pElem>/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/include</pElem>
             <pElem>../addon/include</pElem>
-            <pElem>include</pElem>
           </incDir>
-          <commandLine>-DTEST ${ndebug}</commandLine>
+          <commandLine>-DNDEBUG</commandLine>
         </cTool>
         <ccTool>
           <developmentMode>6</developmentMode>
@@ -825,20 +838,18 @@
           <linkerAddLib>
             <pElem>/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM}</pElem>
             <pElem>/opt/echoes-alert/probe/lib</pElem>
-            <pElem>../addon/dist/Debug/${CND_PLATFORM}</pElem>
           </linkerAddLib>
           <linkerDynSerch>
-            <pElem>../addon/dist/Debug/${CND_PLATFORM}</pElem>
+            <pElem>/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM}</pElem>
             <pElem>/opt/echoes-alert/probe/addons</pElem>
             <pElem>/opt/echoes-alert/probe/lib</pElem>
-            <pElem>/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM}</pElem>
           </linkerDynSerch>
           <stripSymbols>true</stripSymbols>
           <linkerLibItems>
             <linkerOptionItem>`pkg-config --libs gobject-2.0 json-glib-1.0`</linkerOptionItem>
             <linkerLibLibItem>pthread</linkerLibLibItem>
-            <linkerLibLibItem>cunit</linkerLibLibItem>
             <linkerLibLibItem>addon</linkerLibLibItem>
+            <linkerLibLibItem>cunit</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
@@ -881,11 +892,15 @@
           <output>${TESTDIR}/TestFiles/f7</output>
         </linkerTool>
       </folder>
+      <item path="include/addonList.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="include/conf.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/format.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/log.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="include/plugin.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="include/sender.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -1081,31 +1096,39 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="unit_tests/conf/complete.conf" ex="false" tool="3" flavor2="0">
+      <item path="tests_unit/confcunittest.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="unit_tests/conf/minimum.conf" ex="false" tool="3" flavor2="0">
+      <item path="tests_unit/formatcunittest.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="unit_tests/conf/without_probe_id.conf"
-            ex="false"
-            tool="3"
-            flavor2="0">
+<<<<<<< HEAD
+      <item path="tests_unit/logcunittest.c" ex="false" tool="0" flavor2="0">
+=======
+      <item path="tests/conf/complete.conf" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="unit_tests/conf/without_token.conf" ex="false" tool="3" flavor2="0">
+      <item path="tests/conf/minimum.conf" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="unit_tests/confcunittest.c" ex="false" tool="0" flavor2="0">
+      <item path="tests/conf/without_probe_id.conf" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="unit_tests/formatcunittest.c" ex="false" tool="0" flavor2="0">
+      <item path="tests/conf/without_token.conf" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="unit_tests/logcunittest.c" ex="false" tool="0" flavor2="0">
+      <item path="tests/confcunittest..c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="unit_tests/sendercunittest.c" ex="false" tool="0" flavor2="0">
+      <item path="tests/confcunittest.c" ex="false" tool="0" flavor2="0">
+>>>>>>> 961d460e6fff2ee972018169a7659e3cc79a882b
       </item>
-      <item path="unit_tests/signalscunittest.c" ex="false" tool="0" flavor2="0">
+      <item path="tests_unit/sendercunittest.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="unit_tests/utilUnitTest.c" ex="false" tool="0" flavor2="0">
+      <item path="tests_unit/signalscunittest.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="unit_tests/utilUnitTest.h" ex="false" tool="3" flavor2="0">
+      <item path="tests_unit/test.conf" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="tests_unit/utilUnitTest.c" ex="false" tool="0" flavor2="0">
+      </item>
+<<<<<<< HEAD
+      <item path="tests_unit/utilUnitTest.h" ex="false" tool="3" flavor2="0">
+      </item>
+=======
+>>>>>>> 961d460e6fff2ee972018169a7659e3cc79a882b
     </conf>
   </confs>
 </configurationDescriptor>

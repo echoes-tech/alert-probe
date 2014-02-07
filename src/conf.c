@@ -13,91 +13,97 @@
 
 #include "conf.h"
 
-void parseLineConf(Conf *conf, const char* line)
-{
-    char *equal = NULL, *value = NULL;
-
-    /* Search = character */
-    equal = strchr(line, '=');
-    if (equal != NULL)
-    {
-        /* Value is String after equal, end of line */
-        value = equal + 1;
-        /* Replace = character by a end of String */
-        *equal = '\0';
-        /* Key is begin of line */
-
-        if (!strcmp(line, "probe_id"))
-        {
-            /*TODO: test format */
-            conf->probeID = atoi(value);
-        }
-        else if (!strcmp(line, "token"))
-        {
-            strncpy(conf->token, value, (strlen(value) - 1));
-        }
-        else if (!strcmp(line, "probe_plugin_dir"))
-        {
-            /*TODO: test format */
-#ifdef NDEBUG
-            strncpy(conf->probePluginDir, value, (strlen(value) - 1));
-#else
-            strcpy(conf->probePluginDir, "./plugins/");
-#endif
-        }
-        else if (!strcmp(line, "transport_proto"))
-        {
-            /*TODO: test format */
-            conf->transportProto = atoi(value);
-        }
-        else if (!strcmp(line, "transport_message_version"))
-        {
-            /*TODO: test format */
-            conf->transportMsgVersion = atoi(value);
-        }
-        else if (!strcmp(line, "engine_fqdn"))
-        {
-            /*TODO: test format */
-            strncpy(conf->engineFQDN, value, (strlen(value) - 1));
-        }
-        else if (!strcmp(line, "engine_port"))
-        {
-            /*TODO: test format */
-            conf->enginePort = atoi(value);
-        }
-        else
-        {
-            g_warning("Warning: Bad line: %s", line);
-        }
-    }
-    return;
-}
-
 int loadConf(Conf *conf, const char *confPath)
 {
-    FILE* confFile = NULL;
-    char line[MAX_SIZE] = "";
-
-    /* Opening file */
-    confFile = fopen(confPath, "r");
-
-    if (confFile != NULL)
+    GKeyFile *keyFile = g_key_file_new();
+    GError *error = NULL;
+    char *value;
+    
+    /* Open file */
+    if (!g_key_file_load_from_file(keyFile, confPath, G_KEY_FILE_NONE, &error))
     {
-        /* Reading file line by line */
-        while (fgets(line, MAX_SIZE, confFile) != NULL)
-        {
-            /* Ignore commented lines */
-            if (line[0] == '#') continue;
-            parseLineConf(conf, line);
-        }
+        g_critical("Could not open file '%s': %s\n", confPath, error->message);
+        return EXIT_FAILURE;
+    }
 
-        /* Closing conf file */
-        fclose(confFile);
+    /* Get probe_id */
+    conf->probeID = g_key_file_get_integer(keyFile, "probe", "probe_id", &error);
+    if (error != NULL)
+    {
+        g_critical("%s: %s\n", confPath, error->message);
+        return EXIT_FAILURE;
+    }
+
+    /* Get token */
+    value = g_key_file_get_string(keyFile, "probe", "token", &error);
+    if (value == NULL)
+    {
+        g_critical("%s: %s\n", confPath, error->message);
+        return EXIT_FAILURE;
     }
     else
     {
-        g_critical("Critical: %s: %s", strerror(errno), confPath);
-        return errno;
+        strcpy(conf->token, value);
+    }
+
+    /* Get probe_plugin_dir */
+    value = g_key_file_get_string(keyFile, "probe", "probe_plugin_dir", &error);
+    if (value == NULL)
+    {
+#ifdef NDEBUG
+        strcpy(conf->probePluginDir, "/opt/echoes-alert/probe/etc/plugins/");
+#else
+        strcpy(conf->probePluginDir, "./plugins/");
+#endif
+        g_warning("%s: %s\n", confPath, error->message);
+        error = NULL;
+    }
+    else
+    {
+#ifdef NDEBUG
+        strcpy(conf->probePluginDir, value);
+#else
+        strcpy(conf->probePluginDir, "./plugins/");
+#endif
+    }
+
+    /* Get transport_proto */
+    conf->transportProto = g_key_file_get_integer(keyFile, "transport", "transport_proto", &error);
+    if (error != NULL)
+    {
+        conf->transportProto = 0;
+        g_warning("%s: %s\n", confPath, error->message);
+        error = NULL;
+    }
+
+    /* Get transport_message_version */
+    conf->transportMsgVersion = g_key_file_get_integer(keyFile, "transport", "transport_message_version", &error);
+    if (error != NULL)
+    {
+        conf->transportMsgVersion = 2;
+        g_warning("%s: %s\n", confPath, error->message);
+        error = NULL;
+    }
+
+    /* Get engine_fqdn */
+    value = g_key_file_get_string(keyFile, "engine", "engine_fqdn", &error);
+    if (value == NULL)
+    {
+        strcpy(conf->engineFQDN, "alert-engine.echoes-tech.com");
+        g_warning("%s: %s\n", confPath, error->message);
+        error = NULL;
+    }
+    else
+    {
+        strcpy(conf->engineFQDN, value);
+    }
+
+    /* Get engine_port */
+    conf->enginePort = g_key_file_get_integer(keyFile, "engine", "engine_port", &error);
+    if (error != NULL)
+    {
+        conf->enginePort = 443;
+        g_warning("%s: %s\n", confPath, error->message);
     }
 
     return EXIT_SUCCESS;

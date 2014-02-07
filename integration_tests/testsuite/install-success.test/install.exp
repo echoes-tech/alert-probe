@@ -1,0 +1,71 @@
+# Complete installation of probe and addons
+# Test packages installation, conf file, informations existence and script output
+
+
+###############
+## VARIABLES ##
+###############
+
+set timeout 1
+
+# Install script path
+set install_script "install.sh"
+
+
+###########
+## TESTS ##
+###########
+
+# Script running
+set process_id [spawn sh $install_script]
+
+# Password invite
+test_expect "install_password_invite" "To download ECHOES Alert Probe, you have to enter your password\..\n*Note: login is .*\nPassword: $"
+
+# send password
+send "147258369aA\n"
+
+# Update asset
+test_expect "install_put-asset_wait" "#+ 100,0%"
+test_expect "install_put-asset_http-code" "HTTP_CODE: 200"
+
+# Download probe
+test_expect "install_probe_wait" "#+ 100,0%"
+test_expect "install_probe_http-code" "HTTP_CODE: 200"
+test_expect "install_probe_message-downloaded" "ECHOES Alert Probe downloaded."
+
+# Install probe
+set timeout 300
+test_expect "install_probe_message-installed" "ECHOES Alert Probe installed."
+set timeout 1
+
+# Test packages
+test_package_installed "install_common_installed" "ea-probe-addon"
+test_package_installed "install_probe_installed" "ea-probe"
+foreach addon $addons_list {
+	test_package_installed "install_addon${addon}_installed" "ea-probe-addon${addon}"
+}
+
+# Configure probe_id
+test_expect "install_probe_configured" "ECHOES Alert Probe configured."
+
+# Download and copy informations
+test_expect "install_informations_wait" "#+ 100,0%"
+test_expect "install_informations_http-code" "HTTP_CODE: 200"
+test_expect "install_informations_message-downloaded" "ECHOES Alert informations downloaded."
+test_file_exist "install_informations_exist" "/opt/echoes-alert/probe/etc/informations.json"
+
+# Start daemon and finish install script
+test_return_code "install_return_code" $process_id 0
+
+# Tests if ea-probe service is running
+test_is_service_running "install_probe_running" "ea-probe"
+
+
+###########
+## AFTER ##
+###########
+
+# Stop probe 
+set spawn_pid [spawn service ea-probe stop]
+wait_spawn_end $spawn_pid

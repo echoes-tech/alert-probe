@@ -1,0 +1,31 @@
+# Remove all packages
+
+
+###############
+## VARIABLES ##
+###############
+
+set timeout 1
+
+# Uninstall script path
+set uninstall_script "/opt/echoes-alert/probe/sbin/uninstall.sh"
+
+
+###########
+## TESTS ##
+###########
+
+#exec sh $uninstall_script
+
+test_package_purged "remove_probe" "ea-probe"
+
+test_package_purged "remove_common" "ea-probe-addon"
+
+foreach addon $addons_list {
+	test_package_purged "remove_addon${addon}" "ea-probe-addon${addon}"
+}
+
+test_file_removed "remove_clear_folder" "/opt/echoes-alert"
+
+
+

@@ -1,0 +1,55 @@
+# Test probe when have no informationss
+# Expect '0 informationss loaded' message in log file
+# Probe must stop
+
+
+###############
+## VARIABLES ##
+###############
+
+set timeout 10
+
+# Log file path
+set log "/var/log/echoes-alert/probe.log"
+
+###########
+# BEFORE ##
+###########
+
+# Delete informations
+file delete -force /opt/echoes-alert/probe/etc/informations.json
+
+# If a probe is running stop it
+if { [is_service_running "ea-probe"] } {
+	set spawn_pid [spawn service ea-probe stop]
+	wait_spawn_end $spawn_pid
+}
+
+
+###########
+## TESTS ##
+###########
+
+set line_number [expr [linecount $log] + 2]
+
+set spawn_pid [spawn service ea-probe start]
+wait_spawn_end $spawn_pid
+
+test_string_regexp "no-informations_load" "^.* - Critical: No such file or directory: file: /opt/echoes-alert/probe/etc/informations.json$" [get_logfile_line $log $line_number]
+
+sleep 2
+
+test_is_service_stopped "no-informations_stopped" "ea-probe"
+
+
+###########
+## AFTER ##
+###########
+
+# If a probe is running stop it
+if { [is_service_running "ea-probe"] } {
+	set spawn_pid [spawn service ea-probe stop]
+	wait_spawn_end $spawn_pid
+}
+
+
