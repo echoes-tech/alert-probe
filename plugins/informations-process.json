@@ -8,22 +8,19 @@
 
 [
 {
-	"id": 4, /* ODBC */
+	"id": 8, /* Process */
         "sources": 
         [
         {
             	"id": 1, /* Champ à ignorer */
-            	"params": {
-            		"connectionString": "Driver=Postgresql-driver;ServerName=172.16.3.202;Database=echoes;UID=echoes;PWD=toto;port=5432;sslmode=require"
-        	},
             	"searches": 
             	[
              	{
                 	"id": 1, /* Champ à ignorer */
-                	"idType": 5, /* Query */
+                	"idType": 8, /* Process name */
                 	"params": 
                 	{
-                    		"query": "select * from \"T_SEARCH_TYPE_STY\""
+                		"name": "sleep"
                  	},
                 	"period": 5,
                 	"filters": 
@@ -31,7 +28,7 @@
 		        	{
 		            		"id": 1,
 		            		"idType": 1, /* All */
-		            		"idsIDA": [ 1 ]
+		            		"idsIDA": [ 1, 2, 3, 4, 5, 6 ]
 		        	}
                 	]
            	}

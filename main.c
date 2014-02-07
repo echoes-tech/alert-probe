@@ -11,6 +11,14 @@
  * 
  */
 
+/* Documentation tag for Doxygen
+ */
+
+/*! @mainpage ECHOES Alert Probe
+ * 
+ *
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
@@ -37,9 +45,9 @@
 #define VERSION "0.1.0"
 /* Conf Repository */
 #ifdef NDEBUG
-#define CONF_DIR "/opt/echoes-alert/probe/etc/probe.conf"
+    #define CONF_DIR "/opt/echoes-alert/probe/etc/probe.conf"
 #else
-#define CONF_DIR "./conf/probe.conf"
+    #define CONF_DIR "./conf/probe.conf"
 #endif
 
 /**
@@ -165,14 +173,14 @@ int main(int argc, char** argv, char **envp)
               PRODUCT_NAME,
               VERSION
               );
-     
+
     g_type_init();
 
     /* Create file that contains pid use by start-stop-daemon */
 #ifdef NDEBUG
     FILE* daemonPidFile = NULL;
     char *daemonPidFilePath = "/var/run/ea-probe.pid";
-    remove(daemonPidFile);
+    remove(daemonPidFilePath);
     daemonPidFile = fopen(daemonPidFilePath, "w");
     if (daemonPidFile != NULL)
     {
@@ -215,6 +223,9 @@ int main(int argc, char** argv, char **envp)
         logStopProbe(PRODUCT_NAME, VERSION);
         return EXIT_FAILURE;
     }
+#ifndef NDEBUG
+    printf("Fin du chargement des addons\n");
+#endif
 
 #ifndef NDEBUG
     printf("Début de l'envoi des messages\n");

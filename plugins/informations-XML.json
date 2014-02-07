@@ -8,26 +8,24 @@
 
 [
 {
-	"id": 4, /* ODBC */
+	"id": 7, /* Addon XML */
         "sources": 
-        [
+        [	
         {
             	"id": 1, /* Champ à ignorer */
-            	"params": {
-            		"connectionString": "Driver=Postgresql-driver;ServerName=172.16.3.202;Database=echoes;UID=echoes;PWD=toto;port=5432;sslmode=require"
-        	},
             	"searches": 
             	[
              	{
                 	"id": 1, /* Champ à ignorer */
-                	"idType": 5, /* Query */
+                	"idType": 8, /* Path + line */
                 	"params": 
                 	{
-                    		"query": "select * from \"T_SEARCH_TYPE_STY\""
+            			"path": "/home/mla/Bureau/test.xml",
+            			"xpath": "//book"
                  	},
                 	"period": 5,
                 	"filters": 
-                	[
+                	[   
 		        	{
 		            		"id": 1,
 		            		"idType": 1, /* All */
