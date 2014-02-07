@@ -64,10 +64,10 @@ encode_url() {
 }
 
 clean_and_exit() {
-    echo "$ERR_INSTALL_MSG: $1"
-    cd "$CURRENT_DIR"
-    rm -rf "$TMP_DIR"
-    exit 1
+  echo "$ERR_INSTALL_MSG: $1"
+  cd "$CURRENT_DIR"
+  rm -rf "$TMP_DIR"
+  exit 1
 }
 
 test_http_return() {
