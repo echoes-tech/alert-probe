@@ -22,7 +22,7 @@
                     <type>1</type>
                 </confElem>
                 <confElem>
-                    <name>TestJenkins</name>
+                    <name>Test</name>
                     <type>1</type>
                 </confElem>
             </confList>

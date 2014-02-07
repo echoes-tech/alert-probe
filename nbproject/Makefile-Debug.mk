@@ -51,7 +51,6 @@ TESTFILES= \
 	${TESTDIR}/TestFiles/f1 \
 	${TESTDIR}/TestFiles/f4 \
 	${TESTDIR}/TestFiles/f6 \
-	${TESTDIR}/TestFiles/f2 \
 	${TESTDIR}/TestFiles/f5 \
 	${TESTDIR}/TestFiles/f7
 
@@ -131,10 +130,6 @@ ${TESTDIR}/TestFiles/f6: ${TESTDIR}/tests_unit/logcunittest.o ${OBJECTFILES:%.o=
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.c}   -o ${TESTDIR}/TestFiles/f6 $^ ${LDLIBSOPTIONS} 
 
-${TESTDIR}/TestFiles/f2: ${TESTDIR}/tests_unit/plugincunittest.o ${OBJECTFILES:%.o=%_nomain.o}
-	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.c}   -o ${TESTDIR}/TestFiles/f2 $^ ${LDLIBSOPTIONS} 
-
 ${TESTDIR}/TestFiles/f5: ${TESTDIR}/tests_unit/sendercunittest.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.c}   -o ${TESTDIR}/TestFiles/f5 $^ ${LDLIBSOPTIONS} 
@@ -160,12 +155,6 @@ ${TESTDIR}/tests_unit/logcunittest.o: tests_unit/logcunittest.c
 	${MKDIR} -p ${TESTDIR}/tests_unit
 	${RM} $@.d
 	$(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -pedantic -Wextra -MMD -MP -MF $@.d -o ${TESTDIR}/tests_unit/logcunittest.o tests_unit/logcunittest.c
-
-
-${TESTDIR}/tests_unit/plugincunittest.o: tests_unit/plugincunittest.c 
-	${MKDIR} -p ${TESTDIR}/tests_unit
-	${RM} $@.d
-	$(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -pedantic -Wextra -MMD -MP -MF $@.d -o ${TESTDIR}/tests_unit/plugincunittest.o tests_unit/plugincunittest.c
 
 
 ${TESTDIR}/tests_unit/sendercunittest.o: tests_unit/sendercunittest.c 
@@ -278,7 +267,6 @@ ${OBJECTDIR}/tests_unit/utilUnitTest_nomain.o: ${OBJECTDIR}/tests_unit/utilUnitT
 	    ${TESTDIR}/TestFiles/f1 || true; \
 	    ${TESTDIR}/TestFiles/f4 || true; \
 	    ${TESTDIR}/TestFiles/f6 || true; \
-	    ${TESTDIR}/TestFiles/f2 || true; \
 	    ${TESTDIR}/TestFiles/f5 || true; \
 	    ${TESTDIR}/TestFiles/f7 || true; \
 	else  \

@@ -23,7 +23,7 @@ AS=as
 # Macros
 CND_PLATFORM=GNU-Linux-x86
 CND_DLIB_EXT=so
-CND_CONF=Release
+CND_CONF=Test
 CND_DISTDIR=dist
 CND_BUILDDIR=build
 
@@ -68,7 +68,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-L/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM} -L/opt/echoes-alert/probe/lib -Wl,-rpath,/opt/echoes-alert/probe/lib -Wl,-rpath,/opt/echoes-alert/probe/addons `pkg-config --libs gobject-2.0 json-glib-1.0` -lpthread -laddon  
+LDLIBSOPTIONS=-L/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM} -L/opt/echoes-alert/probe/lib -Wl,-rpath,/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM} -Wl,-rpath,/opt/echoes-alert/probe/addons -Wl,-rpath,/opt/echoes-alert/probe/lib `pkg-config --libs gobject-2.0 json-glib-1.0` -lpthread -laddon -lcunit  
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
