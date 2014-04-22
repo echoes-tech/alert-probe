@@ -68,7 +68,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-L../addon/${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM} -L${JENKINS_HOME}/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM} -Wl,-rpath,/opt/echoes-alert/probe/lib `pkg-config --libs gobject-2.0 json-glib-1.0` -lpthread -laddon  
+LDLIBSOPTIONS=-L../addon/${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM} -L${JENKINS_HOME}/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM} -Wl,-rpath,/opt/echoes-alert/probe/lib -Wl,-rpath,/opt/echoes-alert/probe/lib/common `pkg-config --libs gobject-2.0 json-glib-1.0` -lpthread -laddon  
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
