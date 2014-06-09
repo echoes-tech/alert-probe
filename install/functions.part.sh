@@ -6,7 +6,7 @@ get() {
       /usr/bin/curl -# -D "${3}_header" -o "$3" -O "https://${API_HOST}:${API_PORT}${1}?${2}"
     elif [ -x '/usr/bin/openssl' ]
     then
-      printf "GET %s?%s HTTP/1.1\nConnection: close\n\n" "$1" "$2" "$API_HOST" | /usr/bin/openssl s_client -quiet -connect ${API_HOST}:${API_PORT} > ${3}_tmp 2> /dev/null
+      printf "GET %s?%s HTTP/1.1\nHost: %s\nConnection: close\n\n" "$1" "$2" "$API_HOST" | /usr/bin/openssl s_client -quiet -connect ${API_HOST}:${API_PORT} > ${3}_tmp 2> /dev/null
       sed '/^\r*$/q' ${3}_tmp > ${3}_header
       sed '1,/^\r*$/d' ${3}_tmp > ${3}
     else
@@ -18,12 +18,12 @@ get() {
       /usr/bin/curl -# -D "${3}_header" -o "$3" -O "http://${API_HOST}:${API_PORT}${1}?${2}"
     elif [ -x '/usr/bin/telnet' ]
     then
-      { printf "GET %s?%s HTTP/1.1\nConnection: close\n\n" "$1" "$2"; sleep 1; }  | /usr/bin/telnet ${API_HOST} ${API_PORT} > ${3}_tmp 2> /dev/null
+      { printf "GET %s?%s HTTP/1.1\nHost: %s\nConnection: close\n\n" "$1" "$2" "$API_HOST"; sleep 1; }  | /usr/bin/telnet ${API_HOST} ${API_PORT} > ${3}_tmp 2> /dev/null
       sed -n '4,8p' ${3}_tmp > ${3}_header
       sed -n '9,$p' ${3}_tmp > $3
     elif [ -x '/bin/nc' ]
     then
-      printf "GET %s?%s HTTP/1.1\r\nConnection: close\r\n\r\n" "$1" "$2" | /bin/nc ${API_HOST} ${API_PORT} > ${3}_tmp 2> /dev/null
+      printf "GET %s?%s HTTP/1.1\r\nHost: %s\r\nConnection: close\r\n\r\n" "$1" "$2" "$API_HOST" | /bin/nc ${API_HOST} ${API_PORT} > ${3}_tmp 2> /dev/null
       sed '/^\r*$/q' ${3}_tmp > ${3}_header
       sed '1,/^\r*$/d' ${3}_tmp > ${3}
     else
@@ -54,12 +54,12 @@ post() {
       /usr/bin/curl -# -H 'Content-Type: application/json; charset=utf-8' -D "${4}_header" -o "$4" -d "$3" -O "http://${API_HOST}:${API_PORT}${1}?${2}"
     elif [ -x '/usr/bin/telnet' ]
     then
-      { printf "POST %s?%s HTTP/1.1\nContent-Type: application/json; charset=utf-8\nContent-length: $(echo $3 | wc -m)\nConnection: close\n\n%s\n" "$1" "$2" "$3"; sleep 1; }  | /usr/bin/telnet ${API_HOST} ${API_PORT} > ${4}_tmp 2> /dev/null
+      { printf "POST %s?%s HTTP/1.1\nHost: %s\nContent-Type: application/json; charset=utf-8\nContent-length: $(echo $3 | wc -m)\nConnection: close\n\n%s\n" "$1" "$2" "$API_HOST" "$3"; sleep 1; }  | /usr/bin/telnet ${API_HOST} ${API_PORT} > ${4}_tmp 2> /dev/null
       sed -n '4,8p' ${4}_tmp > ${4}_header
       sed -n '9,$p' ${4}_tmp > $4
     elif [ -x '/bin/nc' ]
     then
-      printf "POST %s?%s HTTP/1.1\r\nContent-Type: application/json; charset=utf-8\r\nContent-length: $(echo $3 | wc -m)\r\nConnection: close\r\n\r\n%s\r\n" "$1" "$2" "$3" | /bin/nc ${API_HOST} ${API_PORT} > ${4}_tmp 2> /dev/null
+      printf "POST %s?%s HTTP/1.1\r\nHost: %s\r\nContent-Type: application/json; charset=utf-8\r\nContent-length: $(echo $3 | wc -m)\r\nConnection: close\r\n\r\n%s\r\n" "$1" "$2" "$API_HOST" "$3" | /bin/nc ${API_HOST} ${API_PORT} > ${4}_tmp 2> /dev/null
       sed '/^\r*$/q' ${4}_tmp > ${4}_header
       sed '1,/^\r*$/d' ${4}_tmp > ${4}
     else
@@ -90,12 +90,12 @@ put() {
       /usr/bin/curl -X PUT -# -H 'Content-Type: application/json; charset=utf-8' -D "${4}_header" -o "$4" -d "$3" -O "http://${API_HOST}:${API_PORT}${1}?${2}"
     elif [ -x '/usr/bin/telnet' ]
     then
-      { printf "PUT %s?%s HTTP/1.1\nContent-Type: application/json; charset=utf-8\nContent-length: $(echo $3 | wc -m)\nConnection: close\n\n%s\n" "$1" "$2" "$3"; sleep 1; }  | /usr/bin/telnet ${API_HOST} ${API_PORT} > ${4}_tmp 2> /dev/null
+      { printf "PUT %s?%s HTTP/1.1\nHost: %s\nContent-Type: application/json; charset=utf-8\nContent-length: $(echo $3 | wc -m)\nConnection: close\n\n%s\n" "$1" "$2" "$API_HOST" "$3"; sleep 1; }  | /usr/bin/telnet ${API_HOST} ${API_PORT} > ${4}_tmp 2> /dev/null
       sed -n '4,8p' ${4}_tmp > ${4}_header
       sed -n '9,$p' ${4}_tmp > $4
     elif [ -x '/bin/nc' ]
     then
-      printf "PUT %s?%s HTTP/1.1\r\nContent-Type: application/json; charset=utf-8\r\nContent-length: $(echo $3 | wc -m)\r\nConnection: close\r\n\r\n%s\r\n" "$1" "$2" "$3" | /bin/nc ${API_HOST} ${API_PORT} > ${4}_tmp 2> /dev/null
+      printf "PUT %s?%s HTTP/1.1\r\nHost: %s\r\nContent-Type: application/json; charset=utf-8\r\nContent-length: $(echo $3 | wc -m)\r\nConnection: close\r\n\r\n%s\r\n" "$1" "$2" "$API_HOST" "$3" | /bin/nc ${API_HOST} ${API_PORT} > ${4}_tmp 2> /dev/null
       sed '/^\r*$/q' ${4}_tmp > ${4}_header
       sed '1,/^\r*$/d' ${4}_tmp > ${4}
     else
