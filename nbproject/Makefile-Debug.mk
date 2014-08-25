@@ -80,38 +80,38 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/probe: ${OBJECTFILES}
 
 ${OBJECTDIR}/main.o: main.c 
 	${MKDIR} -p ${OBJECTDIR}
-	${RM} $@.d
-	$(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -pedantic -Wextra -MMD -MP -MF $@.d -o ${OBJECTDIR}/main.o main.c
+	${RM} "$@.d"
+	$(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`   -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.c
 
 ${OBJECTDIR}/src/conf.o: src/conf.c 
 	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -pedantic -Wextra -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/conf.o src/conf.c
+	${RM} "$@.d"
+	$(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`   -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/conf.o src/conf.c
 
 ${OBJECTDIR}/src/format.o: src/format.c 
 	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -pedantic -Wextra -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/format.o src/format.c
+	${RM} "$@.d"
+	$(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`   -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/format.o src/format.c
 
 ${OBJECTDIR}/src/log.o: src/log.c 
 	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -pedantic -Wextra -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/log.o src/log.c
+	${RM} "$@.d"
+	$(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`   -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/log.o src/log.c
 
 ${OBJECTDIR}/src/sender.o: src/sender.c 
 	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -pedantic -Wextra -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/sender.o src/sender.c
+	${RM} "$@.d"
+	$(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`   -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/sender.o src/sender.c
 
 ${OBJECTDIR}/src/signals.o: src/signals.c 
 	${MKDIR} -p ${OBJECTDIR}/src
-	${RM} $@.d
-	$(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -pedantic -Wextra -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/signals.o src/signals.c
+	${RM} "$@.d"
+	$(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`   -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/signals.o src/signals.c
 
 ${OBJECTDIR}/unit_tests/utilUnitTest.o: unit_tests/utilUnitTest.c 
 	${MKDIR} -p ${OBJECTDIR}/unit_tests
-	${RM} $@.d
-	$(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -pedantic -Wextra -MMD -MP -MF $@.d -o ${OBJECTDIR}/unit_tests/utilUnitTest.o unit_tests/utilUnitTest.c
+	${RM} "$@.d"
+	$(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`   -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/unit_tests/utilUnitTest.o unit_tests/utilUnitTest.c
 
 # Subprojects
 .build-subprojects:
@@ -141,32 +141,32 @@ ${TESTDIR}/TestFiles/f7: ${TESTDIR}/unit_tests/signalscunittest.o ${OBJECTFILES:
 
 ${TESTDIR}/unit_tests/confcunittest.o: unit_tests/confcunittest.c 
 	${MKDIR} -p ${TESTDIR}/unit_tests
-	${RM} $@.d
-	$(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -pedantic -Wextra -MMD -MP -MF $@.d -o ${TESTDIR}/unit_tests/confcunittest.o unit_tests/confcunittest.c
+	${RM} "$@.d"
+	$(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`   -MMD -MP -MF "$@.d" -o ${TESTDIR}/unit_tests/confcunittest.o unit_tests/confcunittest.c
 
 
 ${TESTDIR}/unit_tests/formatcunittest.o: unit_tests/formatcunittest.c 
 	${MKDIR} -p ${TESTDIR}/unit_tests
-	${RM} $@.d
-	$(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -pedantic -Wextra   `cppunit-config --cflags` -MMD -MP -MF $@.d -o ${TESTDIR}/unit_tests/formatcunittest.o unit_tests/formatcunittest.c
+	${RM} "$@.d"
+	$(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  `cppunit-config --cflags` -MMD -MP -MF "$@.d" -o ${TESTDIR}/unit_tests/formatcunittest.o unit_tests/formatcunittest.c
 
 
 ${TESTDIR}/unit_tests/logcunittest.o: unit_tests/logcunittest.c 
 	${MKDIR} -p ${TESTDIR}/unit_tests
-	${RM} $@.d
-	$(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -pedantic -Wextra -MMD -MP -MF $@.d -o ${TESTDIR}/unit_tests/logcunittest.o unit_tests/logcunittest.c
+	${RM} "$@.d"
+	$(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`   -MMD -MP -MF "$@.d" -o ${TESTDIR}/unit_tests/logcunittest.o unit_tests/logcunittest.c
 
 
 ${TESTDIR}/unit_tests/sendercunittest.o: unit_tests/sendercunittest.c 
 	${MKDIR} -p ${TESTDIR}/unit_tests
-	${RM} $@.d
-	$(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -pedantic -Wextra -MMD -MP -MF $@.d -o ${TESTDIR}/unit_tests/sendercunittest.o unit_tests/sendercunittest.c
+	${RM} "$@.d"
+	$(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`   -MMD -MP -MF "$@.d" -o ${TESTDIR}/unit_tests/sendercunittest.o unit_tests/sendercunittest.c
 
 
 ${TESTDIR}/unit_tests/signalscunittest.o: unit_tests/signalscunittest.c 
 	${MKDIR} -p ${TESTDIR}/unit_tests
-	${RM} $@.d
-	$(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -pedantic -Wextra -MMD -MP -MF $@.d -o ${TESTDIR}/unit_tests/signalscunittest.o unit_tests/signalscunittest.c
+	${RM} "$@.d"
+	$(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`   -MMD -MP -MF "$@.d" -o ${TESTDIR}/unit_tests/signalscunittest.o unit_tests/signalscunittest.c
 
 
 ${OBJECTDIR}/main_nomain.o: ${OBJECTDIR}/main.o main.c 
@@ -176,8 +176,8 @@ ${OBJECTDIR}/main_nomain.o: ${OBJECTDIR}/main.o main.c
 	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
-	    ${RM} $@.d;\
-	    $(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -pedantic -Wextra -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/main_nomain.o main.c;\
+	    ${RM} "$@.d";\
+	    $(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`   -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main_nomain.o main.c;\
 	else  \
 	    ${CP} ${OBJECTDIR}/main.o ${OBJECTDIR}/main_nomain.o;\
 	fi
@@ -189,8 +189,8 @@ ${OBJECTDIR}/src/conf_nomain.o: ${OBJECTDIR}/src/conf.o src/conf.c
 	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
-	    ${RM} $@.d;\
-	    $(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -pedantic -Wextra -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/conf_nomain.o src/conf.c;\
+	    ${RM} "$@.d";\
+	    $(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`   -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/conf_nomain.o src/conf.c;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/conf.o ${OBJECTDIR}/src/conf_nomain.o;\
 	fi
@@ -202,8 +202,8 @@ ${OBJECTDIR}/src/format_nomain.o: ${OBJECTDIR}/src/format.o src/format.c
 	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
-	    ${RM} $@.d;\
-	    $(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -pedantic -Wextra -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/format_nomain.o src/format.c;\
+	    ${RM} "$@.d";\
+	    $(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`   -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/format_nomain.o src/format.c;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/format.o ${OBJECTDIR}/src/format_nomain.o;\
 	fi
@@ -215,8 +215,8 @@ ${OBJECTDIR}/src/log_nomain.o: ${OBJECTDIR}/src/log.o src/log.c
 	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
-	    ${RM} $@.d;\
-	    $(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -pedantic -Wextra -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/log_nomain.o src/log.c;\
+	    ${RM} "$@.d";\
+	    $(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`   -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/log_nomain.o src/log.c;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/log.o ${OBJECTDIR}/src/log_nomain.o;\
 	fi
@@ -228,8 +228,8 @@ ${OBJECTDIR}/src/sender_nomain.o: ${OBJECTDIR}/src/sender.o src/sender.c
 	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
-	    ${RM} $@.d;\
-	    $(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -pedantic -Wextra -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/sender_nomain.o src/sender.c;\
+	    ${RM} "$@.d";\
+	    $(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`   -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/sender_nomain.o src/sender.c;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/sender.o ${OBJECTDIR}/src/sender_nomain.o;\
 	fi
@@ -241,8 +241,8 @@ ${OBJECTDIR}/src/signals_nomain.o: ${OBJECTDIR}/src/signals.o src/signals.c
 	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
-	    ${RM} $@.d;\
-	    $(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -pedantic -Wextra -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/src/signals_nomain.o src/signals.c;\
+	    ${RM} "$@.d";\
+	    $(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`   -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/src/signals_nomain.o src/signals.c;\
 	else  \
 	    ${CP} ${OBJECTDIR}/src/signals.o ${OBJECTDIR}/src/signals_nomain.o;\
 	fi
@@ -254,8 +254,8 @@ ${OBJECTDIR}/unit_tests/utilUnitTest_nomain.o: ${OBJECTDIR}/unit_tests/utilUnitT
 	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
-	    ${RM} $@.d;\
-	    $(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`  -pedantic -Wextra -Dmain=__nomain -MMD -MP -MF $@.d -o ${OBJECTDIR}/unit_tests/utilUnitTest_nomain.o unit_tests/utilUnitTest.c;\
+	    ${RM} "$@.d";\
+	    $(COMPILE.c) -g -Wall -Iinclude -I../addon/include `pkg-config --cflags gobject-2.0 json-glib-1.0`   -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/unit_tests/utilUnitTest_nomain.o unit_tests/utilUnitTest.c;\
 	else  \
 	    ${CP} ${OBJECTDIR}/unit_tests/utilUnitTest.o ${OBJECTDIR}/unit_tests/utilUnitTest_nomain.o;\
 	fi

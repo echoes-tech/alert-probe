@@ -35,10 +35,12 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <stdlib.h>
 #include <unistd.h> /* close */
 #include <netdb.h> /* gethostbyname */
 #define INVALID_SOCKET -1
 #define SOCKET_ERROR -1
+#define HEARTBEAT 60
 #define closesocket(s) close(s)
 typedef int SOCKET;
 typedef struct sockaddr_in SOCKADDR_IN;
@@ -129,6 +131,13 @@ int popSDElementQueue(
                       SDElementQueue *sdElementQueue,
                       unsigned short *msgID
                       );
+
+/*
+ * Test if an hearbeat should be sent, push ElementQueue if needed
+ * @param *sdElementQueue Pointer of SD-Element Queue
+ * @return Exit status
+ */
+int  heartBeat(SDElementQueue *sdElementQueue);
 
 /**
  * Thread - Main function of Sender Module

@@ -274,12 +274,43 @@ int popSDElementQueue(
     return EXIT_SUCCESS;
 }
 
+int  heartBeat(SDElementQueue *sdElementQueue)
+{
+    static time_t   tmpTime = 0;
+    time_t          collectTime;
+
+    time(&collectTime);
+    if (sdElementQueue->first == NULL || tmpTime == 0)
+    {
+
+        if (tmpTime == 0 || difftime(collectTime, tmpTime) > HEARTBEAT)
+        {
+            char    buf[256];
+
+            sprintf(buf, " 0=\"HB\" t=\"%d\"", HEARTBEAT + 1);
+            pushSDElementQueue(
+                    sdElementQueue
+                    , buf
+                    , collectTime
+                    );
+            tmpTime = collectTime;
+            return (1);
+        }
+    }
+    else
+    {
+        tmpTime = collectTime;
+    }
+    return (0);
+}
+
 void *sender(void *arg)
 {
     SenderParams *senderParams = (SenderParams*) arg;
 
     while (*senderParams->signum == 0)
-    {
+{
+        heartBeat(senderParams->sdElementQueue);
         while (senderParams->sdElementQueue->first != NULL)
         {
             senderParams->msgID++;

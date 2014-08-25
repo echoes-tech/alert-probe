@@ -284,6 +284,38 @@ void testSendMessage_UnavailableHost()
     readStdout_end();
 }
 
+void testHeartBeat()
+{
+    /* Creation d'une queue d'envoi vide */
+    unsigned int probeID = 1;
+    unsigned char transportMsgVersion = 2;
+    SDElementQueue sdElementQueue = {
+            PTHREAD_MUTEX_INITIALIZER,
+            "127.0.0.1",
+            "ea-probe",
+            "abcd1234",
+            &probeID,
+            &transportMsgVersion,
+            3,
+            NULL
+    };
+    
+    /* Test if first call returns TRUE */
+    CU_ASSERT_TRUE(heartBeat(&sdElementQueue));
+
+    /* Test if first element is not NULL */
+    CU_ASSERT_NOT_EQUAL(sdElementQueue.first, NULL);
+
+    /* Test if non-void Queue returns FALSE */
+    CU_ASSERT_FALSE(heartBeat(&sdElementQueue));
+
+    sdElementQueue.first = NULL;
+    sleep(HEARTBEAT + 1); /* HEARTBEAT or HEARTBEAT + 1 ? */
+    
+    /* Test if void Queue after an HEARTBEAT returns TRUE */
+    CU_ASSERT_TRUE(heartBeat(&sdElementQueue));
+}
+
 void testSender()
 {
     const char* address = "127.0.0.1";
@@ -383,7 +415,8 @@ int main()
     if ((NULL == CU_add_test(pSuite, "testSendMessage_Success", testSendMessage_Success)) ||
         (NULL == CU_add_test(pSuite, "testSendMessage_UnavailableHost", testSendMessage_UnavailableHost)) ||
         (NULL == CU_add_test(pSuite, "testPopSDElementQueue", testPopSDElementQueue)) ||
-        (NULL == CU_add_test(pSuite, "testSender", testSender)))
+        (NULL == CU_add_test(pSuite, "testSender", testSender)) ||
+        (NULL == CU_add_test(pSuite, "testHeartBeat", testHeartBeat)))
     {
         CU_cleanup_registry();
         return CU_get_error();
