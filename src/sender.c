@@ -282,7 +282,6 @@ int  heartBeat(SDElementQueue *sdElementQueue)
     time(&collectTime);
     if (sdElementQueue->first == NULL || tmpTime == 0)
     {
-
         if (tmpTime == 0 || difftime(collectTime, tmpTime) > HEARTBEAT)
         {
             char    buf[256];

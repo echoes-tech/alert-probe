@@ -40,7 +40,7 @@
 #include <netdb.h> /* gethostbyname */
 #define INVALID_SOCKET -1
 #define SOCKET_ERROR -1
-#define HEARTBEAT 60
+#define HEARTBEAT 10
 #define closesocket(s) close(s)
 typedef int SOCKET;
 typedef struct sockaddr_in SOCKADDR_IN;
