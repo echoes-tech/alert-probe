@@ -284,12 +284,9 @@ int  heartBeat(SDElementQueue *sdElementQueue)
     {
         if (tmpTime == 0 || difftime(collectTime, tmpTime) > HEARTBEAT)
         {
-            char    buf[256];
-
-            sprintf(buf, " 0=\"HB\" t=\"%d\"", HEARTBEAT + 1);
             pushSDElementQueue(
                     sdElementQueue
-                    , buf
+                    , ""
                     , collectTime
                     );
             tmpTime = collectTime;
