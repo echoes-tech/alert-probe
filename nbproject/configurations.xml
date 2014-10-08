@@ -87,8 +87,12 @@
       </logicalFolder>
       <itemPath>main.c</itemPath>
     </logicalFolder>
+    <logicalFolder name="f1" displayName="Test includes" projectFiles="true">
+      <itemPath>tests_unit/utilUnitTest.c</itemPath>
+      <itemPath>tests_unit/utilUnitTest.h</itemPath>
+    </logicalFolder>
     <logicalFolder name="tests_integration"
-                   displayName="Test Integration Files"
+                   displayName="tests_integration"
                    projectFiles="true">
       <logicalFolder name="testsuite" displayName="testsuite" projectFiles="true">
         <logicalFolder name="config" displayName="config" projectFiles="true">
@@ -127,10 +131,6 @@
       </logicalFolder>
       <itemPath>tests_integration/site.exp</itemPath>
     </logicalFolder>
-    <logicalFolder name="f1" displayName="Test Utils" projectFiles="true">
-      <itemPath>unit_tests/utilUnitTest.c</itemPath>
-      <itemPath>unit_tests/utilUnitTest.h</itemPath>
-    </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
                    projectFiles="false"
@@ -139,35 +139,32 @@
                      displayName="Conf CUnit Test"
                      projectFiles="true"
                      kind="TEST">
-        <itemPath>unit_tests/conf/complete.conf</itemPath>
-        <itemPath>unit_tests/confcunittest.c</itemPath>
-        <itemPath>unit_tests/conf/minimum.conf</itemPath>
-        <itemPath>unit_tests/conf/without_probe_id.conf</itemPath>
-        <itemPath>unit_tests/conf/without_token.conf</itemPath>
+        <itemPath>tests_unit/confcunittest.c</itemPath>
+        <itemPath>tests_unit/test.conf</itemPath>
       </logicalFolder>
       <logicalFolder name="f4"
                      displayName="Format CUnit Test"
                      projectFiles="true"
                      kind="TEST">
-        <itemPath>unit_tests/formatcunittest.c</itemPath>
+        <itemPath>tests_unit/formatcunittest.c</itemPath>
       </logicalFolder>
       <logicalFolder name="f6"
                      displayName="Log CUnit Test"
                      projectFiles="true"
                      kind="TEST">
-        <itemPath>unit_tests/logcunittest.c</itemPath>
+        <itemPath>tests_unit/logcunittest.c</itemPath>
       </logicalFolder>
       <logicalFolder name="f5"
                      displayName="Sender CUnit Test"
                      projectFiles="true"
                      kind="TEST">
-        <itemPath>unit_tests/sendercunittest.c</itemPath>
+        <itemPath>tests_unit/sendercunittest.c</itemPath>
       </logicalFolder>
       <logicalFolder name="f7"
                      displayName="Signals CUnit Test"
                      projectFiles="true"
                      kind="TEST">
-        <itemPath>unit_tests/signalscunittest.c</itemPath>
+        <itemPath>tests_unit/signalscunittest.c</itemPath>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
@@ -204,13 +201,15 @@
         <linkerTool>
           <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/probe</output>
           <linkerAddLib>
-            <pElem>../addon/${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}</pElem>
+            <pElem>../addon/dist/Debug/${CND_PLATFORM}</pElem>
+            <pElem>/usr/local/lib</pElem>
           </linkerAddLib>
           <linkerDynSerch>
-            <pElem>../addon/${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}</pElem>
+            <pElem>../addon/dist/Debug/${CND_PLATFORM}</pElem>
+            <pElem>/opt/echoes-alert/probe/lib</pElem>
           </linkerDynSerch>
           <linkerLibItems>
-            <linkerOptionItem>`pkg-config --libs gobject-2.0 json-glib-1.0`</linkerOptionItem>
+            <linkerOptionItem>`pkg-config --libs  glib-2.0 gobject-2.0  gio-2.0`</linkerOptionItem>
             <linkerLibLibItem>pthread</linkerLibLibItem>
             <linkerLibLibItem>cunit</linkerLibLibItem>
             <linkerLibLibItem>addon</linkerLibLibItem>
@@ -453,30 +452,21 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="unit_tests/conf/complete.conf" ex="false" tool="3" flavor2="0">
+      <item path="tests_unit/confcunittest.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="unit_tests/conf/minimum.conf" ex="false" tool="3" flavor2="0">
+      <item path="tests_unit/formatcunittest.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="unit_tests/conf/without_probe_id.conf"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="tests_unit/logcunittest.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="unit_tests/conf/without_token.conf" ex="false" tool="3" flavor2="0">
+      <item path="tests_unit/sendercunittest.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="unit_tests/confcunittest.c" ex="false" tool="0" flavor2="0">
+      <item path="tests_unit/signalscunittest.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="unit_tests/formatcunittest.c" ex="false" tool="0" flavor2="0">
+      <item path="tests_unit/test.conf" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="unit_tests/logcunittest.c" ex="false" tool="0" flavor2="0">
+      <item path="tests_unit/utilUnitTest.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="unit_tests/sendercunittest.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="unit_tests/signalscunittest.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="unit_tests/utilUnitTest.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="unit_tests/utilUnitTest.h" ex="false" tool="3" flavor2="0">
+      <item path="tests_unit/utilUnitTest.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="1">
@@ -491,8 +481,7 @@
           <stripSymbols>true</stripSymbols>
           <incDir>
             <pElem>include</pElem>
-            <pElem>../addon/include</pElem>
-            <pElem>${JENKINS_HOME}/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/include</pElem>
+            <pElem>/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/include</pElem>
           </incDir>
           <commandLine>-DNDEBUG</commandLine>
         </cTool>
@@ -509,16 +498,16 @@
         <linkerTool>
           <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/probe</output>
           <linkerAddLib>
-            <pElem>../addon/${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}</pElem>
-            <pElem>${JENKINS_HOME}/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}</pElem>
+            <pElem>/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM}</pElem>
+            <pElem>/usr/local/lib</pElem>
           </linkerAddLib>
           <linkerDynSerch>
             <pElem>/opt/echoes-alert/probe/lib</pElem>
-            <pElem>/opt/echoes-alert/probe/lib/common</pElem>
+            <pElem>/opt/echoes-alert/probe/addons</pElem>
           </linkerDynSerch>
           <stripSymbols>true</stripSymbols>
           <linkerLibItems>
-            <linkerOptionItem>`pkg-config --libs gobject-2.0 json-glib-1.0`</linkerOptionItem>
+            <linkerOptionItem>`pkg-config --libs  glib-2.0 gobject-2.0  gio-2.0`</linkerOptionItem>
             <linkerLibLibItem>pthread</linkerLibLibItem>
             <linkerLibLibItem>addon</linkerLibLibItem>
           </linkerLibItems>
@@ -763,30 +752,21 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="unit_tests/conf/complete.conf" ex="false" tool="3" flavor2="0">
+      <item path="tests_unit/confcunittest.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="unit_tests/conf/minimum.conf" ex="false" tool="3" flavor2="0">
+      <item path="tests_unit/formatcunittest.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="unit_tests/conf/without_probe_id.conf"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="tests_unit/logcunittest.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="unit_tests/conf/without_token.conf" ex="false" tool="3" flavor2="0">
+      <item path="tests_unit/sendercunittest.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="unit_tests/confcunittest.c" ex="false" tool="0" flavor2="0">
+      <item path="tests_unit/signalscunittest.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="unit_tests/formatcunittest.c" ex="false" tool="0" flavor2="0">
+      <item path="tests_unit/test.conf" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="unit_tests/logcunittest.c" ex="false" tool="0" flavor2="0">
+      <item path="tests_unit/utilUnitTest.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="unit_tests/sendercunittest.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="unit_tests/signalscunittest.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="unit_tests/utilUnitTest.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="unit_tests/utilUnitTest.h" ex="false" tool="3" flavor2="0">
+      <item path="tests_unit/utilUnitTest.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="Test" type="1">
@@ -801,11 +781,9 @@
           <stripSymbols>true</stripSymbols>
           <incDir>
             <pElem>include</pElem>
-            <pElem>unit_tests</pElem>
-            <pElem>../addon/include</pElem>
-            <pElem>${JENKINS_HOME}/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/include</pElem>
+            <pElem>/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/include</pElem>
           </incDir>
-          <commandLine>-DTEST ${ndebug}</commandLine>
+          <commandLine>-DNDEBUG</commandLine>
         </cTool>
         <ccTool>
           <developmentMode>6</developmentMode>
@@ -820,22 +798,19 @@
         <linkerTool>
           <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/probe</output>
           <linkerAddLib>
-            <pElem>../addon/${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}</pElem>
-            <pElem>${JENKINS_HOME}/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}</pElem>
-            <pElem>/opt/echoes-alert/probe/lib</pElem>
+            <pElem>/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM}</pElem>
+            <pElem>/usr/local/lib</pElem>
           </linkerAddLib>
           <linkerDynSerch>
-            <pElem>../addon/${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}</pElem>
-            <pElem>${JENKINS_HOME}/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}</pElem>
-            <pElem>/opt/echoes-alert/probe/addons</pElem>
             <pElem>/opt/echoes-alert/probe/lib</pElem>
+            <pElem>/var/lib/jenkins/workspace/ea-probe_addon-${target}/label/${NODE_NAME}/dist/Release/${CND_PLATFORM}</pElem>
           </linkerDynSerch>
           <stripSymbols>true</stripSymbols>
           <linkerLibItems>
-            <linkerOptionItem>`pkg-config --libs gobject-2.0 json-glib-1.0`</linkerOptionItem>
+            <linkerOptionItem>`pkg-config --libs  glib-2.0 gobject-2.0  gio-2.0`</linkerOptionItem>
             <linkerLibLibItem>pthread</linkerLibLibItem>
-            <linkerLibLibItem>cunit</linkerLibLibItem>
             <linkerLibLibItem>addon</linkerLibLibItem>
+            <linkerLibLibItem>cunit</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
@@ -1078,30 +1053,21 @@
             tool="3"
             flavor2="0">
       </item>
-      <item path="unit_tests/conf/complete.conf" ex="false" tool="3" flavor2="0">
+      <item path="tests_unit/confcunittest.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="unit_tests/conf/minimum.conf" ex="false" tool="3" flavor2="0">
+      <item path="tests_unit/formatcunittest.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="unit_tests/conf/without_probe_id.conf"
-            ex="false"
-            tool="3"
-            flavor2="0">
+      <item path="tests_unit/logcunittest.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="unit_tests/conf/without_token.conf" ex="false" tool="3" flavor2="0">
+      <item path="tests_unit/sendercunittest.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="unit_tests/confcunittest.c" ex="false" tool="0" flavor2="0">
+      <item path="tests_unit/signalscunittest.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="unit_tests/formatcunittest.c" ex="false" tool="0" flavor2="0">
+      <item path="tests_unit/test.conf" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="unit_tests/logcunittest.c" ex="false" tool="0" flavor2="0">
+      <item path="tests_unit/utilUnitTest.c" ex="false" tool="0" flavor2="0">
       </item>
-      <item path="unit_tests/sendercunittest.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="unit_tests/signalscunittest.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="unit_tests/utilUnitTest.c" ex="false" tool="0" flavor2="0">
-      </item>
-      <item path="unit_tests/utilUnitTest.h" ex="false" tool="3" flavor2="0">
+      <item path="tests_unit/utilUnitTest.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>
