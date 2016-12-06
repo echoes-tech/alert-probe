@@ -61,7 +61,7 @@ do
   fi
 done
 
-echo "ECHOES Alert Probe installed."
+echo "Alert Probe installed."
 
 sed -i -e "s/\(probe_id=\).*/\1$PROBE_ID/" -e "s/\(token=\).*/\1$TOKEN/" $INSTALL_DIR/etc/probe.conf
 echo "ECHOES Alert Probe configured."
@@ -74,7 +74,7 @@ sed -i -e 's:\\\\:\\:g' -e 's:\\/:/:g' informations.json
 
 cp informations.json $INSTALL_DIR/etc/
 
-echo "ECHOES Alert informations downloaded."
+echo "Alert informations downloaded."
 
 unset LOGIN_ENC PASSWORD_ENC
 

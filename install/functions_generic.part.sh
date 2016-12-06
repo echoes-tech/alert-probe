@@ -1,7 +1,7 @@
 are_you_root() {
   if [ $(whoami) != 'root' ]
   then
-    echo "ECHOES Alert Probe requires root privileges to install."
+    echo "Alert Probe requires root privileges to install."
     echo "Please re-run this script as root or use 'sudo sh $0' if your user is in /etc/sudoers."
     exit 1
   fi
@@ -88,10 +88,10 @@ test_http_return() {
   else
     echo "$ERR_INSTALL_MSG: No HTTP Code found in header of ${1} request."
     echo ''
-    echo 'ECHOES Alert API is not reachable.'
+    echo 'Alert API is not reachable.'
     echo ''
-    echo 'ECHOES Alert Probe may not install if you are behind a HTTP(s) proxy server'
-    echo 'ECHOES Alert Probes may not run  correctly in this case'
+    echo 'Alert Probe may not install if you are behind a HTTP(s) proxy server'
+    echo 'Alert Probes may not run  correctly in this case'
     echo 'If you are running behind a HTTP proxy please run the following command'
     echo 'before re run the install script'
     echo ' $ export https_proxy=MyProxyAdress:MyProxyPort'

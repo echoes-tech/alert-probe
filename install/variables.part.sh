@@ -1,4 +1,4 @@
-LOGIN="florent.poinsaut@echoes-tech.com"
+LOGIN="user@echoes.fr"
 PASSWORD="Unknown"
 ASSET_ID=35
 TOKEN="abcdefghijklmo0123456789"
